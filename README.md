@@ -80,7 +80,7 @@ cd %USERPROFILE%\Desktop
 git clone https://github.com/yryo1005/Python_Reference_Mirror_v2.git
 ```
 
-1. clone 後、フォルダを開き `Python_Reference_Mirror` の中に `main.py` や `requirements.txt` があることを確認します。
+1. clone 後、フォルダを開き `Python_Reference_Mirror_v2` の中に `main.py` や `requirements.txt` があることを確認します。
 
 ---
 
@@ -91,10 +91,10 @@ git clone https://github.com/yryo1005/Python_Reference_Mirror_v2.git
 ### 3-1. カレントディレクトリを変更する
 
 ```cmd
-cd Python_Reference_Mirror
+cd Python_Reference_Mirror_v2
 ```
 
-プロンプトの行に `Python_Reference_Mirror` が含まれていることを確認します。
+プロンプトの行に `Python_Reference_Mirror_v2` が含まれていることを確認します。
 
 ### 3-2. 仮想環境の作成と有効化
 
