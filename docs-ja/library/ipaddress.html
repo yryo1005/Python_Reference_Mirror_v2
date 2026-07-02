@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="ipaddress --- IPv4/IPv6 操作ライブラリ" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/ipaddress.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/ipaddress.py ipaddress provides the capabilities to create, manipulate and operate on IPv4 and IPv6 addresses and networks. このモジュールの関数やクラスを使うと、IPアドレスに関する様々なタスク、例えば2つのホストが同じサブネットに属しているかど..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_ipaddress_62ff725d.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/ipaddress.py ipaddress provides the capabilities to create, manipulate and operate on IPv4 and IPv6 addresses and networks. このモジュールの関数やクラスを使うと、IPアドレスに関する様々なタスク、例えば2つのホストが同じサブネットに属しているかど..." />
+<meta name="description" content="ソースコード: Lib/ipaddress.py ipaddress provides the capabilities to create, manipulate and operate on IPv4 and IPv6 addresses and networks. このモジュールの関数やクラスを使うと、IPアドレスに関する様々なタスク、例えば2つのホストが同じサブネットに属しているかど..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>ipaddress --- IPv4/IPv6 操作ライブラリ &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="マルチメディアサービス" href="mm.html" />
+    <link rel="prev" title="xmlrpc.server --- 基本的な XML-RPC サーバー" href="xmlrpc.server.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/ipaddress.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipaddress</span></code> --- IPv4/IPv6 操作ライブラリ</a><ul>
+<li><a class="reference internal" href="#convenience-factory-functions">便利なファクトリ関数</a></li>
+<li><a class="reference internal" href="#ip-addresses">IP アドレス</a><ul>
+<li><a class="reference internal" href="#address-objects">Address オブジェクト</a></li>
+<li><a class="reference internal" href="#conversion-to-strings-and-integers">文字列と整数への変換</a></li>
+<li><a class="reference internal" href="#operators">演算子</a><ul>
+<li><a class="reference internal" href="#comparison-operators">比較演算子</a></li>
+<li><a class="reference internal" href="#arithmetic-operators">算術演算</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ip-network-definitions">IP ネットワーク定義</a><ul>
+<li><a class="reference internal" href="#prefix-net-mask-and-host-mask">プリフィックス, ネットマスク、ホストマスク</a></li>
+<li><a class="reference internal" href="#network-objects">Network オブジェクト</a></li>
+<li><a class="reference internal" href="#id1">演算子</a><ul>
+<li><a class="reference internal" href="#logical-operators">論理演算子</a></li>
+<li><a class="reference internal" href="#iteration">イテレーション</a></li>
+<li><a class="reference internal" href="#networks-as-containers-of-addresses">アドレスのコンテナとしてのネットワーク</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#interface-objects">インターフェイスオブジェクト</a><ul>
+<li><a class="reference internal" href="#id2">演算子</a><ul>
+<li><a class="reference internal" href="#id3">論理演算子</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#other-module-level-functions">その他のモジュールレベル関数</a></li>
+<li><a class="reference internal" href="#custom-exceptions">Custom Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="xmlrpc.server.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xmlrpc.server</span></code> --- 基本的な XML-RPC サーバー</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="mm.html"
+                          title="次の章へ">マルチメディアサービス</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/ipaddress.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/ipaddress.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/ipaddress.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="mm.html" title="マルチメディアサービス"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="xmlrpc.server.html" title="xmlrpc.server --- 基本的な XML-RPC サーバー"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="internet.html" accesskey="U">インターネットプロトコルとサポート</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipaddress</span></code> --- IPv4/IPv6 操作ライブラリ</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-ipaddress">
+<span id="ipaddress-ipv4-ipv6-manipulation-library"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipaddress</span></code> --- IPv4/IPv6 操作ライブラリ<a class="headerlink" href="#module-ipaddress" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/ipaddress.py">Lib/ipaddress.py</a></p>
+<hr class="docutils" />
+<p class="untranslated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipaddress</span></code> provides the capabilities to create, manipulate and
+operate on IPv4 and IPv6 addresses and networks.</p>
+<p class="translated">このモジュールの関数やクラスを使うと、IPアドレスに関する様々なタスク、例えば2つのホストが同じサブネットに属しているかどうかをチェックしたり、特定のサブネット内の全てのホストをイテレートしたり、文字列が正しい IP アドレスかネットワークを定義しているかどうかをチェックするなどを簡単に実現することができます。</p>
+<p class="translated">これはモジュールの完全な API リファレンスです。概要や紹介は <a class="reference internal" href="../howto/ipaddress.html#ipaddress-howto"><span class="std std-ref">ipaddressモジュールの紹介</span></a> を参照してください。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.3.</span></p>
+</div>
+<section id="convenience-factory-functions">
+<h2 class="translated">便利なファクトリ関数<a class="headerlink" href="#convenience-factory-functions" title="Link to this heading">¶</a></h2>
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">ipaddress</span></code> module provides factory functions to conveniently create
+IP addresses, networks and interfaces:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ipaddress.ip_address">
+<span class="sig-prename descclassname"><span class="pre">ipaddress.</span></span><span class="sig-name descname"><span class="pre">ip_address</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.ip_address" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">引数に渡された IP address に応じて、 <a class="reference internal" href="#ipaddress.IPv4Address" title="ipaddress.IPv4Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code></a> か <a class="reference internal" href="#ipaddress.IPv6Address" title="ipaddress.IPv6Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Address</span></code></a> のオブジェクトを返します。 IPv4 か IPv6 のアドレスを受け取ります; <code class="docutils literal notranslate"><span class="pre">2**32</span></code> より小さい整数はデフォルトでは IPv4 アドレスだと判断されます。 <em>address</em> が正しい IPv4, IPv6 アドレスを表現していない場合は <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> を発生させます。</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="s1">&#39;192.168.0.1&#39;</span><span class="p">)</span>
+<span class="go">IPv4Address(&#39;192.168.0.1&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="s1">&#39;2001:db8::&#39;</span><span class="p">)</span>
+<span class="go">IPv6Address(&#39;2001:db8::&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ipaddress.ip_network">
+<span class="sig-prename descclassname"><span class="pre">ipaddress.</span></span><span class="sig-name descname"><span class="pre">ip_network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.ip_network" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">引数に渡された IP address に応じて、 <a class="reference internal" href="#ipaddress.IPv4Network" title="ipaddress.IPv4Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Network</span></code></a> か <a class="reference internal" href="#ipaddress.IPv6Network" title="ipaddress.IPv6Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Network</span></code></a> のオブジェクトを返します。 <em>address</em> は IP ネットワークを示す文字列あるいは整数です。 IPv4 か IPv6 のネットワークを受け取ります; <code class="docutils literal notranslate"><span class="pre">2**32</span></code> より小さい整数はデフォルトでは IPv4 アドレスだと判断されます。 <em>strict</em> は <code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Network</span></code> か <code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Network</span></code> のコンストラクタに渡されます。 <em>address</em> が正しい IPv4, IPv6 アドレスを表現していない場合や、ネットワークの host bit がセットされていた場合は <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> を発生させます。</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.168.0.0/28&#39;</span><span class="p">)</span>
+<span class="go">IPv4Network(&#39;192.168.0.0/28&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ipaddress.ip_interface">
+<span class="sig-prename descclassname"><span class="pre">ipaddress.</span></span><span class="sig-name descname"><span class="pre">ip_interface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.ip_interface" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">引数に渡された IP address に応じて、 <a class="reference internal" href="#ipaddress.IPv4Interface" title="ipaddress.IPv4Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Interface</span></code></a> か <a class="reference internal" href="#ipaddress.IPv6Interface" title="ipaddress.IPv6Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Interface</span></code></a> のオブジェクトを返します。 <em>address</em> は IP ネットワークを示す文字列あるいは整数です。 IPv4 か IPv6 のネットワークを受け取ります; <code class="docutils literal notranslate"><span class="pre">2**32</span></code> より小さい整数はデフォルトでは IPv4 アドレスだと判断されます。 <em>address</em> が正しい IPv4, IPv6 アドレスを表現していない場合は <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> を発生させます。</p>
+</dd></dl>
+
+<p class="translated">これらの便利関数を利用するデメリットとして、IPv4 と IPv6 両方のフォーマットを扱う必要性があるために、どちらを期待されていたのかを知ることができず、エラーメッセージが最小限の情報しか提供できないことです。利用したいバージョンの特定のコンストラクタを直接呼ぶことで、より詳細なエラーレポートを得ることができます。</p>
+</section>
+<section id="ip-addresses">
+<h2 class="translated">IP アドレス<a class="headerlink" href="#ip-addresses" title="Link to this heading">¶</a></h2>
+<section id="address-objects">
+<h3 class="translated">Address オブジェクト<a class="headerlink" href="#address-objects" title="Link to this heading">¶</a></h3>
+<p class="translated"><a class="reference internal" href="#ipaddress.IPv4Address" title="ipaddress.IPv4Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code></a> と <a class="reference internal" href="#ipaddress.IPv6Address" title="ipaddress.IPv6Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Address</span></code></a> オブジェクトは多くの共通した属性を持っています。両方の IP バージョンを扱うコードを書きやすくするために、IPv6 アドレスでしか意味が無いいくつかの属性も <code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code> オブジェクトに実装されています。アドレスオブジェクトは <a class="reference internal" href="../glossary.html#term-hashable"><span class="xref std std-term">hashable</span></a> なので、辞書のキーとして利用できます。</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ipaddress.IPv4Address">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ipaddress.</span></span><span class="sig-name descname"><span class="pre">IPv4Address</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv4Address" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">IPv4 アドレスを構築する。 <em>address</em> が正しい IPv4 アドレスでない場合、 <a class="reference internal" href="#ipaddress.AddressValueError" title="ipaddress.AddressValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">AddressValueError</span></code></a> を発生させます。</p>
+<p class="translated">以下のものが正しい IPv4 アドレスを構築します:</p>
+<ol class="arabic simple">
+<li><p class="untranslated">A string in decimal-dot notation, consisting of four decimal integers in
+the inclusive range 0--255, separated by dots (e.g. <code class="docutils literal notranslate"><span class="pre">192.168.0.1</span></code>). Each
+integer represents an octet (byte) in the address. Leading zeroes are
+not tolerated to prevent confusion with octal notation.</p></li>
+<li><p class="translated">32bit に収まる整数。</p></li>
+<li><p class="translated">大きさ4の <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> オブジェクトに (最上位オクテットが最初になるように) パックされた整数。</p></li>
+</ol>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;192.168.0.1&#39;</span><span class="p">)</span>
+<span class="go">IPv4Address(&#39;192.168.0.1&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv4Address</span><span class="p">(</span><span class="mi">3232235521</span><span class="p">)</span>
+<span class="go">IPv4Address(&#39;192.168.0.1&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv4Address</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xC0\xA8\x00\x01</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">IPv4Address(&#39;192.168.0.1&#39;)</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.8 で変更: </span>Leading zeros are tolerated, even in ambiguous cases that look like
+octal notation.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.9.5 で変更: </span>Leading zeros are no longer tolerated and are treated as an error.
+IPv4 address strings are now parsed as strict as glibc
+<a class="reference internal" href="socket.html#socket.inet_pton" title="socket.inet_pton"><code class="xref py py-func docutils literal notranslate"><span class="pre">inet_pton()</span></code></a>.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Address.version">
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#ipaddress.IPv4Address.version" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">適切なバージョン番号: IPv4 なら <code class="docutils literal notranslate"><span class="pre">4</span></code>, IPv6 なら <code class="docutils literal notranslate"><span class="pre">6</span></code>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.14 で変更: </span>Made available on the class.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Address.max_prefixlen">
+<span class="sig-name descname"><span class="pre">max_prefixlen</span></span><a class="headerlink" href="#ipaddress.IPv4Address.max_prefixlen" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このバージョンのアドレスを表現するのに必要なビット数: IPv4 なら <code class="docutils literal notranslate"><span class="pre">32</span></code>, IPv6 なら <code class="docutils literal notranslate"><span class="pre">128</span></code>.</p>
+<p class="translated">prefix は、アドレスがネットワークに含まれるかどうかを決定するために比較する、アドレスの先頭ビット数を定義します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.14 で変更: </span>Made available on the class.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Address.compressed">
+<span class="sig-name descname"><span class="pre">compressed</span></span><a class="headerlink" href="#ipaddress.IPv4Address.compressed" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Address.exploded">
+<span class="sig-name descname"><span class="pre">exploded</span></span><a class="headerlink" href="#ipaddress.IPv4Address.exploded" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ドットと10進数を使った表現の文字列。この表現には先頭の 0 は含まれません。</p>
+<p class="translated">IPv4 はアドレスの 0 オクテットを省略する記法を定義していないので、IPv4 アドレスにおいてこれらの2つの属性は常に <code class="docutils literal notranslate"><span class="pre">str(addr)</span></code> と等しくなります。これらの属性を用意することで、IPv4 と IPv6 アドレス両方を扱う、表示用コードが書きやすくなります。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Address.packed">
+<span class="sig-name descname"><span class="pre">packed</span></span><a class="headerlink" href="#ipaddress.IPv4Address.packed" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このアドレスのバイナリ表現 - 適切な長さをもった <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> オブジェクト(最上位オクテットが先頭)。 IPv4 では 4 byte で、 IPv6 では 16 byte。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Address.reverse_pointer">
+<span class="sig-name descname"><span class="pre">reverse_pointer</span></span><a class="headerlink" href="#ipaddress.IPv4Address.reverse_pointer" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The name of the reverse DNS PTR record for the IP address, e.g.:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="s2">&quot;127.0.0.1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">reverse_pointer</span>
+<span class="go">&#39;1.0.0.127.in-addr.arpa&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="s2">&quot;2001:db8::1&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">reverse_pointer</span>
+<span class="go">&#39;1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa&#39;</span>
+</pre></div>
+</div>
+<p class="untranslated">This is the name that could be used for performing a PTR lookup, not the
+resolved hostname itself.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.5.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Address.is_multicast">
+<span class="sig-name descname"><span class="pre">is_multicast</span></span><a class="headerlink" href="#ipaddress.IPv4Address.is_multicast" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">アドレスがマルチキャスト用に予約されている場合は <code class="docutils literal notranslate"><span class="pre">True</span></code> 。 <span class="target" id="index-29"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc3171.html"><strong>RFC 3171</strong></a> (IPv4) か <span class="target" id="index-30"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc2373.html"><strong>RFC 2373</strong></a> (IPv6) を参照。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Address.is_private">
+<span class="sig-name descname"><span class="pre">is_private</span></span><a class="headerlink" href="#ipaddress.IPv4Address.is_private" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the address is defined as not globally reachable by
+<a class="reference external" href="https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml">iana-ipv4-special-registry</a> (for IPv4) or <a class="reference external" href="https://www.iana.org/assignments/iana-ipv6-special-registry/iana-ipv6-special-registry.xhtml">iana-ipv6-special-registry</a>
+(for IPv6) with the following exceptions:</p>
+<ul>
+<li><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">is_private</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code> for the shared address space (<code class="docutils literal notranslate"><span class="pre">100.64.0.0/10</span></code>)</p></li>
+<li><p class="untranslated">For IPv4-mapped IPv6-addresses the <code class="docutils literal notranslate"><span class="pre">is_private</span></code> value is determined by the
+semantics of the underlying IPv4 addresses and the following condition holds
+(see <a class="reference internal" href="#ipaddress.IPv6Address.ipv4_mapped" title="ipaddress.IPv6Address.ipv4_mapped"><code class="xref py py-attr docutils literal notranslate"><span class="pre">IPv6Address.ipv4_mapped</span></code></a>):</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">address</span><span class="o">.</span><span class="n">is_private</span> <span class="o">==</span> <span class="n">address</span><span class="o">.</span><span class="n">ipv4_mapped</span><span class="o">.</span><span class="n">is_private</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p class="untranslated"><code class="docutils literal notranslate"><span class="pre">is_private</span></code> has value opposite to <a class="reference internal" href="#ipaddress.IPv4Address.is_global" title="ipaddress.IPv4Address.is_global"><code class="xref py py-attr docutils literal notranslate"><span class="pre">is_global</span></code></a>, except for the shared address space
+(<code class="docutils literal notranslate"><span class="pre">100.64.0.0/10</span></code> range) where they are both <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span>Fixed some false positives and false negatives.</p>
+<ul class="simple">
+<li><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">192.0.0.0/24</span></code> is considered private with the exception of <code class="docutils literal notranslate"><span class="pre">192.0.0.9/32</span></code> and
+<code class="docutils literal notranslate"><span class="pre">192.0.0.10/32</span></code> (previously: only the <code class="docutils literal notranslate"><span class="pre">192.0.0.0/29</span></code> sub-range was considered private).</p></li>
+<li><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">64:ff9b:1::/48</span></code> is considered private.</p></li>
+<li><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">2002::/16</span></code> is considered private.</p></li>
+<li><p class="untranslated">There are exceptions within <code class="docutils literal notranslate"><span class="pre">2001::/23</span></code> (otherwise considered private): <code class="docutils literal notranslate"><span class="pre">2001:1::1/128</span></code>,
+<code class="docutils literal notranslate"><span class="pre">2001:1::2/128</span></code>, <code class="docutils literal notranslate"><span class="pre">2001:3::/32</span></code>, <code class="docutils literal notranslate"><span class="pre">2001:4:112::/48</span></code>, <code class="docutils literal notranslate"><span class="pre">2001:20::/28</span></code>, <code class="docutils literal notranslate"><span class="pre">2001:30::/28</span></code>.
+The exceptions are not considered private.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Address.is_global">
+<span class="sig-name descname"><span class="pre">is_global</span></span><a class="headerlink" href="#ipaddress.IPv4Address.is_global" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the address is defined as globally reachable by
+<a class="reference external" href="https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml">iana-ipv4-special-registry</a> (for IPv4) or <a class="reference external" href="https://www.iana.org/assignments/iana-ipv6-special-registry/iana-ipv6-special-registry.xhtml">iana-ipv6-special-registry</a>
+(for IPv6) with the following exception:</p>
+<p class="untranslated">For IPv4-mapped IPv6-addresses the <code class="docutils literal notranslate"><span class="pre">is_private</span></code> value is determined by the
+semantics of the underlying IPv4 addresses and the following condition holds
+(see <a class="reference internal" href="#ipaddress.IPv6Address.ipv4_mapped" title="ipaddress.IPv6Address.ipv4_mapped"><code class="xref py py-attr docutils literal notranslate"><span class="pre">IPv6Address.ipv4_mapped</span></code></a>):</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">address</span><span class="o">.</span><span class="n">is_global</span> <span class="o">==</span> <span class="n">address</span><span class="o">.</span><span class="n">ipv4_mapped</span><span class="o">.</span><span class="n">is_global</span>
+</pre></div>
+</div>
+<p class="untranslated"><code class="docutils literal notranslate"><span class="pre">is_global</span></code> has value opposite to <a class="reference internal" href="#ipaddress.IPv4Address.is_private" title="ipaddress.IPv4Address.is_private"><code class="xref py py-attr docutils literal notranslate"><span class="pre">is_private</span></code></a>, except for the shared address space
+(<code class="docutils literal notranslate"><span class="pre">100.64.0.0/10</span></code> range) where they are both <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span>Fixed some false positives and false negatives, see <a class="reference internal" href="#ipaddress.IPv4Address.is_private" title="ipaddress.IPv4Address.is_private"><code class="xref py py-attr docutils literal notranslate"><span class="pre">is_private</span></code></a> for details.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Address.is_unspecified">
+<span class="sig-name descname"><span class="pre">is_unspecified</span></span><a class="headerlink" href="#ipaddress.IPv4Address.is_unspecified" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">アドレスが未定義の時に <code class="docutils literal notranslate"><span class="pre">True</span></code>. <span class="target" id="index-31"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc5735.html"><strong>RFC 5735</strong></a> (IPv4) か <span class="target" id="index-32"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc2373.html"><strong>RFC 2373</strong></a> (IPv6) を参照。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Address.is_reserved">
+<span class="sig-name descname"><span class="pre">is_reserved</span></span><a class="headerlink" href="#ipaddress.IPv4Address.is_reserved" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">True</span></code> if the address is noted as reserved by the IETF.
+For IPv4, this is only <code class="docutils literal notranslate"><span class="pre">240.0.0.0/4</span></code>, the <code class="docutils literal notranslate"><span class="pre">Reserved</span></code> address block.
+For IPv6, this is all addresses <a class="reference external" href="https://www.iana.org/assignments/ipv6-address-space/ipv6-address-space.xhtml">allocated</a> as
+<code class="docutils literal notranslate"><span class="pre">Reserved</span> <span class="pre">by</span> <span class="pre">IETF</span></code> for future use.</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">For IPv4, <code class="docutils literal notranslate"><span class="pre">is_reserved</span></code> is not related to the address block value of the
+<code class="docutils literal notranslate"><span class="pre">Reserved-by-Protocol</span></code> column in <a class="reference external" href="https://www.iana.org/assignments/iana-ipv4-special-registry/iana-ipv4-special-registry.xhtml">iana-ipv4-special-registry</a>.</p>
+</div>
+<div class="admonition caution">
+<p class="admonition-title">注意</p>
+<p class="untranslated">For IPv6, <code class="docutils literal notranslate"><span class="pre">fec0::/10</span></code> a former Site-Local scoped address prefix is
+currently excluded from that list (see <a class="reference internal" href="#ipaddress.IPv6Address.is_site_local" title="ipaddress.IPv6Address.is_site_local"><code class="xref py py-attr docutils literal notranslate"><span class="pre">is_site_local</span></code></a> &amp; <span class="target" id="index-4"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc3879.html"><strong>RFC 3879</strong></a>).</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Address.is_loopback">
+<span class="sig-name descname"><span class="pre">is_loopback</span></span><a class="headerlink" href="#ipaddress.IPv4Address.is_loopback" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ループバックアドレスである場合に <code class="docutils literal notranslate"><span class="pre">True</span></code>. <span class="target" id="index-33"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc3330.html"><strong>RFC 3330</strong></a> (IPv4) か <span class="target" id="index-34"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc2373.html"><strong>RFC 2373</strong></a> (IPv6) を参照。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Address.is_link_local">
+<span class="sig-name descname"><span class="pre">is_link_local</span></span><a class="headerlink" href="#ipaddress.IPv4Address.is_link_local" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">アドレスがリンクローカル用に予約されいている場合に <code class="docutils literal notranslate"><span class="pre">True</span></code>. <span class="target" id="index-35"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc3927.html"><strong>RFC 3927</strong></a> を参照。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Address.ipv6_mapped">
+<span class="sig-name descname"><span class="pre">ipv6_mapped</span></span><a class="headerlink" href="#ipaddress.IPv4Address.ipv6_mapped" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code> object representing the IPv4-mapped IPv6 address. See <span class="target" id="index-8"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc4291.html"><strong>RFC 4291</strong></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ipaddress.IPv4Address.__format__">
+<span class="sig-prename descclassname"><span class="pre">IPv4Address.</span></span><span class="sig-name descname"><span class="pre">__format__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fmt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv4Address.__format__" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Returns a string representation of the IP address, controlled by
+an explicit format string.
+<em>fmt</em> can be one of the following: <code class="docutils literal notranslate"><span class="pre">'s'</span></code>, the default option,
+equivalent to <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-func docutils literal notranslate"><span class="pre">str()</span></code></a>, <code class="docutils literal notranslate"><span class="pre">'b'</span></code> for a zero-padded binary string,
+<code class="docutils literal notranslate"><span class="pre">'X'</span></code> or <code class="docutils literal notranslate"><span class="pre">'x'</span></code> for an uppercase or lowercase hexadecimal
+representation, or <code class="docutils literal notranslate"><span class="pre">'n'</span></code>, which is equivalent to <code class="docutils literal notranslate"><span class="pre">'b'</span></code> for IPv4
+addresses and <code class="docutils literal notranslate"><span class="pre">'x'</span></code> for IPv6. For binary and hexadecimal
+representations, the form specifier <code class="docutils literal notranslate"><span class="pre">'#'</span></code> and the grouping option
+<code class="docutils literal notranslate"><span class="pre">'_'</span></code> are available. <code class="docutils literal notranslate"><span class="pre">__format__</span></code> is used by <code class="docutils literal notranslate"><span class="pre">format</span></code>, <code class="docutils literal notranslate"><span class="pre">str.format</span></code>
+and f-strings.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">format</span><span class="p">(</span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;192.168.0.1&#39;</span><span class="p">))</span>
+<span class="go">&#39;192.168.0.1&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;</span><span class="si">{:#b}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;192.168.0.1&#39;</span><span class="p">))</span>
+<span class="go">&#39;0b11000000101010000000000000000001&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv6Address</span><span class="p">(</span><span class="s2">&quot;2001:db8::1000&quot;</span><span class="p">)</span><span class="si">:</span><span class="s1">s</span><span class="si">}</span><span class="s1">&#39;</span>
+<span class="go">&#39;2001:db8::1000&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">format</span><span class="p">(</span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv6Address</span><span class="p">(</span><span class="s1">&#39;2001:db8::1000&#39;</span><span class="p">),</span> <span class="s1">&#39;_X&#39;</span><span class="p">)</span>
+<span class="go">&#39;2001_0DB8_0000_0000_0000_0000_0000_1000&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s1">&#39;{:#_n}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv6Address</span><span class="p">(</span><span class="s1">&#39;2001:db8::1000&#39;</span><span class="p">))</span>
+<span class="go">&#39;0x2001_0db8_0000_0000_0000_0000_0000_1000&#39;</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.9.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ipaddress.</span></span><span class="sig-name descname"><span class="pre">IPv6Address</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv6Address" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">IPv6 アドレスを構築する。 <em>address</em> が正しい IPv6 アドレスでない場合、 <a class="reference internal" href="#ipaddress.AddressValueError" title="ipaddress.AddressValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">AddressValueError</span></code></a> を発生させます。</p>
+<p class="translated">以下のものが正しい IPv6 アドレスを構築します:</p>
+<ol class="arabic">
+<li><p class="translated">4桁の16進数からなるグループ8個で構成された文字列。各グループは16bitを表現している。グループはコロンで区切られる。これは <em>exploded</em> (長い) 記法を表す。文字列は <em>compressed</em> (省略) 記法でも良い。詳細は <span class="target" id="index-36"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc4291.html"><strong>RFC 4291</strong></a> を参照。例えば、 <code class="docutils literal notranslate"><span class="pre">&quot;0000:0000:0000:0000:0000:0abc:0007:0def&quot;</span></code> は <code class="docutils literal notranslate"><span class="pre">&quot;::abc:7:def&quot;</span></code> と省略できる。</p>
+<p class="untranslated">Optionally, the string may also have a scope zone ID, expressed
+with a suffix <code class="docutils literal notranslate"><span class="pre">%scope_id</span></code>. If present, the scope ID must be non-empty,
+and may not contain <code class="docutils literal notranslate"><span class="pre">%</span></code>.
+See <span class="target" id="index-10"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc4007.html"><strong>RFC 4007</strong></a> for details.
+For example, <code class="docutils literal notranslate"><span class="pre">fe80::1234%1</span></code> might identify address <code class="docutils literal notranslate"><span class="pre">fe80::1234</span></code> on the first link of the node.</p>
+</li>
+<li><p class="translated">128bit に収まる整数。</p></li>
+<li><p class="translated">ビッグエンディアンで 16 バイトの長さの <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> オブジェクトにパックされた整数。</p></li>
+</ol>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv6Address</span><span class="p">(</span><span class="s1">&#39;2001:db8::1000&#39;</span><span class="p">)</span>
+<span class="go">IPv6Address(&#39;2001:db8::1000&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv6Address</span><span class="p">(</span><span class="s1">&#39;ff02::5678%1&#39;</span><span class="p">)</span>
+<span class="go">IPv6Address(&#39;ff02::5678%1&#39;)</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.compressed">
+<span class="sig-name descname"><span class="pre">compressed</span></span><a class="headerlink" href="#ipaddress.IPv6Address.compressed" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p class="translated">アドレス表現の短い形式で、グループ内の先頭の 0 を省略し、連続する完全に0のグループの一番長いシーケンスを1つの空グループに折りたたんだもの。</p>
+<p class="translated">これは IPv6 アドレスに対して <code class="docutils literal notranslate"><span class="pre">str(addr)</span></code> が返す値と同じです。</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.exploded">
+<span class="sig-name descname"><span class="pre">exploded</span></span><a class="headerlink" href="#ipaddress.IPv6Address.exploded" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p class="translated">アドレス表現の長い形式。全てのグループの先頭の0は省略されず、完全に0のグループも省略されない。</p>
+<p class="translated">以降の属性とメソッドについては、<a class="reference internal" href="#ipaddress.IPv4Address" title="ipaddress.IPv4Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code></a> クラスの対応するドキュメントを参照してください:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.packed">
+<span class="sig-name descname"><span class="pre">packed</span></span><a class="headerlink" href="#ipaddress.IPv6Address.packed" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.reverse_pointer">
+<span class="sig-name descname"><span class="pre">reverse_pointer</span></span><a class="headerlink" href="#ipaddress.IPv6Address.reverse_pointer" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.version">
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#ipaddress.IPv6Address.version" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.max_prefixlen">
+<span class="sig-name descname"><span class="pre">max_prefixlen</span></span><a class="headerlink" href="#ipaddress.IPv6Address.max_prefixlen" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.is_multicast">
+<span class="sig-name descname"><span class="pre">is_multicast</span></span><a class="headerlink" href="#ipaddress.IPv6Address.is_multicast" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.is_private">
+<span class="sig-name descname"><span class="pre">is_private</span></span><a class="headerlink" href="#ipaddress.IPv6Address.is_private" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.is_global">
+<span class="sig-name descname"><span class="pre">is_global</span></span><a class="headerlink" href="#ipaddress.IPv6Address.is_global" title="Link to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.is_unspecified">
+<span class="sig-name descname"><span class="pre">is_unspecified</span></span><a class="headerlink" href="#ipaddress.IPv6Address.is_unspecified" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.is_reserved">
+<span class="sig-name descname"><span class="pre">is_reserved</span></span><a class="headerlink" href="#ipaddress.IPv6Address.is_reserved" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.is_loopback">
+<span class="sig-name descname"><span class="pre">is_loopback</span></span><a class="headerlink" href="#ipaddress.IPv6Address.is_loopback" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.is_link_local">
+<span class="sig-name descname"><span class="pre">is_link_local</span></span><a class="headerlink" href="#ipaddress.IPv6Address.is_link_local" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.is_site_local">
+<span class="sig-name descname"><span class="pre">is_site_local</span></span><a class="headerlink" href="#ipaddress.IPv6Address.is_site_local" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">アドレスがサイトローカルな目的のために予約されいている場合に <code class="docutils literal notranslate"><span class="pre">True</span></code>. サイトローカルアドレスは <span class="target" id="index-37"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc3879.html"><strong>RFC 3879</strong></a> によって廃止されている事に注意してください。アドレスが <span class="target" id="index-38"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc4193.html"><strong>RFC 4193</strong></a> で定義されているユニークローカルアドレスの範囲に含まれているかどうかをテストするには、 <a class="reference internal" href="#ipaddress.IPv4Address.is_private" title="ipaddress.IPv4Address.is_private"><code class="xref py py-attr docutils literal notranslate"><span class="pre">is_private</span></code></a> を利用してください。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.ipv4_mapped">
+<span class="sig-name descname"><span class="pre">ipv4_mapped</span></span><a class="headerlink" href="#ipaddress.IPv6Address.ipv4_mapped" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">For addresses that appear to be IPv4 mapped addresses in the range
+<code class="docutils literal notranslate"><span class="pre">::FFFF:0:0/96</span></code> as defined by <span class="target" id="index-13"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc4291.html"><strong>RFC 4291</strong></a>, this property reports the
+embedded IPv4 address. For any other address, this property will be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.scope_id">
+<span class="sig-name descname"><span class="pre">scope_id</span></span><a class="headerlink" href="#ipaddress.IPv6Address.scope_id" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">For scoped addresses as defined by <span class="target" id="index-14"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc4007.html"><strong>RFC 4007</strong></a>, this property identifies
+the particular zone of the address's scope that the address belongs to,
+as a string. When no scope zone is specified, this property will be <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.sixtofour">
+<span class="sig-name descname"><span class="pre">sixtofour</span></span><a class="headerlink" href="#ipaddress.IPv6Address.sixtofour" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><span class="target" id="index-39"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc3056.html"><strong>RFC 3056</strong></a> で定義された 6to4 (<code class="docutils literal notranslate"><span class="pre">2002::/16</span></code> で始まる)アドレスの場合、このプロパティは埋め込まれた IPv4 Address を返します。それ以外のアドレスに対しては、このプロパティは <code class="docutils literal notranslate"><span class="pre">None</span></code> になります。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.teredo">
+<span class="sig-name descname"><span class="pre">teredo</span></span><a class="headerlink" href="#ipaddress.IPv6Address.teredo" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><span class="target" id="index-40"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc4380.html"><strong>RFC 4380</strong></a> で定義された Teredo (<code class="docutils literal notranslate"><span class="pre">2001::/32</span></code> で始まる)アドレスの場合、このプロパティは埋め込まれた <code class="docutils literal notranslate"><span class="pre">(server,</span> <span class="pre">client)</span></code> IP アドレスペアを返します。それ以外のアドレスに対しては、このプロパティは <code class="docutils literal notranslate"><span class="pre">None</span></code> になります。</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ipaddress.IPv6Address.__format__">
+<span class="sig-prename descclassname"><span class="pre">IPv6Address.</span></span><span class="sig-name descname"><span class="pre">__format__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fmt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv6Address.__format__" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#ipaddress.IPv4Address" title="ipaddress.IPv4Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code></a> の対応するメソッドのドキュメントを参照してください。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.9.</span></p>
+</div>
+</dd></dl>
+
+</section>
+<section id="conversion-to-strings-and-integers">
+<h3 class="translated">文字列と整数への変換<a class="headerlink" href="#conversion-to-strings-and-integers" title="Link to this heading">¶</a></h3>
+<p class="translated">socket モジュールなどのネットワークインターフェースを利用するには、アドレスを文字列や整数に変換しなければなりません。これには組み込みの <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-func docutils literal notranslate"><span class="pre">str()</span></code></a> と <a class="reference internal" href="functions.html#int" title="int"><code class="xref py py-func docutils literal notranslate"><span class="pre">int()</span></code></a> 関数を利用します:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;192.168.0.1&#39;</span><span class="p">))</span>
+<span class="go">&#39;192.168.0.1&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">int</span><span class="p">(</span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;192.168.0.1&#39;</span><span class="p">))</span>
+<span class="go">3232235521</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv6Address</span><span class="p">(</span><span class="s1">&#39;::1&#39;</span><span class="p">))</span>
+<span class="go">&#39;::1&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">int</span><span class="p">(</span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv6Address</span><span class="p">(</span><span class="s1">&#39;::1&#39;</span><span class="p">))</span>
+<span class="go">1</span>
+</pre></div>
+</div>
+<p class="untranslated">Note that IPv6 scoped addresses are converted to integers without scope zone ID.</p>
+</section>
+<section id="operators">
+<h3 class="translated">演算子<a class="headerlink" href="#operators" title="Link to this heading">¶</a></h3>
+<p class="translated">Address オブジェクトはいくつかの演算子をサポートします。明記されない限り、演算子は互換性のあるオブジェクト間 (つまり IPv4 同士や IPv6 同士) でのみ利用できます。</p>
+<section id="comparison-operators">
+<h4 class="translated">比較演算子<a class="headerlink" href="#comparison-operators" title="Link to this heading">¶</a></h4>
+<p class="untranslated">Address objects can be compared with the usual set of comparison operators.
+Same IPv6 addresses with different scope zone IDs are not equal.
+Some examples:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;127.0.0.2&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;127.0.0.2&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;127.0.0.2&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">IPv6Address</span><span class="p">(</span><span class="s1">&#39;fe80::1234&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">IPv6Address</span><span class="p">(</span><span class="s1">&#39;fe80::1234%1&#39;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">IPv6Address</span><span class="p">(</span><span class="s1">&#39;fe80::1234%1&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="n">IPv6Address</span><span class="p">(</span><span class="s1">&#39;fe80::1234%2&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</section>
+<section id="arithmetic-operators">
+<h4 class="translated">算術演算<a class="headerlink" href="#arithmetic-operators" title="Link to this heading">¶</a></h4>
+<p class="translated">アドレスオブジェクトから整数を加減算できます。いくつかの例:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;127.0.0.2&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span>
+<span class="go">IPv4Address(&#39;127.0.0.5&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;127.0.0.2&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">3</span>
+<span class="go">IPv4Address(&#39;126.255.255.255&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;255.255.255.255&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="gr">ipaddress.AddressValueError</span>: <span class="n">4294967296 (&gt;= 2**32) is not permitted as an IPv4 address</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="ip-network-definitions">
+<h2 class="translated">IP ネットワーク定義<a class="headerlink" href="#ip-network-definitions" title="Link to this heading">¶</a></h2>
+<p class="translated"><a class="reference internal" href="#ipaddress.IPv4Network" title="ipaddress.IPv4Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Network</span></code></a> と <a class="reference internal" href="#ipaddress.IPv6Network" title="ipaddress.IPv6Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Network</span></code></a> オブジェクトは IP ネットワークの定義とインスペクトのための機構を提供します。ネットワーク定義は <em>mask</em> と <em>ネットワークアドレス</em> からなり、 <em>mask</em> でマスク(bitごとの AND) するとネットワークアドレスと同じになる IP アドレスの範囲を定義します。例えば、 <code class="docutils literal notranslate"><span class="pre">255.255.255.0</span></code> という <em>mask</em> と <code class="docutils literal notranslate"><span class="pre">192.168.1.0</span></code> というネットワークアドレスからなるネットワーク定義は、 <code class="docutils literal notranslate"><span class="pre">192.168.1.0</span></code> から <code class="docutils literal notranslate"><span class="pre">192.168.1.255</span></code> を含む範囲を表します。</p>
+<section id="prefix-net-mask-and-host-mask">
+<h3 class="translated">プリフィックス, ネットマスク、ホストマスク<a class="headerlink" href="#prefix-net-mask-and-host-mask" title="Link to this heading">¶</a></h3>
+<p class="translated">IP ネットワークマスクを定義する幾つかの等価な方法があります。<em>プリフィックス</em> <code class="docutils literal notranslate"><span class="pre">/&lt;nbits&gt;</span></code> は先頭の何bitがネットワークマスクで立っているかを示します。<em>ネットマスク</em> は先頭の幾つかのbitが立っている IP アドレスです。プリフィックス <code class="docutils literal notranslate"><span class="pre">/24</span></code> はIPv4 ではネットマスク <code class="docutils literal notranslate"><span class="pre">255.255.255.0</span></code> と、IPv6 では <code class="docutils literal notranslate"><span class="pre">ffff:ff00::</span></code> と同じになります。加えて、<em>ネットマスク</em> と論理が逆の <em>ホストマスク</em> があり、ときどき (例えば Cisco のアクセスコントロールリスト) ネットワークマスクを表すために利用されます。<code class="docutils literal notranslate"><span class="pre">/24</span></code> と等しい IPv4 のホストマスクは <code class="docutils literal notranslate"><span class="pre">0.0.0.255</span></code> になります。</p>
+</section>
+<section id="network-objects">
+<h3 class="translated">Network オブジェクト<a class="headerlink" href="#network-objects" title="Link to this heading">¶</a></h3>
+<p class="translated">address オブジェクトで実装されていた属性は全て network オブジェクトにも実装されています。 network はそれに追加で幾つかの属性を実装しています。
+全ての追加属性は <a class="reference internal" href="#ipaddress.IPv4Network" title="ipaddress.IPv4Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Network</span></code></a> と <a class="reference internal" href="#ipaddress.IPv6Network" title="ipaddress.IPv6Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Network</span></code></a> で共通なので、重複を避けるために <code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Network</span></code> にだけドキュメントされています。ネットワークオブジェクトは <a class="reference internal" href="../glossary.html#term-hashable"><span class="xref std std-term">hashable</span></a> なので、辞書のキーとして使用できます。</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ipaddress.</span></span><span class="sig-name descname"><span class="pre">IPv4Network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv4Network" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">IPv4 ネットワーク定義を構築します。<em>address</em> は以下の1つです:</p>
+<ol class="arabic">
+<li><p class="translated">IPアドレスと、オプションでスラッシュ (<code class="docutils literal notranslate"><span class="pre">/</span></code>) で区切られたマスクを持つ文字列。IPアドレスはネットワークアドレスで、マスクは <em>プリフィックス</em> を意味する1つの数値か、 IPv4 アドレスの文字列表現です。マスクがIPv4アドレスのとき、非ゼロのフィールドで始まるときは <em>ネットマスク</em> として、ゼロのフィールドで始まるときは <em>ホストマスク</em> として解釈されます。ただし、すべてのフィールドが0の場合は、<em>ネットマスク</em> として扱われます。マスクが省略された場合、 <code class="docutils literal notranslate"><span class="pre">/32</span></code> が指定されたものとします。</p>
+<p class="translated">例えば、次の <em>address</em> 指定は全て等しくなります: <code class="docutils literal notranslate"><span class="pre">192.168.1.0/24</span></code>, <code class="docutils literal notranslate"><span class="pre">192.168.1.0/255.255.255.0</span></code> <code class="docutils literal notranslate"><span class="pre">192.168.1.0/0.0.0.255</span></code>.</p>
+</li>
+<li><p class="translated">32bit に収まる整数。これは1つのアドレスのネットワークと等しく、ネットワークアドレスが <em>address</em> に、マスクが <code class="docutils literal notranslate"><span class="pre">/32</span></code> になります。</p></li>
+<li><p class="translated">4byte の <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> オブジェクトにビッグエンディアンでパックされた整数。これは整数の <em>address</em> と同じように解釈されます。</p></li>
+<li><p class="untranslated">A two-tuple of an address description and a netmask, where the address
+description is either a string, a 32-bits integer, a 4-bytes packed
+integer, or an existing <a class="reference internal" href="#ipaddress.IPv4Address" title="ipaddress.IPv4Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code></a> object; and the netmask is either
+an integer representing the prefix length (e.g. <code class="docutils literal notranslate"><span class="pre">24</span></code>) or a string
+representing the prefix mask (e.g. <code class="docutils literal notranslate"><span class="pre">255.255.255.0</span></code>).</p></li>
+</ol>
+<p class="translated"><em>address</em> が有効な IPv4 アドレスでない場合に <a class="reference internal" href="#ipaddress.AddressValueError" title="ipaddress.AddressValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">AddressValueError</span></code></a> 例外を発生させます。マスクが IPv4 アドレスに対して有効でない場合に <a class="reference internal" href="#ipaddress.NetmaskValueError" title="ipaddress.NetmaskValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NetmaskValueError</span></code></a> 例外を発生させます。</p>
+<p class="translated"><em>strict</em> が <code class="docutils literal notranslate"><span class="pre">True</span></code> の場合、与えられたアドレスのホストビットが立っていたら <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> を発生させます。そうでない場合、ホストビットをマスクして正しいネットワークアドレスを計算します。</p>
+<p class="translated">特に明記されない場合、他の network や address を受け取る network のメソッドは、引数の IP バージョンが <code class="docutils literal notranslate"><span class="pre">self</span></code> と異なる場合に <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> を発生させます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span><em>address</em> コンストラクタ引数に2要素のタプル形式を追加しました</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.version">
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#ipaddress.IPv4Network.version" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.max_prefixlen">
+<span class="sig-name descname"><span class="pre">max_prefixlen</span></span><a class="headerlink" href="#ipaddress.IPv4Network.max_prefixlen" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#ipaddress.IPv4Address" title="ipaddress.IPv4Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code></a> の対応する属性のドキュメントを参照してください。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.is_multicast">
+<span class="sig-name descname"><span class="pre">is_multicast</span></span><a class="headerlink" href="#ipaddress.IPv4Network.is_multicast" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.is_private">
+<span class="sig-name descname"><span class="pre">is_private</span></span><a class="headerlink" href="#ipaddress.IPv4Network.is_private" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.is_unspecified">
+<span class="sig-name descname"><span class="pre">is_unspecified</span></span><a class="headerlink" href="#ipaddress.IPv4Network.is_unspecified" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.is_reserved">
+<span class="sig-name descname"><span class="pre">is_reserved</span></span><a class="headerlink" href="#ipaddress.IPv4Network.is_reserved" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.is_loopback">
+<span class="sig-name descname"><span class="pre">is_loopback</span></span><a class="headerlink" href="#ipaddress.IPv4Network.is_loopback" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.is_link_local">
+<span class="sig-name descname"><span class="pre">is_link_local</span></span><a class="headerlink" href="#ipaddress.IPv4Network.is_link_local" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">These attributes are true for the network as a whole if they are true
+for both the network address and the broadcast address.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.network_address">
+<span class="sig-name descname"><span class="pre">network_address</span></span><a class="headerlink" href="#ipaddress.IPv4Network.network_address" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">この network のネットワークアドレス。ネットワークアドレスとプリフィックス長によってユニークにネットワークが定義されます。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.broadcast_address">
+<span class="sig-name descname"><span class="pre">broadcast_address</span></span><a class="headerlink" href="#ipaddress.IPv4Network.broadcast_address" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このネットワークのブロードキャストアドレス。ブロードキャストアドレスに投げられたパケットはそのネットワーク内の全てのホストに受信されます。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.hostmask">
+<span class="sig-name descname"><span class="pre">hostmask</span></span><a class="headerlink" href="#ipaddress.IPv4Network.hostmask" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#ipaddress.IPv4Address" title="ipaddress.IPv4Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code></a> オブジェクトとして表現された ホストマスク。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.netmask">
+<span class="sig-name descname"><span class="pre">netmask</span></span><a class="headerlink" href="#ipaddress.IPv4Network.netmask" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#ipaddress.IPv4Address" title="ipaddress.IPv4Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code></a> オブジェクトとして表現された ネットマスク。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.with_prefixlen">
+<span class="sig-name descname"><span class="pre">with_prefixlen</span></span><a class="headerlink" href="#ipaddress.IPv4Network.with_prefixlen" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.compressed">
+<span class="sig-name descname"><span class="pre">compressed</span></span><a class="headerlink" href="#ipaddress.IPv4Network.compressed" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.exploded">
+<span class="sig-name descname"><span class="pre">exploded</span></span><a class="headerlink" href="#ipaddress.IPv4Network.exploded" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">A string representation of the network, with the mask in prefix
+notation.</p>
+<p class="untranslated"><code class="docutils literal notranslate"><span class="pre">with_prefixlen</span></code> and <code class="docutils literal notranslate"><span class="pre">compressed</span></code> are always the same as
+<code class="docutils literal notranslate"><span class="pre">str(network)</span></code>.
+<code class="docutils literal notranslate"><span class="pre">exploded</span></code> uses the exploded form the network address.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.with_netmask">
+<span class="sig-name descname"><span class="pre">with_netmask</span></span><a class="headerlink" href="#ipaddress.IPv4Network.with_netmask" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">A string representation of the network, with the mask in net mask
+notation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.with_hostmask">
+<span class="sig-name descname"><span class="pre">with_hostmask</span></span><a class="headerlink" href="#ipaddress.IPv4Network.with_hostmask" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">A string representation of the network, with the mask in host mask
+notation.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.num_addresses">
+<span class="sig-name descname"><span class="pre">num_addresses</span></span><a class="headerlink" href="#ipaddress.IPv4Network.num_addresses" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ネットワーク内のアドレスの総数</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.prefixlen">
+<span class="sig-name descname"><span class="pre">prefixlen</span></span><a class="headerlink" href="#ipaddress.IPv4Network.prefixlen" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ネットワークプレフィックスのビット長。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.hosts">
+<span class="sig-name descname"><span class="pre">hosts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv4Network.hosts" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Returns an iterator over the usable hosts in the network.  The usable
+hosts are all the IP addresses that belong to the network, except the
+network address itself and the network broadcast address.  For networks
+with a mask length of 31, the network address and network broadcast
+address are also included in the result. Networks with a mask of 32
+will return a list containing the single host address.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/29&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">hosts</span><span class="p">())</span>
+<span class="go">[IPv4Address(&#39;192.0.2.1&#39;), IPv4Address(&#39;192.0.2.2&#39;),</span>
+<span class="go"> IPv4Address(&#39;192.0.2.3&#39;), IPv4Address(&#39;192.0.2.4&#39;),</span>
+<span class="go"> IPv4Address(&#39;192.0.2.5&#39;), IPv4Address(&#39;192.0.2.6&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/31&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">hosts</span><span class="p">())</span>
+<span class="go">[IPv4Address(&#39;192.0.2.0&#39;), IPv4Address(&#39;192.0.2.1&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.1/32&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">hosts</span><span class="p">())</span>
+<span class="go">[IPv4Address(&#39;192.0.2.1&#39;)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.overlaps">
+<span class="sig-name descname"><span class="pre">overlaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv4Network.overlaps" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">True</span></code> if this network is partly or wholly contained in <em>other</em> or
+<em>other</em> is wholly contained in this network.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.address_exclude">
+<span class="sig-name descname"><span class="pre">address_exclude</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv4Network.address_exclude" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Computes the network definitions resulting from removing the given
+<em>network</em> from this one.  Returns an iterator of network objects.
+Raises <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> if <em>network</em> is not completely contained in
+this network.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n1</span> <span class="o">=</span> <span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/28&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">n2</span> <span class="o">=</span> <span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.1/32&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">n1</span><span class="o">.</span><span class="n">address_exclude</span><span class="p">(</span><span class="n">n2</span><span class="p">))</span>
+<span class="go">[IPv4Network(&#39;192.0.2.8/29&#39;), IPv4Network(&#39;192.0.2.4/30&#39;),</span>
+<span class="go"> IPv4Network(&#39;192.0.2.2/31&#39;), IPv4Network(&#39;192.0.2.0/32&#39;)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.subnets">
+<span class="sig-name descname"><span class="pre">subnets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefixlen_diff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv4Network.subnets" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The subnets that join to make the current network definition, depending
+on the argument values.  <em>prefixlen_diff</em> is the amount our prefix
+length should be increased by.  <em>new_prefix</em> is the desired new
+prefix of the subnets; it must be larger than our prefix.  One and
+only one of <em>prefixlen_diff</em> and <em>new_prefix</em> must be set.  Returns an
+iterator of network objects.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/24&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">subnets</span><span class="p">())</span>
+<span class="go">[IPv4Network(&#39;192.0.2.0/25&#39;), IPv4Network(&#39;192.0.2.128/25&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/24&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">subnets</span><span class="p">(</span><span class="n">prefixlen_diff</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="go">[IPv4Network(&#39;192.0.2.0/26&#39;), IPv4Network(&#39;192.0.2.64/26&#39;),</span>
+<span class="go"> IPv4Network(&#39;192.0.2.128/26&#39;), IPv4Network(&#39;192.0.2.192/26&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/24&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">subnets</span><span class="p">(</span><span class="n">new_prefix</span><span class="o">=</span><span class="mi">26</span><span class="p">))</span>
+<span class="go">[IPv4Network(&#39;192.0.2.0/26&#39;), IPv4Network(&#39;192.0.2.64/26&#39;),</span>
+<span class="go"> IPv4Network(&#39;192.0.2.128/26&#39;), IPv4Network(&#39;192.0.2.192/26&#39;)]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/24&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">subnets</span><span class="p">(</span><span class="n">new_prefix</span><span class="o">=</span><span class="mi">23</span><span class="p">))</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+<span class="w">    </span><span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;new prefix must be longer&#39;</span><span class="p">)</span>
+<span class="gr">ValueError</span>: <span class="n">new prefix must be longer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/24&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">subnets</span><span class="p">(</span><span class="n">new_prefix</span><span class="o">=</span><span class="mi">25</span><span class="p">))</span>
+<span class="go">[IPv4Network(&#39;192.0.2.0/25&#39;), IPv4Network(&#39;192.0.2.128/25&#39;)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.supernet">
+<span class="sig-name descname"><span class="pre">supernet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefixlen_diff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv4Network.supernet" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The supernet containing this network definition, depending on the
+argument values.  <em>prefixlen_diff</em> is the amount our prefix length
+should be decreased by.  <em>new_prefix</em> is the desired new prefix of
+the supernet; it must be smaller than our prefix.  One and only one
+of <em>prefixlen_diff</em> and <em>new_prefix</em> must be set.  Returns a single
+network object.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/24&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">supernet</span><span class="p">()</span>
+<span class="go">IPv4Network(&#39;192.0.2.0/23&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/24&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">supernet</span><span class="p">(</span><span class="n">prefixlen_diff</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">IPv4Network(&#39;192.0.0.0/22&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/24&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">supernet</span><span class="p">(</span><span class="n">new_prefix</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="go">IPv4Network(&#39;192.0.0.0/20&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.subnet_of">
+<span class="sig-name descname"><span class="pre">subnet_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv4Network.subnet_of" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このネットワークが <em>other</em> のサブネットの場合に <code class="docutils literal notranslate"><span class="pre">True</span></code> を返します。</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.168.1.0/24&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.168.1.128/30&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span><span class="o">.</span><span class="n">subnet_of</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.7.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.supernet_of">
+<span class="sig-name descname"><span class="pre">supernet_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv4Network.supernet_of" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このネットワークが <em>other</em> のスーパーネットの場合に <code class="docutils literal notranslate"><span class="pre">True</span></code> を返します。</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.168.1.0/24&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.168.1.128/30&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">supernet_of</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.7.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ipaddress.IPv4Network.compare_networks">
+<span class="sig-name descname"><span class="pre">compare_networks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv4Network.compare_networks" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このネットワークを <em>other</em> と比較します。比較ではネットワークアドレスのみが考慮され、ホストアドレスは考慮されません。<code class="docutils literal notranslate"><span class="pre">-1</span></code>、<code class="docutils literal notranslate"><span class="pre">0</span></code>、<code class="docutils literal notranslate"><span class="pre">1</span></code> のいずれかを返します。</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.1/32&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">compare_networks</span><span class="p">(</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.2/32&#39;</span><span class="p">))</span>
+<span class="go">-1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.1/32&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">compare_networks</span><span class="p">(</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/32&#39;</span><span class="p">))</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.1/32&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">compare_networks</span><span class="p">(</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.1/32&#39;</span><span class="p">))</span>
+<span class="go">0</span>
+</pre></div>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">バージョン 3.7 で非推奨: </span>It uses the same ordering and comparison algorithm as &quot;&lt;&quot;, &quot;==&quot;, and &quot;&gt;&quot;</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ipaddress.</span></span><span class="sig-name descname"><span class="pre">IPv6Network</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv6Network" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">IPv6 ネットワーク定義を構築します。<em>address</em> は以下の1つです:</p>
+<ol class="arabic">
+<li><p class="untranslated">A string consisting of an IP address and an optional prefix length,
+separated by a slash (<code class="docutils literal notranslate"><span class="pre">/</span></code>).  The IP address is the network address,
+and the prefix length must be a single number, the <em>prefix</em>.  If no
+prefix length is provided, it's considered to be <code class="docutils literal notranslate"><span class="pre">/128</span></code>.</p>
+<p class="untranslated">Note that currently expanded netmasks are not supported.  That means
+<code class="docutils literal notranslate"><span class="pre">2001:db00::0/24</span></code> is a valid argument while <code class="docutils literal notranslate"><span class="pre">2001:db00::0/ffff:ff00::</span></code>
+is not.</p>
+</li>
+<li><p class="translated">128bit に収まる整数。これは1つのアドレスのネットワークと等しく、ネットワークアドレスが <em>address</em> に、マスクが <code class="docutils literal notranslate"><span class="pre">/128</span></code> になります。</p></li>
+<li><p class="translated">16byte の <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> オブジェクトにビッグエンディアンでパックされた整数。これは整数の <em>address</em> と同じように解釈されます。</p></li>
+<li><p class="untranslated">A two-tuple of an address description and a netmask, where the address
+description is either a string, a 128-bits integer, a 16-bytes packed
+integer, or an existing <a class="reference internal" href="#ipaddress.IPv6Address" title="ipaddress.IPv6Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Address</span></code></a> object; and the netmask is an
+integer representing the prefix length.</p></li>
+</ol>
+<p class="translated"><em>address</em> が有効な IPv6 アドレスでない場合に <a class="reference internal" href="#ipaddress.AddressValueError" title="ipaddress.AddressValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">AddressValueError</span></code></a> 例外を発生させます。マスクが IPv6 アドレスに対して有効でない場合に <a class="reference internal" href="#ipaddress.NetmaskValueError" title="ipaddress.NetmaskValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NetmaskValueError</span></code></a> 例外を発生させます。</p>
+<p class="translated"><em>strict</em> が <code class="docutils literal notranslate"><span class="pre">True</span></code> の場合、与えられたアドレスのホストビットが立っていたら <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> を発生させます。そうでない場合、ホストビットをマスクして正しいネットワークアドレスを計算します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span><em>address</em> コンストラクタ引数に2要素のタプル形式を追加しました</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.version">
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#ipaddress.IPv6Network.version" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.max_prefixlen">
+<span class="sig-name descname"><span class="pre">max_prefixlen</span></span><a class="headerlink" href="#ipaddress.IPv6Network.max_prefixlen" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.is_multicast">
+<span class="sig-name descname"><span class="pre">is_multicast</span></span><a class="headerlink" href="#ipaddress.IPv6Network.is_multicast" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.is_private">
+<span class="sig-name descname"><span class="pre">is_private</span></span><a class="headerlink" href="#ipaddress.IPv6Network.is_private" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.is_unspecified">
+<span class="sig-name descname"><span class="pre">is_unspecified</span></span><a class="headerlink" href="#ipaddress.IPv6Network.is_unspecified" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.is_reserved">
+<span class="sig-name descname"><span class="pre">is_reserved</span></span><a class="headerlink" href="#ipaddress.IPv6Network.is_reserved" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.is_loopback">
+<span class="sig-name descname"><span class="pre">is_loopback</span></span><a class="headerlink" href="#ipaddress.IPv6Network.is_loopback" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.is_link_local">
+<span class="sig-name descname"><span class="pre">is_link_local</span></span><a class="headerlink" href="#ipaddress.IPv6Network.is_link_local" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.network_address">
+<span class="sig-name descname"><span class="pre">network_address</span></span><a class="headerlink" href="#ipaddress.IPv6Network.network_address" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.broadcast_address">
+<span class="sig-name descname"><span class="pre">broadcast_address</span></span><a class="headerlink" href="#ipaddress.IPv6Network.broadcast_address" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.hostmask">
+<span class="sig-name descname"><span class="pre">hostmask</span></span><a class="headerlink" href="#ipaddress.IPv6Network.hostmask" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.netmask">
+<span class="sig-name descname"><span class="pre">netmask</span></span><a class="headerlink" href="#ipaddress.IPv6Network.netmask" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.with_prefixlen">
+<span class="sig-name descname"><span class="pre">with_prefixlen</span></span><a class="headerlink" href="#ipaddress.IPv6Network.with_prefixlen" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.compressed">
+<span class="sig-name descname"><span class="pre">compressed</span></span><a class="headerlink" href="#ipaddress.IPv6Network.compressed" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.exploded">
+<span class="sig-name descname"><span class="pre">exploded</span></span><a class="headerlink" href="#ipaddress.IPv6Network.exploded" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.with_netmask">
+<span class="sig-name descname"><span class="pre">with_netmask</span></span><a class="headerlink" href="#ipaddress.IPv6Network.with_netmask" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.with_hostmask">
+<span class="sig-name descname"><span class="pre">with_hostmask</span></span><a class="headerlink" href="#ipaddress.IPv6Network.with_hostmask" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.num_addresses">
+<span class="sig-name descname"><span class="pre">num_addresses</span></span><a class="headerlink" href="#ipaddress.IPv6Network.num_addresses" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.prefixlen">
+<span class="sig-name descname"><span class="pre">prefixlen</span></span><a class="headerlink" href="#ipaddress.IPv6Network.prefixlen" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.hosts">
+<span class="sig-name descname"><span class="pre">hosts</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv6Network.hosts" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Returns an iterator over the usable hosts in the network.  The usable
+hosts are all the IP addresses that belong to the network, except the
+Subnet-Router anycast address.  For networks with a mask length of 127,
+the Subnet-Router anycast address is also included in the result.
+Networks with a mask of 128 will return a list containing the
+single host address.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.overlaps">
+<span class="sig-name descname"><span class="pre">overlaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv6Network.overlaps" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.address_exclude">
+<span class="sig-name descname"><span class="pre">address_exclude</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">network</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv6Network.address_exclude" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.subnets">
+<span class="sig-name descname"><span class="pre">subnets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefixlen_diff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv6Network.subnets" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.supernet">
+<span class="sig-name descname"><span class="pre">supernet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefixlen_diff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv6Network.supernet" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.subnet_of">
+<span class="sig-name descname"><span class="pre">subnet_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv6Network.subnet_of" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.supernet_of">
+<span class="sig-name descname"><span class="pre">supernet_of</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv6Network.supernet_of" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.compare_networks">
+<span class="sig-name descname"><span class="pre">compare_networks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv6Network.compare_networks" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#ipaddress.IPv4Network" title="ipaddress.IPv4Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Network</span></code></a> の対応する属性のドキュメントを参照してください。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Network.is_site_local">
+<span class="sig-name descname"><span class="pre">is_site_local</span></span><a class="headerlink" href="#ipaddress.IPv6Network.is_site_local" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">This attribute is true for the network as a whole if it is true
+for both the network address and the broadcast address.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="id1">
+<h3 class="translated">演算子<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
+<p class="translated">Network オブジェクトはいくつかの演算子をサポートします。明記されない限り、演算子は互換性のあるオブジェクト間 (つまり IPv4 同士や IPv6 同士) でのみ利用できます。</p>
+<section id="logical-operators">
+<h4 class="translated">論理演算子<a class="headerlink" href="#logical-operators" title="Link to this heading">¶</a></h4>
+<p class="untranslated">Network objects can be compared with the usual set of logical operators.
+Network objects are ordered first by network address, then by net mask.</p>
+</section>
+<section id="iteration">
+<h4 class="translated">イテレーション<a class="headerlink" href="#iteration" title="Link to this heading">¶</a></h4>
+<p class="untranslated">Network objects can be iterated to list all the addresses belonging to the
+network.  For iteration, <em>all</em> hosts are returned, including unusable hosts
+(for usable hosts, use the <a class="reference internal" href="#ipaddress.IPv4Network.hosts" title="ipaddress.IPv4Network.hosts"><code class="xref py py-meth docutils literal notranslate"><span class="pre">hosts()</span></code></a> method).  An
+example:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">addr</span> <span class="ow">in</span> <span class="n">IPv4Network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/28&#39;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">addr</span>
+<span class="gp">...</span>
+<span class="go">IPv4Address(&#39;192.0.2.0&#39;)</span>
+<span class="go">IPv4Address(&#39;192.0.2.1&#39;)</span>
+<span class="go">IPv4Address(&#39;192.0.2.2&#39;)</span>
+<span class="go">IPv4Address(&#39;192.0.2.3&#39;)</span>
+<span class="go">IPv4Address(&#39;192.0.2.4&#39;)</span>
+<span class="go">IPv4Address(&#39;192.0.2.5&#39;)</span>
+<span class="go">IPv4Address(&#39;192.0.2.6&#39;)</span>
+<span class="go">IPv4Address(&#39;192.0.2.7&#39;)</span>
+<span class="go">IPv4Address(&#39;192.0.2.8&#39;)</span>
+<span class="go">IPv4Address(&#39;192.0.2.9&#39;)</span>
+<span class="go">IPv4Address(&#39;192.0.2.10&#39;)</span>
+<span class="go">IPv4Address(&#39;192.0.2.11&#39;)</span>
+<span class="go">IPv4Address(&#39;192.0.2.12&#39;)</span>
+<span class="go">IPv4Address(&#39;192.0.2.13&#39;)</span>
+<span class="go">IPv4Address(&#39;192.0.2.14&#39;)</span>
+<span class="go">IPv4Address(&#39;192.0.2.15&#39;)</span>
+</pre></div>
+</div>
+</section>
+<section id="networks-as-containers-of-addresses">
+<h4 class="translated">アドレスのコンテナとしてのネットワーク<a class="headerlink" href="#networks-as-containers-of-addresses" title="Link to this heading">¶</a></h4>
+<p class="translated">ネットワークオブジェクトは、アドレスのコンテナとして振舞えます。いくつか例をあげます:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">IPv4Network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/28&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">IPv4Address(&#39;192.0.2.0&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">IPv4Network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/28&#39;</span><span class="p">)[</span><span class="mi">15</span><span class="p">]</span>
+<span class="go">IPv4Address(&#39;192.0.2.15&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;192.0.2.6&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">IPv4Network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/28&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;192.0.3.6&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">IPv4Network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/28&#39;</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="interface-objects">
+<h2 class="translated">インターフェイスオブジェクト<a class="headerlink" href="#interface-objects" title="Link to this heading">¶</a></h2>
+<p class="translated">インターフェースオブジェクトは <a class="reference internal" href="../glossary.html#term-hashable"><span class="xref std std-term">hashable</span></a> なので、辞書のキーとして使用できます。</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="ipaddress.IPv4Interface">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ipaddress.</span></span><span class="sig-name descname"><span class="pre">IPv4Interface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv4Interface" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Construct an IPv4 interface.  The meaning of <em>address</em> is as in the
+constructor of <a class="reference internal" href="#ipaddress.IPv4Network" title="ipaddress.IPv4Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Network</span></code></a>, except that arbitrary host addresses
+are always accepted.</p>
+<p class="untranslated"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Interface</span></code> is a subclass of <a class="reference internal" href="#ipaddress.IPv4Address" title="ipaddress.IPv4Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code></a>, so it inherits
+all the attributes from that class.  In addition, the following attributes
+are available:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Interface.ip">
+<span class="sig-name descname"><span class="pre">ip</span></span><a class="headerlink" href="#ipaddress.IPv4Interface.ip" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The address (<a class="reference internal" href="#ipaddress.IPv4Address" title="ipaddress.IPv4Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code></a>) without network information.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">interface</span> <span class="o">=</span> <span class="n">IPv4Interface</span><span class="p">(</span><span class="s1">&#39;192.0.2.5/24&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">interface</span><span class="o">.</span><span class="n">ip</span>
+<span class="go">IPv4Address(&#39;192.0.2.5&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Interface.network">
+<span class="sig-name descname"><span class="pre">network</span></span><a class="headerlink" href="#ipaddress.IPv4Interface.network" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The network (<a class="reference internal" href="#ipaddress.IPv4Network" title="ipaddress.IPv4Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Network</span></code></a>) this interface belongs to.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">interface</span> <span class="o">=</span> <span class="n">IPv4Interface</span><span class="p">(</span><span class="s1">&#39;192.0.2.5/24&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">interface</span><span class="o">.</span><span class="n">network</span>
+<span class="go">IPv4Network(&#39;192.0.2.0/24&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Interface.with_prefixlen">
+<span class="sig-name descname"><span class="pre">with_prefixlen</span></span><a class="headerlink" href="#ipaddress.IPv4Interface.with_prefixlen" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">A string representation of the interface with the mask in prefix notation.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">interface</span> <span class="o">=</span> <span class="n">IPv4Interface</span><span class="p">(</span><span class="s1">&#39;192.0.2.5/24&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">interface</span><span class="o">.</span><span class="n">with_prefixlen</span>
+<span class="go">&#39;192.0.2.5/24&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Interface.with_netmask">
+<span class="sig-name descname"><span class="pre">with_netmask</span></span><a class="headerlink" href="#ipaddress.IPv4Interface.with_netmask" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">A string representation of the interface with the network as a net mask.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">interface</span> <span class="o">=</span> <span class="n">IPv4Interface</span><span class="p">(</span><span class="s1">&#39;192.0.2.5/24&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">interface</span><span class="o">.</span><span class="n">with_netmask</span>
+<span class="go">&#39;192.0.2.5/255.255.255.0&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv4Interface.with_hostmask">
+<span class="sig-name descname"><span class="pre">with_hostmask</span></span><a class="headerlink" href="#ipaddress.IPv4Interface.with_hostmask" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">A string representation of the interface with the network as a host mask.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">interface</span> <span class="o">=</span> <span class="n">IPv4Interface</span><span class="p">(</span><span class="s1">&#39;192.0.2.5/24&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">interface</span><span class="o">.</span><span class="n">with_hostmask</span>
+<span class="go">&#39;192.0.2.5/0.0.0.255&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ipaddress.IPv6Interface">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ipaddress.</span></span><span class="sig-name descname"><span class="pre">IPv6Interface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.IPv6Interface" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Construct an IPv6 interface.  The meaning of <em>address</em> is as in the
+constructor of <a class="reference internal" href="#ipaddress.IPv6Network" title="ipaddress.IPv6Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Network</span></code></a>, except that arbitrary host addresses
+are always accepted.</p>
+<p class="untranslated"><a class="reference internal" href="#ipaddress.IPv6Interface" title="ipaddress.IPv6Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Interface</span></code></a> is a subclass of <a class="reference internal" href="#ipaddress.IPv6Address" title="ipaddress.IPv6Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Address</span></code></a>, so it inherits
+all the attributes from that class.  In addition, the following attributes
+are available:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Interface.ip">
+<span class="sig-name descname"><span class="pre">ip</span></span><a class="headerlink" href="#ipaddress.IPv6Interface.ip" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Interface.network">
+<span class="sig-name descname"><span class="pre">network</span></span><a class="headerlink" href="#ipaddress.IPv6Interface.network" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Interface.with_prefixlen">
+<span class="sig-name descname"><span class="pre">with_prefixlen</span></span><a class="headerlink" href="#ipaddress.IPv6Interface.with_prefixlen" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Interface.with_netmask">
+<span class="sig-name descname"><span class="pre">with_netmask</span></span><a class="headerlink" href="#ipaddress.IPv6Interface.with_netmask" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ipaddress.IPv6Interface.with_hostmask">
+<span class="sig-name descname"><span class="pre">with_hostmask</span></span><a class="headerlink" href="#ipaddress.IPv6Interface.with_hostmask" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#ipaddress.IPv4Interface" title="ipaddress.IPv4Interface"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Interface</span></code></a> の対応する属性のドキュメントを参照してください。</p>
+</dd></dl>
+
+</dd></dl>
+
+<section id="id2">
+<h3 class="translated">演算子<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h3>
+<p class="translated">Interface オブジェクトはいくつかの演算子をサポートします。明記されない限り、演算子は互換性のあるオブジェクト間 (つまり IPv4 同士や IPv6 同士) でのみ利用できます。</p>
+<section id="id3">
+<h4 class="translated">論理演算子<a class="headerlink" href="#id3" title="Link to this heading">¶</a></h4>
+<p class="untranslated">Interface objects can be compared with the usual set of logical operators.</p>
+<p class="untranslated">For equality comparison (<code class="docutils literal notranslate"><span class="pre">==</span></code> and <code class="docutils literal notranslate"><span class="pre">!=</span></code>), both the IP address and network
+must be the same for the objects to be equal.  An interface will not compare
+equal to any address or network object.</p>
+<p class="untranslated">For ordering (<code class="docutils literal notranslate"><span class="pre">&lt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&gt;</span></code>, etc) the rules are different.  Interface and
+address objects with the same IP version can be compared, and the address
+objects will always sort before the interface objects.  Two interface objects
+are first compared by their networks and, if those are the same, then by their
+IP addresses.</p>
+</section>
+</section>
+</section>
+<section id="other-module-level-functions">
+<h2 class="translated">その他のモジュールレベル関数<a class="headerlink" href="#other-module-level-functions" title="Link to this heading">¶</a></h2>
+<p class="translated">このモジュールは以下のモジュールレベル関数も提供しています:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="ipaddress.v4_int_to_packed">
+<span class="sig-prename descclassname"><span class="pre">ipaddress.</span></span><span class="sig-name descname"><span class="pre">v4_int_to_packed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.v4_int_to_packed" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">アドレスをネットワークバイトオーダー(ビッグエンディアン)でパックされた4バイトで表現します。 <em>address</em> は IPv4 IPアドレスを整数で表したものです。整数が負だったり IPv4 IPアドレスとして大きすぎる場合は <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> 例外を発生させます。</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="mi">3221225985</span><span class="p">)</span>
+<span class="go">IPv4Address(&#39;192.0.2.1&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">v4_int_to_packed</span><span class="p">(</span><span class="mi">3221225985</span><span class="p">)</span>
+<span class="go">b&#39;\xc0\x00\x02\x01&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ipaddress.v6_int_to_packed">
+<span class="sig-prename descclassname"><span class="pre">ipaddress.</span></span><span class="sig-name descname"><span class="pre">v6_int_to_packed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.v6_int_to_packed" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">アドレスをネットワークバイトオーダー(ビッグエンディアン)でパックされた16バイトで表現します。 <em>address</em> は IPv6 IPアドレスを整数で表したものです。整数が負だったり IPv6 IPアドレスとして大きすぎる場合は <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> 例外を発生させます。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ipaddress.summarize_address_range">
+<span class="sig-prename descclassname"><span class="pre">ipaddress.</span></span><span class="sig-name descname"><span class="pre">summarize_address_range</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">first</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">last</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.summarize_address_range" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">first と last で指定された IPアドレス帯に対するイテレーターを返します。 <em>first</em> はアドレス帯の中の最初の <a class="reference internal" href="#ipaddress.IPv4Address" title="ipaddress.IPv4Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code></a> か <a class="reference internal" href="#ipaddress.IPv6Address" title="ipaddress.IPv6Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Address</span></code></a> で、 <em>last</em> はアドレス帯の中の最後の  <code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code> か <code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Address</span></code> です。 <em>first</em> か <em>last</em> がIPアドレスでない場合や、2つの型が揃っていない場合に、 <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> を発生させます。 <em>last</em> が <em>first</em> より大きくない場合や、 <em>first</em> アドレスのバージョンが 4 でも 6 でもない場合は <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> を発生させます。</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">ipaddr</span> <span class="k">for</span> <span class="n">ipaddr</span> <span class="ow">in</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">summarize_address_range</span><span class="p">(</span>
+<span class="gp">... </span>   <span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;192.0.2.0&#39;</span><span class="p">),</span>
+<span class="gp">... </span>   <span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;192.0.2.130&#39;</span><span class="p">))]</span>
+<span class="go">[IPv4Network(&#39;192.0.2.0/25&#39;), IPv4Network(&#39;192.0.2.128/31&#39;), IPv4Network(&#39;192.0.2.130/32&#39;)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ipaddress.collapse_addresses">
+<span class="sig-prename descclassname"><span class="pre">ipaddress.</span></span><span class="sig-name descname"><span class="pre">collapse_addresses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">addresses</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.collapse_addresses" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return an iterator of the collapsed <a class="reference internal" href="#ipaddress.IPv4Network" title="ipaddress.IPv4Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Network</span></code></a> or
+<a class="reference internal" href="#ipaddress.IPv6Network" title="ipaddress.IPv6Network"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Network</span></code></a> objects.  <em>addresses</em> is an <a class="reference internal" href="../glossary.html#term-iterable"><span class="xref std std-term">iterable</span></a> of
+<code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Network</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Network</span></code> objects.  A <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> is
+raised if <em>addresses</em> contains mixed version objects.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">ipaddr</span> <span class="k">for</span> <span class="n">ipaddr</span> <span class="ow">in</span>
+<span class="gp">... </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">collapse_addresses</span><span class="p">([</span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv4Network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/25&#39;</span><span class="p">),</span>
+<span class="gp">... </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv4Network</span><span class="p">(</span><span class="s1">&#39;192.0.2.128/25&#39;</span><span class="p">)])]</span>
+<span class="go">[IPv4Network(&#39;192.0.2.0/24&#39;)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="ipaddress.get_mixed_type_key">
+<span class="sig-prename descclassname"><span class="pre">ipaddress.</span></span><span class="sig-name descname"><span class="pre">get_mixed_type_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.get_mixed_type_key" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ネットワークとアドレスをソートするための key 関数を返します。アドレスとネットワークは本質的に違うものなので、デフォルトでは比較できません。そのため、次の式は:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">IPv4Address</span><span class="p">(</span><span class="s1">&#39;192.0.2.0&#39;</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">IPv4Network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/24&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="untranslated">doesn't make sense.  There are some times however, where you may wish to
+have <code class="xref py py-mod docutils literal notranslate"><span class="pre">ipaddress</span></code> sort these anyway.  If you need to do this, you can use
+this function as the <em>key</em> argument to <a class="reference internal" href="functions.html#sorted" title="sorted"><code class="xref py py-func docutils literal notranslate"><span class="pre">sorted()</span></code></a>.</p>
+<p class="translated"><em>obj</em> はネットワークオブジェクトかアドレスオブジェクトのどちらかです。</p>
+</dd></dl>
+
+</section>
+<section id="custom-exceptions">
+<h2 class="untranslated">Custom Exceptions<a class="headerlink" href="#custom-exceptions" title="Link to this heading">¶</a></h2>
+<p class="translated">クラスのコンストラクタがより具体的なエラー報告をするために、このモジュールでは以下の例外を定義します:</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="ipaddress.AddressValueError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ipaddress.</span></span><span class="sig-name descname"><span class="pre">AddressValueError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ValueError</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.AddressValueError" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Any value error related to the address.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ipaddress.NetmaskValueError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ipaddress.</span></span><span class="sig-name descname"><span class="pre">NetmaskValueError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ValueError</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ipaddress.NetmaskValueError" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Any value error related to the net mask.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipaddress</span></code> --- IPv4/IPv6 操作ライブラリ</a><ul>
+<li><a class="reference internal" href="#convenience-factory-functions">便利なファクトリ関数</a></li>
+<li><a class="reference internal" href="#ip-addresses">IP アドレス</a><ul>
+<li><a class="reference internal" href="#address-objects">Address オブジェクト</a></li>
+<li><a class="reference internal" href="#conversion-to-strings-and-integers">文字列と整数への変換</a></li>
+<li><a class="reference internal" href="#operators">演算子</a><ul>
+<li><a class="reference internal" href="#comparison-operators">比較演算子</a></li>
+<li><a class="reference internal" href="#arithmetic-operators">算術演算</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#ip-network-definitions">IP ネットワーク定義</a><ul>
+<li><a class="reference internal" href="#prefix-net-mask-and-host-mask">プリフィックス, ネットマスク、ホストマスク</a></li>
+<li><a class="reference internal" href="#network-objects">Network オブジェクト</a></li>
+<li><a class="reference internal" href="#id1">演算子</a><ul>
+<li><a class="reference internal" href="#logical-operators">論理演算子</a></li>
+<li><a class="reference internal" href="#iteration">イテレーション</a></li>
+<li><a class="reference internal" href="#networks-as-containers-of-addresses">アドレスのコンテナとしてのネットワーク</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#interface-objects">インターフェイスオブジェクト</a><ul>
+<li><a class="reference internal" href="#id2">演算子</a><ul>
+<li><a class="reference internal" href="#id3">論理演算子</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#other-module-level-functions">その他のモジュールレベル関数</a></li>
+<li><a class="reference internal" href="#custom-exceptions">Custom Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="xmlrpc.server.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xmlrpc.server</span></code> --- 基本的な XML-RPC サーバー</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="mm.html"
+                          title="次の章へ">マルチメディアサービス</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/ipaddress.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/ipaddress.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/ipaddress.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="mm.html" title="マルチメディアサービス"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="xmlrpc.server.html" title="xmlrpc.server --- 基本的な XML-RPC サーバー"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="internet.html" >インターネットプロトコルとサポート</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipaddress</span></code> --- IPv4/IPv6 操作ライブラリ</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

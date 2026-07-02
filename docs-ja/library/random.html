@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="random --- 疑似乱数を生成する" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/random.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/random.py このモジュールでは様々な分布をもつ擬似乱数生成器を実装しています。 整数用に、ある範囲からの一様な選択があります。シーケンス用には、シーケンスからのランダムな要素の一様な選択、リストのランダムな置換をインプレースに生成する関数、順列を置換せずにランダムサンプリングする関数があります。 実数用としては、一様分布、正規分布 (ガウス分布)、対数正規分布..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_random_22fc0914.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/random.py このモジュールでは様々な分布をもつ擬似乱数生成器を実装しています。 整数用に、ある範囲からの一様な選択があります。シーケンス用には、シーケンスからのランダムな要素の一様な選択、リストのランダムな置換をインプレースに生成する関数、順列を置換せずにランダムサンプリングする関数があります。 実数用としては、一様分布、正規分布 (ガウス分布)、対数正規分布..." />
+<meta name="description" content="ソースコード: Lib/random.py このモジュールでは様々な分布をもつ擬似乱数生成器を実装しています。 整数用に、ある範囲からの一様な選択があります。シーケンス用には、シーケンスからのランダムな要素の一様な選択、リストのランダムな置換をインプレースに生成する関数、順列を置換せずにランダムサンプリングする関数があります。 実数用としては、一様分布、正規分布 (ガウス分布)、対数正規分布..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>random --- 疑似乱数を生成する &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="statistics --- 数学的統計関数" href="statistics.html" />
+    <link rel="prev" title="fractions --- 有理数" href="fractions.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/random.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">random</span></code> --- 疑似乱数を生成する</a><ul>
+<li><a class="reference internal" href="#bookkeeping-functions">保守 (bookkeeping) 関数</a></li>
+<li><a class="reference internal" href="#functions-for-bytes">バイト列用の関数</a></li>
+<li><a class="reference internal" href="#functions-for-integers">整数用の関数</a></li>
+<li><a class="reference internal" href="#functions-for-sequences">シーケンス用の関数</a></li>
+<li><a class="reference internal" href="#discrete-distributions">Discrete distributions</a></li>
+<li><a class="reference internal" href="#real-valued-distributions">実数分布</a></li>
+<li><a class="reference internal" href="#alternative-generator">他の生成器</a></li>
+<li><a class="reference internal" href="#notes-on-reproducibility">再現性について</a></li>
+<li><a class="reference internal" href="#examples">使用例</a></li>
+<li><a class="reference internal" href="#recipes">レシピ</a></li>
+<li><a class="reference internal" href="#command-line-usage">コマンドラインでの使用</a></li>
+<li><a class="reference internal" href="#command-line-example">コマンドラインの例</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="fractions.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fractions</span></code> --- 有理数</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="statistics.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">statistics</span></code> --- 数学的統計関数</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/random.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/random.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/random.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="statistics.html" title="statistics --- 数学的統計関数"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="fractions.html" title="fractions --- 有理数"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="numeric.html" accesskey="U">数値と数学モジュール</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">random</span></code> --- 疑似乱数を生成する</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-random">
+<span id="random-generate-pseudo-random-numbers"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">random</span></code> --- 疑似乱数を生成する<a class="headerlink" href="#module-random" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/random.py">Lib/random.py</a></p>
+<hr class="docutils" />
+<p class="translated">このモジュールでは様々な分布をもつ擬似乱数生成器を実装しています。</p>
+<p class="translated">整数用に、ある範囲からの一様な選択があります。シーケンス用には、シーケンスからのランダムな要素の一様な選択、リストのランダムな置換をインプレースに生成する関数、順列を置換せずにランダムサンプリングする関数があります。</p>
+<p class="translated">実数用としては、一様分布、正規分布 (ガウス分布)、対数正規分布、負の指数分布、ガンマおよびベータ分布を計算する関数があります。角度の分布を生成するにはフォン・ミーゼス分布が利用できます。</p>
+<p class="translated">ほとんど全てのモジュール関数は、基礎となる関数 <a class="reference internal" href="#random.random" title="random.random"><code class="xref py py-func docutils literal notranslate"><span class="pre">random()</span></code></a> に依存します。この関数はランダムな浮動小数点数を半開区間 <code class="docutils literal notranslate"><span class="pre">0.0</span> <span class="pre">&lt;=</span> <span class="pre">X</span> <span class="pre">&lt;</span> <span class="pre">1.0</span></code> 内に一様に生成します。Python は中心となる乱数生成器としてメルセンヌツイスタを使います。これは 53 ビット精度の浮動小数点を生成し、周期は 2**19937-1 です。本体は C で実装されていて、高速でスレッドセーフです。メルセンヌツイスタは、現存する中で最も広範囲にテストされた乱数生成器のひとつです。しかしながら、メルセンヌツイスタは完全に決定論的であるため、全ての目的に合致しているわけではなく、暗号化の目的には全く向いていません。</p>
+<p class="translated">このモジュールで提供されている関数は、実際には <a class="reference internal" href="#random.Random" title="random.Random"><code class="xref py py-class docutils literal notranslate"><span class="pre">random.Random</span></code></a> クラスの隠蔽されたインスタンスのメソッドに束縛されています。内部状態を共有しない生成器を取得するため、自分で <a class="reference internal" href="#random.Random" title="random.Random"><code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code></a> のインスタンスを生成することができます。</p>
+<p class="untranslated">Class <a class="reference internal" href="#random.Random" title="random.Random"><code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code></a> can also be subclassed if you want to use a different
+basic generator of your own devising: see the documentation on that class for
+more details.</p>
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">random</span></code> module also provides the <a class="reference internal" href="#random.SystemRandom" title="random.SystemRandom"><code class="xref py py-class docutils literal notranslate"><span class="pre">SystemRandom</span></code></a> class which
+uses the system function <a class="reference internal" href="os.html#os.urandom" title="os.urandom"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.urandom()</span></code></a> to generate random numbers
+from sources provided by the operating system.</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p class="translated">このモジュールの擬似乱数生成器をセキュリティ目的に使用してはいけません。セキュリティや暗号学的な用途については <a class="reference internal" href="secrets.html#module-secrets" title="secrets: Generate secure random numbers for managing secrets."><code class="xref py py-mod docutils literal notranslate"><span class="pre">secrets</span></code></a> モジュールを参照してください。</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p class="translated">M. Matsumoto and T. Nishimura, &quot;Mersenne Twister: A 623-dimensionally
+equidistributed uniform pseudorandom number generator&quot;, ACM Transactions on
+Modeling and Computer Simulation Vol. 8, No. 1, January pp.3--30 1998.</p>
+<p class="translated"><a class="reference external" href="https://code.activestate.com/recipes/576707-long-period-random-number-generator/">Complementary-Multiply-with-Carry recipe</a>  長い周期と比較的シンプルな更新操作を備えた互換性のある別の乱数生成器。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">The global random number generator and instances of <a class="reference internal" href="#random.Random" title="random.Random"><code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code></a> are thread-safe.
+However, in the free-threaded build, concurrent calls to the global generator or
+to the same instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code> may encounter contention and poor performance.
+Consider using separate instances of <code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code> per thread instead.</p>
+</div>
+<section id="bookkeeping-functions">
+<h2 class="translated">保守 (bookkeeping) 関数<a class="headerlink" href="#bookkeeping-functions" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="random.seed">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">seed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.seed" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">乱数生成器を初期化します。</p>
+<p class="translated"><em>a</em> が省略されるか <code class="docutils literal notranslate"><span class="pre">None</span></code> の場合、現在のシステム時刻が使用されます。乱数のソースがオペレーティングシステムによって提供される場合、システム時刻の代わりにそれが使用されます (利用可能性についての詳細は <a class="reference internal" href="os.html#os.urandom" title="os.urandom"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.urandom()</span></code></a> 関数を参照)。</p>
+<p class="translated"><em>a</em> が int の場合は、その絶対値が直接使用されます。</p>
+<p class="translated">バージョン2 (デフォルト) では、 <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference internal" href="stdtypes.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytearray</span></code></a> オブジェクトは <a class="reference internal" href="functions.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> に変換され、そのビットがすべて使用されます。</p>
+<p class="translated">バージョン1 (Python の古いバージョンでの乱数列を再現するために提供される) では、 <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> と <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> に対して適用されるアルゴリズムは、より狭い範囲のシードを生成します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span>文字列シードのすべてのビットを使うバージョン2スキームに移行。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.11 で変更: </span><em>seed</em> は次の型の内のいずれかでなければなりません: <code class="docutils literal notranslate"><span class="pre">None</span></code>、<a class="reference internal" href="functions.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>、<a class="reference internal" href="functions.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>、<a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>、<a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>、<a class="reference internal" href="stdtypes.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytearray</span></code></a>。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random.getstate">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">getstate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#random.getstate" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">乱数生成器の現在の内部状態を記憶したオブジェクトを返します。このオブジェクトを <a class="reference internal" href="#random.setstate" title="random.setstate"><code class="xref py py-func docutils literal notranslate"><span class="pre">setstate()</span></code></a> に渡して内部状態を復元することができます。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random.setstate">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">setstate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.setstate" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>state</em> は予め <a class="reference internal" href="#random.getstate" title="random.getstate"><code class="xref py py-func docutils literal notranslate"><span class="pre">getstate()</span></code></a> を呼び出して得ておかなくてはなりません。 <a class="reference internal" href="#random.setstate" title="random.setstate"><code class="xref py py-func docutils literal notranslate"><span class="pre">setstate()</span></code></a> は <code class="xref py py-func docutils literal notranslate"><span class="pre">getstate()</span></code> が呼び出された時の乱数生成器の内部状態を復元します。</p>
+</dd></dl>
+
+</section>
+<section id="functions-for-bytes">
+<h2 class="translated">バイト列用の関数<a class="headerlink" href="#functions-for-bytes" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="random.randbytes">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">randbytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.randbytes" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>n</em> バイトのランダムなバイト列を生成します。</p>
+<p class="translated">セキュリティトークンを生成する目的で、このメソッドを使用しないでください。代わりに <a class="reference internal" href="secrets.html#secrets.token_bytes" title="secrets.token_bytes"><code class="xref py py-func docutils literal notranslate"><span class="pre">secrets.token_bytes()</span></code></a> を使用してください。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.9.</span></p>
+</div>
+</dd></dl>
+
+</section>
+<section id="functions-for-integers">
+<h2 class="translated">整数用の関数<a class="headerlink" href="#functions-for-integers" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="random.randrange">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">randrange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stop</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.randrange" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">randrange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em><span class="optional">]</span><span class="sig-paren">)</span></dt>
+<dd><p class="translated"><code class="docutils literal notranslate"><span class="pre">range(start,</span> <span class="pre">stop,</span> <span class="pre">step)</span></code> の要素からランダムに選ばれた要素を返します。</p>
+<p class="untranslated">This is roughly equivalent to <code class="docutils literal notranslate"><span class="pre">choice(range(start,</span> <span class="pre">stop,</span> <span class="pre">step))</span></code> but
+supports arbitrarily large ranges and is optimized for common cases.</p>
+<p class="translated">位置引数のパターンは <a class="reference internal" href="stdtypes.html#range" title="range"><code class="xref py py-func docutils literal notranslate"><span class="pre">range()</span></code></a> 関数の引数と一致します。</p>
+<p class="untranslated">Keyword arguments should not be used because they can be interpreted
+in unexpected ways. For example <code class="docutils literal notranslate"><span class="pre">randrange(start=100)</span></code> is interpreted
+as <code class="docutils literal notranslate"><span class="pre">randrange(0,</span> <span class="pre">100,</span> <span class="pre">1)</span></code>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span>一様に分布した値の生成に関して <a class="reference internal" href="#random.randrange" title="random.randrange"><code class="xref py py-meth docutils literal notranslate"><span class="pre">randrange()</span></code></a> がより洗練されました。以前は <code class="docutils literal notranslate"><span class="pre">int(random()*n)</span></code> のようなやや一様でない分布を生成するスタイルを使用していました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.12 で変更: </span>整数以外の型の自動変換はサポートされなくなりました。<code class="docutils literal notranslate"><span class="pre">randrange(10.0)</span></code> や <code class="docutils literal notranslate"><span class="pre">randrange(Fraction(10,</span> <span class="pre">1))</span></code> のような呼び出しは <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> を送出します。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random.randint">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">randint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.randint" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&lt;=</span> <span class="pre">N</span> <span class="pre">&lt;=</span> <span class="pre">b</span></code> であるようなランダムな整数 <em>N</em> を返します。<code class="docutils literal notranslate"><span class="pre">randrange(a,</span> <span class="pre">b+1)</span></code> のエイリアスです。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random.getrandbits">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">getrandbits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.getrandbits" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>k</em> 桁の乱数ビットを持つ Python の整数を生成し、返します。このメソッドはメルセンヌツイスタ生成器で提供されており、その他の乱数生成器でもオプションの API として提供されている場合があります。<a class="reference internal" href="#random.getrandbits" title="random.getrandbits"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getrandbits()</span></code></a> が使用可能な場合、<a class="reference internal" href="#random.randrange" title="random.randrange"><code class="xref py py-meth docutils literal notranslate"><span class="pre">randrange()</span></code></a> は任意の範囲の乱数を生成できるようになります。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.9 で変更: </span><em>k</em> の値として 0 が許されるようになりました。</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="functions-for-sequences">
+<h2 class="translated">シーケンス用の関数<a class="headerlink" href="#functions-for-sequences" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="random.choice">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">choice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seq</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.choice" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">空でないシーケンス <em>seq</em> からランダムに要素を返します。 <em>seq</em> が空のときは、 <a class="reference internal" href="exceptions.html#IndexError" title="IndexError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">IndexError</span></code></a> が送出されます。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random.choices">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">choices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">population</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">cum_weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.choices" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>population</em> から重複ありで選んだ要素からなる大きさ <em>k</em> のリストを返します。<em>population</em> が空の場合 <a class="reference internal" href="exceptions.html#IndexError" title="IndexError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">IndexError</span></code></a> を送出します。</p>
+<p class="translated"><em>weights</em> シーケンスが与えられた場合、相対的な重みに基づいて要素が選ばれます。あるいは、<em>cum_weights</em> シーケンスが与えられた場合、累積的な重み (<a class="reference internal" href="itertools.html#itertools.accumulate" title="itertools.accumulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">itertools.accumulate()</span></code></a> を用いて計算されるかもしれません) で要素が選ばれます。例えば、相対的な重み <code class="docutils literal notranslate"><span class="pre">[10,</span> <span class="pre">5,</span> <span class="pre">30,</span> <span class="pre">5]</span></code> は累積的な重み <code class="docutils literal notranslate"><span class="pre">[10,</span> <span class="pre">15,</span> <span class="pre">45,</span> <span class="pre">50]</span></code> と等価です。内部的には、相対的な重みは要素選択の前に累積的な重みに変換されるため、累積的な重みを渡すと手間を省けます。</p>
+<p class="translated"><em>weights</em> および <em>cum_weights</em> が与えられなかった場合、要素は同じ確率で選択されます。重みのシーケンスが与えられた場合、その長さは <em>population</em> シーケンスと同じでなければなりません。<em>weights</em> と <em>cum_weights</em> を同時に与えると <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> が送出されます。</p>
+<p class="translated"><em>weights</em> や <em>cum_weights</em> には <a class="reference internal" href="#module-random" title="random: Generate pseudo-random numbers with various common distributions."><code class="xref py py-func docutils literal notranslate"><span class="pre">random()</span></code></a> が返す <a class="reference internal" href="functions.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> 値と相互に変換できるような、任意の数値型を使用できます (int、float、fraction を含みますが、decimal は除きます)。重みには非負で有限の値を指定することが規定されます。全ての重みが 0 の場合、例外 <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> が送出されます。</p>
+<p class="translated">与えられた種に対して、同じ重みを持つ <a class="reference internal" href="#random.choices" title="random.choices"><code class="xref py py-func docutils literal notranslate"><span class="pre">choices()</span></code></a> 関数は、一般に <a class="reference internal" href="#random.choice" title="random.choice"><code class="xref py py-func docutils literal notranslate"><span class="pre">choice()</span></code></a> を繰り返し呼び出す場合とは異なるシーケンスを生成します。 <code class="xref py py-func docutils literal notranslate"><span class="pre">choices()</span></code> で使用されるアルゴリズムは、内部の一貫性とスピードのために浮動小数点演算を使用します。 <code class="xref py py-func docutils literal notranslate"><span class="pre">choice()</span></code> で使われるアルゴリズムは、丸め誤差による小さな偏りを避けるために、デフォルトでは選択を繰り返す整数演算になっています。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.6.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.9 で変更: </span>全ての重みが 0 の場合、例外 <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> を送出します。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random.shuffle">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">shuffle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.shuffle" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">シーケンス <em>x</em> をインプレースにシャッフルします。</p>
+<p class="translated">イミュータブルなシーケンスをシャッフルしてシャッフルされたリストを新たに返すには、代わりに <code class="docutils literal notranslate"><span class="pre">sample(x,</span> <span class="pre">k=len(x))</span></code> を使用してください。</p>
+<p class="translated">たとえ <code class="docutils literal notranslate"><span class="pre">len(x)</span></code> が小さくても、<em>x</em> の並べ替えの総数 (訳注: 要素数の階乗) は大半の乱数生成器の周期よりもすぐに大きくなることに注意してください。つまり、長いシーケンスの大半の並べ替えは決して生成されないだろう、ということです。例えば、長さ 2080 のシーケンスがメルセンヌツイスタ生成器の周期に収まる中で最大のものになります。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.11 で変更: </span>オプション引数 <em>random</em> が削除されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random.sample">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">sample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">population</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.sample" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">母集団のシーケンスから選ばれた長さ <em>k</em> の一意な要素からなるリストを返します。値の置換を行わないランダムサンプリングに用いられます。</p>
+<p class="translated">母集団自体を変更せずに、母集団内の要素を含む新たなリストを返します。返されたリストは選択された順に並んでいるので、このリストの部分スライスもランダムなサンプルになります。これにより、くじの当選者 (サンプル) を1等賞と2等賞（の部分スライス）に分けることも可能です。</p>
+<p class="translated">母集団の要素は <a class="reference internal" href="../glossary.html#term-hashable"><span class="xref std std-term">ハッシュ可能</span></a> でなくても、ユニークでなくてもかまいません。母集団が繰り返しを含む場合、出現するそれぞれがサンプルに選択されえます。</p>
+<p class="translated">母集団に重複がある場合はその分だけ1つずつ指定するか、キーワード専用オプション引数 <em>counts</em> で指定することができます。例えば、 <code class="docutils literal notranslate"><span class="pre">sample(['red',</span> <span class="pre">'blue'],</span> <span class="pre">counts=[4,</span> <span class="pre">2],</span> <span class="pre">k=5)</span></code> は <code class="docutils literal notranslate"><span class="pre">sample(['red',</span> <span class="pre">'red',</span> <span class="pre">'red',</span> <span class="pre">'red',</span> <span class="pre">'blue',</span> <span class="pre">'blue'],</span> <span class="pre">k=5)</span></code> と等価になります。</p>
+<p class="translated">ある範囲の整数からサンプルを取る場合、引数に <a class="reference internal" href="stdtypes.html#range" title="range"><code class="xref py py-func docutils literal notranslate"><span class="pre">range()</span></code></a> オブジェクトを使用してください。大きな母集団の場合、これは特に速く、メモリ効率が良いです: <code class="docutils literal notranslate"><span class="pre">sample(range(10000000),</span> <span class="pre">k=60)</span></code>。</p>
+<p class="translated">サンプルの大きさが母集団の大きさより大きい場合 <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> が送出されます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.9 で変更: </span><em>counts</em> 引数が追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.11 で変更: </span><em>population</em> 変数はシーケンスでなければなりません。
+setsのリストへの暗黙の型変換はサポートされていません。</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="discrete-distributions">
+<h2 class="untranslated">Discrete distributions<a class="headerlink" href="#discrete-distributions" title="Link to this heading">¶</a></h2>
+<p class="untranslated">The following function generates a discrete distribution.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="random.binomialvariate">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">binomialvariate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.binomialvariate" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated"><a class="reference external" href="https://mathworld.wolfram.com/BinomialDistribution.html">Binomial distribution</a>.
+Return the number of successes for <em>n</em> independent trials with the
+probability of success in each trial being <em>p</em>:</p>
+<p class="untranslated">Mathematically equivalent to:</p>
+<div class="translated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nb">sum</span><span class="p">(</span><span class="n">random</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">p</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+</pre></div>
+</div>
+<p class="untranslated">The number of trials <em>n</em> should be a non-negative integer.
+The probability of success <em>p</em> should be between <code class="docutils literal notranslate"><span class="pre">0.0</span> <span class="pre">&lt;=</span> <span class="pre">p</span> <span class="pre">&lt;=</span> <span class="pre">1.0</span></code>.
+The result is an integer in the range <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">X</span> <span class="pre">&lt;=</span> <span class="pre">n</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.12.</span></p>
+</div>
+</dd></dl>
+
+</section>
+<section id="real-valued-distributions">
+<span id="id1"></span><h2 class="translated">実数分布<a class="headerlink" href="#real-valued-distributions" title="Link to this heading">¶</a></h2>
+<p class="translated">以下の関数は特定の実数値分布を生成します。関数の引数の名前は、一般的な数学の慣例で使われている分布の公式の対応する変数から取られています; これらの公式のほとんどはどんな統計学のテキストにも載っています。</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="random.random">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#random.random" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ランダムな浮動小数点数（範囲は <code class="docutils literal notranslate"><span class="pre">0.0</span> <span class="pre">&lt;=</span> <span class="pre">X</span> <span class="pre">&lt;</span> <span class="pre">1.0</span></code>）を返します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random.uniform">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">uniform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.uniform" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&lt;=</span> <span class="pre">b</span></code> であれば <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">&lt;=</span> <span class="pre">N</span> <span class="pre">&lt;=</span> <span class="pre">b</span></code> 、<code class="docutils literal notranslate"><span class="pre">b</span> <span class="pre">&lt;</span> <span class="pre">a</span></code> であれば <code class="docutils literal notranslate"><span class="pre">b</span> <span class="pre">&lt;=</span> <span class="pre">N</span> <span class="pre">&lt;=</span> <span class="pre">a</span></code> であるようなランダムな浮動小数点数 <em>N</em> を返します。</p>
+<p class="translated">端点の値 <code class="docutils literal notranslate"><span class="pre">b</span></code> が範囲に含まれるかどうかは、式 <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">+</span> <span class="pre">(b-a)</span> <span class="pre">*</span> <span class="pre">random()</span></code> における浮動小数点の丸めに依存します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random.triangular">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">triangular</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">low</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">high</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.triangular" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><code class="docutils literal notranslate"><span class="pre">low</span> <span class="pre">&lt;=</span> <span class="pre">N</span> <span class="pre">&lt;=</span> <span class="pre">high</span></code> でありこれら境界値の間に指定された最頻値 <em>mode</em> を持つようなランダムな浮動小数点数 <em>N</em> を返します。境界 <em>low</em> と <em>high</em> のデフォルトは 0 と 1 です。最頻値 <em>mode</em> 引数のデフォルトは両境界値の中点になり、対称な分布を与えます。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random.betavariate">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">betavariate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.betavariate" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ベータ分布です。引数の満たすべき条件は <code class="docutils literal notranslate"><span class="pre">alpha</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> および <code class="docutils literal notranslate"><span class="pre">beta</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> です。 0 から 1 の範囲の値を返します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random.expovariate">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">expovariate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lambd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.expovariate" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">指数分布です。<em>lambd</em> は平均にしたい値の逆数です。(この引数は &quot;lambda&quot; と呼ぶべきなのですが、Python の予約語なので使えません。) 返す値の範囲は <em>lambd</em> が正なら 0 から正の無限大、<em>lambd</em> が負なら負の無限大から 0 です。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.12 で変更: </span><code class="docutils literal notranslate"><span class="pre">lambd</span></code> にデフォルト値を追加しました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random.gammavariate">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">gammavariate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.gammavariate" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Gamma distribution.  (<em>Not</em> the gamma function!)  The shape and
+scale parameters, <em>alpha</em> and <em>beta</em>, must have positive values.
+(Calling conventions vary and some sources define 'beta'
+as the inverse of the scale).</p>
+<p class="translated">確率分布関数は:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span>          <span class="n">x</span> <span class="o">**</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span> <span class="o">/</span> <span class="n">beta</span><span class="p">)</span>
+<span class="n">pdf</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">=</span>  <span class="o">--------------------------------------</span>
+            <span class="n">math</span><span class="o">.</span><span class="n">gamma</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="n">beta</span> <span class="o">**</span> <span class="n">alpha</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random.gauss">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">gauss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.gauss" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">正規分布、またはガウス分布と呼ばれます。 <em>mu</em> は平均であり、 <em>sigma</em> は標準偏差です。この関数は後で定義する関数 <a class="reference internal" href="#random.normalvariate" title="random.normalvariate"><code class="xref py py-func docutils literal notranslate"><span class="pre">normalvariate()</span></code></a> より少しだけ高速です。</p>
+<p class="untranslated">Multithreading note:  When two threads call this function
+simultaneously, it is possible that they will receive the
+same return value.  This can be avoided in three ways.
+1) Have each thread use a different instance of the random
+number generator. 2) Put locks around all calls. 3) Use the
+slower, but thread-safe <a class="reference internal" href="#random.normalvariate" title="random.normalvariate"><code class="xref py py-func docutils literal notranslate"><span class="pre">normalvariate()</span></code></a> function instead.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.11 で変更: </span><em>mu</em> と <em>sigma</em> にデフォルト値を追加しました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random.lognormvariate">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">lognormvariate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.lognormvariate" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">対数正規分布です。この分布を自然対数を用いた分布にした場合、平均 <em>mu</em> で標準偏差 <em>sigma</em> の正規分布になります。 <em>mu</em> は任意の値を取ることができ、<em>sigma</em> はゼロより大きくなければなりません。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random.normalvariate">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">normalvariate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sigma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.normalvariate" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">正規分布です。 <em>mu</em> は平均で、 <em>sigma</em> は標準偏差です。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.11 で変更: </span><em>mu</em> と <em>sigma</em> にデフォルト値を追加しました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random.vonmisesvariate">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">vonmisesvariate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kappa</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.vonmisesvariate" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>mu</em> は平均の角度で、0 から 2*<em>pi</em> までのラジアンで表されます。 <em>kappa</em> は濃度パラメータで、ゼロ以上でなければなりません。<em>kappa</em> がゼロに等しい場合、この分布は範囲 0 から 2*<em>pi</em> の一様でランダムな角度の分布に退化します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random.paretovariate">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">paretovariate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.paretovariate" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">パレート分布です。 <em>alpha</em> は形状パラメータです。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="random.weibullvariate">
+<span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">weibullvariate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.weibullvariate" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ワイブル分布です。 <em>alpha</em> は尺度パラメタで、 <em>beta</em> は形状パラメータです。</p>
+</dd></dl>
+
+</section>
+<section id="alternative-generator">
+<h2 class="translated">他の生成器<a class="headerlink" href="#alternative-generator" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="random.Random">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">Random</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#random.Random" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Class that implements the default pseudo-random number generator used by the
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">random</span></code> module.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.11 で変更: </span>以前は <em>seed</em> は任意のハッシュ可能オブジェクトが設定可能でした。現在は <code class="docutils literal notranslate"><span class="pre">None</span></code>, <a class="reference internal" href="functions.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference internal" href="functions.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference internal" href="stdtypes.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytearray</span></code></a> に制限されています。</p>
+</div>
+<p class="untranslated">Subclasses of <code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code> should override the following methods if they
+wish to make use of a different basic generator:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="random.Random.seed">
+<span class="sig-name descname"><span class="pre">seed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.Random.seed" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Override this method in subclasses to customise the <code class="xref py py-meth docutils literal notranslate"><span class="pre">seed()</span></code>
+behaviour of <code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code> instances.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="random.Random.getstate">
+<span class="sig-name descname"><span class="pre">getstate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#random.Random.getstate" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Override this method in subclasses to customise the <code class="xref py py-meth docutils literal notranslate"><span class="pre">getstate()</span></code>
+behaviour of <code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code> instances.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="random.Random.setstate">
+<span class="sig-name descname"><span class="pre">setstate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.Random.setstate" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Override this method in subclasses to customise the <code class="xref py py-meth docutils literal notranslate"><span class="pre">setstate()</span></code>
+behaviour of <code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code> instances.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="random.Random.random">
+<span class="sig-name descname"><span class="pre">random</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#random.Random.random" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Override this method in subclasses to customise the <code class="xref py py-meth docutils literal notranslate"><span class="pre">random()</span></code>
+behaviour of <code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code> instances.</p>
+</dd></dl>
+
+<p class="untranslated">Optionally, a custom generator subclass can also supply the following method:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="random.Random.getrandbits">
+<span class="sig-name descname"><span class="pre">getrandbits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.Random.getrandbits" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Override this method in subclasses to customise the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">getrandbits()</span></code> behaviour of <code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code> instances.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="random.Random.randbytes">
+<span class="sig-name descname"><span class="pre">randbytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#random.Random.randbytes" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Override this method in subclasses to customise the
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">randbytes()</span></code> behaviour of <code class="xref py py-class docutils literal notranslate"><span class="pre">Random</span></code> instances.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="random.SystemRandom">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">random.</span></span><span class="sig-name descname"><span class="pre">SystemRandom</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">seed</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#random.SystemRandom" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">オペレーティングシステムの提供する発生源によって乱数を生成する <a class="reference internal" href="os.html#os.urandom" title="os.urandom"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.urandom()</span></code></a> 関数を使うクラスです。すべてのシステムで使えるメソッドではありません。ソフトウェアの状態に依存してはいけませんし、一連の操作は再現不能です。従って、 <a class="reference internal" href="#random.seed" title="random.seed"><code class="xref py py-meth docutils literal notranslate"><span class="pre">seed()</span></code></a> メソッドは何の影響も及ぼさず、無視されます。 <a class="reference internal" href="#random.getstate" title="random.getstate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getstate()</span></code></a> と <a class="reference internal" href="#random.setstate" title="random.setstate"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setstate()</span></code></a> メソッドが呼び出されると、例外 <a class="reference internal" href="exceptions.html#NotImplementedError" title="NotImplementedError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NotImplementedError</span></code></a> が送出されます。</p>
+</dd></dl>
+
+</section>
+<section id="notes-on-reproducibility">
+<h2 class="translated">再現性について<a class="headerlink" href="#notes-on-reproducibility" title="Link to this heading">¶</a></h2>
+<p class="translated">疑似乱数生成器から与えられたシーケンスを再現できると便利なことがあります。シード値を再利用することで、複数のスレッドが実行されていない限り、実行ごとに同じシーケンスが再現できます。</p>
+<p class="translated">random モジュールのアルゴリズムやシード処理関数のほとんどは、Python バージョン間で変更される対象となりますが、次の二点は変更されないことが保証されています:</p>
+<ul class="simple">
+<li><p class="translated">新しいシード処理メソッドが追加されたら、後方互換なシード処理器が提供されます。</p></li>
+<li><p class="translated">生成器の <a class="reference internal" href="#random.Random.random" title="random.Random.random"><code class="xref py py-meth docutils literal notranslate"><span class="pre">random()</span></code></a> メソッドは、互換なシード処理器に同じシードが与えられた場合、引き続き同じシーケンスを生成します。</p></li>
+</ul>
+</section>
+<section id="examples">
+<span id="random-examples"></span><h2 class="translated">使用例<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p class="translated">基礎的な例:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">random</span><span class="p">()</span>                          <span class="c1"># Random float:  0.0 &lt;= x &lt; 1.0</span>
+<span class="go">0.37444887175646646</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uniform</span><span class="p">(</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)</span>                <span class="c1"># Random float:  2.5 &lt;= x &lt;= 10.0</span>
+<span class="go">3.1800146073117523</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">expovariate</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">5</span><span class="p">)</span>                <span class="c1"># Interval between arrivals averaging 5 seconds</span>
+<span class="go">5.148957571865031</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">randrange</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>                     <span class="c1"># Integer from 0 to 9 inclusive</span>
+<span class="go">7</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>              <span class="c1"># Even integer from 0 to 100 inclusive</span>
+<span class="go">26</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">choice</span><span class="p">([</span><span class="s1">&#39;win&#39;</span><span class="p">,</span> <span class="s1">&#39;lose&#39;</span><span class="p">,</span> <span class="s1">&#39;draw&#39;</span><span class="p">])</span>   <span class="c1"># Single random element from a sequence</span>
+<span class="go">&#39;draw&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">deck</span> <span class="o">=</span> <span class="s1">&#39;ace two three four&#39;</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">shuffle</span><span class="p">(</span><span class="n">deck</span><span class="p">)</span>                     <span class="c1"># Shuffle a list</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">deck</span>
+<span class="go">[&#39;four&#39;, &#39;two&#39;, &#39;ace&#39;, &#39;three&#39;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="c1"># Four samples without replacement</span>
+<span class="go">[40, 10, 50, 30]</span>
+</pre></div>
+</div>
+<p class="translated">シミュレーション:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Six roulette wheel spins (weighted sampling with replacement)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">choices</span><span class="p">([</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">],</span> <span class="p">[</span><span class="mi">18</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="go">[&#39;red&#39;, &#39;green&#39;, &#39;black&#39;, &#39;black&#39;, &#39;red&#39;, &#39;black&#39;]</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Deal 20 cards without replacement from a deck</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># of 52 playing cards, and determine the proportion of cards</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># with a ten-value:  ten, jack, queen, or king.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">deal</span> <span class="o">=</span> <span class="n">sample</span><span class="p">([</span><span class="s1">&#39;tens&#39;</span><span class="p">,</span> <span class="s1">&#39;low cards&#39;</span><span class="p">],</span> <span class="n">counts</span><span class="o">=</span><span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">36</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">deal</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;tens&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="mi">20</span>
+<span class="go">0.15</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Estimate the probability of getting 5 or more heads from 7 spins</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># of a biased coin that settles on heads 60% of the time.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">(</span><span class="n">binomialvariate</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">5</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10_000</span><span class="p">))</span> <span class="o">/</span> <span class="mi">10_000</span>
+<span class="go">0.4169</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Probability of the median of 5 samples being in middle two quartiles</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">trial</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="mi">2_500</span> <span class="o">&lt;=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">choices</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10_000</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">))[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">7_500</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">sum</span><span class="p">(</span><span class="n">trial</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10_000</span><span class="p">))</span> <span class="o">/</span> <span class="mi">10_000</span>
+<span class="go">0.7958</span>
+</pre></div>
+</div>
+<p class="translated">サンプルの平均の信頼区間を推定するのに、重複ありでリサンプリングして <a class="reference external" href="https://ja.wikipedia.org/wiki/%E3%83%96%E3%83%BC%E3%83%88%E3%82%B9%E3%83%88%E3%83%A9%E3%83%83%E3%83%97%E6%B3%95">統計的ブートストラップ</a> を行う例:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># https://www.thoughtco.com/example-of-bootstrapping-3126155</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">statistics</span><span class="w"> </span><span class="kn">import</span> <span class="n">fmean</span> <span class="k">as</span> <span class="n">mean</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">choices</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">41</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mi">81</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">63</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">95</span><span class="p">]</span>
+<span class="n">means</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">mean</span><span class="p">(</span><span class="n">choices</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The sample mean of </span><span class="si">{</span><span class="n">mean</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1"> has a 90% confidence &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;interval from </span><span class="si">{</span><span class="n">means</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1"> to </span><span class="si">{</span><span class="n">means</span><span class="p">[</span><span class="mi">94</span><span class="p">]</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="translated">薬と偽薬の間に観察された効果の違いについて、統計的有意性、すなわち <a class="reference external" href="https://en.wikipedia.org/wiki/P-value">p 値</a> を決定するために、<a class="reference external" href="https://en.wikipedia.org/wiki/Resampling_(statistics)#Permutation_tests">リサンプリング順列試験</a> を行う例:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Example from &quot;Statistics is Easy&quot; by Dennis Shasha and Manda Wilson</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">statistics</span><span class="w"> </span><span class="kn">import</span> <span class="n">fmean</span> <span class="k">as</span> <span class="n">mean</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">shuffle</span>
+
+<span class="n">drug</span> <span class="o">=</span> <span class="p">[</span><span class="mi">54</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">53</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">73</span><span class="p">,</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">65</span><span class="p">,</span> <span class="mi">65</span><span class="p">]</span>
+<span class="n">placebo</span> <span class="o">=</span> <span class="p">[</span><span class="mi">54</span><span class="p">,</span> <span class="mi">51</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span> <span class="mi">44</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">52</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span> <span class="mi">46</span><span class="p">]</span>
+<span class="n">observed_diff</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">drug</span><span class="p">)</span> <span class="o">-</span> <span class="n">mean</span><span class="p">(</span><span class="n">placebo</span><span class="p">)</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">10_000</span>
+<span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">combined</span> <span class="o">=</span> <span class="n">drug</span> <span class="o">+</span> <span class="n">placebo</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">shuffle</span><span class="p">(</span><span class="n">combined</span><span class="p">)</span>
+    <span class="n">new_diff</span> <span class="o">=</span> <span class="n">mean</span><span class="p">(</span><span class="n">combined</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">drug</span><span class="p">)])</span> <span class="o">-</span> <span class="n">mean</span><span class="p">(</span><span class="n">combined</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">drug</span><span class="p">):])</span>
+    <span class="n">count</span> <span class="o">+=</span> <span class="p">(</span><span class="n">new_diff</span> <span class="o">&gt;=</span> <span class="n">observed_diff</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n</span><span class="si">}</span><span class="s1"> label reshufflings produced only </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s1"> instances with a difference&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;at least as extreme as the observed difference of </span><span class="si">{</span><span class="n">observed_diff</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;The one-sided p-value of </span><span class="si">{</span><span class="n">count</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">n</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1"> leads us to reject the null&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;hypothesis that there is no difference between the drug and the placebo.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="translated">マルチサーバーキューにおける到達時間とサービス提供のシミュレーション:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">heapq</span><span class="w"> </span><span class="kn">import</span> <span class="n">heapify</span><span class="p">,</span> <span class="n">heapreplace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">expovariate</span><span class="p">,</span> <span class="n">gauss</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">statistics</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean</span><span class="p">,</span> <span class="n">quantiles</span>
+
+<span class="n">average_arrival_interval</span> <span class="o">=</span> <span class="mf">5.6</span>
+<span class="n">average_service_time</span> <span class="o">=</span> <span class="mf">15.0</span>
+<span class="n">stdev_service_time</span> <span class="o">=</span> <span class="mf">3.5</span>
+<span class="n">num_servers</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="n">waits</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">arrival_time</span> <span class="o">=</span> <span class="mf">0.0</span>
+<span class="n">servers</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_servers</span>  <span class="c1"># time when each server becomes available</span>
+<span class="n">heapify</span><span class="p">(</span><span class="n">servers</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1_000_000</span><span class="p">):</span>
+    <span class="n">arrival_time</span> <span class="o">+=</span> <span class="n">expovariate</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">average_arrival_interval</span><span class="p">)</span>
+    <span class="n">next_server_available</span> <span class="o">=</span> <span class="n">servers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">wait</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">next_server_available</span> <span class="o">-</span> <span class="n">arrival_time</span><span class="p">)</span>
+    <span class="n">waits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wait</span><span class="p">)</span>
+    <span class="n">service_duration</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">gauss</span><span class="p">(</span><span class="n">average_service_time</span><span class="p">,</span> <span class="n">stdev_service_time</span><span class="p">))</span>
+    <span class="n">service_completed</span> <span class="o">=</span> <span class="n">arrival_time</span> <span class="o">+</span> <span class="n">wait</span> <span class="o">+</span> <span class="n">service_duration</span>
+    <span class="n">heapreplace</span><span class="p">(</span><span class="n">servers</span><span class="p">,</span> <span class="n">service_completed</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Mean wait: </span><span class="si">{</span><span class="n">mean</span><span class="p">(</span><span class="n">waits</span><span class="p">)</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">   Max wait: </span><span class="si">{</span><span class="nb">max</span><span class="p">(</span><span class="n">waits</span><span class="p">)</span><span class="si">:</span><span class="s1">.1f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Quartiles:&#39;</span><span class="p">,</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantiles</span><span class="p">(</span><span class="n">waits</span><span class="p">)])</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p class="translated"><a class="reference external" href="https://www.youtube.com/watch?v=Iq9DzN6mvYA">Statistics for Hackers</a> <a class="reference external" href="https://us.pycon.org/2016/speaker/profile/295/">Jake Vanderplas</a> による統計解析のビデオ。シミュレーション、サンプリング、シャッフル、交差検定といった基本的な概念のみを用いています。</p>
+<p class="translated"><a class="reference external" href="https://nbviewer.org/url/norvig.com/ipython/Economics.ipynb">Economics Simulation</a> <a class="reference external" href="https://norvig.com/bio.html">Peter Norvig</a> による市場価格のシミュレーション。このモジュールが提供する多くのツールや分布 (gauss, uniform, sample, betavariate, choice, triangular, randrange) の活用法を示しています。</p>
+<p class="translated"><a class="reference external" href="https://nbviewer.org/url/norvig.com/ipython/Probability.ipynb">A Concrete Introduction to Probability (using Python)</a> <a class="reference external" href="https://norvig.com/bio.html">Peter Norvig</a> によるチュートリアル。確率論の基礎、シミュレーションの書き方、Python を使用したデータ解析法をカバーしています。</p>
+</div>
+</section>
+<section id="recipes">
+<h2 class="translated">レシピ<a class="headerlink" href="#recipes" title="Link to this heading">¶</a></h2>
+<p class="untranslated">These recipes show how to efficiently make random selections
+from the combinatoric iterators in the <a class="reference internal" href="itertools.html#module-itertools" title="itertools: Functions creating iterators for efficient looping."><code class="xref py py-mod docutils literal notranslate"><span class="pre">itertools</span></code></a> module:</p>
+<div class="untranslated highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">random_product</span><span class="p">(</span><span class="o">*</span><span class="n">iterables</span><span class="p">,</span> <span class="n">repeat</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="s2">&quot;Random selection from itertools.product(*iterables, repeat=repeat)&quot;</span>
+    <span class="n">pools</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="n">iterables</span><span class="p">))</span> <span class="o">*</span> <span class="n">repeat</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">,</span> <span class="n">pools</span><span class="p">))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">random_permutation</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="s2">&quot;Random selection from itertools.permutations(iterable, r)&quot;</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span> <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">r</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">r</span><span class="p">))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">random_combination</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+    <span class="s2">&quot;Random selection from itertools.combinations(iterable, r)&quot;</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">r</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pool</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">random_combination_with_replacement</span><span class="p">(</span><span class="n">iterable</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+    <span class="s2">&quot;Choose r elements with replacement.  Order the result to match the iterable.&quot;</span>
+    <span class="c1"># Result will be in set(itertools.combinations_with_replacement(iterable, r)).</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pool</span><span class="p">)</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="n">r</span><span class="p">))</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">pool</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">random_derangement</span><span class="p">(</span><span class="n">iterable</span><span class="p">):</span>
+    <span class="s2">&quot;Choose a permutation where no element stays in its original position.&quot;</span>
+    <span class="n">seq</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">iterable</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">seq</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">()</span>
+        <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;No derangments to choose from&#39;</span><span class="p">)</span>
+    <span class="n">perm</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">seq</span><span class="p">)))</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">perm</span><span class="p">)</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">perm</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">p</span> <span class="o">!=</span> <span class="n">q</span> <span class="k">for</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">perm</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">seq</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">perm</span><span class="p">])</span>
+</pre></div>
+</div>
+<p class="untranslated">The default <a class="reference internal" href="#random.random" title="random.random"><code class="xref py py-func docutils literal notranslate"><span class="pre">random()</span></code></a> returns multiples of 2⁻⁵³ in the range
+<em>0.0 ≤ x &lt; 1.0</em>.  All such numbers are evenly spaced and are exactly
+representable as Python floats.  However, many other representable
+floats in that interval are not possible selections.  For example,
+<code class="docutils literal notranslate"><span class="pre">0.05954861408025609</span></code> isn't an integer multiple of 2⁻⁵³.</p>
+<p class="untranslated">The following recipe takes a different approach.  All floats in the
+interval are possible selections.  The mantissa comes from a uniform
+distribution of integers in the range <em>2⁵² ≤ mantissa &lt; 2⁵³</em>.  The
+exponent comes from a geometric distribution where exponents smaller
+than <em>-53</em> occur half as often as the next larger exponent.</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">random</span><span class="w"> </span><span class="kn">import</span> <span class="n">Random</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">ldexp</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FullRandom</span><span class="p">(</span><span class="n">Random</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">random</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">mantissa</span> <span class="o">=</span> <span class="mh">0x10_0000_0000_0000</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">getrandbits</span><span class="p">(</span><span class="mi">52</span><span class="p">)</span>
+        <span class="n">exponent</span> <span class="o">=</span> <span class="o">-</span><span class="mi">53</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">x</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getrandbits</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+            <span class="n">exponent</span> <span class="o">+=</span> <span class="n">x</span><span class="o">.</span><span class="n">bit_length</span><span class="p">()</span> <span class="o">-</span> <span class="mi">32</span>
+        <span class="k">return</span> <span class="n">ldexp</span><span class="p">(</span><span class="n">mantissa</span><span class="p">,</span> <span class="n">exponent</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="untranslated">All <a class="reference internal" href="#real-valued-distributions"><span class="std std-ref">real valued distributions</span></a>
+in the class will use the new method:</p>
+<div class="translated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">fr</span> <span class="o">=</span> <span class="n">FullRandom</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fr</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+<span class="go">0.05954861408025609</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">fr</span><span class="o">.</span><span class="n">expovariate</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="go">8.87925541791544</span>
+</pre></div>
+</div>
+<p class="untranslated">The recipe is conceptually equivalent to an algorithm that chooses from
+all the multiples of 2⁻¹⁰⁷⁴ in the range <em>0.0 ≤ x &lt; 1.0</em>.  All such
+numbers are evenly spaced, but most have to be rounded down to the
+nearest representable Python float.  (The value 2⁻¹⁰⁷⁴ is the smallest
+positive unnormalized float and is equal to <code class="docutils literal notranslate"><span class="pre">math.ulp(0.0)</span></code>.)</p>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p class="untranslated"><a class="reference external" href="https://allendowney.com/research/rand/downey07randfloat.pdf">Generating Pseudo-random Floating-Point Values</a> a
+paper by Allen B. Downey describing ways to generate more
+fine-grained floats than normally generated by <a class="reference internal" href="#random.random" title="random.random"><code class="xref py py-func docutils literal notranslate"><span class="pre">random()</span></code></a>.</p>
+</div>
+</section>
+<section id="command-line-usage">
+<span id="random-cli"></span><h2 class="translated">コマンドラインでの使用<a class="headerlink" href="#command-line-usage" title="Link to this heading">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+<p class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">random</span></code> モジュールはコマンドラインから実行できます。</p>
+<div class="translated highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>random<span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span><span class="o">[</span>-c<span class="w"> </span>CHOICE<span class="w"> </span><span class="o">[</span>CHOICE<span class="w"> </span>...<span class="o">]</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>-i<span class="w"> </span>N<span class="w"> </span><span class="p">|</span><span class="w"> </span>-f<span class="w"> </span>N<span class="o">]</span><span class="w"> </span><span class="o">[</span>input<span class="w"> </span>...<span class="o">]</span>
+</pre></div>
+</div>
+<p class="translated">以下のオプションが使用できます:</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-random-h">
+<span id="cmdoption-random-help"></span><span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-random-h" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ヘルプメッセージを表示して終了します。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-random-c">
+<span class="sig-name descname"><span class="pre">-c</span></span><span class="sig-prename descclassname"> <span class="pre">CHOICE</span> <span class="pre">[CHOICE</span> <span class="pre">...]</span></span><a class="headerlink" href="#cmdoption-random-c" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object std" id="cmdoption-random-choice">
+<span class="sig-name descname"><span class="pre">--choice</span></span><span class="sig-prename descclassname"> <span class="pre">CHOICE</span> <span class="pre">[CHOICE</span> <span class="pre">...]</span></span><a class="headerlink" href="#cmdoption-random-choice" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#random.choice" title="random.choice"><code class="xref py py-meth docutils literal notranslate"><span class="pre">choice()</span></code></a> を使用してランダムに選択して出力します。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-random-i">
+<span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;N&gt;</span></span><a class="headerlink" href="#cmdoption-random-i" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object std" id="cmdoption-random-integer">
+<span class="sig-name descname"><span class="pre">--integer</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;N&gt;</span></span><a class="headerlink" href="#cmdoption-random-integer" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#random.randint" title="random.randint"><code class="xref py py-meth docutils literal notranslate"><span class="pre">randint()</span></code></a> を使用して1からNの間(Nを含む)のランダムな整数を出力します。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-random-f">
+<span class="sig-name descname"><span class="pre">-f</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;N&gt;</span></span><a class="headerlink" href="#cmdoption-random-f" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object std" id="cmdoption-random-float">
+<span class="sig-name descname"><span class="pre">--float</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;N&gt;</span></span><a class="headerlink" href="#cmdoption-random-float" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#random.uniform" title="random.uniform"><code class="xref py py-meth docutils literal notranslate"><span class="pre">uniform()</span></code></a> を使用して0からNの間(Nを含む)のランダムな浮動小数点数を出力します。</p>
+</dd></dl>
+
+<p class="translated">オプションが指定されない場合、出力は入力に依存します。</p>
+<ul class="simple">
+<li><p class="translated">文字列または複数: <a class="reference internal" href="#cmdoption-random-choice"><code class="xref std std-option docutils literal notranslate"><span class="pre">--choice</span></code></a> と同じ。</p></li>
+<li><p class="translated">整数: <a class="reference internal" href="#cmdoption-random-integer"><code class="xref std std-option docutils literal notranslate"><span class="pre">--integer</span></code></a> と同じ。</p></li>
+<li><p class="translated">浮動小数点数: <a class="reference internal" href="#cmdoption-random-float"><code class="xref std std-option docutils literal notranslate"><span class="pre">--float</span></code></a> と同じ。</p></li>
+</ul>
+</section>
+<section id="command-line-example">
+<span id="random-cli-example"></span><h2 class="translated">コマンドラインの例<a class="headerlink" href="#command-line-example" title="Link to this heading">¶</a></h2>
+<p class="translated">以下は <code class="xref py py-mod docutils literal notranslate"><span class="pre">random</span></code> のコマンドラインインターフェースの例です:</p>
+<div class="untranslated highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="c1"># Choose one at random</span>
+<span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>random<span class="w"> </span>egg<span class="w"> </span>bacon<span class="w"> </span>sausage<span class="w"> </span>spam<span class="w"> </span><span class="s2">&quot;Lobster Thermidor aux crevettes with a Mornay sauce&quot;</span>
+<span class="go">Lobster Thermidor aux crevettes with a Mornay sauce</span>
+
+<span class="gp">$ </span><span class="c1"># Random integer</span>
+<span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>random<span class="w"> </span><span class="m">6</span>
+<span class="go">6</span>
+
+<span class="gp">$ </span><span class="c1"># Random floating-point number</span>
+<span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>random<span class="w"> </span><span class="m">1</span>.8
+<span class="go">1.7080016272295635</span>
+
+<span class="gp">$ </span><span class="c1"># With explicit arguments</span>
+<span class="gp">$ </span>python<span class="w">  </span>-m<span class="w"> </span>random<span class="w"> </span>--choice<span class="w"> </span>egg<span class="w"> </span>bacon<span class="w"> </span>sausage<span class="w"> </span>spam<span class="w"> </span><span class="s2">&quot;Lobster Thermidor aux crevettes with a Mornay sauce&quot;</span>
+<span class="go">egg</span>
+
+<span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>random<span class="w"> </span>--integer<span class="w"> </span><span class="m">6</span>
+<span class="go">3</span>
+
+<span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>random<span class="w"> </span>--float<span class="w"> </span><span class="m">1</span>.8
+<span class="go">1.5666339105010318</span>
+
+<span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>random<span class="w"> </span>--integer<span class="w"> </span><span class="m">6</span>
+<span class="go">5</span>
+
+<span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>random<span class="w"> </span>--float<span class="w"> </span><span class="m">6</span>
+<span class="go">3.1942323316565915</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">random</span></code> --- 疑似乱数を生成する</a><ul>
+<li><a class="reference internal" href="#bookkeeping-functions">保守 (bookkeeping) 関数</a></li>
+<li><a class="reference internal" href="#functions-for-bytes">バイト列用の関数</a></li>
+<li><a class="reference internal" href="#functions-for-integers">整数用の関数</a></li>
+<li><a class="reference internal" href="#functions-for-sequences">シーケンス用の関数</a></li>
+<li><a class="reference internal" href="#discrete-distributions">Discrete distributions</a></li>
+<li><a class="reference internal" href="#real-valued-distributions">実数分布</a></li>
+<li><a class="reference internal" href="#alternative-generator">他の生成器</a></li>
+<li><a class="reference internal" href="#notes-on-reproducibility">再現性について</a></li>
+<li><a class="reference internal" href="#examples">使用例</a></li>
+<li><a class="reference internal" href="#recipes">レシピ</a></li>
+<li><a class="reference internal" href="#command-line-usage">コマンドラインでの使用</a></li>
+<li><a class="reference internal" href="#command-line-example">コマンドラインの例</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="fractions.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fractions</span></code> --- 有理数</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="statistics.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">statistics</span></code> --- 数学的統計関数</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/random.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/random.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/random.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="statistics.html" title="statistics --- 数学的統計関数"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="fractions.html" title="fractions --- 有理数"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="numeric.html" >数値と数学モジュール</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">random</span></code> --- 疑似乱数を生成する</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="bdb --- デバッガーフレームワーク" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/bdb.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/bdb.py The bdb module handles basic debugger functions, like setting breakpoints or managing execution via the debugger. 以下の例外が定義されています: The bdb module also defines two classes: 最後に、このモ..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_bdb_558e5116.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/bdb.py The bdb module handles basic debugger functions, like setting breakpoints or managing execution via the debugger. 以下の例外が定義されています: The bdb module also defines two classes: 最後に、このモ..." />
+<meta name="description" content="ソースコード: Lib/bdb.py The bdb module handles basic debugger functions, like setting breakpoints or managing execution via the debugger. 以下の例外が定義されています: The bdb module also defines two classes: 最後に、このモ..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>bdb --- デバッガーフレームワーク &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="faulthandler --- Python トレースバックをダンプする" href="faulthandler.html" />
+    <link rel="prev" title="監査イベント表" href="audit_events.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/bdb.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="audit_events.html"
+                          title="前の章へ">監査イベント表</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="faulthandler.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">faulthandler</span></code> --- Python トレースバックをダンプする</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/bdb.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/bdb.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/bdb.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="faulthandler.html" title="faulthandler --- Python トレースバックをダンプする"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="audit_events.html" title="監査イベント表"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="debug.html" accesskey="U">Debugging and Profiling</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">bdb</span></code> --- デバッガーフレームワーク</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-bdb">
+<span id="bdb-debugger-framework"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">bdb</span></code> --- デバッガーフレームワーク<a class="headerlink" href="#module-bdb" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/bdb.py">Lib/bdb.py</a></p>
+<hr class="docutils" />
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">bdb</span></code> module handles basic debugger functions, like setting breakpoints
+or managing execution via the debugger.</p>
+<p class="translated">以下の例外が定義されています:</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="bdb.BdbQuit">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bdb.</span></span><span class="sig-name descname"><span class="pre">BdbQuit</span></span><a class="headerlink" href="#bdb.BdbQuit" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#bdb.Bdb" title="bdb.Bdb"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bdb</span></code></a> クラスが、デバッガーを終了させるために投げる例外。</p>
+</dd></dl>
+
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">bdb</span></code> module also defines two classes:</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="bdb.Breakpoint">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bdb.</span></span><span class="sig-name descname"><span class="pre">Breakpoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temporary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cond</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">funcname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Breakpoint" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このクラスはテンポラリブレークポイント、無視するカウント、無効化と再有効化、条件付きブレークポイントを実装しています。</p>
+<p class="translated">ブレークポイントは <a class="reference internal" href="#bdb.Breakpoint.bpbynumber" title="bdb.Breakpoint.bpbynumber"><code class="xref py py-attr docutils literal notranslate"><span class="pre">bpbynumber</span></code></a> という名前のリストで番号によりインデックスされ、 <a class="reference internal" href="#bdb.Breakpoint.bplist" title="bdb.Breakpoint.bplist"><code class="xref py py-attr docutils literal notranslate"><span class="pre">bplist</span></code></a> により <code class="docutils literal notranslate"><span class="pre">(file,</span> <span class="pre">line)</span></code> の形でインデックスされます。 <code class="xref py py-attr docutils literal notranslate"><span class="pre">bpbynumber</span></code> は <a class="reference internal" href="#bdb.Breakpoint" title="bdb.Breakpoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code></a> クラスのインスタンスを指しています。一方 <code class="xref py py-attr docutils literal notranslate"><span class="pre">bplist</span></code> は、同じ行に複数のブレークポイントが設定される場合があるので、インスタンスのリストを指しています。</p>
+<p class="translated">ブレークポイントを作るとき、関連付けられる <a class="reference internal" href="#bdb.Breakpoint.file" title="bdb.Breakpoint.file"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ファイル名</span></code></a> は正規化されていなければなりません。<a class="reference internal" href="#bdb.Breakpoint.funcname" title="bdb.Breakpoint.funcname"><code class="xref py py-attr docutils literal notranslate"><span class="pre">funcname</span></code></a> が定義されると、ブレークポイントの <a class="reference internal" href="#bdb.Breakpoint.hits" title="bdb.Breakpoint.hits"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ヒット</span></code></a> はその関数の最初の行が実行されたときにカウントされます。<a class="reference internal" href="#bdb.Breakpoint.cond" title="bdb.Breakpoint.cond"><code class="xref py py-attr docutils literal notranslate"><span class="pre">条件付き</span></code></a> ブレークポイントは毎回 <code class="xref py py-attr docutils literal notranslate"><span class="pre">ヒット</span></code> をカウントします。</p>
+<p class="translated"><a class="reference internal" href="#bdb.Breakpoint" title="bdb.Breakpoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code></a> インスタンスは以下のメソッドを持ちます:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Breakpoint.deleteMe">
+<span class="sig-name descname"><span class="pre">deleteMe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Breakpoint.deleteMe" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このブレークポイントをファイル/行に関連付けられたリストから削除します。このブレークポイントがその行に設定された最後のブレークポイントだった場合、そのファイル/行に対するエントリ自体を削除します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Breakpoint.enable">
+<span class="sig-name descname"><span class="pre">enable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Breakpoint.enable" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このブレークポイントを有効にします。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Breakpoint.disable">
+<span class="sig-name descname"><span class="pre">disable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Breakpoint.disable" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このブレークポイントを無効にします。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Breakpoint.bpformat">
+<span class="sig-name descname"><span class="pre">bpformat</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Breakpoint.bpformat" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ブレークポイントに関する情報を持つ文字列をフォーマットして返します:</p>
+<ul class="simple">
+<li><p class="untranslated">Breakpoint number.</p></li>
+<li><p class="untranslated">Temporary status (del or keep).</p></li>
+<li><p class="untranslated">File/line position.</p></li>
+<li><p class="untranslated">Break condition.</p></li>
+<li><p class="untranslated">Number of times to ignore.</p></li>
+<li><p class="untranslated">Number of times hit.</p></li>
+</ul>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Breakpoint.bpprint">
+<span class="sig-name descname"><span class="pre">bpprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Breakpoint.bpprint" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイル <em>out</em> に、またはそれが <code class="docutils literal notranslate"><span class="pre">None</span></code> の場合は標準出力に、 <a class="reference internal" href="#bdb.Breakpoint.bpformat" title="bdb.Breakpoint.bpformat"><code class="xref py py-meth docutils literal notranslate"><span class="pre">bpformat()</span></code></a> の出力を表示する。</p>
+</dd></dl>
+
+<p class="translated"><a class="reference internal" href="#bdb.Breakpoint" title="bdb.Breakpoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code></a> インスタンスは以下の属性を持ちます:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bdb.Breakpoint.file">
+<span class="sig-name descname"><span class="pre">file</span></span><a class="headerlink" href="#bdb.Breakpoint.file" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">File name of the <code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bdb.Breakpoint.line">
+<span class="sig-name descname"><span class="pre">line</span></span><a class="headerlink" href="#bdb.Breakpoint.line" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Line number of the <code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code> within <a class="reference internal" href="#bdb.Breakpoint.file" title="bdb.Breakpoint.file"><code class="xref py py-attr docutils literal notranslate"><span class="pre">file</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bdb.Breakpoint.temporary">
+<span class="sig-name descname"><span class="pre">temporary</span></span><a class="headerlink" href="#bdb.Breakpoint.temporary" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">True</span></code> if a <code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code> at (file, line) is temporary.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bdb.Breakpoint.cond">
+<span class="sig-name descname"><span class="pre">cond</span></span><a class="headerlink" href="#bdb.Breakpoint.cond" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Condition for evaluating a <code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code> at (file, line).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bdb.Breakpoint.funcname">
+<span class="sig-name descname"><span class="pre">funcname</span></span><a class="headerlink" href="#bdb.Breakpoint.funcname" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Function name that defines whether a <code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code> is hit upon
+entering the function.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bdb.Breakpoint.enabled">
+<span class="sig-name descname"><span class="pre">enabled</span></span><a class="headerlink" href="#bdb.Breakpoint.enabled" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">True</span></code> if <code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code> is enabled.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bdb.Breakpoint.bpbynumber">
+<span class="sig-name descname"><span class="pre">bpbynumber</span></span><a class="headerlink" href="#bdb.Breakpoint.bpbynumber" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Numeric index for a single instance of a <code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bdb.Breakpoint.bplist">
+<span class="sig-name descname"><span class="pre">bplist</span></span><a class="headerlink" href="#bdb.Breakpoint.bplist" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Dictionary of <code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code> instances indexed by
+(<a class="reference internal" href="#bdb.Breakpoint.file" title="bdb.Breakpoint.file"><code class="xref py py-attr docutils literal notranslate"><span class="pre">file</span></code></a>, <a class="reference internal" href="#bdb.Breakpoint.line" title="bdb.Breakpoint.line"><code class="xref py py-attr docutils literal notranslate"><span class="pre">line</span></code></a>) tuples.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bdb.Breakpoint.ignore">
+<span class="sig-name descname"><span class="pre">ignore</span></span><a class="headerlink" href="#bdb.Breakpoint.ignore" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Number of times to ignore a <code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="bdb.Breakpoint.hits">
+<span class="sig-name descname"><span class="pre">hits</span></span><a class="headerlink" href="#bdb.Breakpoint.hits" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Count of the number of times a <code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code> has been hit.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bdb.Bdb">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bdb.</span></span><span class="sig-name descname"><span class="pre">Bdb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'settrace'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#bdb.Bdb" title="bdb.Bdb"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bdb</span></code></a> クラスは一般的なPythonデバッガーの基本クラスとして振舞います。</p>
+<p class="translated">このクラスはトレース機能の詳細を扱います。ユーザーとのインタラクションは、派生クラスが実装するべきです。標準ライブラリのデバッガクラス (<a class="reference internal" href="pdb.html#pdb.Pdb" title="pdb.Pdb"><code class="xref py py-class docutils literal notranslate"><span class="pre">pdb.Pdb</span></code></a>) がその利用例です。</p>
+<p class="translated"><em>skip</em> 引数は、もし与えられたならグロブ形式のモジュール名パターンの iterable でなければなりません。デバッガはこれらのパターンのどれかにマッチするモジュールで発生したフレームにステップインしなくなります。フレームが特定のモジュールで発生したかどうかは、フレームのグローバル変数の <code class="docutils literal notranslate"><span class="pre">__name__</span></code> によって決定されます。</p>
+<p class="untranslated">The <em>backend</em> argument specifies the backend to use for <code class="xref py py-class docutils literal notranslate"><span class="pre">Bdb</span></code>. It
+can be either <code class="docutils literal notranslate"><span class="pre">'settrace'</span></code> or <code class="docutils literal notranslate"><span class="pre">'monitoring'</span></code>. <code class="docutils literal notranslate"><span class="pre">'settrace'</span></code> uses
+<a class="reference internal" href="sys.html#sys.settrace" title="sys.settrace"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.settrace()</span></code></a> which has the best backward compatibility. The
+<code class="docutils literal notranslate"><span class="pre">'monitoring'</span></code> backend uses the new <a class="reference internal" href="sys.monitoring.html#module-sys.monitoring" title="sys.monitoring: Access and control event monitoring"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sys.monitoring</span></code></a> that was
+introduced in Python 3.12, which can be much more efficient because it
+can disable unused events. We are trying to keep the exact interfaces
+for both backends, but there are some differences. The debugger developers
+are encouraged to use the <code class="docutils literal notranslate"><span class="pre">'monitoring'</span></code> backend to achieve better
+performance.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.1 で変更: </span><em>skip</em> パラメータが追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.14 で変更: </span>Added the <em>backend</em> parameter.</p>
+</div>
+<p class="translated">以下の <a class="reference internal" href="#bdb.Bdb" title="bdb.Bdb"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bdb</span></code></a> のメソッドは、通常オーバーライドする必要はありません。</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.canonic">
+<span class="sig-name descname"><span class="pre">canonic</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.canonic" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return canonical form of <em>filename</em>.</p>
+<p class="untranslated">For real file names, the canonical form is an operating-system-dependent,
+<a class="reference internal" href="os.path.html#os.path.normcase" title="os.path.normcase"><code class="xref py py-func docutils literal notranslate"><span class="pre">case-normalized</span></code></a> <a class="reference internal" href="os.path.html#os.path.abspath" title="os.path.abspath"><code class="xref py py-func docutils literal notranslate"><span class="pre">absolute</span> <span class="pre">path</span></code></a>. A <em>filename</em> with angle brackets, such as <code class="docutils literal notranslate"><span class="pre">&quot;&lt;stdin&gt;&quot;</span></code>
+generated in interactive mode, is returned unchanged.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.start_trace">
+<span class="sig-name descname"><span class="pre">start_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.start_trace" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Start tracing. For <code class="docutils literal notranslate"><span class="pre">'settrace'</span></code> backend, this method is equivalent to
+<code class="docutils literal notranslate"><span class="pre">sys.settrace(self.trace_dispatch)</span></code></p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.stop_trace">
+<span class="sig-name descname"><span class="pre">stop_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.stop_trace" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Stop tracing. For <code class="docutils literal notranslate"><span class="pre">'settrace'</span></code> backend, this method is equivalent to
+<code class="docutils literal notranslate"><span class="pre">sys.settrace(None)</span></code></p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.reset" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">botframe</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">stopframe</span></code>, <code class="xref py py-attr docutils literal notranslate"><span class="pre">returnframe</span></code> and
+<a class="reference internal" href="#bdb.Bdb.set_quit" title="bdb.Bdb.set_quit"><code class="xref py py-attr docutils literal notranslate"><span class="pre">quitting</span></code></a> attributes with values ready to start debugging.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.trace_dispatch">
+<span class="sig-name descname"><span class="pre">trace_dispatch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.trace_dispatch" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">この関数は、デバッグされているフレームのトレース関数としてインストールされます。戻り値は新しいトレース関数(殆どの場合はこの関数自身)です。</p>
+<p class="translated">デフォルトの実装は、実行しようとしている <em>event</em> (文字列として渡されます) の種類に基づいてフレームのディスパッチ方法を決定します。<em>event</em> は次のうちのどれかです:</p>
+<ul class="simple">
+<li><p class="translated"><code class="docutils literal notranslate"><span class="pre">&quot;line&quot;</span></code>: 新しい行を実行しようとしています。</p></li>
+<li><p class="translated"><code class="docutils literal notranslate"><span class="pre">&quot;call&quot;</span></code>: 関数が呼び出されているか、別のコードブロックに入ります。</p></li>
+<li><p class="translated"><code class="docutils literal notranslate"><span class="pre">&quot;return&quot;</span></code>: 関数か別のコードブロックからreturnしようとしています。</p></li>
+<li><p class="translated"><code class="docutils literal notranslate"><span class="pre">&quot;exception&quot;</span></code>: 例外が発生しました。</p></li>
+<li><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">&quot;c_call&quot;</span></code>: A C function is about to be called.</p></li>
+<li><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">&quot;c_return&quot;</span></code>: A C function has returned.</p></li>
+<li><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">&quot;c_exception&quot;</span></code>: A C function has raised an exception.</p></li>
+</ul>
+<p class="untranslated">For the Python events, specialized functions (see below) are called.  For
+the C events, no action is taken.</p>
+<p class="translated"><em>arg</em> 引数は以前のイベントに依存します。</p>
+<p class="translated">トレース関数についてのより詳しい情報は、 <a class="reference internal" href="sys.html#sys.settrace" title="sys.settrace"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.settrace()</span></code></a> のドキュメントを参照してください。コードとフレームオブジェクトについてのより詳しい情報は、 <a class="reference internal" href="../reference/datamodel.html#types"><span class="std std-ref">標準型の階層</span></a> を参照してください。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.dispatch_line">
+<span class="sig-name descname"><span class="pre">dispatch_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.dispatch_line" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">If the debugger should stop on the current line, invoke the
+<a class="reference internal" href="#bdb.Bdb.user_line" title="bdb.Bdb.user_line"><code class="xref py py-meth docutils literal notranslate"><span class="pre">user_line()</span></code></a> method (which should be overridden in subclasses).
+Raise a <a class="reference internal" href="#bdb.BdbQuit" title="bdb.BdbQuit"><code class="xref py py-exc docutils literal notranslate"><span class="pre">BdbQuit</span></code></a> exception if the <a class="reference internal" href="#bdb.Bdb.set_quit" title="bdb.Bdb.set_quit"><code class="xref py py-attr docutils literal notranslate"><span class="pre">quitting</span></code></a> flag is set
+(which can be set from <code class="xref py py-meth docutils literal notranslate"><span class="pre">user_line()</span></code>).  Return a reference to the
+<a class="reference internal" href="#bdb.Bdb.trace_dispatch" title="bdb.Bdb.trace_dispatch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">trace_dispatch()</span></code></a> method for further tracing in that scope.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.dispatch_call">
+<span class="sig-name descname"><span class="pre">dispatch_call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.dispatch_call" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">If the debugger should stop on this function call, invoke the
+<a class="reference internal" href="#bdb.Bdb.user_call" title="bdb.Bdb.user_call"><code class="xref py py-meth docutils literal notranslate"><span class="pre">user_call()</span></code></a> method (which should be overridden in subclasses).
+Raise a <a class="reference internal" href="#bdb.BdbQuit" title="bdb.BdbQuit"><code class="xref py py-exc docutils literal notranslate"><span class="pre">BdbQuit</span></code></a> exception if the <a class="reference internal" href="#bdb.Bdb.set_quit" title="bdb.Bdb.set_quit"><code class="xref py py-attr docutils literal notranslate"><span class="pre">quitting</span></code></a> flag is set
+(which can be set from <code class="xref py py-meth docutils literal notranslate"><span class="pre">user_call()</span></code>).  Return a reference to the
+<a class="reference internal" href="#bdb.Bdb.trace_dispatch" title="bdb.Bdb.trace_dispatch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">trace_dispatch()</span></code></a> method for further tracing in that scope.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.dispatch_return">
+<span class="sig-name descname"><span class="pre">dispatch_return</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.dispatch_return" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">If the debugger should stop on this function return, invoke the
+<a class="reference internal" href="#bdb.Bdb.user_return" title="bdb.Bdb.user_return"><code class="xref py py-meth docutils literal notranslate"><span class="pre">user_return()</span></code></a> method (which should be overridden in subclasses).
+Raise a <a class="reference internal" href="#bdb.BdbQuit" title="bdb.BdbQuit"><code class="xref py py-exc docutils literal notranslate"><span class="pre">BdbQuit</span></code></a> exception if the <a class="reference internal" href="#bdb.Bdb.set_quit" title="bdb.Bdb.set_quit"><code class="xref py py-attr docutils literal notranslate"><span class="pre">quitting</span></code></a> flag is set
+(which can be set from <code class="xref py py-meth docutils literal notranslate"><span class="pre">user_return()</span></code>).  Return a reference to the
+<a class="reference internal" href="#bdb.Bdb.trace_dispatch" title="bdb.Bdb.trace_dispatch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">trace_dispatch()</span></code></a> method for further tracing in that scope.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.dispatch_exception">
+<span class="sig-name descname"><span class="pre">dispatch_exception</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.dispatch_exception" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">If the debugger should stop at this exception, invokes the
+<a class="reference internal" href="#bdb.Bdb.user_exception" title="bdb.Bdb.user_exception"><code class="xref py py-meth docutils literal notranslate"><span class="pre">user_exception()</span></code></a> method (which should be overridden in subclasses).
+Raise a <a class="reference internal" href="#bdb.BdbQuit" title="bdb.BdbQuit"><code class="xref py py-exc docutils literal notranslate"><span class="pre">BdbQuit</span></code></a> exception if the <a class="reference internal" href="#bdb.Bdb.set_quit" title="bdb.Bdb.set_quit"><code class="xref py py-attr docutils literal notranslate"><span class="pre">quitting</span></code></a> flag is set
+(which can be set from <code class="xref py py-meth docutils literal notranslate"><span class="pre">user_exception()</span></code>).  Return a reference to the
+<a class="reference internal" href="#bdb.Bdb.trace_dispatch" title="bdb.Bdb.trace_dispatch"><code class="xref py py-meth docutils literal notranslate"><span class="pre">trace_dispatch()</span></code></a> method for further tracing in that scope.</p>
+</dd></dl>
+
+<p class="translated">通常、継承クラスは以下のメソッド群をオーバーライドしません。しかし、停止やブレークポイント機能を再定義したい場合には、オーバーライドすることもあります。</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.is_skipped_module">
+<span class="sig-name descname"><span class="pre">is_skipped_module</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.is_skipped_module" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>module_name</em> matches any skip pattern.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.stop_here">
+<span class="sig-name descname"><span class="pre">stop_here</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.stop_here" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>frame</em> is below the starting frame in the stack.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.break_here">
+<span class="sig-name descname"><span class="pre">break_here</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.break_here" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if there is an effective breakpoint for this line.</p>
+<p class="untranslated">Check whether a line or function breakpoint exists and is in effect.  Delete temporary
+breakpoints based on information from <a class="reference internal" href="#bdb.effective" title="bdb.effective"><code class="xref py py-func docutils literal notranslate"><span class="pre">effective()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.break_anywhere">
+<span class="sig-name descname"><span class="pre">break_anywhere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.break_anywhere" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if any breakpoint exists for <em>frame</em>'s filename.</p>
+</dd></dl>
+
+<p class="translated">継承クラスはデバッガー操作をするために以下のメソッド群をオーバーライドするべきです。</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.user_call">
+<span class="sig-name descname"><span class="pre">user_call</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">argument_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.user_call" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Called from <a class="reference internal" href="#bdb.Bdb.dispatch_call" title="bdb.Bdb.dispatch_call"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dispatch_call()</span></code></a> if a break might stop inside the
+called function.</p>
+<p class="untranslated"><em>argument_list</em> is not used anymore and will always be <code class="docutils literal notranslate"><span class="pre">None</span></code>.
+The argument is kept for backwards compatibility.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.user_line">
+<span class="sig-name descname"><span class="pre">user_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.user_line" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#bdb.Bdb.stop_here" title="bdb.Bdb.stop_here"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stop_here()</span></code></a> か <a class="reference internal" href="#bdb.Bdb.break_here" title="bdb.Bdb.break_here"><code class="xref py py-meth docutils literal notranslate"><span class="pre">break_here()</span></code></a> が <code class="docutils literal notranslate"><span class="pre">True</span></code> を返したときに、 <a class="reference internal" href="#bdb.Bdb.dispatch_line" title="bdb.Bdb.dispatch_line"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dispatch_line()</span></code></a> から呼び出されます。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.user_return">
+<span class="sig-name descname"><span class="pre">user_return</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.user_return" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#bdb.Bdb.stop_here" title="bdb.Bdb.stop_here"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stop_here()</span></code></a> が <code class="docutils literal notranslate"><span class="pre">True</span></code> を返したときに、 <a class="reference internal" href="#bdb.Bdb.dispatch_return" title="bdb.Bdb.dispatch_return"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dispatch_return()</span></code></a> から呼び出されます。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.user_exception">
+<span class="sig-name descname"><span class="pre">user_exception</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.user_exception" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#bdb.Bdb.stop_here" title="bdb.Bdb.stop_here"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stop_here()</span></code></a> が <code class="docutils literal notranslate"><span class="pre">True</span></code> を返したときに、 <a class="reference internal" href="#bdb.Bdb.dispatch_exception" title="bdb.Bdb.dispatch_exception"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dispatch_exception()</span></code></a> から呼び出されます。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.do_clear">
+<span class="sig-name descname"><span class="pre">do_clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.do_clear" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ブレークポイントがテンポラリブレークポイントだったときに、それをどう削除するかを決定します。</p>
+<p class="translated">継承クラスはこのメソッドを実装しなければなりません。</p>
+</dd></dl>
+
+<p class="translated">継承クラスとクライアントは、ステップ状態に影響を及ぼすために以下のメソッドを呼び出すことができます。</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.set_step">
+<span class="sig-name descname"><span class="pre">set_step</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.set_step" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">コードの次の行でストップします。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.set_next">
+<span class="sig-name descname"><span class="pre">set_next</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.set_next" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">与えられたフレームかそれより下(のフレーム)にある、次の行でストップします。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.set_return">
+<span class="sig-name descname"><span class="pre">set_return</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.set_return" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">指定されたフレームから抜けるときにストップします。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.set_until">
+<span class="sig-name descname"><span class="pre">set_until</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.set_until" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">現在の行番号よりも大きい <em>lineno</em> に到達したとき、あるいは、現在のフレームから戻るときにストップします。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.set_trace">
+<span class="sig-name descname"><span class="pre">set_trace</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.set_trace" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>frame</em> からデバッグを開始します。<em>frame</em> が指定されなかった場合、デバッグは呼び出し元のフレームから開始します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span><a class="reference internal" href="#bdb.set_trace" title="bdb.set_trace"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_trace()</span></code></a> will enter the debugger immediately, rather than
+on the next line of code to be executed.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.set_continue">
+<span class="sig-name descname"><span class="pre">set_continue</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.set_continue" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ブレークポイントに到達するか終了したときにストップします。もしブレークポイントが1つも無い場合、システムのトレース関数を <code class="docutils literal notranslate"><span class="pre">None</span></code> に設定します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.set_quit">
+<span class="sig-name descname"><span class="pre">set_quit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.set_quit" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated" id="index-0">Set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">quitting</span></code> attribute to <code class="docutils literal notranslate"><span class="pre">True</span></code>.  This raises <a class="reference internal" href="#bdb.BdbQuit" title="bdb.BdbQuit"><code class="xref py py-exc docutils literal notranslate"><span class="pre">BdbQuit</span></code></a> in
+the next call to one of the <code class="xref py py-meth docutils literal notranslate"><span class="pre">dispatch_*()</span></code> methods.</p>
+</dd></dl>
+
+<p class="translated">継承クラスとクライアントは以下のメソッドをブレークポイント操作に利用できます。これらのメソッドは、何か悪いことがあればエラーメッセージを含む文字列を返し、すべてが順調であれば <code class="docutils literal notranslate"><span class="pre">None</span></code> を返します。</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.set_break">
+<span class="sig-name descname"><span class="pre">set_break</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temporary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cond</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">funcname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.set_break" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">新しいブレークポイントを設定します。引数の <em>lineno</em> 行が <em>filename</em> に存在しない場合、エラーメッセージを返します。 <em>filename</em> は、 <a class="reference internal" href="#bdb.Bdb.canonic" title="bdb.Bdb.canonic"><code class="xref py py-meth docutils literal notranslate"><span class="pre">canonic()</span></code></a> メソッドで説明されているような、標準形である必要があります。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.clear_break">
+<span class="sig-name descname"><span class="pre">clear_break</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.clear_break" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>filename</em> の <em>lineno</em> 行にあるブレークポイントを削除します。もしブレークポイントが無かった場合、エラーメッセージを返します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.clear_bpbynumber">
+<span class="sig-name descname"><span class="pre">clear_bpbynumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.clear_bpbynumber" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#bdb.Breakpoint.bpbynumber" title="bdb.Breakpoint.bpbynumber"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Breakpoint.bpbynumber</span></code></a> の中で <em>arg</em> のインデックスを持つブレークポイントを削除します。 <em>arg</em> が数値でないか範囲外の場合、エラーメッセージを返します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.clear_all_file_breaks">
+<span class="sig-name descname"><span class="pre">clear_all_file_breaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.clear_all_file_breaks" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>filename</em> にあるすべてのブレークポイントを削除します。もしブレークポイントが無かった場合、エラーメッセージを返します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.clear_all_breaks">
+<span class="sig-name descname"><span class="pre">clear_all_breaks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.clear_all_breaks" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">存在するすべてのブレークポイントを削除します。もしブレークポイントが無かった場合、エラーメッセージを返します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.get_bpbynumber">
+<span class="sig-name descname"><span class="pre">get_bpbynumber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.get_bpbynumber" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">与えられた数値によって指定されるブレークポイントを返します。 <em>arg</em> が文字列なら数値に変換されます。 <em>arg</em> が非数値の文字列である場合、指定されたブレークポイントが存在しないか削除された場合、 <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> が上げられます。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.get_break">
+<span class="sig-name descname"><span class="pre">get_break</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.get_break" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if there is a breakpoint for <em>lineno</em> in <em>filename</em>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.get_breaks">
+<span class="sig-name descname"><span class="pre">get_breaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineno</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.get_breaks" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>filename</em> の <em>lineno</em> にあるすべてのブレークポイントを返します。ブレークポイントが存在しない場合は空のリストを返します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.get_file_breaks">
+<span class="sig-name descname"><span class="pre">get_file_breaks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.get_file_breaks" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>filename</em> の中のすべてのブレークポイントを返します。ブレークポイントが存在しない場合は空のリストを返します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.get_all_breaks">
+<span class="sig-name descname"><span class="pre">get_all_breaks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.get_all_breaks" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">セットされているすべてのブレークポイントを返します。</p>
+</dd></dl>
+
+<p class="untranslated">Derived classes and clients can call the following methods to disable and
+restart events to achieve better performance. These methods only work
+when using the <code class="docutils literal notranslate"><span class="pre">'monitoring'</span></code> backend.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.disable_current_event">
+<span class="sig-name descname"><span class="pre">disable_current_event</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.disable_current_event" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Disable the current event until the next time <a class="reference internal" href="#bdb.Bdb.restart_events" title="bdb.Bdb.restart_events"><code class="xref py py-func docutils literal notranslate"><span class="pre">restart_events()</span></code></a> is
+called. This is helpful when the debugger is not interested in the current
+line.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.restart_events">
+<span class="sig-name descname"><span class="pre">restart_events</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.restart_events" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Restart all the disabled events. This function is automatically called in
+<code class="docutils literal notranslate"><span class="pre">dispatch_*</span></code> methods after <code class="docutils literal notranslate"><span class="pre">user_*</span></code> methods are called. If the
+<code class="docutils literal notranslate"><span class="pre">dispatch_*</span></code> methods are not overridden, the disabled events will be
+restarted after each user interaction.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<p class="translated">継承クラスとクライアントは以下のメソッドを呼んでスタックトレースを表現するデータ構造を取得することができます。</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.get_stack">
+<span class="sig-name descname"><span class="pre">get_stack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.get_stack" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return a list of (frame, lineno) tuples in a stack trace, and a size.</p>
+<p class="untranslated">The most recently called frame is last in the list. The size is the number
+of frames below the frame where the debugger was invoked.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.format_stack_entry">
+<span class="sig-name descname"><span class="pre">format_stack_entry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame_lineno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lprefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">':</span> <span class="pre">'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.format_stack_entry" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return a string with information about a stack entry, which is a
+<code class="docutils literal notranslate"><span class="pre">(frame,</span> <span class="pre">lineno)</span></code> tuple.  The return string contains:</p>
+<ul class="simple">
+<li><p class="untranslated">The canonical filename which contains the frame.</p></li>
+<li><p class="translated">関数名もしくは <code class="docutils literal notranslate"><span class="pre">&quot;&lt;lambda&gt;&quot;</span></code>。</p></li>
+<li><p class="translated">入力された引数。</p></li>
+<li><p class="translated">戻り値。</p></li>
+<li><p class="translated">(あれば)その行のコード。</p></li>
+</ul>
+</dd></dl>
+
+<p class="translated">以下の2つのメソッドは、文字列として渡された <a class="reference internal" href="../glossary.html#term-statement"><span class="xref std std-term">文</span></a> をデバッグするもので、クライアントから利用されます。</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.run" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Debug a statement executed via the <a class="reference internal" href="functions.html#exec" title="exec"><code class="xref py py-func docutils literal notranslate"><span class="pre">exec()</span></code></a> function.  <em>globals</em>
+defaults to <code class="xref py py-attr docutils literal notranslate"><span class="pre">__main__.__dict__</span></code>, <em>locals</em> defaults to <em>globals</em>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.runeval">
+<span class="sig-name descname"><span class="pre">runeval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.runeval" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="functions.html#eval" title="eval"><code class="xref py py-func docutils literal notranslate"><span class="pre">eval()</span></code></a> 関数を利用して式を実行しデバッグします。 <em>globals</em> と <em>locals</em> は <a class="reference internal" href="#bdb.Bdb.run" title="bdb.Bdb.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> と同じ意味です。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.runctx">
+<span class="sig-name descname"><span class="pre">runctx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globals</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.runctx" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">後方互換性のためのメソッドです。 <a class="reference internal" href="#bdb.Bdb.run" title="bdb.Bdb.run"><code class="xref py py-meth docutils literal notranslate"><span class="pre">run()</span></code></a> を使ってください。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bdb.Bdb.runcall">
+<span class="sig-name descname"><span class="pre">runcall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.Bdb.runcall" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">1つの関数呼び出しをデバッグし、その結果を返します。</p>
+</dd></dl>
+
+</dd></dl>
+
+<p class="translated">最後に、このモジュールは以下の関数を提供しています:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="bdb.checkfuncname">
+<span class="sig-prename descclassname"><span class="pre">bdb.</span></span><span class="sig-name descname"><span class="pre">checkfuncname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.checkfuncname" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if we should break here, depending on the way the
+<a class="reference internal" href="#bdb.Breakpoint" title="bdb.Breakpoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">Breakpoint</span></code></a> <em>b</em> was set.</p>
+<p class="untranslated">If it was set via line number, it checks if
+<a class="reference internal" href="#bdb.Breakpoint.line" title="bdb.Breakpoint.line"><code class="xref py py-attr docutils literal notranslate"><span class="pre">b.line</span></code></a> is the same as the one in <em>frame</em>.
+If the breakpoint was set via
+<a class="reference internal" href="#bdb.Breakpoint.funcname" title="bdb.Breakpoint.funcname"><code class="xref py py-attr docutils literal notranslate"><span class="pre">function</span> <span class="pre">name</span></code></a>, we have to check we are in
+the right <em>frame</em> (the right function) and if we are on its first executable
+line.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bdb.effective">
+<span class="sig-prename descclassname"><span class="pre">bdb.</span></span><span class="sig-name descname"><span class="pre">effective</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#bdb.effective" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return <code class="docutils literal notranslate"><span class="pre">(active</span> <span class="pre">breakpoint,</span> <span class="pre">delete</span> <span class="pre">temporary</span> <span class="pre">flag)</span></code> or <code class="docutils literal notranslate"><span class="pre">(None,</span> <span class="pre">None)</span></code> as the
+breakpoint to act upon.</p>
+<p class="untranslated">The <em>active breakpoint</em> is the first entry in
+<a class="reference internal" href="#bdb.Breakpoint.bplist" title="bdb.Breakpoint.bplist"><code class="xref py py-attr docutils literal notranslate"><span class="pre">bplist</span></code></a> for the
+(<a class="reference internal" href="#bdb.Breakpoint.file" title="bdb.Breakpoint.file"><code class="xref py py-attr docutils literal notranslate"><span class="pre">file</span></code></a>, <a class="reference internal" href="#bdb.Breakpoint.line" title="bdb.Breakpoint.line"><code class="xref py py-attr docutils literal notranslate"><span class="pre">line</span></code></a>)
+(which must exist) that is <a class="reference internal" href="#bdb.Breakpoint.enabled" title="bdb.Breakpoint.enabled"><code class="xref py py-attr docutils literal notranslate"><span class="pre">enabled</span></code></a>, for
+which <a class="reference internal" href="#bdb.checkfuncname" title="bdb.checkfuncname"><code class="xref py py-func docutils literal notranslate"><span class="pre">checkfuncname()</span></code></a> is true, and that has neither a false
+<a class="reference internal" href="#bdb.Breakpoint.cond" title="bdb.Breakpoint.cond"><code class="xref py py-attr docutils literal notranslate"><span class="pre">condition</span></code></a> nor positive
+<a class="reference internal" href="#bdb.Breakpoint.ignore" title="bdb.Breakpoint.ignore"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ignore</span></code></a> count.  The <em>flag</em>, meaning that a
+temporary breakpoint should be deleted, is <code class="docutils literal notranslate"><span class="pre">False</span></code> only when the
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">cond</span></code> cannot be evaluated (in which case,
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">ignore</span></code> count is ignored).</p>
+<p class="untranslated">If no such entry exists, then <code class="docutils literal notranslate"><span class="pre">(None,</span> <span class="pre">None)</span></code> is returned.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="bdb.set_trace">
+<span class="sig-prename descclassname"><span class="pre">bdb.</span></span><span class="sig-name descname"><span class="pre">set_trace</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#bdb.set_trace" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#bdb.Bdb" title="bdb.Bdb"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bdb</span></code></a> クラスのインスタンスを使って、呼び出し元のフレームからデバッグを開始します。</p>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="audit_events.html"
+                          title="前の章へ">監査イベント表</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="faulthandler.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">faulthandler</span></code> --- Python トレースバックをダンプする</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/bdb.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/bdb.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/bdb.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="faulthandler.html" title="faulthandler --- Python トレースバックをダンプする"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="audit_events.html" title="監査イベント表"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="debug.html" >Debugging and Profiling</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">bdb</span></code> --- デバッガーフレームワーク</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

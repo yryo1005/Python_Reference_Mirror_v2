@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="compileall --- Python ライブラリをバイトコンパイルする" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/compileall.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/compileall.py このモジュールは、Python ライブラリのインストールを助けるユーティリティ関数群を提供します。この関数群は、ディレクトリツリー内の Python ソースファイルをコンパイルします。このモジュールを使って、キャッシュされたバイトコードファイルをライブラリのインストール時に生成することで、ライブラリディレクトリに書き込み権限をもたないユーザ..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_compileall_2cb2ce17.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/compileall.py このモジュールは、Python ライブラリのインストールを助けるユーティリティ関数群を提供します。この関数群は、ディレクトリツリー内の Python ソースファイルをコンパイルします。このモジュールを使って、キャッシュされたバイトコードファイルをライブラリのインストール時に生成することで、ライブラリディレクトリに書き込み権限をもたないユーザ..." />
+<meta name="description" content="ソースコード: Lib/compileall.py このモジュールは、Python ライブラリのインストールを助けるユーティリティ関数群を提供します。この関数群は、ディレクトリツリー内の Python ソースファイルをコンパイルします。このモジュールを使って、キャッシュされたバイトコードファイルをライブラリのインストール時に生成することで、ライブラリディレクトリに書き込み権限をもたないユーザ..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>compileall --- Python ライブラリをバイトコンパイルする &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="dis --- Python バイトコードの逆アセンブラー" href="dis.html" />
+    <link rel="prev" title="py_compile --- Python ソースファイルをコンパイルする" href="py_compile.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/compileall.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compileall</span></code> --- Python ライブラリをバイトコンパイルする</a><ul>
+<li><a class="reference internal" href="#command-line-use">コマンドラインでの使用</a></li>
+<li><a class="reference internal" href="#public-functions">パブリックな関数</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="py_compile.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">py_compile</span></code> --- Python ソースファイルをコンパイルする</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="dis.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dis</span></code> --- Python バイトコードの逆アセンブラー</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/compileall.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/compileall.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/compileall.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="dis.html" title="dis --- Python バイトコードの逆アセンブラー"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="py_compile.html" title="py_compile --- Python ソースファイルをコンパイルする"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="language.html" accesskey="U">Python言語サービス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">compileall</span></code> --- Python ライブラリをバイトコンパイルする</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-compileall">
+<span id="compileall-byte-compile-python-libraries"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compileall</span></code> --- Python ライブラリをバイトコンパイルする<a class="headerlink" href="#module-compileall" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/compileall.py">Lib/compileall.py</a></p>
+<hr class="docutils" />
+<p class="translated">このモジュールは、Python ライブラリのインストールを助けるユーティリティ関数群を提供します。この関数群は、ディレクトリツリー内の Python ソースファイルをコンパイルします。このモジュールを使って、キャッシュされたバイトコードファイルをライブラリのインストール時に生成することで、ライブラリディレクトリに書き込み権限をもたないユーザでも、これらを利用できるようになります。</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: not WASI.</p>
+<p class="translated">このモジュールは WebAssembly では動作しないか、利用不可です。詳しくは、<a class="reference internal" href="intro.html#wasm-availability"><span class="std std-ref">WebAssembly プラットフォーム</span></a> を見てください。</p>
+</div>
+<section id="command-line-use">
+<span id="compileall-cli"></span><h2 class="translated">コマンドラインでの使用<a class="headerlink" href="#command-line-use" title="Link to this heading">¶</a></h2>
+<p class="translated">このモジュールは、 (<strong class="program">python -m compileall</strong> を使って) Python ソースをコンパイルするスクリプトとして機能します。</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-compileall-arg-directory">
+<span class="sig-name descname"><span class="pre">directory</span></span><span class="sig-prename descclassname"> <span class="pre">...</span></span><a class="headerlink" href="#cmdoption-compileall-arg-directory" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object std" id="cmdoption-compileall-arg-file">
+<span class="sig-name descname"><span class="pre">file</span></span><span class="sig-prename descclassname"> <span class="pre">...</span></span><a class="headerlink" href="#cmdoption-compileall-arg-file" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">位置引数は、コンパイルするファイル群か、再帰的に横断されるディレクトリでソースファイル群を含むものです。引数が与えられなければ、 <code class="samp docutils literal notranslate"><span class="pre">-l</span> <em><span class="pre">&lt;directories</span> <span class="pre">from</span> <span class="pre">sys.path&gt;</span></em></code> を渡したのと同じように動作します。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-compileall-l">
+<span class="sig-name descname"><span class="pre">-l</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-compileall-l" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">サブディレクトリを再帰処理せず、指名または暗示されたディレクトリ群に含まれるソースコードファイル群だけをコンパイルします。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-compileall-f">
+<span class="sig-name descname"><span class="pre">-f</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-compileall-f" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">タイムスタンプが最新であってもリビルドを強制します。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-compileall-q">
+<span class="sig-name descname"><span class="pre">-q</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-compileall-q" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">コンパイルされたファイルのリストを出力しません。
+一つ渡された場合でもエラーメッセージは出力されます。
+二つ (<code class="docutils literal notranslate"><span class="pre">-qq</span></code>) の場合全ての出力は抑制されます。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-compileall-d">
+<span class="sig-name descname"><span class="pre">-d</span></span><span class="sig-prename descclassname"> <span class="pre">destdir</span></span><a class="headerlink" href="#cmdoption-compileall-d" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">コンパイルされるそれぞれのファイルへのパスの先頭に、ディレクトリを追加します。これはコンパイル時トレースバックに使われ、バイトコードファイルが実行される時点でソースファイルが存在しない場合に、トレースバックやその他のメッセージに使われるバイトコードファイルにもコンパイルされます。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-compileall-s">
+<span class="sig-name descname"><span class="pre">-s</span></span><span class="sig-prename descclassname"> <span class="pre">strip_prefix</span></span><a class="headerlink" href="#cmdoption-compileall-s" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Remove the given prefix from paths recorded in the <code class="docutils literal notranslate"><span class="pre">.pyc</span></code> files.
+Paths are made relative to the prefix.</p>
+<p class="untranslated">This option can be used with <code class="docutils literal notranslate"><span class="pre">-p</span></code> but not with <code class="docutils literal notranslate"><span class="pre">-d</span></code>.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-compileall-p">
+<span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"> <span class="pre">prepend_prefix</span></span><a class="headerlink" href="#cmdoption-compileall-p" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Prepend the given prefix to paths recorded in the <code class="docutils literal notranslate"><span class="pre">.pyc</span></code> files.
+Use <code class="docutils literal notranslate"><span class="pre">-p</span> <span class="pre">/</span></code> to make the paths absolute.</p>
+<p class="untranslated">This option can be used with <code class="docutils literal notranslate"><span class="pre">-s</span></code> but not with <code class="docutils literal notranslate"><span class="pre">-d</span></code>.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-compileall-x">
+<span class="sig-name descname"><span class="pre">-x</span></span><span class="sig-prename descclassname"> <span class="pre">regex</span></span><a class="headerlink" href="#cmdoption-compileall-x" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">regex を使って、コンパイル候補のそれぞれのファイルのフルパスを検索し、regex がマッチしたファイルを除外します。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-compileall-i">
+<span class="sig-name descname"><span class="pre">-i</span></span><span class="sig-prename descclassname"> <span class="pre">list</span></span><a class="headerlink" href="#cmdoption-compileall-i" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイル <code class="docutils literal notranslate"><span class="pre">list</span></code> を読み込み、そのファイルのそれぞれの行を、コンパイルするファイルとディレクトリのリストに加えます。<code class="docutils literal notranslate"><span class="pre">list</span></code> が <code class="docutils literal notranslate"><span class="pre">-</span></code> なら、<code class="docutils literal notranslate"><span class="pre">stdin</span></code> の行を読み込みます。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-compileall-b">
+<span class="sig-name descname"><span class="pre">-b</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-compileall-b" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">バイトコードファイルを、他のバージョンの Python によって生成されたバイトコードファイルを上書きするかもしれない、レガシーな場所に生成します。デフォルトでは <span class="target" id="index-8"></span><a class="pep reference external" href="https://peps.python.org/pep-3147/"><strong>PEP 3147</strong></a> で決められた場所と名前を使い、複数のバージョンの Python が共存できるようにします。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-compileall-r">
+<span class="sig-name descname"><span class="pre">-r</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-compileall-r" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">サブディレクトリの最大再起深度を制御します。
+このオプションが与えられた場合、<code class="docutils literal notranslate"><span class="pre">-l</span></code> オプションは無視されます。
+<strong class="program">python -m compileall &lt;directory&gt; -r 0</strong> は <strong class="program">python -m compileall &lt;directory&gt; -l</strong> と等価です。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-compileall-j">
+<span class="sig-name descname"><span class="pre">-j</span></span><span class="sig-prename descclassname"> <span class="pre">N</span></span><a class="headerlink" href="#cmdoption-compileall-j" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Use <em>N</em> workers to compile the files within the given directory.
+If <code class="docutils literal notranslate"><span class="pre">0</span></code> is used, then the result of <a class="reference internal" href="os.html#os.process_cpu_count" title="os.process_cpu_count"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.process_cpu_count()</span></code></a>
+will be used.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-compileall-invalidation-mode">
+<span class="sig-name descname"><span class="pre">--invalidation-mode</span></span><span class="sig-prename descclassname"> <span class="pre">[timestamp|checked-hash|unchecked-hash]</span></span><a class="headerlink" href="#cmdoption-compileall-invalidation-mode" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">生成したバイトコードファイルを実行時に無効化する方法を制御します。<code class="docutils literal notranslate"><span class="pre">timestamp</span></code> を指定すると、生成した``.pyc`` ファイルにソースファイルのタイムスタンプとサイズを埋め込みます。<code class="docutils literal notranslate"><span class="pre">checked-hash</span></code> と <code class="docutils literal notranslate"><span class="pre">unchecked-hash</span></code> を指定すると、ハッシュベースの pycファイルが生成されます。ハッシュベースのpycファイルは、ソースファイルにタイムスタンプではなくハッシュ値を埋め込みます。Python がバイトコードキャッシュファイルを実行時に検証する方法の詳細を知るには、<a class="reference internal" href="../reference/import.html#pyc-invalidation"><span class="std std-ref">キャッシュされたバイトコードの無効化</span></a> を参照してください。デフォルト値は、<span class="target" id="index-9"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">SOURCE_DATE_EPOCH</span></code> 環境変数が設定されていなければ <code class="docutils literal notranslate"><span class="pre">timestamp</span></code> で、<code class="docutils literal notranslate"><span class="pre">SOURCE_DATE_EPOCH</span></code> 環境変数が設定されていれば、<code class="docutils literal notranslate"><span class="pre">checked-hash</span></code> になります。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-compileall-o">
+<span class="sig-name descname"><span class="pre">-o</span></span><span class="sig-prename descclassname"> <span class="pre">level</span></span><a class="headerlink" href="#cmdoption-compileall-o" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Compile with the given optimization level. May be used multiple times
+to compile for multiple levels at a time (for example,
+<code class="docutils literal notranslate"><span class="pre">compileall</span> <span class="pre">-o</span> <span class="pre">1</span> <span class="pre">-o</span> <span class="pre">2</span></code>).</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-compileall-e">
+<span class="sig-name descname"><span class="pre">-e</span></span><span class="sig-prename descclassname"> <span class="pre">dir</span></span><a class="headerlink" href="#cmdoption-compileall-e" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Ignore symlinks pointing outside the given directory.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-compileall-hardlink-dupes">
+<span class="sig-name descname"><span class="pre">--hardlink-dupes</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-compileall-hardlink-dupes" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">If two <code class="docutils literal notranslate"><span class="pre">.pyc</span></code> files with different optimization level have
+the same content, use hard links to consolidate duplicate files.</p>
+</dd></dl>
+
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span><code class="docutils literal notranslate"><span class="pre">-i</span></code>, <code class="docutils literal notranslate"><span class="pre">-b</span></code>, <code class="docutils literal notranslate"><span class="pre">-h</span></code> オプションを追加。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span><code class="docutils literal notranslate"><span class="pre">-j</span></code>, <code class="docutils literal notranslate"><span class="pre">-r</span></code>, <code class="docutils literal notranslate"><span class="pre">-qq</span></code> オプションが追加されました。<code class="docutils literal notranslate"><span class="pre">-q</span></code> オプションが複数のレベルの値に変更されました。<code class="docutils literal notranslate"><span class="pre">-b</span></code> は常に拡張子 <code class="docutils literal notranslate"><span class="pre">.pyc</span></code> のバイトエンコーディングファイルを生成し、<code class="docutils literal notranslate"><span class="pre">.pyo</span></code> を作りません。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7 で変更: </span><code class="docutils literal notranslate"><span class="pre">--invalidation-mode</span></code> オプションが追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.9 で変更: </span>Added the <code class="docutils literal notranslate"><span class="pre">-s</span></code>, <code class="docutils literal notranslate"><span class="pre">-p</span></code>, <code class="docutils literal notranslate"><span class="pre">-e</span></code> and <code class="docutils literal notranslate"><span class="pre">--hardlink-dupes</span></code> options.
+Raised the default recursion limit from 10 to
+<a class="reference internal" href="sys.html#sys.getrecursionlimit" title="sys.getrecursionlimit"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.getrecursionlimit()</span></code></a>.
+Added the possibility to specify the <code class="docutils literal notranslate"><span class="pre">-o</span></code> option multiple times.</p>
+</div>
+<p class="translated"><a class="reference internal" href="functions.html#compile" title="compile"><code class="xref py py-func docutils literal notranslate"><span class="pre">compile()</span></code></a> 関数で利用される最適化レベルを制御するコマンドラインオプションはありません。 Python インタプリタ自体のオプションを使ってください: <strong class="program">python -O -m compileall</strong>.</p>
+<p class="untranslated">Similarly, the <a class="reference internal" href="functions.html#compile" title="compile"><code class="xref py py-func docutils literal notranslate"><span class="pre">compile()</span></code></a> function respects the <a class="reference internal" href="sys.html#sys.pycache_prefix" title="sys.pycache_prefix"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.pycache_prefix</span></code></a>
+setting. The generated bytecode cache will only be useful if <code class="xref py py-func docutils literal notranslate"><span class="pre">compile()</span></code> is
+run with the same <code class="xref py py-data docutils literal notranslate"><span class="pre">sys.pycache_prefix</span></code> (if any) that will be used at
+runtime.</p>
+</section>
+<section id="public-functions">
+<h2 class="translated">パブリックな関数<a class="headerlink" href="#public-functions" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="compileall.compile_dir">
+<span class="sig-prename descclassname"><span class="pre">compileall.</span></span><span class="sig-name descname"><span class="pre">compile_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxlevels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">sys.getrecursionlimit()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ddir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legacy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">workers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invalidation_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">stripdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prependdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_sl_dest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hardlink_dupes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compileall.compile_dir" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>dir</em> という名前のディレクトリーツリーをたどり、途中で見つけた全ての <code class="file docutils literal notranslate"><span class="pre">.py</span></code> をコンパイルします。全ファイルのコンパイルが成功した場合は真を、それ以外の場合は偽を返します。</p>
+<p class="translated"><em>maxlevels</em> パラメータで最大再帰深度を制限します。デフォルトは <code class="docutils literal notranslate"><span class="pre">sys.getrecursionlimit()</span></code> です。</p>
+<p class="translated"><em>ddir</em> が与えられた場合、コンパイルされるそれぞれのファイルへのパスの先頭に、そのディレクトリを追加します。これはコンパイル時トレースバックに使われ、バイトコードファイルが実行される時点でソースファイルが存在しない場合に、トレースバックやその他のメッセージに使われるバイトコードファイルにもコンパイルされます。</p>
+<p class="translated"><em>force</em> が真の場合、タイムスタンプが最新のであってもモジュールは再コンパイルされます。</p>
+<p class="untranslated">If <em>rx</em> is given, its <code class="docutils literal notranslate"><span class="pre">search</span></code> method is called on the complete path to each
+file considered for compilation, and if it returns a true value, the file
+is skipped. This can be used to exclude files matching a regular expression,
+given as a <a class="reference internal" href="re.html#re-objects"><span class="std std-ref">re.Pattern</span></a> object.</p>
+<p class="translated"><em>quiet</em> が <code class="docutils literal notranslate"><span class="pre">False</span></code> か <code class="docutils literal notranslate"><span class="pre">0</span></code> (デフォルト) の場合、ファイル名とその他の情報は標準出力に表示されます。
+<code class="docutils literal notranslate"><span class="pre">1</span></code> の場合エラーのみが表示されます。
+<code class="docutils literal notranslate"><span class="pre">2</span></code> の場合出力はすべて抑制されます。</p>
+<p class="translated"><em>legacy</em> が真の時、バイトコードファイルは古い場所と名前に書かれ、他のバージョンの Python によって作られたバイトコードファイルを上書きする可能性があります。デフォルトは <span class="target" id="index-10"></span><a class="pep reference external" href="https://peps.python.org/pep-3147/"><strong>PEP 3147</strong></a> で決められた場所と名前を使い、複数のバージョンの Python のバイトコードファイルが共存できるようにします。</p>
+<p class="untranslated"><em>optimize</em> specifies the optimization level for the compiler.  It is passed to
+the built-in <a class="reference internal" href="functions.html#compile" title="compile"><code class="xref py py-func docutils literal notranslate"><span class="pre">compile()</span></code></a> function. Accepts also a sequence of optimization
+levels which lead to multiple compilations of one <code class="file docutils literal notranslate"><span class="pre">.py</span></code> file in one call.</p>
+<p class="untranslated">The argument <em>workers</em> specifies how many workers are used to
+compile files in parallel. The default is to not use multiple workers.
+If the platform can't use multiple workers and <em>workers</em> argument is given,
+then sequential compilation will be used as a fallback.  If <em>workers</em>
+is 0, the number of cores in the system is used.  If <em>workers</em> is
+lower than <code class="docutils literal notranslate"><span class="pre">0</span></code>, a <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> will be raised.</p>
+<p class="translated"><em>invalidation_mode</em> は、<a class="reference internal" href="py_compile.html#py_compile.PycInvalidationMode" title="py_compile.PycInvalidationMode"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_compile.PycInvalidationMode</span></code></a> のメンバーでなければならず、生成されたpycファイルを実行時に無効化する方法を制御します。</p>
+<p class="untranslated">The <em>stripdir</em>, <em>prependdir</em> and <em>limit_sl_dest</em> arguments correspond to
+the <code class="docutils literal notranslate"><span class="pre">-s</span></code>, <code class="docutils literal notranslate"><span class="pre">-p</span></code> and <code class="docutils literal notranslate"><span class="pre">-e</span></code> options described above.
+They may be specified as <code class="docutils literal notranslate"><span class="pre">str</span></code> or <a class="reference internal" href="os.html#os.PathLike" title="os.PathLike"><code class="xref py py-class docutils literal notranslate"><span class="pre">os.PathLike</span></code></a>.</p>
+<p class="untranslated">If <em>hardlink_dupes</em> is true and two <code class="docutils literal notranslate"><span class="pre">.pyc</span></code> files with different optimization
+level have the same content, use hard links to consolidate duplicate files.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span><em>legacy</em> と <em>optimize</em> 引数が追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span><code class="docutils literal notranslate"><span class="pre">workers</span></code> パラメータが追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span><em>quiet</em> 引数が複数のレベルの値に変更されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span><em>optimize</em> の値に関わらず、<em>legacy</em> 引数は <code class="docutils literal notranslate"><span class="pre">.pyc</span></code> ファイルのみを書き出し、<code class="docutils literal notranslate"><span class="pre">.pyo</span></code> ファイルを書き出さないようになりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7 で変更: </span><em>invalidation_mode</em> 引数を追加しました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7.2 で変更: </span>The <em>invalidation_mode</em> parameter's default value is updated to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.8 で変更: </span>Setting <em>workers</em> to 0 now chooses the optimal number of cores.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.9 で変更: </span>Added <em>stripdir</em>, <em>prependdir</em>, <em>limit_sl_dest</em> and <em>hardlink_dupes</em> arguments.
+Default value of <em>maxlevels</em> was changed from <code class="docutils literal notranslate"><span class="pre">10</span></code> to <code class="docutils literal notranslate"><span class="pre">sys.getrecursionlimit()</span></code></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="compileall.compile_file">
+<span class="sig-prename descclassname"><span class="pre">compileall.</span></span><span class="sig-name descname"><span class="pre">compile_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fullname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ddir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rx</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legacy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invalidation_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">stripdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prependdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit_sl_dest</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hardlink_dupes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compileall.compile_file" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">パス <em>fullname</em> のファイルをコンパイルします。コンパイルが成功すれば真を、そうでなければ偽を返します。</p>
+<p class="translated"><em>ddir</em> が与えられた場合、コンパイルされるファイルのパスの先頭にそのディレクトリを追加します。これはコンパイル時トレースバックに使われ、バイトコードファイルが実行される時点でソースファイルが存在しない場合に、トレースバックやその他のメッセージに使われるバイトコードファイルにもコンパイルされます。</p>
+<p class="untranslated">If <em>rx</em> is given, its <code class="docutils literal notranslate"><span class="pre">search</span></code> method is passed the full path name to the
+file being compiled, and if it returns a true value, the file is not
+compiled and <code class="docutils literal notranslate"><span class="pre">True</span></code> is returned. This can be used to exclude files matching
+a regular expression, given as a <a class="reference internal" href="re.html#re-objects"><span class="std std-ref">re.Pattern</span></a> object.</p>
+<p class="translated"><em>quiet</em> が <code class="docutils literal notranslate"><span class="pre">False</span></code> か <code class="docutils literal notranslate"><span class="pre">0</span></code> (デフォルト) の場合、ファイル名とその他の情報は標準出力に表示されます。
+<code class="docutils literal notranslate"><span class="pre">1</span></code> の場合エラーのみが表示されます。
+<code class="docutils literal notranslate"><span class="pre">2</span></code> の場合出力はすべて抑制されます。</p>
+<p class="translated"><em>legacy</em> が真の時、バイトコードファイルは古い場所と名前に書かれ、他のバージョンの Python によって作られたバイトコードファイルを上書きする可能性があります。デフォルトは <span class="target" id="index-11"></span><a class="pep reference external" href="https://peps.python.org/pep-3147/"><strong>PEP 3147</strong></a> で決められた場所と名前を使い、複数のバージョンの Python のバイトコードファイルが共存できるようにします。</p>
+<p class="untranslated"><em>optimize</em> specifies the optimization level for the compiler.  It is passed to
+the built-in <a class="reference internal" href="functions.html#compile" title="compile"><code class="xref py py-func docutils literal notranslate"><span class="pre">compile()</span></code></a> function. Accepts also a sequence of optimization
+levels which lead to multiple compilations of one <code class="file docutils literal notranslate"><span class="pre">.py</span></code> file in one call.</p>
+<p class="translated"><em>invalidation_mode</em> は、<a class="reference internal" href="py_compile.html#py_compile.PycInvalidationMode" title="py_compile.PycInvalidationMode"><code class="xref py py-class docutils literal notranslate"><span class="pre">py_compile.PycInvalidationMode</span></code></a> のメンバーでなければならず、生成されたpycファイルを実行時に無効化する方法を制御します。</p>
+<p class="untranslated">The <em>stripdir</em>, <em>prependdir</em> and <em>limit_sl_dest</em> arguments correspond to
+the <code class="docutils literal notranslate"><span class="pre">-s</span></code>, <code class="docutils literal notranslate"><span class="pre">-p</span></code> and <code class="docutils literal notranslate"><span class="pre">-e</span></code> options described above.
+They may be specified as <code class="docutils literal notranslate"><span class="pre">str</span></code> or <a class="reference internal" href="os.html#os.PathLike" title="os.PathLike"><code class="xref py py-class docutils literal notranslate"><span class="pre">os.PathLike</span></code></a>.</p>
+<p class="untranslated">If <em>hardlink_dupes</em> is true and two <code class="docutils literal notranslate"><span class="pre">.pyc</span></code> files with different optimization
+level have the same content, use hard links to consolidate duplicate files.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span><em>quiet</em> 引数が複数のレベルの値に変更されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span><em>optimize</em> の値に関わらず、<em>legacy</em> 引数は <code class="docutils literal notranslate"><span class="pre">.pyc</span></code> ファイルのみを書き出し、<code class="docutils literal notranslate"><span class="pre">.pyo</span></code> ファイルを書き出さないようになりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7 で変更: </span><em>invalidation_mode</em> 引数を追加しました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7.2 で変更: </span>The <em>invalidation_mode</em> parameter's default value is updated to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.9 で変更: </span>引数 <em>stripdir</em> 、 <em>prependdir</em> 、 <em>limit_sl_dest</em> 、および <em>hardlink_dupes</em> を追加しました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="compileall.compile_path">
+<span class="sig-prename descclassname"><span class="pre">compileall.</span></span><span class="sig-name descname"><span class="pre">compile_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skip_curdir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxlevels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quiet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legacy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">invalidation_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#compileall.compile_path" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><code class="docutils literal notranslate"><span class="pre">sys.path</span></code> からたどって見つけたすべての <code class="file docutils literal notranslate"><span class="pre">.py</span></code> ファイルをバイトコンパイルします。
+すべてのファイルを問題なくコンパイルできたときに真を、それ以外のときに偽を返します。</p>
+<p class="translated"><em>skip_curdir</em> が真(デフォルト)のとき、カレントディレクトリは走査から除外されます。
+それ以外のすべての引数は <a class="reference internal" href="#compileall.compile_dir" title="compileall.compile_dir"><code class="xref py py-func docutils literal notranslate"><span class="pre">compile_dir()</span></code></a> 関数に渡されます。
+その他の compile 関数群と異なり、 <code class="docutils literal notranslate"><span class="pre">maxlevels</span></code> のデフォルトが <code class="docutils literal notranslate"><span class="pre">0</span></code> になっていることに注意してください。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span><em>legacy</em> と <em>optimize</em> 引数が追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span><em>quiet</em> 引数が複数のレベルの値に変更されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span><em>optimize</em> の値に関わらず、<em>legacy</em> 引数は <code class="docutils literal notranslate"><span class="pre">.pyc</span></code> ファイルのみを書き出し、<code class="docutils literal notranslate"><span class="pre">.pyo</span></code> ファイルを書き出さないようになりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7 で変更: </span><em>invalidation_mode</em> 引数を追加しました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7.2 で変更: </span>The <em>invalidation_mode</em> parameter's default value is updated to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</div>
+</dd></dl>
+
+<p class="translated"><code class="file docutils literal notranslate"><span class="pre">Lib/</span></code> ディレクトリ以下にある全ての <code class="file docutils literal notranslate"><span class="pre">.py</span></code> ファイルを強制的に再コンパイルするには、以下のようにします:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">compileall</span>
+
+<span class="n">compileall</span><span class="o">.</span><span class="n">compile_dir</span><span class="p">(</span><span class="s1">&#39;Lib/&#39;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Perform same compilation, excluding files in .svn directories.</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="n">compileall</span><span class="o">.</span><span class="n">compile_dir</span><span class="p">(</span><span class="s1">&#39;Lib/&#39;</span><span class="p">,</span> <span class="n">rx</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[/</span><span class="se">\\</span><span class="s1">][.]svn&#39;</span><span class="p">),</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># pathlib.Path objects can also be used.</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="n">compileall</span><span class="o">.</span><span class="n">compile_dir</span><span class="p">(</span><span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="s1">&#39;Lib/&#39;</span><span class="p">),</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<dl class="simple">
+<dt class="translated">Module <a class="reference internal" href="py_compile.html#module-py_compile" title="py_compile: Generate byte-code files from Python source files."><code class="xref py py-mod docutils literal notranslate"><span class="pre">py_compile</span></code></a></dt><dd><p class="translated">一つのソースファイルをバイトコンパイルします。</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">compileall</span></code> --- Python ライブラリをバイトコンパイルする</a><ul>
+<li><a class="reference internal" href="#command-line-use">コマンドラインでの使用</a></li>
+<li><a class="reference internal" href="#public-functions">パブリックな関数</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="py_compile.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">py_compile</span></code> --- Python ソースファイルをコンパイルする</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="dis.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">dis</span></code> --- Python バイトコードの逆アセンブラー</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/compileall.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/compileall.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/compileall.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="dis.html" title="dis --- Python バイトコードの逆アセンブラー"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="py_compile.html" title="py_compile --- Python ソースファイルをコンパイルする"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="language.html" >Python言語サービス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">compileall</span></code> --- Python ライブラリをバイトコンパイルする</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

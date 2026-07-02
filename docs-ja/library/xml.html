@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="XMLを扱うモジュール群" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/xml.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/xml/ PythonのXMLを扱うインターフェースは xml パッケージにまとめられています。 It is important to note that modules in the xml package require that there be at least one SAX-compliant XML parser available. The Expat..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_xml_676da3fe.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/xml/ PythonのXMLを扱うインターフェースは xml パッケージにまとめられています。 It is important to note that modules in the xml package require that there be at least one SAX-compliant XML parser available. The Expat..." />
+<meta name="description" content="ソースコード: Lib/xml/ PythonのXMLを扱うインターフェースは xml パッケージにまとめられています。 It is important to note that modules in the xml package require that there be at least one SAX-compliant XML parser available. The Expat..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>XMLを扱うモジュール群 &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="xml.etree.ElementTree --- ElementTree XML API" href="xml.etree.elementtree.html" />
+    <link rel="prev" title="html.entities --- HTML 一般実体の定義" href="html.entities.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/xml.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">XMLを扱うモジュール群</a><ul>
+<li><a class="reference internal" href="#xml-vulnerabilities">XML security</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="html.entities.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">html.entities</span></code> --- HTML 一般実体の定義</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="xml.etree.elementtree.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.etree.ElementTree</span></code> --- ElementTree XML API</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/xml.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/xml.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/xml.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="xml.etree.elementtree.html" title="xml.etree.ElementTree --- ElementTree XML API"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="html.entities.html" title="html.entities --- HTML 一般実体の定義"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="markup.html" accesskey="U">構造化マークアップツール</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">XMLを扱うモジュール群</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-xml">
+<span id="xml-processing-modules"></span><span id="xml"></span><h1 class="translated">XMLを扱うモジュール群<a class="headerlink" href="#module-xml" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/xml/">Lib/xml/</a></p>
+<hr class="docutils" />
+<p class="translated">PythonのXMLを扱うインターフェースは <code class="docutils literal notranslate"><span class="pre">xml</span></code> パッケージにまとめられています。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">If you need to parse untrusted or unauthenticated data, see
+<a class="reference internal" href="#xml-security"><span class="std std-ref">XML security</span></a>.</p>
+</div>
+<p class="untranslated">It is important to note that modules in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">xml</span></code> package require that
+there be at least one SAX-compliant XML parser available. The Expat parser is
+included with Python, so the <a class="reference internal" href="pyexpat.html#module-xml.parsers.expat" title="xml.parsers.expat: An interface to the Expat non-validating XML parser."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.parsers.expat</span></code></a> module will always be
+available.</p>
+<p class="translated"><a class="reference internal" href="xml.dom.html#module-xml.dom" title="xml.dom: Document Object Model API for Python."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.dom</span></code></a> および <a class="reference internal" href="xml.sax.html#module-xml.sax" title="xml.sax: Package containing SAX2 base classes and convenience functions."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax</span></code></a> パッケージのドキュメントは Python による DOM および SAX インターフェースへのバインディングに関する定義です。</p>
+<p class="translated">XML に関連するサブモジュール:</p>
+<ul class="simple">
+<li><p class="translated"><a class="reference internal" href="xml.etree.elementtree.html#module-xml.etree.ElementTree" title="xml.etree.ElementTree: Implementation of the ElementTree API."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.etree.ElementTree</span></code></a>: ElementTree API、シンプルで軽量な XML プロセッサ</p></li>
+</ul>
+<ul class="simple">
+<li><p class="translated"><a class="reference internal" href="xml.dom.html#module-xml.dom" title="xml.dom: Document Object Model API for Python."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.dom</span></code></a>: DOM API の定義</p></li>
+<li><p class="translated"><a class="reference internal" href="xml.dom.minidom.html#module-xml.dom.minidom" title="xml.dom.minidom: Minimal Document Object Model (DOM) implementation."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.dom.minidom</span></code></a>: 最小限の DOM の実装</p></li>
+<li><p class="translated"><a class="reference internal" href="xml.dom.pulldom.html#module-xml.dom.pulldom" title="xml.dom.pulldom: Support for building partial DOM trees from SAX events."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.dom.pulldom</span></code></a>: 部分的な DOM ツリー構築のサポート</p></li>
+</ul>
+<ul class="simple">
+<li><p class="translated"><a class="reference internal" href="xml.sax.html#module-xml.sax" title="xml.sax: Package containing SAX2 base classes and convenience functions."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax</span></code></a>: SAX2 基底クラスと便利関数群</p></li>
+<li><p class="translated"><a class="reference internal" href="pyexpat.html#module-xml.parsers.expat" title="xml.parsers.expat: An interface to the Expat non-validating XML parser."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.parsers.expat</span></code></a>: Expat parser バインディング</p></li>
+</ul>
+<section id="xml-vulnerabilities">
+<span id="xml-security"></span><span id="id1"></span><h2 class="untranslated">XML security<a class="headerlink" href="#xml-vulnerabilities" title="Link to this heading">¶</a></h2>
+<p class="untranslated">An attacker can abuse XML features to carry out denial of service attacks,
+access local files, generate network connections to other machines, or
+circumvent firewalls when attacker-controlled XML is being parsed,
+in Python or elsewhere.</p>
+<p class="untranslated">The built-in XML parsers of Python rely on the library <a class="reference external" href="https://github.com/libexpat/libexpat">libexpat</a>, commonly
+called Expat, for parsing XML.</p>
+<p class="untranslated">By default, Expat itself does not access local files or create network
+connections.</p>
+<p class="untranslated">Expat versions lower than 2.7.2 may be vulnerable to the &quot;billion laughs&quot;,
+&quot;quadratic blowup&quot; and &quot;large tokens&quot; vulnerabilities, or to disproportional
+use of dynamic memory.
+Python bundles a copy of Expat, and whether Python uses the bundled or a
+system-wide Expat, depends on how the Python interpreter
+<a class="reference internal" href="../using/configure.html#cmdoption-with-system-expat"><code class="xref std std-option docutils literal notranslate"><span class="pre">has</span> <span class="pre">been</span> <span class="pre">configured</span></code></a> in your environment.
+Python may be vulnerable if it uses such older versions of Expat.
+Check <code class="xref py py-const docutils literal notranslate"><span class="pre">pyexpat.EXPAT_VERSION</span></code>.</p>
+<p class="untranslated"><a class="reference internal" href="xmlrpc.html#module-xmlrpc" title="xmlrpc: Server and client modules implementing XML-RPC."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xmlrpc</span></code></a> is <strong>vulnerable</strong> to the &quot;decompression bomb&quot; attack.</p>
+<dl class="simple">
+<dt class="translated">billion laughs / exponential entity expansion</dt><dd><p class="translated"><a class="reference external" href="https://en.wikipedia.org/wiki/Billion_laughs">Billion Laughs</a> 攻撃 -- または指数関数的エンティティ展開 (exponential entity expansion) -- は複数階層の入れ子になったエンティティを使用します。
+各エンティティは別のエンティティを複数回参照し、最終的なエンティティの定義は短い文字列です。
+指数関数的に展開されることで数 GB のテキストができ、多くのメモリと CPU 時間を消費します。</p>
+</dd>
+<dt class="translated">quadratic blowup entity expansion</dt><dd><p class="translated">二次爆発攻撃 (quadratic blowup attack) はエンティティ展開を悪用する点で <a class="reference external" href="https://en.wikipedia.org/wiki/Billion_laughs">Billion Laughs</a> 攻撃に似ています。
+入れ子になったエンティティの代わりに、この攻撃は数千字の大きなエンティティを何度も繰り返します。
+この攻撃は指数関数的なものほど効率的ではありませんが、パーザの深い入れ子になったエンティティを禁止する対抗手段をすり抜けます。</p>
+</dd>
+<dt class="translated">decompression bomb</dt><dd><p class="translated">解凍爆弾 (あるいは <a class="reference external" href="https://ja.wikipedia.org/wiki/%E9%AB%98%E5%9C%A7%E7%B8%AE%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E7%88%86%E5%BC%BE">ZIP 爆弾</a>) は、gzip 圧縮 HTTP ストリームや LZMA 圧縮ファイルなどの圧縮された XML ストリームをパースできる全ての XML ライブラリに対し行われます。
+攻撃者は送信データ量を1/3以下に減らすことができます。</p>
+</dd>
+<dt class="untranslated">large tokens</dt><dd><p class="untranslated">Expat needs to re-parse unfinished tokens; without the protection
+introduced in Expat 2.6.0, this can lead to quadratic runtime that can
+be used to cause denial of service in the application parsing XML.
+The issue is known as <span class="target" id="index-0"></span><a class="cve reference external" href="https://www.cve.org/CVERecord?id=CVE-2023-52425"><strong>CVE 2023-52425</strong></a>.</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">XMLを扱うモジュール群</a><ul>
+<li><a class="reference internal" href="#xml-vulnerabilities">XML security</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="html.entities.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">html.entities</span></code> --- HTML 一般実体の定義</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="xml.etree.elementtree.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.etree.ElementTree</span></code> --- ElementTree XML API</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/xml.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/xml.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/xml.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="xml.etree.elementtree.html" title="xml.etree.ElementTree --- ElementTree XML API"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="html.entities.html" title="html.entities --- HTML 一般実体の定義"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="markup.html" >構造化マークアップツール</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">XMLを扱うモジュール群</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

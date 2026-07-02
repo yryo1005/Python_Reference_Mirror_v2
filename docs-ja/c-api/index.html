@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Python/C API reference manual" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/c-api/index.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="このマニュアルでは、拡張モジュールを書いたり Python インタプリタをアプリケーションに埋め込んだりしたい C/C++ プログラマが利用できる API について述べています。 Python インタプリタの拡張と埋め込み は拡張モジュールを書く際の一般的な決まりごとについて記述していますが、 API の詳細までは記述していないので、このドキュメントが手引きになります。 はじめに- 言語バー..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_c-api_index_a1777091.png" />
+<meta property="og:image:alt" content="このマニュアルでは、拡張モジュールを書いたり Python インタプリタをアプリケーションに埋め込んだりしたい C/C++ プログラマが利用できる API について述べています。 Python インタプリタの拡張と埋め込み は拡張モジュールを書く際の一般的な決まりごとについて記述していますが、 API の詳細までは記述していないので、このドキュメントが手引きになります。 はじめに- 言語バー..." />
+<meta name="description" content="このマニュアルでは、拡張モジュールを書いたり Python インタプリタをアプリケーションに埋め込んだりしたい C/C++ プログラマが利用できる API について述べています。 Python インタプリタの拡張と埋め込み は拡張モジュールを書く際の一般的な決まりごとについて記述していますが、 API の詳細までは記述していないので、このドキュメントが手引きになります。 はじめに- 言語バー..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>Python/C API reference manual &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="はじめに" href="intro.html" />
+    <link rel="prev" title="1. 他のアプリケーションへの Python の埋め込み" href="../extending/embedding.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/c-api/index.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../extending/embedding.html"
+                          title="前の章へ"><span class="section-number">1. </span>他のアプリケーションへの Python の埋め込み</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="intro.html"
+                          title="次の章へ">はじめに</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "c-api/index.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/c-api/index.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/c-api/index.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="はじめに"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../extending/embedding.html" title="1. 他のアプリケーションへの Python の埋め込み"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+        <li class="nav-item nav-item-this"><a href="">Python/C API reference manual</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="python-c-api-reference-manual">
+<span id="c-api-index"></span><h1 class="untranslated">Python/C API reference manual<a class="headerlink" href="#python-c-api-reference-manual" title="Link to this heading">¶</a></h1>
+<p class="translated">このマニュアルでは、拡張モジュールを書いたり Python インタプリタをアプリケーションに埋め込んだりしたい C/C++ プログラマが利用できる API について述べています。 <a class="reference internal" href="../extending/index.html#extending-index"><span class="std std-ref">Python インタプリタの拡張と埋め込み</span></a> は拡張モジュールを書く際の一般的な決まりごとについて記述していますが、 API の詳細までは記述していないので、このドキュメントが手引きになります。</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">はじめに</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#language-version-compatibility">言語バージョン互換性</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#coding-standards">コーディング基準</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#include-files">インクルードファイル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#useful-macros">便利なマクロ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#objects-types-and-reference-counts">オブジェクト、型および参照カウント</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#exceptions">例外</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#embedding-python">Python の埋め込み</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#debugging-builds">デバッグ版ビルド (Debugging Builds)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="intro.html#recommended-third-party-tools">おすすめのサードパーティツール</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="stable.html">C API Stability</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="stable.html#unstable-c-api">Unstable C API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stable.html#stable-application-binary-interface">Stable Application Binary Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stable.html#platform-considerations">プラットフォームで考慮すべき点</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stable.html#contents-of-limited-api">限定版APIの内容</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="veryhigh.html">超高水準レイヤ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="veryhigh.html#available-start-symbols">Available start symbols</a></li>
+<li class="toctree-l2"><a class="reference internal" href="veryhigh.html#stack-effects">Stack Effects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="refcounting.html">参照カウント</a></li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">例外処理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#printing-and-clearing">出力とクリア</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#raising-exceptions">例外の送出</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#issuing-warnings">警告</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#querying-the-error-indicator">エラーインジケータの問い合わせ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#signal-handling">シグナルハンドリング</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#exception-classes">例外クラス</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#exception-objects">例外オブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#unicode-exception-objects">Unicode 例外オブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#recursion-control">再帰の管理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#exception-and-warning-types">Exception and warning types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#tracebacks">Tracebacks</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="extension-modules.html">拡張モジュールの定義</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="extension-modules.html#multiple-module-instances">複数のモジュールインスタンス</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extension-modules.html#initialization-function">Initialization function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extension-modules.html#multi-phase-initialization">多段階初期化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extension-modules.html#legacy-single-phase-initialization">従来の一段階初期化</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utilities.html">ユーティリティ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sys.html">オペレーティングシステム関連のユーティリティ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sys.html#system-functions">システム関数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sys.html#process-control">プロセス制御</a></li>
+<li class="toctree-l2"><a class="reference internal" href="import.html">モジュールのインポート</a></li>
+<li class="toctree-l2"><a class="reference internal" href="marshal.html">データ整列化 (data marshalling) のサポート</a></li>
+<li class="toctree-l2"><a class="reference internal" href="arg.html">引数の解釈と値の構築</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conversion.html">文字列の変換と書式化</a></li>
+<li class="toctree-l2"><a class="reference internal" href="conversion.html#character-classification-and-conversion">Character classification and conversion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hash.html">PyHash API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reflection.html">リフレクション</a></li>
+<li class="toctree-l2"><a class="reference internal" href="codec.html">codec レジストリとサポート関数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="time.html">PyTime C API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="perfmaps.html">Support for Perf Maps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="abstract.html">抽象オブジェクトレイヤ (Abstract Objects Layer)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="object.html">オブジェクトプロトコル (object protocol)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="call.html">Call プロトコル</a></li>
+<li class="toctree-l2"><a class="reference internal" href="number.html">数値型プロトコル (number protocol)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sequence.html">シーケンス型プロトコル (sequence protocol)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mapping.html">マップ型プロトコル (mapping protocol)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="iter.html">イテレータプロトコル (iterator protocol)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="buffer.html">バッファプロトコル (buffer Protocol)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="concrete.html">具象オブジェクト (concrete object) レイヤ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="concrete.html#fundamental-objects">基本オブジェクト (fundamental object)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concrete.html#numeric-objects">数値型オブジェクト (numeric object)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concrete.html#sequence-objects">シーケンスオブジェクト (sequence object)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concrete.html#container-objects">Container オブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concrete.html#function-objects">Function オブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concrete.html#other-objects">その他のオブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="concrete.html#c-api-for-extension-modules">C API for extension modules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="interp-lifecycle.html">インタープリタの初期化と終了処理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="interp-lifecycle.html#before-python-initialization">Before Python initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interp-lifecycle.html#global-configuration-variables">グローバルな設定変数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interp-lifecycle.html#initializing-and-finalizing-the-interpreter">インタープリタの初期化と終了処理</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interp-lifecycle.html#cautions-regarding-runtime-finalization">Cautions regarding runtime finalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interp-lifecycle.html#process-wide-parameters">プロセスワイドのパラメータ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="threads.html">Thread states and the global interpreter lock</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="threads.html#detaching-the-thread-state-from-extension-code">Detaching the thread state from extension code</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threads.html#non-python-created-threads">Non-Python created threads</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threads.html#legacy-api">Legacy API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threads.html#cautions-about-fork">Cautions about fork()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threads.html#high-level-apis">高水準 API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threads.html#gil-state-apis">GIL-state APIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="threads.html#low-level-apis">低水準 API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="threads.html#asynchronous-notifications">Asynchronous notifications</a></li>
+<li class="toctree-l1"><a class="reference internal" href="threads.html#operating-system-thread-apis">Operating system thread APIs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="synchronization.html">同期プリミティブ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="synchronization.html#python-critical-section-api">Python critical section API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="synchronization.html#legacy-locking-apis">Legacy locking APIs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tls.html">Thread-local storage support</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tls.html#thread-specific-storage-api">Thread-specific storage API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tls.html#dynamic-allocation">Dynamic allocation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tls.html#methods">メソッド</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tls.html#legacy-apis">Legacy APIs</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="subinterpreters.html">Multiple interpreters in a Python process</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="subinterpreters.html#a-per-interpreter-gil">A per-interpreter GIL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="subinterpreters.html#bugs-and-caveats">バグと注意事項</a></li>
+<li class="toctree-l2"><a class="reference internal" href="subinterpreters.html#high-level-apis">高水準 API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="subinterpreters.html#low-level-apis">低水準 API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="subinterpreters.html#advanced-debugger-support">Advanced debugger support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="profiling.html">Profiling and tracing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="profiling.html#reference-tracing">Reference tracing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="init_config.html">Python 初期化設定</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="init_config.html#pyinitconfig-c-api">PyInitConfig C API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="init_config.html#configuration-options">Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="init_config.html#runtime-python-configuration-api">Runtime Python configuration API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="init_config.html#pyconfig-c-api">PyConfig C API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="init_config.html#py-getargcargv">Py_GetArgcArgv()</a></li>
+<li class="toctree-l2"><a class="reference internal" href="init_config.html#delaying-main-module-execution">Delaying main module execution</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">メモリ管理</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#overview">概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#allocator-domains">Allocator Domains</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#raw-memory-interface">生メモリインターフェース</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#memory-interface">メモリインターフェース</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#object-allocators">オブジェクトアロケータ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#default-memory-allocators">Default Memory Allocators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#customize-memory-allocators">メモリアロケータをカスタマイズする</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#debug-hooks-on-the-python-memory-allocators">Debug hooks on the Python memory allocators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#the-pymalloc-allocator">pymalloc アロケータ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#the-mimalloc-allocator">The mimalloc allocator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#tracemalloc-c-api">tracemalloc C API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#examples">使用例</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="objimpl.html">オブジェクト実装サポート (object implementation support)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="allocation.html">Allocating objects on the heap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="lifecycle.html">Object Life Cycle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="structures.html">共通のオブジェクト構造体 (common object structure)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="typeobj.html">Type Object Structures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gcsupport.html">循環参照ガベージコレクションをサポートする</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="apiabiversion.html">API と ABI のバージョニング</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="apiabiversion.html#build-time-version-constants">Build-time version constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apiabiversion.html#run-time-version">Run-time version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apiabiversion.html#bit-packing-macros">Bit-packing macros</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring.html">Monitoring C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="monitoring.html#generating-execution-events">Generating Execution Events</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="monitoring.html#managing-the-monitoring-state">Managing the Monitoring State</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../extending/embedding.html"
+                          title="前の章へ"><span class="section-number">1. </span>他のアプリケーションへの Python の埋め込み</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="intro.html"
+                          title="次の章へ">はじめに</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "c-api/index.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/c-api/index.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/c-api/index.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="intro.html" title="はじめに"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../extending/embedding.html" title="1. 他のアプリケーションへの Python の埋め込み"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+        <li class="nav-item nav-item-this"><a href="">Python/C API reference manual</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

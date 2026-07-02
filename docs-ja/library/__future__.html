@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="__future__ --- future 文の定義" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/__future__.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/__future__.py from __future__ import feature の形式でのインポートは future 文 の定義と呼ばれています。これらは特殊なケースで、 Python の新機能が標準になるリリースの前に Python コンパイラーが future 文を含むモジュールで Python の新機能を使用できるようにします。 While these..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library___future___89f64f93.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/__future__.py from __future__ import feature の形式でのインポートは future 文 の定義と呼ばれています。これらは特殊なケースで、 Python の新機能が標準になるリリースの前に Python コンパイラーが future 文を含むモジュールで Python の新機能を使用できるようにします。 While these..." />
+<meta name="description" content="ソースコード: Lib/__future__.py from __future__ import feature の形式でのインポートは future 文 の定義と呼ばれています。これらは特殊なケースで、 Python の新機能が標準になるリリースの前に Python コンパイラーが future 文を含むモジュールで Python の新機能を使用できるようにします。 While these..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>__future__ --- future 文の定義 &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="gc --- ガベージコレクターインターフェース" href="gc.html" />
+    <link rel="prev" title="traceback --- スタックトレースの表示または取得" href="traceback.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/__future__.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">__future__</span></code> --- future 文の定義</a><ul>
+<li><a class="reference internal" href="#module-contents">モジュールコンテンツ</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="traceback.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">traceback</span></code> --- スタックトレースの表示または取得</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="gc.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gc</span></code> --- ガベージコレクターインターフェース</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/__future__.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/__future__.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/__future__.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="gc.html" title="gc --- ガベージコレクターインターフェース"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="traceback.html" title="traceback --- スタックトレースの表示または取得"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="python.html" accesskey="U">Python ランタイムサービス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">__future__</span></code> --- future 文の定義</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-__future__">
+<span id="future-future-statement-definitions"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">__future__</span></code> --- future 文の定義<a class="headerlink" href="#module-__future__" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/__future__.py">Lib/__future__.py</a></p>
+<hr class="docutils" />
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">__future__</span> <span class="pre">import</span> <span class="pre">feature</span></code> の形式でのインポートは <a class="reference internal" href="../reference/simple_stmts.html#future"><span class="std std-ref">future 文</span></a> の定義と呼ばれています。これらは特殊なケースで、 Python の新機能が標準になるリリースの前に Python コンパイラーが future 文を含むモジュールで Python の新機能を使用できるようにします。</p>
+<p class="untranslated">While these future statements are given additional special meaning by the
+Python compiler, they are still executed like any other import statement and
+the <code class="xref py py-mod docutils literal notranslate"><span class="pre">__future__</span></code> exists and is handled by the import system the same way
+any other Python module would be. This design serves three purposes:</p>
+<ul class="simple">
+<li><p class="translated">import 文を解析する既存のツールを混乱させることを避け、インポートしようとしているモジュールを見つけられるようにするため。</p></li>
+<li><p class="untranslated">To document when incompatible changes were introduced, and when they will be
+--- or were --- made mandatory.  This is a form of executable documentation, and
+can be inspected programmatically via importing <code class="xref py py-mod docutils literal notranslate"><span class="pre">__future__</span></code> and examining
+its contents.</p></li>
+<li><p class="untranslated">To ensure that <a class="reference internal" href="../reference/simple_stmts.html#future"><span class="std std-ref">future statements</span></a> run under releases prior to
+Python 2.1 at least yield runtime exceptions (the import of <code class="xref py py-mod docutils literal notranslate"><span class="pre">__future__</span></code>
+will fail, because there was no module of that name prior to 2.1).</p></li>
+</ul>
+<section id="module-contents">
+<h2 class="translated">モジュールコンテンツ<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<p class="untranslated">No feature description will ever be deleted from <code class="xref py py-mod docutils literal notranslate"><span class="pre">__future__</span></code>. Since its
+introduction in Python 2.1 the following features have found their way into the
+language using this mechanism:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p class="translated">feature</p></th>
+<th class="head"><p class="translated">optional in</p></th>
+<th class="head"><p class="translated">mandatory in</p></th>
+<th class="head"><p class="translated">effect</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><dl class="py data">
+<dt class="sig sig-object py" id="future__.nested_scopes">
+<span class="sig-prename descclassname"><span class="pre">__future__.</span></span><span class="sig-name descname"><span class="pre">nested_scopes</span></span><a class="headerlink" href="#future__.nested_scopes" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</td>
+<td><p class="translated">2.1.0b1</p></td>
+<td><p class="translated">2.2</p></td>
+<td><p class="translated"><span class="target" id="index-0"></span><a class="pep reference external" href="https://peps.python.org/pep-0227/"><strong>PEP 227</strong></a>: <em>Statically Nested Scopes</em></p></td>
+</tr>
+<tr class="row-odd"><td><dl class="py data">
+<dt class="sig sig-object py" id="future__.generators">
+<span class="sig-prename descclassname"><span class="pre">__future__.</span></span><span class="sig-name descname"><span class="pre">generators</span></span><a class="headerlink" href="#future__.generators" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</td>
+<td><p class="translated">2.2.0a1</p></td>
+<td><p class="translated">2.3</p></td>
+<td><p class="translated"><span class="target" id="index-1"></span><a class="pep reference external" href="https://peps.python.org/pep-0255/"><strong>PEP 255</strong></a>: <em>Simple Generators</em></p></td>
+</tr>
+<tr class="row-even"><td><dl class="py data">
+<dt class="sig sig-object py" id="future__.division">
+<span class="sig-prename descclassname"><span class="pre">__future__.</span></span><span class="sig-name descname"><span class="pre">division</span></span><a class="headerlink" href="#future__.division" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</td>
+<td><p class="translated">2.2.0a2</p></td>
+<td><p class="translated">3.0</p></td>
+<td><p class="translated"><span class="target" id="index-2"></span><a class="pep reference external" href="https://peps.python.org/pep-0238/"><strong>PEP 238</strong></a>: <em>Changing the Division Operator</em></p></td>
+</tr>
+<tr class="row-odd"><td><dl class="py data">
+<dt class="sig sig-object py" id="future__.absolute_import">
+<span class="sig-prename descclassname"><span class="pre">__future__.</span></span><span class="sig-name descname"><span class="pre">absolute_import</span></span><a class="headerlink" href="#future__.absolute_import" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</td>
+<td><p class="translated">2.5.0a1</p></td>
+<td><p class="translated">3.0</p></td>
+<td><p class="translated"><span class="target" id="index-3"></span><a class="pep reference external" href="https://peps.python.org/pep-0328/"><strong>PEP 328</strong></a>: <em>Imports: Multi-Line and Absolute/Relative</em></p></td>
+</tr>
+<tr class="row-even"><td><dl class="py data">
+<dt class="sig sig-object py" id="future__.with_statement">
+<span class="sig-prename descclassname"><span class="pre">__future__.</span></span><span class="sig-name descname"><span class="pre">with_statement</span></span><a class="headerlink" href="#future__.with_statement" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</td>
+<td><p class="translated">2.5.0a1</p></td>
+<td><p class="translated">2.6</p></td>
+<td><p class="untranslated"><span class="target" id="index-4"></span><a class="pep reference external" href="https://peps.python.org/pep-0343/"><strong>PEP 343</strong></a>: <em>The “with” Statement</em></p></td>
+</tr>
+<tr class="row-odd"><td><dl class="py data">
+<dt class="sig sig-object py" id="future__.print_function">
+<span class="sig-prename descclassname"><span class="pre">__future__.</span></span><span class="sig-name descname"><span class="pre">print_function</span></span><a class="headerlink" href="#future__.print_function" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</td>
+<td><p class="translated">2.6.0a2</p></td>
+<td><p class="translated">3.0</p></td>
+<td><p class="translated"><span class="target" id="index-5"></span><a class="pep reference external" href="https://peps.python.org/pep-3105/"><strong>PEP 3105</strong></a>: <em>Make print a function</em></p></td>
+</tr>
+<tr class="row-even"><td><dl class="py data">
+<dt class="sig sig-object py" id="future__.unicode_literals">
+<span class="sig-prename descclassname"><span class="pre">__future__.</span></span><span class="sig-name descname"><span class="pre">unicode_literals</span></span><a class="headerlink" href="#future__.unicode_literals" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</td>
+<td><p class="translated">2.6.0a2</p></td>
+<td><p class="translated">3.0</p></td>
+<td><p class="translated"><span class="target" id="index-6"></span><a class="pep reference external" href="https://peps.python.org/pep-3112/"><strong>PEP 3112</strong></a>: <em>Bytes literals in Python 3000</em></p></td>
+</tr>
+<tr class="row-odd"><td><dl class="py data">
+<dt class="sig sig-object py" id="future__.generator_stop">
+<span class="sig-prename descclassname"><span class="pre">__future__.</span></span><span class="sig-name descname"><span class="pre">generator_stop</span></span><a class="headerlink" href="#future__.generator_stop" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</td>
+<td><p class="translated">3.5.0b1</p></td>
+<td><p class="translated">3.7</p></td>
+<td><p class="translated"><span class="target" id="index-7"></span><a class="pep reference external" href="https://peps.python.org/pep-0479/"><strong>PEP 479</strong></a>: <em>StopIteration handling inside generators</em></p></td>
+</tr>
+<tr class="row-even"><td><dl class="py data">
+<dt class="sig sig-object py" id="future__.annotations">
+<span class="sig-prename descclassname"><span class="pre">__future__.</span></span><span class="sig-name descname"><span class="pre">annotations</span></span><a class="headerlink" href="#future__.annotations" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</td>
+<td><p class="translated">3.7.0b1</p></td>
+<td><p class="untranslated">Never <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></td>
+<td><p class="untranslated"><span class="target" id="index-8"></span><a class="pep reference external" href="https://peps.python.org/pep-0563/"><strong>PEP 563</strong></a>: <em>Postponed evaluation of annotations</em>,
+<span class="target" id="index-9"></span><a class="pep reference external" href="https://peps.python.org/pep-0649/"><strong>PEP 649</strong></a>: <em>Deferred evaluation of annotations using descriptors</em></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class" id="future-classes">
+<dt class="sig sig-object py" id="future__._Feature">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">__future__.</span></span><span class="sig-name descname"><span class="pre">_Feature</span></span><a class="headerlink" href="#future__._Feature" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><code class="file docutils literal notranslate"><span class="pre">__future__.py</span></code> のそれぞれの文は次のような形式をしています:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">FeatureName</span> <span class="o">=</span> <span class="n">_Feature</span><span class="p">(</span><span class="n">OptionalRelease</span><span class="p">,</span> <span class="n">MandatoryRelease</span><span class="p">,</span>
+                       <span class="n">CompilerFlag</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="translated">ここで、普通は、 <em>OptionalRelease</em> は <em>MandatoryRelease</em> より小さく、2つとも <a class="reference internal" href="sys.html#sys.version_info" title="sys.version_info"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.version_info</span></code></a> と同じフォーマットの5つのタプルからなります:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">PY_MAJOR_VERSION</span><span class="p">,</span> <span class="c1"># the 2 in 2.1.0a3; an int</span>
+ <span class="n">PY_MINOR_VERSION</span><span class="p">,</span> <span class="c1"># the 1; an int</span>
+ <span class="n">PY_MICRO_VERSION</span><span class="p">,</span> <span class="c1"># the 0; an int</span>
+ <span class="n">PY_RELEASE_LEVEL</span><span class="p">,</span> <span class="c1"># &quot;alpha&quot;, &quot;beta&quot;, &quot;candidate&quot; or &quot;final&quot;; string</span>
+ <span class="n">PY_RELEASE_SERIAL</span> <span class="c1"># the 3; an int</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="future__._Feature.getOptionalRelease">
+<span class="sig-prename descclassname"><span class="pre">_Feature.</span></span><span class="sig-name descname"><span class="pre">getOptionalRelease</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#future__._Feature.getOptionalRelease" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>OptionalRelease</em> はその機能が導入された最初のリリースを記録します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="future__._Feature.getMandatoryRelease">
+<span class="sig-prename descclassname"><span class="pre">_Feature.</span></span><span class="sig-name descname"><span class="pre">getMandatoryRelease</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#future__._Feature.getMandatoryRelease" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">まだ時期が来ていない <em>MandatoryRelease</em> の場合、<em>MandatoryRelease</em> はその機能が言語の一部となるリリースを記します。</p>
+<p class="translated">その他の場合、<em>MandatoryRelease</em> はその機能がいつ言語の一部になったのかを記録します。そのリリースから、あるいはそれ以降のリリースでは、この機能を使う際に future 文は必要ではありませんが、future 文を使い続けても構いません。</p>
+<p class="translated"><em>MandatoryRelease</em> は <code class="docutils literal notranslate"><span class="pre">None</span></code> になるかもしれません。つまり、予定された機能が破棄されたか、まだ決定されていないということです。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="future__._Feature.compiler_flag">
+<span class="sig-prename descclassname"><span class="pre">_Feature.</span></span><span class="sig-name descname"><span class="pre">compiler_flag</span></span><a class="headerlink" href="#future__._Feature.compiler_flag" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>CompilerFlag</em> は、動的にコンパイルされるコードでその機能を有効にするために、組み込み関数 <a class="reference internal" href="functions.html#compile" title="compile"><code class="xref py py-func docutils literal notranslate"><span class="pre">compile()</span></code></a> の第4引数に渡す(ビットフィールド)フラグです。このフラグは <a class="reference internal" href="#future__._Feature" title="__future__._Feature"><code class="xref py py-class docutils literal notranslate"><span class="pre">_Feature</span></code></a> インスタンスの <a class="reference internal" href="#future__._Feature.compiler_flag" title="__future__._Feature.compiler_flag"><code class="xref py py-attr docutils literal notranslate"><span class="pre">_Feature.compiler_flag</span></code></a> 属性に保存されています。</p>
+</dd></dl>
+
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p class="untranslated"><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">__future__</span> <span class="pre">import</span> <span class="pre">annotations</span></code> was previously scheduled to
+become mandatory in Python 3.10, but the change was delayed and ultimately
+canceled. This feature will eventually be deprecated and removed. See
+<span class="target" id="index-10"></span><a class="pep reference external" href="https://peps.python.org/pep-0649/"><strong>PEP 649</strong></a> and <span class="target" id="index-11"></span><a class="pep reference external" href="https://peps.python.org/pep-0749/"><strong>PEP 749</strong></a>.</p>
+</aside>
+</aside>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<dl class="simple">
+<dt class="translated"><a class="reference internal" href="../reference/simple_stmts.html#future"><span class="std std-ref">future 文 (future statement)</span></a></dt><dd><p class="translated">コンパイラがどのように future インポートを扱うか。</p>
+</dd>
+<dt class="translated"><span class="target" id="index-12"></span><a class="pep reference external" href="https://peps.python.org/pep-0236/"><strong>PEP 236</strong></a> - Back to the __future__</dt><dd><p class="translated">__future__ 機構の原案</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">__future__</span></code> --- future 文の定義</a><ul>
+<li><a class="reference internal" href="#module-contents">モジュールコンテンツ</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="traceback.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">traceback</span></code> --- スタックトレースの表示または取得</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="gc.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">gc</span></code> --- ガベージコレクターインターフェース</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/__future__.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/__future__.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/__future__.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="gc.html" title="gc --- ガベージコレクターインターフェース"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="traceback.html" title="traceback --- スタックトレースの表示または取得"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="python.html" >Python ランタイムサービス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">__future__</span></code> --- future 文の定義</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

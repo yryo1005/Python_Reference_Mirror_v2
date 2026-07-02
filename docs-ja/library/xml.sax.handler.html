@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="xml.sax.handler --- SAX ハンドラーの基底クラス" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/xml.sax.handler.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/xml/sax/handler.py The SAX API defines five kinds of handlers: content handlers, DTD handlers, error handlers, entity resolvers and lexical handlers. Applications normally only need to ..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_xml.sax.handler_0d3f6ef0.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/xml/sax/handler.py The SAX API defines five kinds of handlers: content handlers, DTD handlers, error handlers, entity resolvers and lexical handlers. Applications normally only need to ..." />
+<meta name="description" content="ソースコード: Lib/xml/sax/handler.py The SAX API defines five kinds of handlers: content handlers, DTD handlers, error handlers, entity resolvers and lexical handlers. Applications normally only need to ..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>xml.sax.handler --- SAX ハンドラーの基底クラス &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="xml.sax.saxutils --- SAX ユーティリティー" href="xml.sax.utils.html" />
+    <link rel="prev" title="xml.sax --- SAX2 バーサーのサポート" href="xml.sax.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/xml.sax.handler.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.handler</span></code> --- SAX ハンドラーの基底クラス</a><ul>
+<li><a class="reference internal" href="#contenthandler-objects">ContentHandler オブジェクト</a></li>
+<li><a class="reference internal" href="#dtdhandler-objects">DTDHandler オブジェクト</a></li>
+<li><a class="reference internal" href="#entityresolver-objects">EntityResolver オブジェクト</a></li>
+<li><a class="reference internal" href="#errorhandler-objects">ErrorHandler オブジェクト</a></li>
+<li><a class="reference internal" href="#lexicalhandler-objects">LexicalHandler Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="xml.sax.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax</span></code> --- SAX2 バーサーのサポート</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="xml.sax.utils.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.saxutils</span></code> --- SAX ユーティリティー</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/xml.sax.handler.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/xml.sax.handler.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/xml.sax.handler.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="xml.sax.utils.html" title="xml.sax.saxutils --- SAX ユーティリティー"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="xml.sax.html" title="xml.sax --- SAX2 バーサーのサポート"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="markup.html" accesskey="U">構造化マークアップツール</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.handler</span></code> --- SAX ハンドラーの基底クラス</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-xml.sax.handler">
+<span id="xml-sax-handler-base-classes-for-sax-handlers"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.handler</span></code> --- SAX ハンドラーの基底クラス<a class="headerlink" href="#module-xml.sax.handler" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/xml/sax/handler.py">Lib/xml/sax/handler.py</a></p>
+<hr class="docutils" />
+<p class="untranslated">The SAX API defines five kinds of handlers: content handlers, DTD handlers,
+error handlers, entity resolvers and lexical handlers. Applications normally
+only need to implement those interfaces whose events they are interested in;
+they can implement the interfaces in a single object or in multiple objects.
+Handler implementations should inherit from the base classes provided in the
+module <code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.handler</span></code>, so that all methods get default implementations.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="xml.sax.handler.ContentHandler">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">xml.sax.handler.</span></span><span class="sig-name descname"><span class="pre">ContentHandler</span></span><a class="headerlink" href="#xml.sax.handler.ContentHandler" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">アプリケーションにとって最も重要なメインの SAX コールバック・インターフェースです。このインターフェースで発生するイベントの順序はドキュメント内の情報の順序を反映しています。</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xml.sax.handler.DTDHandler">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">xml.sax.handler.</span></span><span class="sig-name descname"><span class="pre">DTDHandler</span></span><a class="headerlink" href="#xml.sax.handler.DTDHandler" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">DTD イベントのハンドラです。</p>
+<p class="translated">パースされていないエンティティや属性など、基本的なパースに必要な DTD イベントの指定だけを行うインターフェースです。</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xml.sax.handler.EntityResolver">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">xml.sax.handler.</span></span><span class="sig-name descname"><span class="pre">EntityResolver</span></span><a class="headerlink" href="#xml.sax.handler.EntityResolver" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">エンティティ解決用の基本インターフェースです。このインターフェースを実装したオブジェクトを作成しパーサに登録することで、パーサはすべての外部エンティティを解決するメソッドを呼び出すようになります。</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xml.sax.handler.ErrorHandler">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">xml.sax.handler.</span></span><span class="sig-name descname"><span class="pre">ErrorHandler</span></span><a class="headerlink" href="#xml.sax.handler.ErrorHandler" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">エラーや警告メッセージをアプリケーションに通知するためにパーサが使用するインターフェースです。このオブジェクトのメソッドが、エラーをただちに例外に変換するか、あるいは別の方法で処理するかの制御をしています。</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="xml.sax.handler.LexicalHandler">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">xml.sax.handler.</span></span><span class="sig-name descname"><span class="pre">LexicalHandler</span></span><a class="headerlink" href="#xml.sax.handler.LexicalHandler" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Interface used by the parser to represent low frequency events which may not
+be of interest to many applications.</p>
+</dd></dl>
+
+<p class="untranslated">In addition to these classes, <code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.handler</span></code> provides symbolic constants
+for the feature and property names.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="xml.sax.handler.feature_namespaces">
+<span class="sig-prename descclassname"><span class="pre">xml.sax.handler.</span></span><span class="sig-name descname"><span class="pre">feature_namespaces</span></span><a class="headerlink" href="#xml.sax.handler.feature_namespaces" title="Link to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="translated line">値: <code class="docutils literal notranslate"><span class="pre">&quot;http://xml.org/sax/features/namespaces&quot;</span></code></div>
+<div class="translated line">真: 名前空間を処理します。</div>
+<div class="translated line">偽: オプションで名前空間を処理しません (暗黙に名前空間接頭辞も無効にします; デフォルト)。</div>
+<div class="translated line">アクセス: (パース時) 読み込み専用; (パース時以外) 読み書き可</div>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xml.sax.handler.feature_namespace_prefixes">
+<span class="sig-prename descclassname"><span class="pre">xml.sax.handler.</span></span><span class="sig-name descname"><span class="pre">feature_namespace_prefixes</span></span><a class="headerlink" href="#xml.sax.handler.feature_namespace_prefixes" title="Link to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="translated line">値: <code class="docutils literal notranslate"><span class="pre">&quot;http://xml.org/sax/features/namespace-prefixes&quot;</span></code></div>
+<div class="translated line">真: 名前空間宣言で用いられている元々の接頭辞付きの名前と属性を報告します。</div>
+<div class="translated line">偽: 名前空間宣言で用いられている属性を報告しません。オプションで元々の接頭辞付きの名前も報告しません (デフォルト)。</div>
+<div class="translated line">アクセス: (パース時) 読み込み専用; (パース時以外) 読み書き可</div>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xml.sax.handler.feature_string_interning">
+<span class="sig-prename descclassname"><span class="pre">xml.sax.handler.</span></span><span class="sig-name descname"><span class="pre">feature_string_interning</span></span><a class="headerlink" href="#xml.sax.handler.feature_string_interning" title="Link to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="translated line">値: <code class="docutils literal notranslate"><span class="pre">&quot;http://xml.org/sax/features/string-interning&quot;</span></code></div>
+<div class="translated line">真: 全ての要素名、接頭辞、属性名、名前空間 URI、ローカル名を組込みの intern 関数を使ってシンボルに登録します。</div>
+<div class="translated line">偽: 名前を必ずしもシンボルに登録しませんが、されるかもしれません (デフォルト)。</div>
+<div class="translated line">アクセス: (パース時) 読み込み専用; (パース時以外) 読み書き可</div>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xml.sax.handler.feature_validation">
+<span class="sig-prename descclassname"><span class="pre">xml.sax.handler.</span></span><span class="sig-name descname"><span class="pre">feature_validation</span></span><a class="headerlink" href="#xml.sax.handler.feature_validation" title="Link to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="translated line">値: <code class="docutils literal notranslate"><span class="pre">&quot;http://xml.org/sax/features/validation&quot;</span></code></div>
+<div class="translated line">真: 全ての妥当性検査エラーを報告します (外部一般エンティティと外部変数エンティティが暗示されます)。</div>
+<div class="translated line">偽: 妥当性検査エラーを報告しません。</div>
+<div class="translated line">アクセス: (パース時) 読み込み専用; (パース時以外) 読み書き可</div>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xml.sax.handler.feature_external_ges">
+<span class="sig-prename descclassname"><span class="pre">xml.sax.handler.</span></span><span class="sig-name descname"><span class="pre">feature_external_ges</span></span><a class="headerlink" href="#xml.sax.handler.feature_external_ges" title="Link to this definition">¶</a></dt>
+<dd><div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p class="untranslated">Enabling opens a vulnerability to
+<a class="reference external" href="https://en.wikipedia.org/wiki/XML_external_entity_attack">external entity attacks</a>
+if the parser is used with user-provided XML content.
+Please reflect on your <a class="reference external" href="https://en.wikipedia.org/wiki/Threat_model">threat model</a>
+before enabling this feature.</p>
+</div>
+<div class="line-block">
+<div class="translated line">値: <code class="docutils literal notranslate"><span class="pre">&quot;http://xml.org/sax/features/external-general-entities&quot;</span></code></div>
+<div class="translated line">真: 全ての外部一般 (テキスト) エンティティを取り込みます。</div>
+<div class="translated line">偽: 外部一般エンティティを取り込みません。</div>
+<div class="translated line">アクセス: (パース時) 読み込み専用; (パース時以外) 読み書き可</div>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xml.sax.handler.feature_external_pes">
+<span class="sig-prename descclassname"><span class="pre">xml.sax.handler.</span></span><span class="sig-name descname"><span class="pre">feature_external_pes</span></span><a class="headerlink" href="#xml.sax.handler.feature_external_pes" title="Link to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="translated line">値: <code class="docutils literal notranslate"><span class="pre">&quot;http://xml.org/sax/features/external-parameter-entities&quot;</span></code></div>
+<div class="translated line">真: 外部 DTD サブセットを含む全ての外部変数エンティティを取り込みます。</div>
+<div class="translated line">偽: 外部 DTD サブセットであっても外部変数エンティティを取り込みません。</div>
+<div class="translated line">アクセス: (パース時) 読み込み専用; (パース時以外) 読み書き可</div>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xml.sax.handler.all_features">
+<span class="sig-prename descclassname"><span class="pre">xml.sax.handler.</span></span><span class="sig-name descname"><span class="pre">all_features</span></span><a class="headerlink" href="#xml.sax.handler.all_features" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">全機能のリスト。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xml.sax.handler.property_lexical_handler">
+<span class="sig-prename descclassname"><span class="pre">xml.sax.handler.</span></span><span class="sig-name descname"><span class="pre">property_lexical_handler</span></span><a class="headerlink" href="#xml.sax.handler.property_lexical_handler" title="Link to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="translated line">値: <code class="docutils literal notranslate"><span class="pre">&quot;http://xml.org/sax/properties/lexical-handler&quot;</span></code></div>
+<div class="untranslated line">data type: xml.sax.handler.LexicalHandler (not supported in Python 2)</div>
+<div class="translated line">説明: コメントなど字句解析イベント用のオプション拡張ハンドラ。</div>
+<div class="translated line">アクセス: 読み書き可</div>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xml.sax.handler.property_declaration_handler">
+<span class="sig-prename descclassname"><span class="pre">xml.sax.handler.</span></span><span class="sig-name descname"><span class="pre">property_declaration_handler</span></span><a class="headerlink" href="#xml.sax.handler.property_declaration_handler" title="Link to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="translated line">値: <code class="docutils literal notranslate"><span class="pre">&quot;http://xml.org/sax/properties/declaration-handler&quot;</span></code></div>
+<div class="translated line">データ型: xml.sax.sax2lib.DeclHandler (Python 2 では未サポート)</div>
+<div class="translated line">説明: 表記や未解析エンティティをのぞく DTD 関連イベント用のオプション拡張ハンドラ。</div>
+<div class="translated line">アクセス: 読み書き可</div>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xml.sax.handler.property_dom_node">
+<span class="sig-prename descclassname"><span class="pre">xml.sax.handler.</span></span><span class="sig-name descname"><span class="pre">property_dom_node</span></span><a class="headerlink" href="#xml.sax.handler.property_dom_node" title="Link to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="translated line">値: <code class="docutils literal notranslate"><span class="pre">&quot;http://xml.org/sax/properties/dom-node&quot;</span></code></div>
+<div class="translated line">データ型: org.w3c.dom.Node (Python 2 では未サポート)</div>
+<div class="translated line">説明: パース時は DOM イテレータならば現在の DOM ノードです。非パース時はイテレートのルート DOM ノードです。</div>
+<div class="translated line">アクセス: (パース時) 読み込み専用; (パース時以外) 読み書き可</div>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xml.sax.handler.property_xml_string">
+<span class="sig-prename descclassname"><span class="pre">xml.sax.handler.</span></span><span class="sig-name descname"><span class="pre">property_xml_string</span></span><a class="headerlink" href="#xml.sax.handler.property_xml_string" title="Link to this definition">¶</a></dt>
+<dd><div class="line-block">
+<div class="translated line">値: <code class="docutils literal notranslate"><span class="pre">&quot;http://xml.org/sax/properties/xml-string&quot;</span></code></div>
+<div class="untranslated line">data type: Bytes</div>
+<div class="translated line">説明: 現在のイベントの元になったリテラル文字列。</div>
+<div class="translated line">アクセス: 読み出し専用</div>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="xml.sax.handler.all_properties">
+<span class="sig-prename descclassname"><span class="pre">xml.sax.handler.</span></span><span class="sig-name descname"><span class="pre">all_properties</span></span><a class="headerlink" href="#xml.sax.handler.all_properties" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">既知の全プロパティ名のリスト。</p>
+</dd></dl>
+
+<section id="contenthandler-objects">
+<span id="content-handler-objects"></span><h2 class="translated">ContentHandler オブジェクト<a class="headerlink" href="#contenthandler-objects" title="Link to this heading">¶</a></h2>
+<p class="translated"><a class="reference internal" href="#xml.sax.handler.ContentHandler" title="xml.sax.handler.ContentHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContentHandler</span></code></a> はアプリケーション側でサブクラス化して利用することが前提になっています。パーサは入力ドキュメントのイベントにより、それぞれに対応する以下のメソッドを呼び出します:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.ContentHandler.setDocumentLocator">
+<span class="sig-prename descclassname"><span class="pre">ContentHandler.</span></span><span class="sig-name descname"><span class="pre">setDocumentLocator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">locator</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.ContentHandler.setDocumentLocator" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">アプリケーションにドキュメントイベントの発生位置を指すロケータを与えるためにパーサから呼び出されます。</p>
+<p class="translated">SAX パーサによるロケータの提供は強く推奨されています(必須ではありません)。もし提供する場合は、DocumentHandler インターフェースのどのメソッドよりも先にこのメソッドが呼び出されるようにしなければなりません。</p>
+<p class="translated">パーサがエラーを報告しない場合でも、ロケータによってアプリケーションは全てのドキュメント関連イベントの終了位置を知ることが出来ます。
+通常、アプリケーションは自身のエラー (例えば文字コンテンツがアプリケーションの規則に適合しない場合) を報告するためにこれを使用します。
+ロケータが返す情報は検索エンジンでの利用にはおそらく不充分です。</p>
+<p class="translated">ロケータが正しい情報を返すのは、このインターフェースからイベントの呼出しが実行されている間だけです。それ以外のときは使用すべきでありません。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.ContentHandler.startDocument">
+<span class="sig-prename descclassname"><span class="pre">ContentHandler.</span></span><span class="sig-name descname"><span class="pre">startDocument</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.ContentHandler.startDocument" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ドキュメントの開始通知を受け取ります。</p>
+<p class="translated">SAX パーサはこのインターフェースやDTDHandler のどのメソッド (<a class="reference internal" href="#xml.sax.handler.ContentHandler.setDocumentLocator" title="xml.sax.handler.ContentHandler.setDocumentLocator"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setDocumentLocator()</span></code></a> を除く) よりも先にこのメソッドを一度だけ呼び出します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.ContentHandler.endDocument">
+<span class="sig-prename descclassname"><span class="pre">ContentHandler.</span></span><span class="sig-name descname"><span class="pre">endDocument</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.ContentHandler.endDocument" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ドキュメントの終了通知を受け取ります。</p>
+<p class="translated">SAX パーサはこのメソッドを一度だけ呼び出します。パース中に呼び出す最後のメソッドです。パーサは (回復不能なエラーで) パース処理を中断するか、あるいは入力の最後に到達するまでこのメソッドを呼び出しません。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.ContentHandler.startPrefixMapping">
+<span class="sig-prename descclassname"><span class="pre">ContentHandler.</span></span><span class="sig-name descname"><span class="pre">startPrefixMapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uri</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.ContentHandler.startPrefixMapping" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">接頭辞と URI 名前空間の関連付けのスコープを開始します。</p>
+<p class="translated">このイベントからの情報は名前空間処理に必須ではありません。SAX XML リーダは <code class="docutils literal notranslate"><span class="pre">feature_namespaces</span></code> 機能が有効な場合 (デフォルト)、要素と属性名の接頭辞を自動的に置換します。</p>
+<p class="translated">しかしながら、接頭辞の自動展開を安全に行えないために、アプリケーションが文字データや属性値の中で接頭辞を使わなければならない場合があります。
+必要ならば <a class="reference internal" href="#xml.sax.handler.ContentHandler.startPrefixMapping" title="xml.sax.handler.ContentHandler.startPrefixMapping"><code class="xref py py-meth docutils literal notranslate"><span class="pre">startPrefixMapping()</span></code></a> や <a class="reference internal" href="#xml.sax.handler.ContentHandler.endPrefixMapping" title="xml.sax.handler.ContentHandler.endPrefixMapping"><code class="xref py py-meth docutils literal notranslate"><span class="pre">endPrefixMapping()</span></code></a> イベントはアプリケーションにコンテキスト自身の中で接頭辞を展開するための情報を提供します。</p>
+<p class="translated"><a class="reference internal" href="#xml.sax.handler.ContentHandler.startPrefixMapping" title="xml.sax.handler.ContentHandler.startPrefixMapping"><code class="xref py py-meth docutils literal notranslate"><span class="pre">startPrefixMapping()</span></code></a> と <a class="reference internal" href="#xml.sax.handler.ContentHandler.endPrefixMapping" title="xml.sax.handler.ContentHandler.endPrefixMapping"><code class="xref py py-meth docutils literal notranslate"><span class="pre">endPrefixMapping()</span></code></a> イベントは相互に正しい入れ子関係になることが保証されていないので注意が必要です。すべての <code class="xref py py-meth docutils literal notranslate"><span class="pre">startPrefixMapping()</span></code> は対応する <a class="reference internal" href="#xml.sax.handler.ContentHandler.startElement" title="xml.sax.handler.ContentHandler.startElement"><code class="xref py py-meth docutils literal notranslate"><span class="pre">startElement()</span></code></a> の前に発生し、 <code class="xref py py-meth docutils literal notranslate"><span class="pre">endPrefixMapping()</span></code> イベントは対応する <a class="reference internal" href="#xml.sax.handler.ContentHandler.endElement" title="xml.sax.handler.ContentHandler.endElement"><code class="xref py py-meth docutils literal notranslate"><span class="pre">endElement()</span></code></a> の後で発生しますが、その順序は保証されていません。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.ContentHandler.endPrefixMapping">
+<span class="sig-prename descclassname"><span class="pre">ContentHandler.</span></span><span class="sig-name descname"><span class="pre">endPrefixMapping</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.ContentHandler.endPrefixMapping" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">接頭辞と URI の関連付けのスコープを終了します。</p>
+<p class="translated">詳しくは <a class="reference internal" href="#xml.sax.handler.ContentHandler.startPrefixMapping" title="xml.sax.handler.ContentHandler.startPrefixMapping"><code class="xref py py-meth docutils literal notranslate"><span class="pre">startPrefixMapping()</span></code></a> を参照してください。このイベントは常に対応する <a class="reference internal" href="#xml.sax.handler.ContentHandler.endElement" title="xml.sax.handler.ContentHandler.endElement"><code class="xref py py-meth docutils literal notranslate"><span class="pre">endElement()</span></code></a> の後で発生しますが、複数の <a class="reference internal" href="#xml.sax.handler.ContentHandler.endPrefixMapping" title="xml.sax.handler.ContentHandler.endPrefixMapping"><code class="xref py py-meth docutils literal notranslate"><span class="pre">endPrefixMapping()</span></code></a> イベントの順序は特に保証されません。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.ContentHandler.startElement">
+<span class="sig-prename descclassname"><span class="pre">ContentHandler.</span></span><span class="sig-name descname"><span class="pre">startElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.ContentHandler.startElement" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">非名前空間モードでの要素の開始を通知します。</p>
+<p class="untranslated">The <em>name</em> parameter contains the raw XML 1.0 name of the element type as a
+string and the <em>attrs</em> parameter holds an object of the
+<a class="reference internal" href="xml.sax.reader.html#attributes-objects"><span class="std std-ref">Attributes</span></a> interface containing the attributes of
+the element.  The object passed as <em>attrs</em> may be re-used by the parser; holding
+on to a reference to it is not a reliable way to keep a copy of the attributes.
+To keep a copy of the attributes, use the <a class="reference internal" href="copy.html#module-copy" title="copy: Shallow and deep copy operations."><code class="xref py py-meth docutils literal notranslate"><span class="pre">copy()</span></code></a> method of the <em>attrs</em>
+object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.ContentHandler.endElement">
+<span class="sig-prename descclassname"><span class="pre">ContentHandler.</span></span><span class="sig-name descname"><span class="pre">endElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.ContentHandler.endElement" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">非名前空間モードでの要素の終了を通知します。</p>
+<p class="translated"><em>name</em> 引数は <a class="reference internal" href="#xml.sax.handler.ContentHandler.startElement" title="xml.sax.handler.ContentHandler.startElement"><code class="xref py py-meth docutils literal notranslate"><span class="pre">startElement()</span></code></a> イベントとまったく同じ要素型名を持ちます。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.ContentHandler.startElementNS">
+<span class="sig-prename descclassname"><span class="pre">ContentHandler.</span></span><span class="sig-name descname"><span class="pre">startElementNS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attrs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.ContentHandler.startElementNS" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">名前空間モードでの要素の開始を通知します。</p>
+<p class="untranslated">The <em>name</em> parameter contains the name of the element type as a <code class="docutils literal notranslate"><span class="pre">(uri,</span>
+<span class="pre">localname)</span></code> tuple, the <em>qname</em> parameter contains the raw XML 1.0 name used in
+the source document, and the <em>attrs</em> parameter holds an instance of the
+<a class="reference internal" href="xml.sax.reader.html#attributes-ns-objects"><span class="std std-ref">AttributesNS</span></a> interface
+containing the attributes of the element.  If no namespace is associated with
+the element, the <em>uri</em> component of <em>name</em> will be <code class="docutils literal notranslate"><span class="pre">None</span></code>.  The object passed
+as <em>attrs</em> may be re-used by the parser; holding on to a reference to it is not
+a reliable way to keep a copy of the attributes.  To keep a copy of the
+attributes, use the <a class="reference internal" href="copy.html#module-copy" title="copy: Shallow and deep copy operations."><code class="xref py py-meth docutils literal notranslate"><span class="pre">copy()</span></code></a> method of the <em>attrs</em> object.</p>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">feature_namespace_prefixes</span></code> 機能が有効でなければ、パーサで <em>qname</em> を <code class="docutils literal notranslate"><span class="pre">None</span></code> に設定することも可能です。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.ContentHandler.endElementNS">
+<span class="sig-prename descclassname"><span class="pre">ContentHandler.</span></span><span class="sig-name descname"><span class="pre">endElementNS</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.ContentHandler.endElementNS" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">名前空間モードでの要素の終了を通知します。</p>
+<p class="translated"><em>name</em> 引数は <a class="reference internal" href="#xml.sax.handler.ContentHandler.startElementNS" title="xml.sax.handler.ContentHandler.startElementNS"><code class="xref py py-meth docutils literal notranslate"><span class="pre">startElementNS()</span></code></a> イベントとまったく同じ要素型を持ちます。 <em>qname</em> 引数も同様です。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.ContentHandler.characters">
+<span class="sig-prename descclassname"><span class="pre">ContentHandler.</span></span><span class="sig-name descname"><span class="pre">characters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.ContentHandler.characters" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">文字データの通知を受け取ります。</p>
+<p class="translated">パーサはこのメソッドを呼び出して文字データの各チャンクを報告します。SAX パーサは一連の文字データを単一のチャンクとして返す場合と複数のチャンクに分けて返す場合がありますが、ロケータの情報が正しく保たれるように、一つのイベントの文字データは常に同じ外部エンティティのものでなければなりません。</p>
+<p class="translated"><em>content</em> は文字列、バイト列のどちらでもかまいませんが、<code class="docutils literal notranslate"><span class="pre">expat</span></code> リーダ・モジュールは常に文字列を生成するようになっています。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated">Python XML SIG が提供していた初期 SAX 1 では、このメソッドにもっと JAVA 風のインターフェースが用いられています。しかし Python で採用されている大半のパーサでは古いインターフェースを有効に使うことができないため、よりシンプルなものに変更されました。古いコードを新しいインターフェースに変更するには、古い <em>offset</em> と <em>length</em> パラメータでスライスせずに、<em>content</em> を指定するようにしてください。</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.ContentHandler.ignorableWhitespace">
+<span class="sig-prename descclassname"><span class="pre">ContentHandler.</span></span><span class="sig-name descname"><span class="pre">ignorableWhitespace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">whitespace</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.ContentHandler.ignorableWhitespace" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">要素内容中の無視できる空白文字の通知を受け取ります。</p>
+<p class="translated">妥当性検査を行うパーサはこのメソッドを使って、無視できる空白文字 (W3C XML 1.0 勧告の 2.10 節参照) の各チャンクを報告しなければなりません。妥当性検査をしないパーサもコンテンツモデルの利用とパースが可能な場合、このメソッドを利用することが可能です。</p>
+<p class="translated">SAX パーサは連続する複数の空白文字を単一のチャンクとして返す場合と複数のチャンクに分けて返す場合があります。しかし、ロケータが有用な情報を提供できるように、単一のイベント中のすべての文字は同じ外部エンティティからのものでなければなりません。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.ContentHandler.processingInstruction">
+<span class="sig-prename descclassname"><span class="pre">ContentHandler.</span></span><span class="sig-name descname"><span class="pre">processingInstruction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">target</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.ContentHandler.processingInstruction" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">処理命令の通知を受け取ります。</p>
+<p class="translated">パーサは処理命令が見つかるたびにこのメソッドを呼び出します。処理命令はメインのドキュメント要素の前や後にも発生することがあるので注意してください。</p>
+<p class="translated">SAX パーサがこのメソッドを使って XML 宣言 (XML 1.0 のセクション 2.8) やテキスト宣言 (XML 1.0 のセクション 4.3.1) の通知をすることはありません。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.ContentHandler.skippedEntity">
+<span class="sig-prename descclassname"><span class="pre">ContentHandler.</span></span><span class="sig-name descname"><span class="pre">skippedEntity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.ContentHandler.skippedEntity" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">スキップしたエンティティの通知を受け取ります。</p>
+<p class="translated">パーサはエンティティをスキップするたびにこのメソッドを呼び出します。妥当性検査をしないプロセッサは (外部 DTD サブセットで宣言されているなどの理由で) 宣言が見当たらないエンティティをスキップします。すべてのプロセッサは <code class="docutils literal notranslate"><span class="pre">feature_external_ges</span></code> および <code class="docutils literal notranslate"><span class="pre">feature_external_pes</span></code> 属性の値によっては外部エンティティをスキップすることがあります。</p>
+</dd></dl>
+
+</section>
+<section id="dtdhandler-objects">
+<span id="dtd-handler-objects"></span><h2 class="translated">DTDHandler オブジェクト<a class="headerlink" href="#dtdhandler-objects" title="Link to this heading">¶</a></h2>
+<p class="translated"><a class="reference internal" href="#xml.sax.handler.DTDHandler" title="xml.sax.handler.DTDHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">DTDHandler</span></code></a> インスタンスは以下のメソッドを提供します:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.DTDHandler.notationDecl">
+<span class="sig-prename descclassname"><span class="pre">DTDHandler.</span></span><span class="sig-name descname"><span class="pre">notationDecl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">publicId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">systemId</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.DTDHandler.notationDecl" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">表記宣言イベントの通知を扱います。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.DTDHandler.unparsedEntityDecl">
+<span class="sig-prename descclassname"><span class="pre">DTDHandler.</span></span><span class="sig-name descname"><span class="pre">unparsedEntityDecl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">publicId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">systemId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ndata</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.DTDHandler.unparsedEntityDecl" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">未パースのエンティティ宣言イベントの通知を扱います。</p>
+</dd></dl>
+
+</section>
+<section id="entityresolver-objects">
+<span id="entity-resolver-objects"></span><h2 class="translated">EntityResolver オブジェクト<a class="headerlink" href="#entityresolver-objects" title="Link to this heading">¶</a></h2>
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.EntityResolver.resolveEntity">
+<span class="sig-prename descclassname"><span class="pre">EntityResolver.</span></span><span class="sig-name descname"><span class="pre">resolveEntity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">publicId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">systemId</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.EntityResolver.resolveEntity" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">エンティティのシステム識別子を解決し、文字列として読み込んだシステム識別子あるいは InputSource オブジェクトのいずれかを返します。デフォルトの実装では <em>systemId</em> を返します。</p>
+</dd></dl>
+
+</section>
+<section id="errorhandler-objects">
+<span id="sax-error-handler"></span><h2 class="translated">ErrorHandler オブジェクト<a class="headerlink" href="#errorhandler-objects" title="Link to this heading">¶</a></h2>
+<p class="untranslated">Objects with this interface are used to receive error and warning information
+from the <a class="reference internal" href="xml.sax.reader.html#xml.sax.xmlreader.XMLReader" title="xml.sax.xmlreader.XMLReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLReader</span></code></a>.  If you create an object that
+implements this interface, then register the object with your
+<code class="xref py py-class docutils literal notranslate"><span class="pre">XMLReader</span></code>, the parser
+will call the methods in your object to report all warnings and errors. There
+are three levels of errors available: warnings, (possibly) recoverable errors,
+and unrecoverable errors.  All methods take a <a class="reference internal" href="xml.sax.html#xml.sax.SAXParseException" title="xml.sax.SAXParseException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SAXParseException</span></code></a> as the
+only parameter.  Errors and warnings may be converted to an exception by raising
+the passed-in exception object.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.ErrorHandler.error">
+<span class="sig-prename descclassname"><span class="pre">ErrorHandler.</span></span><span class="sig-name descname"><span class="pre">error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exception</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.ErrorHandler.error" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">パーサが回復可能なエラーに遭遇すると呼び出されます。このメソッドが例外を送出しない場合パースは継続されますが、アプリケーションは更なるドキュメント情報を期待すべきではありません。パーサの処理を継続を認めることで入力ドキュメント内の他のエラーを見つけることができます。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.ErrorHandler.fatalError">
+<span class="sig-prename descclassname"><span class="pre">ErrorHandler.</span></span><span class="sig-name descname"><span class="pre">fatalError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exception</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.ErrorHandler.fatalError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">パーサが回復不能なエラーに遭遇すると呼び出されます。このメソッドが return したとき、パースの停止が求められています。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.ErrorHandler.warning">
+<span class="sig-prename descclassname"><span class="pre">ErrorHandler.</span></span><span class="sig-name descname"><span class="pre">warning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exception</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.ErrorHandler.warning" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">パーサが軽微な警告情報をアプリケーションに通知するときに呼び出されます。このメソッドが return したときはパースの継続が求められ、ドキュメント情報はアプリケーションに送り続けられます。このメソッドでの例外の送出はパースを終了します。</p>
+</dd></dl>
+
+</section>
+<section id="lexicalhandler-objects">
+<span id="lexical-handler-objects"></span><h2 class="untranslated">LexicalHandler Objects<a class="headerlink" href="#lexicalhandler-objects" title="Link to this heading">¶</a></h2>
+<p class="untranslated">Optional SAX2 handler for lexical events.</p>
+<p class="untranslated">This handler is used to obtain lexical information about an XML
+document. Lexical information includes information describing the
+document encoding used and XML comments embedded in the document, as
+well as section boundaries for the DTD and for any CDATA sections.
+The lexical handlers are used in the same manner as content handlers.</p>
+<p class="untranslated">Set the LexicalHandler of an XMLReader by using the setProperty method
+with the property identifier
+<code class="docutils literal notranslate"><span class="pre">'http://xml.org/sax/properties/lexical-handler'</span></code>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.LexicalHandler.comment">
+<span class="sig-prename descclassname"><span class="pre">LexicalHandler.</span></span><span class="sig-name descname"><span class="pre">comment</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.LexicalHandler.comment" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Reports a comment anywhere in the document (including the DTD and
+outside the document element).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.LexicalHandler.startDTD">
+<span class="sig-prename descclassname"><span class="pre">LexicalHandler.</span></span><span class="sig-name descname"><span class="pre">startDTD</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">public_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">system_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.LexicalHandler.startDTD" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Reports the start of the DTD declarations if the document has an
+associated DTD.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.LexicalHandler.endDTD">
+<span class="sig-prename descclassname"><span class="pre">LexicalHandler.</span></span><span class="sig-name descname"><span class="pre">endDTD</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.LexicalHandler.endDTD" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Reports the end of DTD declaration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.LexicalHandler.startCDATA">
+<span class="sig-prename descclassname"><span class="pre">LexicalHandler.</span></span><span class="sig-name descname"><span class="pre">startCDATA</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.LexicalHandler.startCDATA" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Reports the start of a CDATA marked section.</p>
+<p class="untranslated">The contents of the CDATA marked section will be reported through
+the characters handler.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.handler.LexicalHandler.endCDATA">
+<span class="sig-prename descclassname"><span class="pre">LexicalHandler.</span></span><span class="sig-name descname"><span class="pre">endCDATA</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.handler.LexicalHandler.endCDATA" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Reports the end of a CDATA marked section.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.handler</span></code> --- SAX ハンドラーの基底クラス</a><ul>
+<li><a class="reference internal" href="#contenthandler-objects">ContentHandler オブジェクト</a></li>
+<li><a class="reference internal" href="#dtdhandler-objects">DTDHandler オブジェクト</a></li>
+<li><a class="reference internal" href="#entityresolver-objects">EntityResolver オブジェクト</a></li>
+<li><a class="reference internal" href="#errorhandler-objects">ErrorHandler オブジェクト</a></li>
+<li><a class="reference internal" href="#lexicalhandler-objects">LexicalHandler Objects</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="xml.sax.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax</span></code> --- SAX2 バーサーのサポート</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="xml.sax.utils.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.saxutils</span></code> --- SAX ユーティリティー</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/xml.sax.handler.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/xml.sax.handler.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/xml.sax.handler.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="xml.sax.utils.html" title="xml.sax.saxutils --- SAX ユーティリティー"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="xml.sax.html" title="xml.sax --- SAX2 バーサーのサポート"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="markup.html" >構造化マークアップツール</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.handler</span></code> --- SAX ハンドラーの基底クラス</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

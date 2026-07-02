@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="2. Python インタプリタを使う" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/tutorial/interpreter.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="インタプリタを起動する: Python が使用可能な環境では、インタプリタは一般的に/usr/local/bin/python3.14 にインストールされています。使用している Unix シェルの検索パスに/usr/local/bin を追加すると、次のコマンドでインタプリタを開始できます: 1 どのディレクトリに Python インタプリタをインストールするかはインストール時に選択できるの..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_tutorial_interpreter_5c4cba96.png" />
+<meta property="og:image:alt" content="インタプリタを起動する: Python が使用可能な環境では、インタプリタは一般的に/usr/local/bin/python3.14 にインストールされています。使用している Unix シェルの検索パスに/usr/local/bin を追加すると、次のコマンドでインタプリタを開始できます: 1 どのディレクトリに Python インタプリタをインストールするかはインストール時に選択できるの..." />
+<meta name="description" content="インタプリタを起動する: Python が使用可能な環境では、インタプリタは一般的に/usr/local/bin/python3.14 にインストールされています。使用している Unix シェルの検索パスに/usr/local/bin を追加すると、次のコマンドでインタプリタを開始できます: 1 どのディレクトリに Python インタプリタをインストールするかはインストール時に選択できるの..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>2. Python インタプリタを使う &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="3. 形式ばらない Python の紹介" href="introduction.html" />
+    <link rel="prev" title="1. やる気を高めよう" href="appetite.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/tutorial/interpreter.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">2. Python インタプリタを使う</a><ul>
+<li><a class="reference internal" href="#invoking-the-interpreter">2.1. インタプリタを起動する</a><ul>
+<li><a class="reference internal" href="#argument-passing">2.1.1. 引数の受け渡し</a></li>
+<li><a class="reference internal" href="#interactive-mode">2.1.2. 対話モード</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-interpreter-and-its-environment">2.2. インタプリタとその環境</a><ul>
+<li><a class="reference internal" href="#source-code-encoding">2.2.1. ソースコードの文字コード</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="appetite.html"
+                          title="前の章へ"><span class="section-number">1. </span>やる気を高めよう</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="introduction.html"
+                          title="次の章へ"><span class="section-number">3. </span>形式ばらない Python の紹介</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "tutorial/interpreter.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/tutorial/interpreter.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/tutorial/interpreter.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="3. 形式ばらない Python の紹介"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="appetite.html" title="1. やる気を高めよう"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Python チュートリアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2. </span>Python インタプリタを使う</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="using-the-python-interpreter">
+<span id="tut-using"></span><h1 class="translated"><span class="section-number">2. </span>Python インタプリタを使う<a class="headerlink" href="#using-the-python-interpreter" title="Link to this heading">¶</a></h1>
+<section id="invoking-the-interpreter">
+<span id="tut-invoking"></span><h2 class="translated"><span class="section-number">2.1. </span>インタプリタを起動する<a class="headerlink" href="#invoking-the-interpreter" title="Link to this heading">¶</a></h2>
+<p class="translated">Python が使用可能な環境では、インタプリタは一般的に <code class="docutils literal notranslate"><span class="pre">/usr/local/bin/python3.14</span></code> にインストールされています。使用している Unix シェルの検索パスに <code class="file docutils literal notranslate"><span class="pre">/usr/local/bin</span></code> を追加すると、次のコマンドでインタプリタを開始できます:</p>
+<div class="untranslated highlight-text notranslate"><div class="highlight"><pre><span></span>python3.14
+</pre></div>
+</div>
+<p class="translated"><a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> どのディレクトリに Python インタプリタをインストールするかはインストール時に選択できるので、インタプリタは他のディレクトリにあるかもしれません; 身近な Python に詳しい人か、システム管理者に聞いてみてください。 (例えば、その他の場所としては <code class="file docutils literal notranslate"><span class="pre">/usr/local/python</span></code> が一般的です。)</p>
+<p class="translated"><a class="reference internal" href="../using/windows.html#windows-store"><span class="std std-ref">Microsoft ストア</span></a> からPythonのインストールを行った Windows マシンでは、 <code class="docutils literal notranslate"><span class="pre">python3.14</span></code> コマンドが利用できます。
+<a class="reference internal" href="../using/windows.html#launcher"><span class="std std-ref">py.exe ランチャ</span></a> をインストールした場合、 <code class="file docutils literal notranslate"><span class="pre">py</span></code> コマンドが使えます。
+Python を起動する他の方法については <a class="reference internal" href="../using/windows.html#setting-envvars"><span class="std std-ref">Python install manager</span></a> を参照してください。</p>
+<p class="translated">ファイル終端文字 (Unixでは <kbd class="kbd docutils literal notranslate">Control</kbd>-<kbd class="kbd docutils literal notranslate">D</kbd> 、DOS や Windows では <kbd class="kbd docutils literal notranslate">Control</kbd>-<kbd class="kbd docutils literal notranslate">Z</kbd>) を一次プロンプト (訳注: '&gt;&gt;&gt;' のこと) に入力すると、インタプリタが終了ステータス 0 で終了します。もしこの操作がうまく働かないなら、コマンド: <code class="docutils literal notranslate"><span class="pre">quit()</span></code> と入力すればインタプリタを終了できます。</p>
+<p class="untranslated">The interpreter's line-editing features include interactive editing, history
+substitution and code completion on most systems.
+Perhaps the quickest check to see whether command line editing is supported is
+typing a word in on the Python prompt, then pressing Left arrow (or <kbd class="kbd docutils literal notranslate">Control</kbd>-<kbd class="kbd docutils literal notranslate">b</kbd>).
+If the cursor moves, you have command line editing; see Appendix
+<a class="reference internal" href="interactive.html#tut-interacting"><span class="std std-ref">対話入力編集と履歴置換</span></a> for an introduction to the keys.
+If nothing appears to happen, or if a sequence like <code class="docutils literal notranslate"><span class="pre">^[[D</span></code> or <code class="docutils literal notranslate"><span class="pre">^B</span></code> appears,
+command line editing isn't available; you'll only be able to use
+backspace to remove characters from the current line.</p>
+<p class="translated">インタプリタは Unix シェルと同じように使えます。標準入力が端末に接続された状態では、コマンドを対話的に読み込んで実行します。ファイル名を引数に指定するか、<code class="docutils literal notranslate"><span class="pre">python3</span> <span class="pre">&lt;</span> <span class="pre">filename</span></code> のように標準入力ファイルとして指定すると、インタプリタはファイルから <em>スクリプト</em> を読み込んで実行します。</p>
+<p class="translated">インタプリタを <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-c</span> <span class="pre">command</span> <span class="pre">[arg]</span> <span class="pre">...</span></code> のように起動する方法もあります。この形式では、シェルの <a class="reference internal" href="../using/cmdline.html#cmdoption-c"><code class="xref std std-option docutils literal notranslate"><span class="pre">-c</span></code></a> オプションと同じように、 <em>command</em> に指定した文を実行します。 Python 文には、スペースなどのシェルにとって特殊な意味をもつ文字がしばしば含まれるので、 <em>command</em> 全体をクォート(訳注: <code class="docutils literal notranslate"><span class="pre">'</span></code>)で囲っておいたほうが良いでしょう。</p>
+<p class="translated">Python のモジュールには、スクリプトとしても便利に使えるものがあります。 <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">module</span> <span class="pre">[arg]</span> <span class="pre">...</span></code> のように起動すると、 <em>module</em> のソースファイルを、フルパスを指定して起動したかのように実行できます。</p>
+<p class="translated">スクリプトファイルを使用する場合、スクリプトの実行が完了した後、そのまま対話モードに入れると便利なことがあります。これには <a class="reference internal" href="../using/cmdline.html#cmdoption-i"><code class="xref std std-option docutils literal notranslate"><span class="pre">-i</span></code></a> をスクリプト名の前に追加します。</p>
+<p class="translated">全てのコマンドラインオプションは <a class="reference internal" href="../using/cmdline.html#using-on-general"><span class="std std-ref">コマンドラインと環境</span></a> で説明されています。</p>
+<section id="argument-passing">
+<span id="tut-argpassing"></span><h3 class="translated"><span class="section-number">2.1.1. </span>引数の受け渡し<a class="headerlink" href="#argument-passing" title="Link to this heading">¶</a></h3>
+<p class="translated">スクリプト名と引数を指定してインタプリタを起動した場合、スクリプト名やスクリプト名以後に指定した引数は、文字列のリストに変換されて <code class="docutils literal notranslate"><span class="pre">sys</span></code> モジュールの <code class="docutils literal notranslate"><span class="pre">argv</span></code> 変数に格納されます。 <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">sys</span></code> とすることでこのリストにアクセスできます。
+<code class="docutils literal notranslate"><span class="pre">sys.argv</span></code> には少なくとも一つ要素が入っています。スクリプト名も引数も指定しなければ、 <code class="docutils literal notranslate"><span class="pre">sys.argv[0]</span></code> は空の文字列になります。
+スクリプト名の代わりに <code class="docutils literal notranslate"><span class="pre">'-'</span></code> (標準入力を意味します) を指定すると、 <code class="docutils literal notranslate"><span class="pre">sys.argv[0]</span></code> は <code class="docutils literal notranslate"><span class="pre">'-'</span></code> になります。
+<a class="reference internal" href="../using/cmdline.html#cmdoption-c"><code class="xref std std-option docutils literal notranslate"><span class="pre">-c</span></code></a>  <em>command</em> を使うと、 <code class="docutils literal notranslate"><span class="pre">sys.argv[0]</span></code> は <code class="docutils literal notranslate"><span class="pre">'-c'</span></code> になります。 <a class="reference internal" href="../using/cmdline.html#cmdoption-m"><code class="xref std std-option docutils literal notranslate"><span class="pre">-m</span></code></a> <em>module</em> を使った場合、 <code class="docutils literal notranslate"><span class="pre">sys.argv[0]</span></code> はモジュールのフルパスになります。 Python インタープリタは、<code class="xref std std-option docutils literal notranslate"><span class="pre">-c</span></code> <em>command</em> や <code class="xref std std-option docutils literal notranslate"><span class="pre">-m</span></code> <em>module</em> の後ろに指定したオプションは無視します。無視された引数は、<code class="docutils literal notranslate"><span class="pre">sys.argv</span></code> を使って <em>command</em> や <em>module</em> から参照できます。</p>
+</section>
+<section id="interactive-mode">
+<span id="tut-interactive"></span><h3 class="translated"><span class="section-number">2.1.2. </span>対話モード<a class="headerlink" href="#interactive-mode" title="Link to this heading">¶</a></h3>
+<p class="translated">インタプリタが命令を端末 (tty) やコマンドプロンプトから読み取っている場合、インタプリタは <em>対話モード (interactive mode)</em> で動作しているといいます。
+このモードでは、インタプリタは <em>一次プロンプト (primary prompt)</em> を表示して、ユーザにコマンドを入力するよう促します。一次プロンプトは普通、三つの「大なり記号」 (<code class="docutils literal notranslate"><span class="pre">&gt;&gt;&gt;</span></code>) です。継続行では、インタプリタは <em>二次プロンプト (secondary prompt)</em> を表示します。二次プロンプトは、デフォルトでは三つのドット (<code class="docutils literal notranslate"><span class="pre">...</span></code>) です。
+インタプリタは、最初のプロンプトを出す前にバージョン番号と著作権表示から始まる起動メッセージを出力します:</p>
+<div class="untranslated highlight-shell-session notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>python3.14
+<span class="go">Python 3.14 (default, April 4 2024, 09:25:04)</span>
+<span class="go">[GCC 10.2.0] on linux</span>
+<span class="go">Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p class="translated">継続行は、複数行の構文を入力するときに使います。例えば、 <a class="reference internal" href="../reference/compound_stmts.html#if"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">if</span></code></a> 文は継続行を使用します</p>
+<div class="translated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">the_world_is_flat</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">if</span> <span class="n">the_world_is_flat</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Be careful not to fall off!&quot;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">Be careful not to fall off!</span>
+</pre></div>
+</div>
+<p class="translated">対話モードについての詳細は <a class="reference internal" href="appendix.html#tut-interac"><span class="std std-ref">対話モード</span></a> を参照してください。</p>
+</section>
+</section>
+<section id="the-interpreter-and-its-environment">
+<span id="tut-interp"></span><h2 class="translated"><span class="section-number">2.2. </span>インタプリタとその環境<a class="headerlink" href="#the-interpreter-and-its-environment" title="Link to this heading">¶</a></h2>
+<section id="source-code-encoding">
+<span id="tut-source-encoding"></span><h3 class="translated"><span class="section-number">2.2.1. </span>ソースコードの文字コード<a class="headerlink" href="#source-code-encoding" title="Link to this heading">¶</a></h3>
+<p class="translated">デフォルトでは、Python のソースコードは UTF-8 でエンコードされているものとして扱われます。UTF-8 では、世界中のほとんどの言語の文字を、同時に文字列リテラル、識別子、コメントなどに書けます。--- ただし、標準ライブラリは識別子に ASCII 文字のみを利用していて、その他のポータブルなコードもその慣習に従うべきです。それらの文字を正しく表示するためには、エディターはそのファイルが UTF-8 である事を識別して、そのファイルに含まれている文字を全てサポートしたフォントを使わなければなりません。</p>
+<p class="translated">デフォルトエンコーディング以外のエンコーディングを使用するには、ファイルの <em>先頭</em> の行に特別なコメントを追加しなければなりません。書式は以下の通りです:</p>
+<div class="translated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: encoding -*-</span>
+</pre></div>
+</div>
+<p class="translated"><em>encoding</em> には、Python が <a class="reference internal" href="../library/codecs.html#module-codecs" title="codecs: Encode and decode data and streams."><code class="xref py py-mod docutils literal notranslate"><span class="pre">codecs</span></code></a> でサポートしている有効なエンコーディングを指定します。</p>
+<p class="translated">例えば、Windows-1252 エンコーディングを使用するには、ソースコードファイルの先頭行は下記のようにします:</p>
+<div class="translated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># -*- coding: cp1252 -*-</span>
+</pre></div>
+</div>
+<p class="translated">ソースコードが <a class="reference internal" href="appendix.html#tut-scripts"><span class="std std-ref">UNIX &quot;shebang&quot; 行</span></a> で始まる場合には、<em>先頭行</em> のルールは当てはまりません。
+この場合には、エンコーディングの宣言はファイルの2行目に追加します。
+例えば以下のようになります:</p>
+<div class="translated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: cp1252 -*-</span>
+</pre></div>
+</div>
+<p class="translated rubric">脚注</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p class="translated">Unixでは、Python 3.x インタープリタの実行ファイルはデフォルトでは <code class="docutils literal notranslate"><span class="pre">python</span></code> という名前ではインストールされません。同時にインストールされた Python 2.x 実行ファイルと衝突させないためです。</p>
+</aside>
+</aside>
+</section>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">2. Python インタプリタを使う</a><ul>
+<li><a class="reference internal" href="#invoking-the-interpreter">2.1. インタプリタを起動する</a><ul>
+<li><a class="reference internal" href="#argument-passing">2.1.1. 引数の受け渡し</a></li>
+<li><a class="reference internal" href="#interactive-mode">2.1.2. 対話モード</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-interpreter-and-its-environment">2.2. インタプリタとその環境</a><ul>
+<li><a class="reference internal" href="#source-code-encoding">2.2.1. ソースコードの文字コード</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="appetite.html"
+                          title="前の章へ"><span class="section-number">1. </span>やる気を高めよう</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="introduction.html"
+                          title="次の章へ"><span class="section-number">3. </span>形式ばらない Python の紹介</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "tutorial/interpreter.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/tutorial/interpreter.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/tutorial/interpreter.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="3. 形式ばらない Python の紹介"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="appetite.html" title="1. やる気を高めよう"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python チュートリアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">2. </span>Python インタプリタを使う</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="ipaddressモジュールの紹介" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/howto/ipaddress.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="author, Peter Moody,, author, Nick Coghlan,. 概要: このドキュメントは ipaddress モジュールへのやさしい入門を提供するのが目的です。これは主にまだIPネットワーキングの用語に詳しくないユーザーを対象としていますが、 ipaddress がどのようにIPネットワークアドレス処理の概念を表現しているかをざっと見るのにも役立つかもしれません。..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_howto_ipaddress_805e9aeb.png" />
+<meta property="og:image:alt" content="author, Peter Moody,, author, Nick Coghlan,. 概要: このドキュメントは ipaddress モジュールへのやさしい入門を提供するのが目的です。これは主にまだIPネットワーキングの用語に詳しくないユーザーを対象としていますが、 ipaddress がどのようにIPネットワークアドレス処理の概念を表現しているかをざっと見るのにも役立つかもしれません。..." />
+<meta name="description" content="author, Peter Moody,, author, Nick Coghlan,. 概要: このドキュメントは ipaddress モジュールへのやさしい入門を提供するのが目的です。これは主にまだIPネットワーキングの用語に詳しくないユーザーを対象としていますが、 ipaddress がどのようにIPネットワークアドレス処理の概念を表現しているかをざっと見るのにも役立つかもしれません。..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>ipaddressモジュールの紹介 &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="DTrace と SystemTap で CPython を測定する" href="instrumentation.html" />
+    <link rel="prev" title="urllib パッケージを使ってインターネット上のリソースを取得するには" href="urllib2.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/howto/ipaddress.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">ipaddressモジュールの紹介</a><ul>
+<li><a class="reference internal" href="#creating-address-network-interface-objects">アドレス/ネットワーク/インターフェースオブジェクトの作成</a><ul>
+<li><a class="reference internal" href="#a-note-on-ip-versions">IPバージョンについての注意</a></li>
+<li><a class="reference internal" href="#ip-host-addresses">IPホストアドレス</a></li>
+<li><a class="reference internal" href="#defining-networks">ネットワークを定義する</a></li>
+<li><a class="reference internal" href="#host-interfaces">ホストインターフェース</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inspecting-address-network-interface-objects">アドレス/ネットワーク/インターフェースオブジェクト</a></li>
+<li><a class="reference internal" href="#networks-as-lists-of-addresses">アドレスのリストとしてのネットワーク</a></li>
+<li><a class="reference internal" href="#comparisons">比較</a></li>
+<li><a class="reference internal" href="#using-ip-addresses-with-other-modules">他のモジュールでIPアドレスを使用する</a></li>
+<li><a class="reference internal" href="#getting-more-detail-when-instance-creation-fails">インスタンスの生成に失敗した場合にさらに詳細を取得する</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="urllib2.html"
+                          title="前の章へ">urllib パッケージを使ってインターネット上のリソースを取得するには</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="instrumentation.html"
+                          title="次の章へ">DTrace と SystemTap で CPython を測定する</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "howto/ipaddress.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/howto/ipaddress.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/howto/ipaddress.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="instrumentation.html" title="DTrace と SystemTap で CPython を測定する"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="urllib2.html" title="urllib パッケージを使ってインターネット上のリソースを取得するには"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Python HOWTO</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ipaddressモジュールの紹介</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="an-introduction-to-the-ipaddress-module">
+<span id="ipaddress-howto"></span><h1 class="translated">ipaddressモジュールの紹介<a class="headerlink" href="#an-introduction-to-the-ipaddress-module" title="Link to this heading">¶</a></h1>
+<dl class="field-list simple">
+<dt class="field-odd untranslated">author<span class="colon">:</span></dt>
+<dd class="field-odd untranslated"><p class="untranslated">Peter Moody</p>
+</dd>
+<dt class="field-even untranslated">author<span class="colon">:</span></dt>
+<dd class="field-even untranslated"><p class="untranslated">Nick Coghlan</p>
+</dd>
+</dl>
+<aside class="topic">
+<p class="translated topic-title">概要</p>
+<p class="translated">このドキュメントは <a class="reference internal" href="../library/ipaddress.html#module-ipaddress" title="ipaddress: IPv4/IPv6 manipulation library."><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipaddress</span></code></a> モジュールへのやさしい入門を提供するのが目的です。これは主にまだIPネットワーキングの用語に詳しくないユーザーを対象としていますが、<code class="xref py py-mod docutils literal notranslate"><span class="pre">ipaddress</span></code> がどのようにIPネットワークアドレス処理の概念を表現しているかをざっと見るのにも役立つかもしれません。</p>
+</aside>
+<section id="creating-address-network-interface-objects">
+<h2 class="translated">アドレス/ネットワーク/インターフェースオブジェクトの作成<a class="headerlink" href="#creating-address-network-interface-objects" title="Link to this heading">¶</a></h2>
+<p class="translated"><a class="reference internal" href="../library/ipaddress.html#module-ipaddress" title="ipaddress: IPv4/IPv6 manipulation library."><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipaddress</span></code></a> はIPアドレスを検査したり操作したりするためのモジュールであるため、まずはオブジェクトを作成したほうが良いでしょう。文字列および整数を使用して <code class="xref py py-mod docutils literal notranslate"><span class="pre">ipaddress</span></code> を使用してオブジェクトを作成できます。</p>
+<section id="a-note-on-ip-versions">
+<h3 class="translated">IPバージョンについての注意<a class="headerlink" href="#a-note-on-ip-versions" title="Link to this heading">¶</a></h3>
+<p class="translated">IPアドレッシングに詳しくない読者にとっては、インターネットプロトコル(IP)が現在バージョン4プロトコルからバージョン6へと移行している途中であることを知っておくのが重要です。この移行はプロトコルのバージョン4が世界中の需要に対応するために十分なアドレスを提供できないことが大きな理由で起こっており、特にインターネットへ直接接続する機器が増えている状況を踏まえたものです。</p>
+<p class="translated">上述した2つのプロトコルバージョンの違いの詳細を説明するのはこの入門ドキュメントの対象範囲を超えていますが、読者は少なくともこれらの2つのバージョンが存在することと、どちらかのバージョンを強制的に使用することが必要になることもあるということを認識する必要があります。</p>
+</section>
+<section id="ip-host-addresses">
+<h3 class="translated">IPホストアドレス<a class="headerlink" href="#ip-host-addresses" title="Link to this heading">¶</a></h3>
+<p class="translated">アドレスは多くの場合「ホストアドレス」と呼ばれ、IPアドレッシングを扱う場合の最も基本的な単位です。アドレスを作成する単純な方法は <a class="reference internal" href="../library/ipaddress.html#ipaddress.ip_address" title="ipaddress.ip_address"><code class="xref py py-func docutils literal notranslate"><span class="pre">ipaddress.ip_address()</span></code></a> ファクトリー関数を使用することで、この方法では渡された値をもとにIPv4かIPv6アドレスのどちらかを自動的に決定します:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="s1">&#39;192.0.2.1&#39;</span><span class="p">)</span>
+<span class="go">IPv4Address(&#39;192.0.2.1&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="s1">&#39;2001:DB8::1&#39;</span><span class="p">)</span>
+<span class="go">IPv6Address(&#39;2001:db8::1&#39;)</span>
+</pre></div>
+</div>
+<p class="translated">アドレスは整数から直接作成することも可能です。32ビットに収まる値はIPv4アドレスであるとみなされます:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="mi">3221225985</span><span class="p">)</span>
+<span class="go">IPv4Address(&#39;192.0.2.1&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="mi">42540766411282592856903984951653826561</span><span class="p">)</span>
+<span class="go">IPv6Address(&#39;2001:db8::1&#39;)</span>
+</pre></div>
+</div>
+<p class="translated">IPv4またはIPv6アドレスの使用を強制するには、適切なクラスを直接呼び出す必要があります。これは特にIPv6アドレスを小さな整数で作成する場合に役立ちます:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">IPv4Address(&#39;0.0.0.1&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv4Address</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">IPv4Address(&#39;0.0.0.1&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv6Address</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="go">IPv6Address(&#39;::1&#39;)</span>
+</pre></div>
+</div>
+</section>
+<section id="defining-networks">
+<h3 class="translated">ネットワークを定義する<a class="headerlink" href="#defining-networks" title="Link to this heading">¶</a></h3>
+<p class="translated">ホストアドレスは通常IPネットワークへ統合され、 <a class="reference internal" href="../library/ipaddress.html#module-ipaddress" title="ipaddress: IPv4/IPv6 manipulation library."><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipaddress</span></code></a> はネットワーク定義の作成、検査、操作の手段を提供します。IPネットワークオブジェクトはネットワークの一部であるホストアドレスの範囲を定義する文字列から生成されます。この情報の最も単純な形式は「ネットワークアドレス/ネットワークプレフィックス」のペアであり、プレフィックスは先頭のビット数として定義され、アドレスがネットワークの一部であるかどうか、それらのビットに期待される値がネットワークアドレスに定義されているかを判断するために比較されます。</p>
+<p class="translated">アドレスについては、正しいIPバージョンを自動的に判断するファクトリー関数が提供されます:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/24&#39;</span><span class="p">)</span>
+<span class="go">IPv4Network(&#39;192.0.2.0/24&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;2001:db8::0/96&#39;</span><span class="p">)</span>
+<span class="go">IPv6Network(&#39;2001:db8::/96&#39;)</span>
+</pre></div>
+</div>
+<p class="translated">ネットワークオブジェクトにはホストビットを設定することができません。これについての実践的な効果は <code class="docutils literal notranslate"><span class="pre">192.0.2.1/24</span></code> がネットワークを表さないということです。次の項でより詳しく説明しますが、ネットワーク内IP表記は一般的に特定のネットワーク上のネットワークインターフェースを表すのに使用されるため、このような定義はインターフェースオブジェクトと呼ばれます。</p>
+<p class="translated">デフォルトでは、ホストビットセットの指定でネットワークオブジェクトを作成しようとすると <a class="reference internal" href="../library/exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> が発生する結果となります。 <code class="docutils literal notranslate"><span class="pre">strict=False</span></code> フラグをコンストラクタに渡すと、追加分のビットをゼロとして強制的に処理するように要求できます:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.1/24&#39;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="w">   </span><span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">192.0.2.1/24 has host bits set</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.1/24&#39;</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="go">IPv4Network(&#39;192.0.2.0/24&#39;)</span>
+</pre></div>
+</div>
+<p class="translated">文字列形式では劇的に柔軟性を提供できる一方、ネットワークはちょうどホストアドレスのように整数で定義することもできます。この場合、ネットワークは整数により特定できる単一のアドレスのみを含むものとして処理され、ネットワークプレフィックスはネットワークアドレスの全体を含みます:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_network</span><span class="p">(</span><span class="mi">3221225984</span><span class="p">)</span>
+<span class="go">IPv4Network(&#39;192.0.2.0/32&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_network</span><span class="p">(</span><span class="mi">42540766411282592856903984951653826560</span><span class="p">)</span>
+<span class="go">IPv6Network(&#39;2001:db8::/128&#39;)</span>
+</pre></div>
+</div>
+<p class="translated">アドレスについては、ファクトリー関数を呼ぶ代わりにクラスコンストラクタを直接呼ぶことで、作成対象のネットワークを特定の種類に強制することができます。</p>
+</section>
+<section id="host-interfaces">
+<h3 class="translated">ホストインターフェース<a class="headerlink" href="#host-interfaces" title="Link to this heading">¶</a></h3>
+<p class="translated">直前に述べたように、特定のネットワーク上のアドレスを示したい場合には、アドレスもネットワーククラスも十分ではありません。 <code class="docutils literal notranslate"><span class="pre">192.0.2.1/24</span></code> のような表記は「 <code class="docutils literal notranslate"><span class="pre">192.0.2.0/24</span></code> のネットワーク上の <code class="docutils literal notranslate"><span class="pre">192.0.2.1</span></code> のホスト」の短縮形として通常ネットワークエンジニアやファイアウォールやルータ用のツールを書く人が使用し、 <a class="reference internal" href="../library/ipaddress.html#module-ipaddress" title="ipaddress: IPv4/IPv6 manipulation library."><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipaddress</span></code></a> はそれに応じて特定のネットワークとアドレスを関連づけるハイブリッドクラス集を提供します。アドレス部分がネットワークアドレスであることに制限されないことを除き、作成用のインターフェースはネットワーク定義用のインターフェースと同一です。</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_interface</span><span class="p">(</span><span class="s1">&#39;192.0.2.1/24&#39;</span><span class="p">)</span>
+<span class="go">IPv4Interface(&#39;192.0.2.1/24&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_interface</span><span class="p">(</span><span class="s1">&#39;2001:db8::1/96&#39;</span><span class="p">)</span>
+<span class="go">IPv6Interface(&#39;2001:db8::1/96&#39;)</span>
+</pre></div>
+</div>
+<p class="translated">整数入力は(ネットワークと同様に)受け入れられ、適切なコンストラクタを直接呼び出すことで特定のIPバージョンの使用を強制できます。</p>
+</section>
+</section>
+<section id="inspecting-address-network-interface-objects">
+<h2 class="translated">アドレス/ネットワーク/インターフェースオブジェクト<a class="headerlink" href="#inspecting-address-network-interface-objects" title="Link to this heading">¶</a></h2>
+<p class="translated">さて、IPv(4|6)(アドレス|ネットワーク|インターフェース)オブジェクトをわざわざ作成したので、多分それについて情報がほしいことでしょう。 <a class="reference internal" href="../library/ipaddress.html#module-ipaddress" title="ipaddress: IPv4/IPv6 manipulation library."><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipaddress</span></code></a> はこの作業を簡単で直観的にできるようにします。</p>
+<p class="translated">IPバージョンを抽出する:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">addr4</span> <span class="o">=</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="s1">&#39;192.0.2.1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">addr6</span> <span class="o">=</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="s1">&#39;2001:db8::1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">addr6</span><span class="o">.</span><span class="n">version</span>
+<span class="go">6</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">addr4</span><span class="o">.</span><span class="n">version</span>
+<span class="go">4</span>
+</pre></div>
+</div>
+<p class="translated">インターフェースからネットワークを取得する:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">host4</span> <span class="o">=</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_interface</span><span class="p">(</span><span class="s1">&#39;192.0.2.1/24&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">host4</span><span class="o">.</span><span class="n">network</span>
+<span class="go">IPv4Network(&#39;192.0.2.0/24&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">host6</span> <span class="o">=</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_interface</span><span class="p">(</span><span class="s1">&#39;2001:db8::1/96&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">host6</span><span class="o">.</span><span class="n">network</span>
+<span class="go">IPv6Network(&#39;2001:db8::/96&#39;)</span>
+</pre></div>
+</div>
+<p class="translated">個別なアドレスがいくつネットワークに存在するかを調べる:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net4</span> <span class="o">=</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/24&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net4</span><span class="o">.</span><span class="n">num_addresses</span>
+<span class="go">256</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net6</span> <span class="o">=</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;2001:db8::0/96&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net6</span><span class="o">.</span><span class="n">num_addresses</span>
+<span class="go">4294967296</span>
+</pre></div>
+</div>
+<p class="translated">「使用可能」なネットワーク上のアドレスを順番にたどる:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net4</span> <span class="o">=</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/24&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">net4</span><span class="o">.</span><span class="n">hosts</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">192.0.2.1</span>
+<span class="go">192.0.2.2</span>
+<span class="go">192.0.2.3</span>
+<span class="go">192.0.2.4</span>
+<span class="go">...</span>
+<span class="go">192.0.2.252</span>
+<span class="go">192.0.2.253</span>
+<span class="go">192.0.2.254</span>
+</pre></div>
+</div>
+<p class="translated">ネットマスクを取得(例: ネットワークプレフィックスに応じてビットを設定)したりホストマスク(ネットマスクの一部ではない任意のビット)を取得する:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net4</span> <span class="o">=</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/24&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net4</span><span class="o">.</span><span class="n">netmask</span>
+<span class="go">IPv4Address(&#39;255.255.255.0&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net4</span><span class="o">.</span><span class="n">hostmask</span>
+<span class="go">IPv4Address(&#39;0.0.0.255&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net6</span> <span class="o">=</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;2001:db8::0/96&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net6</span><span class="o">.</span><span class="n">netmask</span>
+<span class="go">IPv6Address(&#39;ffff:ffff:ffff:ffff:ffff:ffff::&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net6</span><span class="o">.</span><span class="n">hostmask</span>
+<span class="go">IPv6Address(&#39;::ffff:ffff&#39;)</span>
+</pre></div>
+</div>
+<p class="translated">アドレスを展開したり圧縮したりする:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">addr6</span><span class="o">.</span><span class="n">exploded</span>
+<span class="go">&#39;2001:0db8:0000:0000:0000:0000:0000:0001&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">addr6</span><span class="o">.</span><span class="n">compressed</span>
+<span class="go">&#39;2001:db8::1&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net6</span><span class="o">.</span><span class="n">exploded</span>
+<span class="go">&#39;2001:0db8:0000:0000:0000:0000:0000:0000/96&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net6</span><span class="o">.</span><span class="n">compressed</span>
+<span class="go">&#39;2001:db8::/96&#39;</span>
+</pre></div>
+</div>
+<p class="translated">IPv4は展開や圧縮には対応していませんが、それでも関連したオブジェクトが適切なプロパティを提供し、バージョンに対して中立なコードがIPv4アドレスを正しく処理する一方でIPv6向けには最も簡潔または最も詳細な形式が使用されることを保証します。</p>
+</section>
+<section id="networks-as-lists-of-addresses">
+<h2 class="translated">アドレスのリストとしてのネットワーク<a class="headerlink" href="#networks-as-lists-of-addresses" title="Link to this heading">¶</a></h2>
+<p class="translated">ネットワークをリストとして扱うと便利な場合があります。これは、ネットワークを次のようにインデックス付けすることが可能なことを意味します:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">net4</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">IPv4Address(&#39;192.0.2.1&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net4</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">IPv4Address(&#39;192.0.2.255&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net6</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">IPv6Address(&#39;2001:db8::1&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">net6</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">IPv6Address(&#39;2001:db8::ffff:ffff&#39;)</span>
+</pre></div>
+</div>
+<p class="translated">以下のようなリストのメンバーシップの判定用文法が使用可能なように、ネットワークオブジェクト自身が適応します:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">address</span> <span class="ow">in</span> <span class="n">network</span><span class="p">:</span>
+    <span class="c1"># do something</span>
+</pre></div>
+</div>
+<p class="translated">ネットワークプレフィックスに基づき、所属しているかどうかの判定が効果的にできます:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">addr4</span> <span class="o">=</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="s1">&#39;192.0.2.1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">addr4</span> <span class="ow">in</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.2.0/24&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">addr4</span> <span class="ow">in</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_network</span><span class="p">(</span><span class="s1">&#39;192.0.3.0/24&#39;</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</section>
+<section id="comparisons">
+<h2 class="translated">比較<a class="headerlink" href="#comparisons" title="Link to this heading">¶</a></h2>
+<p class="translated"><a class="reference internal" href="../library/ipaddress.html#module-ipaddress" title="ipaddress: IPv4/IPv6 manipulation library."><code class="xref py py-mod docutils literal notranslate"><span class="pre">ipaddress</span></code></a> はオブジェクトの比較をするための単純で、かつ願わくば直観的な方法を意味が通じるように提供します:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="s1">&#39;192.0.2.1&#39;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="s1">&#39;192.0.2.2&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<p class="translated">異なるバージョンや異なるタイプのオブジェクトを比較しようとすると <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> 例外が発生します。</p>
+</section>
+<section id="using-ip-addresses-with-other-modules">
+<h2 class="translated">他のモジュールでIPアドレスを使用する<a class="headerlink" href="#using-ip-addresses-with-other-modules" title="Link to this heading">¶</a></h2>
+<p class="translated">IPアドレスを使用する他のモジュール(<a class="reference internal" href="../library/socket.html#module-socket" title="socket: Low-level networking interface."><code class="xref py py-mod docutils literal notranslate"><span class="pre">socket</span></code></a> など)は通常このモジュールからオブジェクトを直接受け付けません。直接渡すのではなく、他のモジュールが受け付ける整数や文字列に強制的に変換する必要があります:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">addr4</span> <span class="o">=</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="s1">&#39;192.0.2.1&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">addr4</span><span class="p">)</span>
+<span class="go">&#39;192.0.2.1&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">int</span><span class="p">(</span><span class="n">addr4</span><span class="p">)</span>
+<span class="go">3221225985</span>
+</pre></div>
+</div>
+</section>
+<section id="getting-more-detail-when-instance-creation-fails">
+<h2 class="translated">インスタンスの生成に失敗した場合にさらに詳細を取得する<a class="headerlink" href="#getting-more-detail-when-instance-creation-fails" title="Link to this heading">¶</a></h2>
+<p class="translated">上述したバージョンに関知しないファクトリー関数を使用してアドレス/ネットワーク/インターフェースオブジェクトを作成する場合、渡された値がそのタイプのオブジェクトとして認識されなかったと単純に通知する汎用的なメッセージとともに、どのエラーでも <a class="reference internal" href="../library/exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> として報告されます。特定のエラーが提供されないのは、拒否された理由をより詳細に提供するために、値がIPv4またはIPv6である <em>はず</em> かどうかを知る必要があるためです。</p>
+<p class="translated">追加の詳細を得ると役立つ場合のユースケースに対応するため、個別のクラスのコンストラクタは実際に <a class="reference internal" href="../library/exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> のサブクラスである <a class="reference internal" href="../library/ipaddress.html#ipaddress.AddressValueError" title="ipaddress.AddressValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ipaddress.AddressValueError</span></code></a> と <a class="reference internal" href="../library/ipaddress.html#ipaddress.NetmaskValueError" title="ipaddress.NetmaskValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ipaddress.NetmaskValueError</span></code></a> を発生させて具体的に定義のどの部分のパースに失敗したのかを示します。</p>
+<p class="translated">クラスコンストラクタを直接使用する場合にはこれらのエラーメッセージはさらに非常に詳細になっています。例えば:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_address</span><span class="p">(</span><span class="s2">&quot;192.168.0.256&quot;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="w">  </span><span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">&#39;192.168.0.256&#39; does not appear to be an IPv4 or IPv6 address</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv4Address</span><span class="p">(</span><span class="s2">&quot;192.168.0.256&quot;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="w">  </span><span class="c">...</span>
+<span class="gr">ipaddress.AddressValueError</span>: <span class="n">Octet 256 (&gt; 255) not permitted in &#39;192.168.0.256&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">ip_network</span><span class="p">(</span><span class="s2">&quot;192.168.0.1/64&quot;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="w">  </span><span class="c">...</span>
+<span class="gr">ValueError</span>: <span class="n">&#39;192.168.0.1/64&#39; does not appear to be an IPv4 or IPv6 network</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv4Network</span><span class="p">(</span><span class="s2">&quot;192.168.0.1/64&quot;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+<span class="w">  </span><span class="c">...</span>
+<span class="gr">ipaddress.NetmaskValueError</span>: <span class="n">&#39;64&#39; is not a valid netmask</span>
+</pre></div>
+</div>
+<p class="translated">しかし、モジュールについて固有の上記例外のどちらも <a class="reference internal" href="../library/exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> を親クラスとして持ち、エラーの特定のタイプに興味がない場合でも、以下のようにコードを記述できます:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">network</span> <span class="o">=</span> <span class="n">ipaddress</span><span class="o">.</span><span class="n">IPv4Network</span><span class="p">(</span><span class="n">address</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;address/netmask is invalid for IPv4:&#39;</span><span class="p">,</span> <span class="n">address</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">ipaddressモジュールの紹介</a><ul>
+<li><a class="reference internal" href="#creating-address-network-interface-objects">アドレス/ネットワーク/インターフェースオブジェクトの作成</a><ul>
+<li><a class="reference internal" href="#a-note-on-ip-versions">IPバージョンについての注意</a></li>
+<li><a class="reference internal" href="#ip-host-addresses">IPホストアドレス</a></li>
+<li><a class="reference internal" href="#defining-networks">ネットワークを定義する</a></li>
+<li><a class="reference internal" href="#host-interfaces">ホストインターフェース</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#inspecting-address-network-interface-objects">アドレス/ネットワーク/インターフェースオブジェクト</a></li>
+<li><a class="reference internal" href="#networks-as-lists-of-addresses">アドレスのリストとしてのネットワーク</a></li>
+<li><a class="reference internal" href="#comparisons">比較</a></li>
+<li><a class="reference internal" href="#using-ip-addresses-with-other-modules">他のモジュールでIPアドレスを使用する</a></li>
+<li><a class="reference internal" href="#getting-more-detail-when-instance-creation-fails">インスタンスの生成に失敗した場合にさらに詳細を取得する</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="urllib2.html"
+                          title="前の章へ">urllib パッケージを使ってインターネット上のリソースを取得するには</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="instrumentation.html"
+                          title="次の章へ">DTrace と SystemTap で CPython を測定する</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "howto/ipaddress.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/howto/ipaddress.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/howto/ipaddress.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="instrumentation.html" title="DTrace と SystemTap で CPython を測定する"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="urllib2.html" title="urllib パッケージを使ってインターネット上のリソースを取得するには"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python HOWTO</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">ipaddressモジュールの紹介</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

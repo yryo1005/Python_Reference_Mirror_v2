@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="email.mime: Creating email and MIME objects from scratch" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/email.mime.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/email/mime/ This module is part of the legacy ( Compat32) email API. Its functionality is partially replaced by the contentmanager in the new API, but in certain applications these clas..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_email.mime_1bde6ca4.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/email/mime/ This module is part of the legacy ( Compat32) email API. Its functionality is partially replaced by the contentmanager in the new API, but in certain applications these clas..." />
+<meta name="description" content="ソースコード: Lib/email/mime/ This module is part of the legacy ( Compat32) email API. Its functionality is partially replaced by the contentmanager in the new API, but in certain applications these clas..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>email.mime: Creating email and MIME objects from scratch &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="email.header: 国際化されたヘッダー" href="email.header.html" />
+    <link rel="prev" title="email.message.Message: compat32 API を使用した電子メールメッセージの表現" href="email.compat32-message.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/email.mime.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="email.compat32-message.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.message.Message</span></code>: <code class="xref py py-data docutils literal notranslate"><span class="pre">compat32</span></code> API を使用した電子メールメッセージの表現</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="email.header.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.header</span></code>: 国際化されたヘッダー</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/email.mime.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/email.mime.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/email.mime.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="email.header.html" title="email.header: 国際化されたヘッダー"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="email.compat32-message.html" title="email.message.Message: compat32 API を使用した電子メールメッセージの表現"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" >インターネット上のデータの操作</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="email.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code> --- 電子メールと MIME 処理のためのパッケージ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.mime</span></code>: Creating email and MIME objects from scratch</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-email.mime">
+<span id="email-mime-creating-email-and-mime-objects-from-scratch"></span><h1 class="untranslated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.mime</span></code>: Creating email and MIME objects from scratch<a class="headerlink" href="#module-email.mime" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/email/mime/">Lib/email/mime/</a></p>
+<hr class="docutils" />
+<p class="untranslated">This module is part of the legacy (<code class="docutils literal notranslate"><span class="pre">Compat32</span></code>) email API.  Its functionality
+is partially replaced by the <a class="reference internal" href="email.contentmanager.html#module-email.contentmanager" title="email.contentmanager: Storing and Retrieving Content from MIME Parts"><code class="xref py py-mod docutils literal notranslate"><span class="pre">contentmanager</span></code></a> in the new API, but
+in certain applications these classes may still be useful, even in non-legacy
+code.</p>
+<p class="translated">ふつう、メッセージオブジェクト構造はファイルまたは何がしかのテキストをパーザに通すことで得られます。パーザは与えられたテキストを解析し、基底となる root のメッセージオブジェクトを返します。しかし、完全なメッセージオブジェクト構造を何もないところから作成することもまた可能です。個別の <a class="reference internal" href="email.compat32-message.html#email.message.Message" title="email.message.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a> を手で作成することさえできます。実際には、すでに存在するメッセージオブジェクト構造をとってきて、そこに新たな <code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code> オブジェクトを追加したり、あるものを別のところへ移動させたりできます。これは MIME メッセージを切ったりおろしたりするために非常に便利なインターフェイスを提供します。</p>
+<p class="translated">新しいメッセージオブジェクト構造は <a class="reference internal" href="email.compat32-message.html#email.message.Message" title="email.message.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a> インスタンスを作成することにより作れます。ここに添付ファイルやその他適切なものをすべて手で加えてやればよいのです。MIME メッセージの場合、 <a class="reference internal" href="email.html#module-email" title="email: Package supporting the parsing, manipulating, and generating email messages."><code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code></a> パッケージはこれらを簡単におこなえるようにするためにいくつかの便利なサブクラスを提供しています。</p>
+<p class="translated">以下がそのサブクラスです:</p>
+<dl class="py class" id="module-email.mime.base">
+<dt class="sig sig-object py" id="email.mime.base.MIMEBase">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.mime.base.</span></span><span class="sig-name descname"><span class="pre">MIMEBase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_maintype</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_subtype</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">compat32</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#email.mime.base.MIMEBase" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">モジュール: <a class="reference internal" href="#module-email.mime.base" title="email.mime.base"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.mime.base</span></code></a></p>
+<p class="translated">これはすべての <a class="reference internal" href="email.compat32-message.html#email.message.Message" title="email.message.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a> の MIME 用サブクラスの基底となるクラスです。とくに <a class="reference internal" href="#email.mime.base.MIMEBase" title="email.mime.base.MIMEBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIMEBase</span></code></a> のインスタンスを直接作成することは (可能ではありますが) ふつうはしないでしょう。 <code class="xref py py-class docutils literal notranslate"><span class="pre">MIMEBase</span></code> は単により特化された MIME 用サブクラスのための便宜的な基底クラスとして提供されています。</p>
+<p class="translated"><em>_maintype</em> は <em class="mailheader">Content-Type</em> の主形式 (maintype) であり (<em class="mimetype">text</em> や <em class="mimetype">image</em> など)、 <em>_subtype</em> は <em class="mailheader">Content-Type</em> の副形式 (subtype) です (<em class="mimetype">plain</em> や <em class="mimetype">gif</em> など)。 <em>_params</em> は各パラメータのキーと値を格納した辞書であり、これは直接 <a class="reference internal" href="email.compat32-message.html#email.message.Message.add_header" title="email.message.Message.add_header"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Message.add_header</span></code></a> に渡されます。</p>
+<p class="untranslated">If <em>policy</em> is specified, (defaults to the
+<a class="reference internal" href="email.policy.html#email.policy.Compat32" title="email.policy.Compat32"><code class="xref py py-class docutils literal notranslate"><span class="pre">compat32</span></code></a> policy) it will be passed to
+<a class="reference internal" href="email.compat32-message.html#email.message.Message" title="email.message.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a>.</p>
+<p class="translated"><a class="reference internal" href="#email.mime.base.MIMEBase" title="email.mime.base.MIMEBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIMEBase</span></code></a> クラスはつねに (<em>_maintype</em> 、 <em>_subtype</em> 、および <em>_params</em> にもとづいた) <em class="mailheader">Content-Type</em> ヘッダと、 <em class="mailheader">MIME-Version</em> ヘッダ (必ず <code class="docutils literal notranslate"><span class="pre">1.0</span></code> に設定される) を追加します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span>キーワード専用引数 <em>policy</em> が追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py class" id="module-email.mime.nonmultipart">
+<dt class="sig sig-object py" id="email.mime.nonmultipart.MIMENonMultipart">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.mime.nonmultipart.</span></span><span class="sig-name descname"><span class="pre">MIMENonMultipart</span></span><a class="headerlink" href="#email.mime.nonmultipart.MIMENonMultipart" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">モジュール: <a class="reference internal" href="#module-email.mime.nonmultipart" title="email.mime.nonmultipart"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.mime.nonmultipart</span></code></a></p>
+<p class="translated"><a class="reference internal" href="#email.mime.base.MIMEBase" title="email.mime.base.MIMEBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIMEBase</span></code></a> のサブクラスで、これは <em class="mimetype">multipart</em> 形式でない MIME メッセージのための中間的な基底クラスです。このクラスのおもな目的は、通常 <em class="mimetype">multipart</em> 形式のメッセージに対してのみ意味をなす <a class="reference internal" href="email.compat32-message.html#email.message.Message.attach" title="email.message.Message.attach"><code class="xref py py-meth docutils literal notranslate"><span class="pre">attach()</span></code></a> メソッドの使用をふせぐことです。もし <code class="xref py py-meth docutils literal notranslate"><span class="pre">attach()</span></code> メソッドが呼ばれた場合、これは <a class="reference internal" href="email.errors.html#email.errors.MultipartConversionError" title="email.errors.MultipartConversionError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">MultipartConversionError</span></code></a> 例外を発生します。</p>
+</dd></dl>
+
+<dl class="py class" id="module-email.mime.multipart">
+<dt class="sig sig-object py" id="email.mime.multipart.MIMEMultipart">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.mime.multipart.</span></span><span class="sig-name descname"><span class="pre">MIMEMultipart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_subtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'mixed'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_subparts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">compat32</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#email.mime.multipart.MIMEMultipart" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">モジュール: <a class="reference internal" href="#module-email.mime.multipart" title="email.mime.multipart"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.mime.multipart</span></code></a></p>
+<p class="translated"><a class="reference internal" href="#email.mime.base.MIMEBase" title="email.mime.base.MIMEBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIMEBase</span></code></a> のサブクラスで、これは <em class="mimetype">multipart</em> 形式の MIME メッセージのための中間的な基底クラスです。オプション引数 <em>_subtype</em> はデフォルトでは <em class="mimetype">mixed</em> になっていますが、そのメッセージの副形式 (subtype) を指定するのに使うことができます。メッセージオブジェクトには <em class="mimetype">multipart/_subtype</em> という値をもつ <em class="mailheader">Content-Type</em> ヘッダとともに、 <em class="mailheader">MIME-Version</em> ヘッダが追加されるでしょう。</p>
+<p class="translated">オプション引数 <em>boundary</em> は multipart の境界文字列です。これが <code class="docutils literal notranslate"><span class="pre">None</span></code> の場合 (デフォルト)、境界は必要に応じて計算されます（例えばメッセージがシリアライズされるときなど）。</p>
+<p class="translated"><em>_subparts</em> はそのペイロードの subpart の初期値からなるシーケンスです。このシーケンスはリストに変換できるようになっている必要があります。新しい subpart はつねに <a class="reference internal" href="email.compat32-message.html#email.message.Message.attach" title="email.message.Message.attach"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Message.attach</span></code></a> メソッドを使ってそのメッセージに追加できるようになっています。</p>
+<p class="untranslated">Optional <em>policy</em> argument defaults to <a class="reference internal" href="email.policy.html#email.policy.Compat32" title="email.policy.Compat32"><code class="xref py py-class docutils literal notranslate"><span class="pre">compat32</span></code></a>.</p>
+<p class="translated"><em class="mailheader">Content-Type</em> ヘッダに対する追加のパラメータはキーワード引数 <em>_params</em> を介して取得あるいは設定されます。これはキーワード辞書になっています。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span>キーワード専用引数 <em>policy</em> が追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py class" id="module-email.mime.application">
+<dt class="sig sig-object py" id="email.mime.application.MIMEApplication">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.mime.application.</span></span><span class="sig-name descname"><span class="pre">MIMEApplication</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_subtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'octet-stream'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_encoder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">email.encoders.encode_base64</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">compat32</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#email.mime.application.MIMEApplication" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">モジュール: <a class="reference internal" href="#module-email.mime.application" title="email.mime.application"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.mime.application</span></code></a></p>
+<p class="untranslated">A subclass of <a class="reference internal" href="#email.mime.nonmultipart.MIMENonMultipart" title="email.mime.nonmultipart.MIMENonMultipart"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIMENonMultipart</span></code></a>, the
+<code class="xref py py-class docutils literal notranslate"><span class="pre">MIMEApplication</span></code> class is used to represent MIME message objects of
+major type <em class="mimetype">application</em>.  <em>_data</em> contains the bytes for the raw
+application data.  Optional <em>_subtype</em> specifies the MIME subtype and defaults
+to <em class="mimetype">octet-stream</em>.</p>
+<p class="translated">オプション引数の <em>_encoder</em> は呼び出し可能なオブジェクト (関数など) で、データの転送に使う実際のエンコード処理を行います。この呼び出し可能なオブジェクトは引数を 1 つ取り、それは <a class="reference internal" href="#email.mime.application.MIMEApplication" title="email.mime.application.MIMEApplication"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIMEApplication</span></code></a> のインスタンスです。ペイロードをエンコードされた形式に変更するために <a class="reference internal" href="email.compat32-message.html#email.message.Message.get_payload" title="email.message.Message.get_payload"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_payload()</span></code></a> と <a class="reference internal" href="email.compat32-message.html#email.message.Message.set_payload" title="email.message.Message.set_payload"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_payload()</span></code></a> を使い、必要に応じて <em class="mailheader">Content-Transfer-Encoding</em> やその他のヘッダをメッセージオブジェクトに追加するべきです。デフォルトのエンコードは base64 です。組み込みのエンコーダの一覧は <a class="reference internal" href="email.encoders.html#module-email.encoders" title="email.encoders: Encoders for email message payloads."><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.encoders</span></code></a> モジュールを見てください。</p>
+<p class="untranslated">Optional <em>policy</em> argument defaults to <a class="reference internal" href="email.policy.html#email.policy.Compat32" title="email.policy.Compat32"><code class="xref py py-class docutils literal notranslate"><span class="pre">compat32</span></code></a>.</p>
+<p class="translated"><em>_params</em> は基底クラスのコンストラクタにそのまま渡されます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span>キーワード専用引数 <em>policy</em> が追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py class" id="module-email.mime.audio">
+<dt class="sig sig-object py" id="email.mime.audio.MIMEAudio">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.mime.audio.</span></span><span class="sig-name descname"><span class="pre">MIMEAudio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_audiodata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_subtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_encoder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">email.encoders.encode_base64</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">compat32</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#email.mime.audio.MIMEAudio" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">モジュール: <a class="reference internal" href="#module-email.mime.audio" title="email.mime.audio"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.mime.audio</span></code></a></p>
+<p class="untranslated">A subclass of <a class="reference internal" href="#email.mime.nonmultipart.MIMENonMultipart" title="email.mime.nonmultipart.MIMENonMultipart"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIMENonMultipart</span></code></a>, the
+<code class="xref py py-class docutils literal notranslate"><span class="pre">MIMEAudio</span></code> class is used to create MIME message objects of major type
+<em class="mimetype">audio</em>. <em>_audiodata</em> contains the bytes for the raw audio data.  If
+this data can be decoded as au, wav, aiff, or aifc, then the
+subtype will be automatically included in the <em class="mailheader">Content-Type</em> header.
+Otherwise you can explicitly specify the audio subtype via the <em>_subtype</em>
+argument.  If the minor type could not be guessed and <em>_subtype</em> was not given,
+then <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> is raised.</p>
+<p class="translated">オプション引数の <em>_encoder</em> は呼び出し可能なオブジェクト (関数など) で、オーディオデータの転送に使う実際のエンコード処理を行います。この呼び出し可能なオブジェクトは引数を 1 つ取り、それは <a class="reference internal" href="#email.mime.audio.MIMEAudio" title="email.mime.audio.MIMEAudio"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIMEAudio</span></code></a> のインスタンスです。ペイロードをエンコードされた形式に変更するために <a class="reference internal" href="email.compat32-message.html#email.message.Message.get_payload" title="email.message.Message.get_payload"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_payload()</span></code></a> と <a class="reference internal" href="email.compat32-message.html#email.message.Message.set_payload" title="email.message.Message.set_payload"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_payload()</span></code></a> を使い、必要に応じて <em class="mailheader">Content-Transfer-Encoding</em> やその他のヘッダをメッセージオブジェクトに追加するべきです。デフォルトのエンコードは base64 です。組み込みのエンコーダの一覧は <a class="reference internal" href="email.encoders.html#module-email.encoders" title="email.encoders: Encoders for email message payloads."><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.encoders</span></code></a> モジュールを見てください。</p>
+<p class="untranslated">Optional <em>policy</em> argument defaults to <a class="reference internal" href="email.policy.html#email.policy.Compat32" title="email.policy.Compat32"><code class="xref py py-class docutils literal notranslate"><span class="pre">compat32</span></code></a>.</p>
+<p class="translated"><em>_params</em> は基底クラスのコンストラクタにそのまま渡されます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span>キーワード専用引数 <em>policy</em> が追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py class" id="module-email.mime.image">
+<dt class="sig sig-object py" id="email.mime.image.MIMEImage">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.mime.image.</span></span><span class="sig-name descname"><span class="pre">MIMEImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_imagedata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_subtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_encoder</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">email.encoders.encode_base64</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">compat32</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#email.mime.image.MIMEImage" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">モジュール: <a class="reference internal" href="#module-email.mime.image" title="email.mime.image"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.mime.image</span></code></a></p>
+<p class="untranslated">A subclass of <a class="reference internal" href="#email.mime.nonmultipart.MIMENonMultipart" title="email.mime.nonmultipart.MIMENonMultipart"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIMENonMultipart</span></code></a>, the
+<code class="xref py py-class docutils literal notranslate"><span class="pre">MIMEImage</span></code> class is used to create MIME message objects of major type
+<em class="mimetype">image</em>. <em>_imagedata</em> contains the bytes for the raw image data.  If
+this data type can be detected (jpeg, png, gif, tiff, rgb, pbm, pgm, ppm,
+rast, xbm, bmp, webp, and exr attempted), then the subtype will be
+automatically included in the <em class="mailheader">Content-Type</em> header. Otherwise
+you can explicitly specify the image subtype via the <em>_subtype</em> argument.
+If the minor type could not be guessed and <em>_subtype</em> was not given, then
+<a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> is raised.</p>
+<p class="translated">オプション引数の <em>_encoder</em> は呼び出し可能なオブジェクト (関数など) で、画像データの転送に使う実際のエンコード処理を行います。この呼び出し可能なオブジェクトは引数を 1 つ取り、それは <a class="reference internal" href="#email.mime.image.MIMEImage" title="email.mime.image.MIMEImage"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIMEImage</span></code></a> のインスタンスです。ペイロードをエンコードされた形式に変更するために <a class="reference internal" href="email.compat32-message.html#email.message.Message.get_payload" title="email.message.Message.get_payload"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_payload()</span></code></a> と <a class="reference internal" href="email.compat32-message.html#email.message.Message.set_payload" title="email.message.Message.set_payload"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_payload()</span></code></a> を使い、必要に応じて <em class="mailheader">Content-Transfer-Encoding</em> やその他のヘッダをメッセージオブジェクトに追加するべきです。デフォルトのエンコードは base64 です。組み込みのエンコーダの一覧は <a class="reference internal" href="email.encoders.html#module-email.encoders" title="email.encoders: Encoders for email message payloads."><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.encoders</span></code></a> モジュールを見てください。</p>
+<p class="untranslated">Optional <em>policy</em> argument defaults to <a class="reference internal" href="email.policy.html#email.policy.Compat32" title="email.policy.Compat32"><code class="xref py py-class docutils literal notranslate"><span class="pre">compat32</span></code></a>.</p>
+<p class="translated"><em>_params</em> は <a class="reference internal" href="#email.mime.base.MIMEBase" title="email.mime.base.MIMEBase"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIMEBase</span></code></a> コンストラクタに直接渡されます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span>キーワード専用引数 <em>policy</em> が追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py class" id="module-email.mime.message">
+<dt class="sig sig-object py" id="email.mime.message.MIMEMessage">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.mime.message.</span></span><span class="sig-name descname"><span class="pre">MIMEMessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_subtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'rfc822'</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">compat32</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#email.mime.message.MIMEMessage" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">モジュール: <a class="reference internal" href="#module-email.mime.message" title="email.mime.message"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.mime.message</span></code></a></p>
+<p class="translated"><a class="reference internal" href="#email.mime.message.MIMEMessage" title="email.mime.message.MIMEMessage"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIMEMessage</span></code></a> クラスは <a class="reference internal" href="#email.mime.nonmultipart.MIMENonMultipart" title="email.mime.nonmultipart.MIMENonMultipart"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIMENonMultipart</span></code></a> のサブクラスで、主形式 (maintype) が <em class="mimetype">message</em> の MIME オブジェクトを作成するのに使われます。ペイロードとして使われるメッセージは <em>_msg</em> になります。これは <a class="reference internal" href="email.compat32-message.html#email.message.Message" title="email.message.Message"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code></a> クラス (あるいはそのサブクラス) のインスタンスでなければいけません。そうでない場合、この関数は <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> を発生します。</p>
+<p class="translated">オプション引数 <em>_subtype</em> はそのメッセージの副形式 (subtype) を設定します。デフォルトではこれは <em class="mimetype">rfc822</em> になっています。</p>
+<p class="untranslated">Optional <em>policy</em> argument defaults to <a class="reference internal" href="email.policy.html#email.policy.Compat32" title="email.policy.Compat32"><code class="xref py py-class docutils literal notranslate"><span class="pre">compat32</span></code></a>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span>キーワード専用引数 <em>policy</em> が追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py class" id="module-email.mime.text">
+<dt class="sig sig-object py" id="email.mime.text.MIMEText">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.mime.text.</span></span><span class="sig-name descname"><span class="pre">MIMEText</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_subtype</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'plain'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_charset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">compat32</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#email.mime.text.MIMEText" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">モジュール: <a class="reference internal" href="#module-email.mime.text" title="email.mime.text"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.mime.text</span></code></a></p>
+<p class="translated"><a class="reference internal" href="#email.mime.text.MIMEText" title="email.mime.text.MIMEText"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIMEText</span></code></a> クラスは <a class="reference internal" href="#email.mime.nonmultipart.MIMENonMultipart" title="email.mime.nonmultipart.MIMENonMultipart"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIMENonMultipart</span></code></a> のサブクラスで、主形式 (maintype) が <em class="mimetype">text</em> の MIME オブジェクトを作成するのに使われます。ペイロードの文字列は <em>_text</em> になります。 <em>_subtype</em> には副形式 (subtype) を指定し、デフォルトは <em class="mimetype">plain</em> です。 <em>_charset</em> はテキストの文字セットで、 <code class="xref py py-class docutils literal notranslate"><span class="pre">MIMENonMultipart</span></code> コンストラクタに引数として渡されます。この値は、文字列が <code class="docutils literal notranslate"><span class="pre">ascii</span></code> コードポイントのみを含む場合 <code class="docutils literal notranslate"><span class="pre">us-ascii</span></code> 、それ以外は <code class="docutils literal notranslate"><span class="pre">utf-8</span></code> がデフォルトになっています。 <em>_charset</em> パラメータは、文字列と <a class="reference internal" href="email.charset.html#email.charset.Charset" title="email.charset.Charset"><code class="xref py py-class docutils literal notranslate"><span class="pre">Charset</span></code></a> インスタンスの両方を受け付けます。</p>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">_charset</span></code> 引数に明示的に <code class="docutils literal notranslate"><span class="pre">None</span></code> をセットしない限りは、作成される MIMEText オブジェクトは <code class="docutils literal notranslate"><span class="pre">charset</span></code> の付いた <em class="mailheader">Content-Type</em> ヘッダと <em class="mailheader">Content-Transfer-Endcoding</em> ヘッダの両方を持ちます。これは後続の <code class="docutils literal notranslate"><span class="pre">set_payload</span></code> 呼び出しが、 <code class="docutils literal notranslate"><span class="pre">set_payload</span></code> コマンドに charset が渡したとしてもエンコードされたペイロードにはならないことを意味します。 <code class="docutils literal notranslate"><span class="pre">Content-Transfer-Encoding</span></code> ヘッダを削除することでこの振る舞いを「リセット」出来ます。これにより <code class="docutils literal notranslate"><span class="pre">set_payload</span></code> 呼び出しが新たなペイロードを自動的にエンコード (そして新たな <em class="mailheader">Content-Transfer-Encoding</em> ヘッダを追加) します。</p>
+<p class="untranslated">Optional <em>policy</em> argument defaults to <a class="reference internal" href="email.policy.html#email.policy.Compat32" title="email.policy.Compat32"><code class="xref py py-class docutils literal notranslate"><span class="pre">compat32</span></code></a>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span><em>_charset</em> は <a class="reference internal" href="email.charset.html#email.charset.Charset" title="email.charset.Charset"><code class="xref py py-class docutils literal notranslate"><span class="pre">Charset</span></code></a> インスタンスも受け取ります。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span>キーワード専用引数 <em>policy</em> が追加されました。</p>
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="email.compat32-message.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.message.Message</span></code>: <code class="xref py py-data docutils literal notranslate"><span class="pre">compat32</span></code> API を使用した電子メールメッセージの表現</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="email.header.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.header</span></code>: 国際化されたヘッダー</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/email.mime.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/email.mime.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/email.mime.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="email.header.html" title="email.header: 国際化されたヘッダー"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="email.compat32-message.html" title="email.message.Message: compat32 API を使用した電子メールメッセージの表現"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" >インターネット上のデータの操作</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="email.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code> --- 電子メールと MIME 処理のためのパッケージ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.mime</span></code>: Creating email and MIME objects from scratch</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

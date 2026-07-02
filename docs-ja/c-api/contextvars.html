@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="コンテキスト変数オブジェクト" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/c-api/contextvars.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="この節では、 contextvars モジュールの公開 C API の詳細について説明します。 型チェックマクロ: コンテキストオブジェクトを取り扱う関数: コンテキスト変数の関数:" />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_c-api_contextvars_9df65755.png" />
+<meta property="og:image:alt" content="この節では、 contextvars モジュールの公開 C API の詳細について説明します。 型チェックマクロ: コンテキストオブジェクトを取り扱う関数: コンテキスト変数の関数:" />
+<meta name="description" content="この節では、 contextvars モジュールの公開 C API の詳細について説明します。 型チェックマクロ: コンテキストオブジェクトを取り扱う関数: コンテキスト変数の関数:" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>コンテキスト変数オブジェクト &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="型ヒントのためのオブジェクト" href="typehints.html" />
+    <link rel="prev" title="コルーチンオブジェクト" href="coro.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/c-api/contextvars.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="coro.html"
+                          title="前の章へ">コルーチンオブジェクト</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="typehints.html"
+                          title="次の章へ">型ヒントのためのオブジェクト</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "c-api/contextvars.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/c-api/contextvars.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/c-api/contextvars.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="typehints.html" title="型ヒントのためのオブジェクト"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="coro.html" title="コルーチンオブジェクト"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API reference manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" accesskey="U">具象オブジェクト (concrete object) レイヤ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">コンテキスト変数オブジェクト</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="context-variables-objects">
+<span id="contextvarsobjects"></span><h1 class="translated">コンテキスト変数オブジェクト<a class="headerlink" href="#context-variables-objects" title="Link to this heading">¶</a></h1>
+<div class="versionadded" id="contextvarsobjects-pointertype-change">
+<p><span class="versionmodified added">Added in version 3.7.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7.1 で変更: </span></p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated">Python 3.7.1 で全てのコンテキスト変数の C API のシグネチャは、 <a class="reference internal" href="#c.PyContext" title="PyContext"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyContext</span></code></a>, <a class="reference internal" href="#c.PyContextVar" title="PyContextVar"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyContextVar</span></code></a>, <a class="reference internal" href="#c.PyContextToken" title="PyContextToken"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyContextToken</span></code></a> の代わりに <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyObject</span></code></a> ポインタを使うように <strong>変更</strong> されました。例えば:</p>
+<div class="untranslated highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// in 3.7.0:</span>
+<span class="n">PyContext</span><span class="w"> </span><span class="o">*</span><span class="nf">PyContext_New</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+
+<span class="c1">// in 3.7.1+:</span>
+<span class="n">PyObject</span><span class="w"> </span><span class="o">*</span><span class="nf">PyContext_New</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="translated">詳細は <a class="reference external" href="https://bugs.python.org/issue?&#64;action=redirect&amp;bpo=34762">bpo-34762</a> を参照してください。</p>
+</div>
+</div>
+<p class="translated">この節では、 <a class="reference internal" href="../library/contextvars.html#module-contextvars" title="contextvars: Context Variables"><code class="xref py py-mod docutils literal notranslate"><span class="pre">contextvars</span></code></a> モジュールの公開 C API の詳細について説明します。</p>
+<dl class="c type">
+<dt class="sig sig-object c" id="c.PyContext">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyContext</span></span></span><a class="headerlink" href="#c.PyContext" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated"><a class="reference internal" href="../library/contextvars.html#contextvars.Context" title="contextvars.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">contextvars.Context</span></code></a> オブジェクトを表現するための C 構造体。</p>
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.PyContextVar">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyContextVar</span></span></span><a class="headerlink" href="#c.PyContextVar" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated"><a class="reference internal" href="../library/contextvars.html#contextvars.ContextVar" title="contextvars.ContextVar"><code class="xref py py-class docutils literal notranslate"><span class="pre">contextvars.ContextVar</span></code></a> オブジェクトを表現するための C 構造体。</p>
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.PyContextToken">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyContextToken</span></span></span><a class="headerlink" href="#c.PyContextToken" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated"><a class="reference internal" href="../library/contextvars.html#contextvars.Token" title="contextvars.Token"><code class="xref py py-class docutils literal notranslate"><span class="pre">contextvars.Token</span></code></a> オブジェクトを表現するための C 構造体。</p>
+</dd></dl>
+
+<dl class="c var">
+<dt class="sig sig-object c" id="c.PyContext_Type">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><span class="n"><span class="pre">PyTypeObject</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyContext_Type</span></span></span><a class="headerlink" href="#c.PyContext_Type" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated"><em>コンテキスト</em> 型を表現する型オブジェクト。</p>
+</dd></dl>
+
+<dl class="c var">
+<dt class="sig sig-object c" id="c.PyContextVar_Type">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><span class="n"><span class="pre">PyTypeObject</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyContextVar_Type</span></span></span><a class="headerlink" href="#c.PyContextVar_Type" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated"><em>コンテキスト変数</em> 型を表現する型オブジェクト。</p>
+</dd></dl>
+
+<dl class="c var">
+<dt class="sig sig-object c" id="c.PyContextToken_Type">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><span class="n"><span class="pre">PyTypeObject</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyContextToken_Type</span></span></span><a class="headerlink" href="#c.PyContextToken_Type" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated"><em>コンテキスト変数トークン</em> 型を表現する型オブジェクト。</p>
+</dd></dl>
+
+<p class="translated">型チェックマクロ:</p>
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyContext_CheckExact">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyContext_CheckExact</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">o</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyContext_CheckExact" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated"><em>o</em> が <a class="reference internal" href="#c.PyContext_Type" title="PyContext_Type"><code class="xref c c-data docutils literal notranslate"><span class="pre">PyContext_Type</span></code></a> の場合に真を返します。
+<em>o</em> は <code class="docutils literal notranslate"><span class="pre">NULL</span></code> であってはなりません。
+この関数は常に成功します。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyContextVar_CheckExact">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyContextVar_CheckExact</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">o</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyContextVar_CheckExact" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated"><em>o</em> が <a class="reference internal" href="#c.PyContextVar_Type" title="PyContextVar_Type"><code class="xref c c-data docutils literal notranslate"><span class="pre">PyContextVar_Type</span></code></a> の場合に真を返します。
+<em>o</em> は <code class="docutils literal notranslate"><span class="pre">NULL</span></code> であってはなりません。
+この関数は常に成功します。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyContextToken_CheckExact">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyContextToken_CheckExact</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">o</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyContextToken_CheckExact" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated"><em>o</em> が <a class="reference internal" href="#c.PyContextToken_Type" title="PyContextToken_Type"><code class="xref c c-data docutils literal notranslate"><span class="pre">PyContextToken_Type</span></code></a> の場合に真を返します。
+<em>o</em> は <code class="docutils literal notranslate"><span class="pre">NULL</span></code> であってはなりません。
+この関数は常に成功します。</p>
+</dd></dl>
+
+<p class="translated">コンテキストオブジェクトを取り扱う関数:</p>
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyContext_New">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">PyContext_New</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">void</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyContext_New" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="refcount return_new_ref">戻り値: 新しい参照。</em><p class="translated">新しい空のコンテキストオブジェクトを作成します。
+エラーが起きた場合は <code class="docutils literal notranslate"><span class="pre">NULL</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyContext_Copy">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">PyContext_Copy</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">ctx</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyContext_Copy" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="refcount return_new_ref">戻り値: 新しい参照。</em><p class="translated">渡された <em>ctx</em> コンテキストオブジェクトの浅いコピーを作成します。
+エラーが起きた場合は <code class="docutils literal notranslate"><span class="pre">NULL</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyContext_CopyCurrent">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">PyContext_CopyCurrent</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">void</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyContext_CopyCurrent" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="refcount return_new_ref">戻り値: 新しい参照。</em><p class="translated">現在のコンテキストオブジェクトの浅いコピーを作成します。
+エラーが起きた場合は <code class="docutils literal notranslate"><span class="pre">NULL</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyContext_Enter">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyContext_Enter</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">ctx</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyContext_Enter" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated"><em>ctx</em> を現在のスレッドの現在のコンテキストに設定します。
+成功したら <code class="docutils literal notranslate"><span class="pre">0</span></code> を、失敗したら <code class="docutils literal notranslate"><span class="pre">-1</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyContext_Exit">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyContext_Exit</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">ctx</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyContext_Exit" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated"><em>ctx</em> コンテキストを無効にし、1 つ前のコンテキストを現在のスレッドの現在のコンテキストに復元します。
+成功したら <code class="docutils literal notranslate"><span class="pre">0</span></code> を、失敗したら <code class="docutils literal notranslate"><span class="pre">-1</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyContext_AddWatcher">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyContext_AddWatcher</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.PyContext_WatchCallback" title="PyContext_WatchCallback"><span class="n"><span class="pre">PyContext_WatchCallback</span></span></a><span class="w"> </span><span class="n"><span class="pre">callback</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyContext_AddWatcher" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="untranslated">Register <em>callback</em> as a context object watcher for the current interpreter.
+Return an ID which may be passed to <a class="reference internal" href="#c.PyContext_ClearWatcher" title="PyContext_ClearWatcher"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyContext_ClearWatcher()</span></code></a>.
+In case of error (e.g. no more watcher IDs available),
+return <code class="docutils literal notranslate"><span class="pre">-1</span></code> and set an exception.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyContext_ClearWatcher">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyContext_ClearWatcher</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n"><span class="pre">watcher_id</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyContext_ClearWatcher" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="untranslated">Clear watcher identified by <em>watcher_id</em> previously returned from
+<a class="reference internal" href="#c.PyContext_AddWatcher" title="PyContext_AddWatcher"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyContext_AddWatcher()</span></code></a> for the current interpreter.
+Return <code class="docutils literal notranslate"><span class="pre">0</span></code> on success, or <code class="docutils literal notranslate"><span class="pre">-1</span></code> and set an exception on error
+(e.g. if the given <em>watcher_id</em> was never registered.)</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.PyContextEvent">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyContextEvent</span></span></span><a class="headerlink" href="#c.PyContextEvent" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="untranslated">Enumeration of possible context object watcher events:</p>
+<ul class="simple">
+<li><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">Py_CONTEXT_SWITCHED</span></code>: The <a class="reference internal" href="../glossary.html#term-current-context"><span class="xref std std-term">current context</span></a> has switched to a
+different context.  The object passed to the watch callback is the
+now-current <a class="reference internal" href="../library/contextvars.html#contextvars.Context" title="contextvars.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">contextvars.Context</span></code></a> object, or None if no context is
+current.</p></li>
+</ul>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.PyContext_WatchCallback">
+<span class="k"><span class="pre">typedef</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">PyContext_WatchCallback</span></span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">(</span></span><a class="reference internal" href="#c.PyContextEvent" title="PyContextEvent"><span class="n"><span class="pre">PyContextEvent</span></span></a><span class="w"> </span><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">obj</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#c.PyContext_WatchCallback" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="untranslated">Context object watcher callback function.  The object passed to the callback
+is event-specific; see <a class="reference internal" href="#c.PyContextEvent" title="PyContextEvent"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyContextEvent</span></code></a> for details.</p>
+<p class="untranslated">If the callback returns with an exception set, it must return <code class="docutils literal notranslate"><span class="pre">-1</span></code>; this
+exception will be printed as an unraisable exception using
+<a class="reference internal" href="exceptions.html#c.PyErr_FormatUnraisable" title="PyErr_FormatUnraisable"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyErr_FormatUnraisable()</span></code></a>. Otherwise it should return <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
+<p class="untranslated">There may already be a pending exception set on entry to the callback. In
+this case, the callback should return <code class="docutils literal notranslate"><span class="pre">0</span></code> with the same exception still
+set. This means the callback may not call any other API that can set an
+exception unless it saves and clears the exception state first, and restores
+it before returning.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<p class="translated">コンテキスト変数の関数:</p>
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyContextVar_New">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">PyContextVar_New</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">name</span></span>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">def</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyContextVar_New" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="refcount return_new_ref">戻り値: 新しい参照。</em><p class="translated">新しい <code class="docutils literal notranslate"><span class="pre">ContextVar</span></code> オブジェクトを作成します。<em>name</em> 引数は内部走査とデバッグの目的で使われます。<em>def</em> 引数はコンテキスト変数のデフォルト値を指定するか、デフォルトがない場合は <code class="docutils literal notranslate"><span class="pre">NULL</span></code> です。エラーが起きた場合は、関数は <code class="docutils literal notranslate"><span class="pre">NULL</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyContextVar_Get">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyContextVar_Get</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">var</span></span>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">default_value</span></span>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyContextVar_Get" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated">コンテキスト変数の値を取得します。
+取得中にエラーが起きた場合は <code class="docutils literal notranslate"><span class="pre">-1</span></code> を、値が見付かっても見付からなくてもエラーが起きなかった場合は <code class="docutils literal notranslate"><span class="pre">0</span></code> を返します。</p>
+<p class="translated">コンテキスト変数が見付かった場合、 <em>value</em> はそれを指すポインタになっています。
+コンテキスト変数が見付から <em>なかった</em> 場合は、 <em>value</em> が指すものは次のようになっています:</p>
+<ul class="simple">
+<li><p class="translated">(<code class="docutils literal notranslate"><span class="pre">NULL</span></code> でなければ) <em>default_value</em></p></li>
+<li><p class="translated">(<code class="docutils literal notranslate"><span class="pre">NULL</span></code> でなければ) <em>var</em> のデフォルト値</p></li>
+<li><p class="translated"><code class="docutils literal notranslate"><span class="pre">NULL</span></code></p></li>
+</ul>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">NULL</span></code> を除けば、この関数は新しい参照を返します。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyContextVar_Set">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">PyContextVar_Set</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">var</span></span>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyContextVar_Set" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="refcount return_new_ref">戻り値: 新しい参照。</em><p class="translated">現在のコンテキストにおいて <em>var</em> の値を <em>value</em> にセットします。この変更による新しいトークンオブジェクトか、エラーが起こった場合は``NULL``を返します。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyContextVar_Reset">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyContextVar_Reset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">var</span></span>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">token</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyContextVar_Reset" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated"><em>var</em> コンテキスト変数の状態をリセットし、 <em>token</em> を返した <a class="reference internal" href="#c.PyContextVar_Set" title="PyContextVar_Set"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyContextVar_Set()</span></code></a> が呼ばれる前の状態に戻します。
+この関数は成功したら <code class="docutils literal notranslate"><span class="pre">0</span></code> 、失敗したら <code class="docutils literal notranslate"><span class="pre">-1</span></code> を返します。</p>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="coro.html"
+                          title="前の章へ">コルーチンオブジェクト</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="typehints.html"
+                          title="次の章へ">型ヒントのためのオブジェクト</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "c-api/contextvars.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/c-api/contextvars.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/c-api/contextvars.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="typehints.html" title="型ヒントのためのオブジェクト"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="coro.html" title="コルーチンオブジェクト"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API reference manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" >具象オブジェクト (concrete object) レイヤ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">コンテキスト変数オブジェクト</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

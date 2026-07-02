@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="参照カウント" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/c-api/refcounting.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="このセクションにある関数とマクロは、 Python オブジェクトの参照カウントの管理に使用されます。" />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_c-api_refcounting_bf470e98.png" />
+<meta property="og:image:alt" content="このセクションにある関数とマクロは、 Python オブジェクトの参照カウントの管理に使用されます。" />
+<meta name="description" content="このセクションにある関数とマクロは、 Python オブジェクトの参照カウントの管理に使用されます。" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>参照カウント &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="例外処理" href="exceptions.html" />
+    <link rel="prev" title="超高水準レイヤ" href="veryhigh.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/c-api/refcounting.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="veryhigh.html"
+                          title="前の章へ">超高水準レイヤ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="exceptions.html"
+                          title="次の章へ">例外処理</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "c-api/refcounting.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/c-api/refcounting.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/c-api/refcounting.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="exceptions.html" title="例外処理"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="veryhigh.html" title="超高水準レイヤ"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Python/C API reference manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">参照カウント</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="reference-counting">
+<span id="countingrefs"></span><h1 class="translated">参照カウント<a class="headerlink" href="#reference-counting" title="Link to this heading">¶</a></h1>
+<p class="translated">このセクションにある関数とマクロは、 Python オブジェクトの参照カウントの管理に使用されます。</p>
+<dl class="c function">
+<dt class="sig sig-object c" id="c.Py_REFCNT">
+<a class="reference internal" href="intro.html#c.Py_ssize_t" title="Py_ssize_t"><span class="n"><span class="pre">Py_ssize_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Py_REFCNT</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">o</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_REFCNT" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a> (バージョン 3.14 より).</em><p class="translated">Python オブジェクト <em>o</em> の参照カウントを取得します。</p>
+<p class="translated">戻り値は、実際に保持されているオブジェクトの参照の数を実際に反映しているとは限らないことに注意してください。例えば、一部のオブジェクトは永続 (<a class="reference internal" href="../glossary.html#term-immortal"><span class="xref std std-term">immortal</span></a>) であり、実際の参照の数を反映しない非常に高い参照数を持ちます。したがって、 0 か 1 の値以外では、正確な戻り値に頼らないでください。</p>
+<p class="translated">オブジェクトの参照カウントを設定するためには、 <a class="reference internal" href="#c.Py_SET_REFCNT" title="Py_SET_REFCNT"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_SET_REFCNT()</span></code></a> 関数を使用してください。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">On <a class="reference internal" href="../glossary.html#term-free-threaded-build"><span class="xref std std-term">free-threaded builds</span></a> of Python, returning 1
+isn't sufficient to determine if it's safe to treat <em>o</em> as having no
+access by other threads. Use <a class="reference internal" href="object.html#c.PyUnstable_Object_IsUniquelyReferenced" title="PyUnstable_Object_IsUniquelyReferenced"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyUnstable_Object_IsUniquelyReferenced()</span></code></a>
+for that instead.</p>
+<p class="untranslated">See also the function <a class="reference internal" href="object.html#c.PyUnstable_Object_IsUniqueReferencedTemporary" title="PyUnstable_Object_IsUniqueReferencedTemporary"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyUnstable_Object_IsUniqueReferencedTemporary()</span></code></a>.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.10 で変更: </span><a class="reference internal" href="#c.Py_REFCNT" title="Py_REFCNT"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_REFCNT()</span></code></a> は static なインライン関数に変更されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.11 で変更: </span>引数の型は <span class="c-expr sig sig-inline c"><span class="k">const</span><span class="w"> </span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n">PyObject</span></a><span class="p">*</span></span> ではなくなりました。</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.Py_SET_REFCNT">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Py_SET_REFCNT</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">o</span></span>, <a class="reference internal" href="intro.html#c.Py_ssize_t" title="Py_ssize_t"><span class="n"><span class="pre">Py_ssize_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">refcnt</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_SET_REFCNT" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated">オブジェクト <em>o</em> の参照カウントを <em>refcnt</em> に設定します。</p>
+<p class="translated"><a class="reference internal" href="../using/configure.html#free-threading-build"><span class="std std-ref">フリースレッドな Python ビルド</span></a> では、 <em>refcnt</em> が <code class="docutils literal notranslate"><span class="pre">UINT32_MAX</span></code> より大きい場合、オブジェクトは永続 (<a class="reference internal" href="../glossary.html#term-immortal"><span class="xref std std-term">immortal</span></a>) となります。</p>
+<p class="translated">この関数は永続 (<a class="reference internal" href="../glossary.html#term-immortal"><span class="xref std std-term">immortal</span></a>) オブジェクトには何もしません。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.9.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.12 で変更: </span>永続オブジェクトは変更されません。</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.Py_INCREF">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Py_INCREF</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">o</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_INCREF" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated">オブジェクト <em>o</em> への新しい <a class="reference internal" href="../glossary.html#term-strong-reference"><span class="xref std std-term">強参照</span></a> を取得し、それが使用中で破棄されてはならないことを示します。</p>
+<p class="translated">この関数は永続 (<a class="reference internal" href="../glossary.html#term-immortal"><span class="xref std std-term">immortal</span></a>) オブジェクトには何もしません。</p>
+<p class="untranslated">This function is usually used to convert a <a class="reference internal" href="../glossary.html#term-borrowed-reference"><span class="xref std std-term">borrowed reference</span></a> to a
+<a class="reference internal" href="../glossary.html#term-strong-reference"><span class="xref std std-term">strong reference</span></a> in-place. The <a class="reference internal" href="#c.Py_NewRef" title="Py_NewRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_NewRef()</span></code></a> function can be
+used to create a new <span class="xref std std-term">strong reference</span>.</p>
+<p class="untranslated">When done using the object, release is by calling <a class="reference internal" href="#c.Py_DECREF" title="Py_DECREF"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_DECREF()</span></code></a>.</p>
+<p class="translated">オブジェクトが <code class="docutils literal notranslate"><span class="pre">NULL</span></code> であってはいけません。それが <code class="docutils literal notranslate"><span class="pre">NULL</span></code> ではないと確信が持てないならば、 <a class="reference internal" href="#c.Py_XINCREF" title="Py_XINCREF"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_XINCREF()</span></code></a> を使ってください。</p>
+<p class="untranslated">Do not expect this function to actually modify <em>o</em> in any way.
+For at least <span class="target" id="index-0"></span><a class="pep reference external" href="https://peps.python.org/pep-0683/"><strong>some objects</strong></a>,
+this function has no effect.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.12 で変更: </span>永続オブジェクトは変更されません。</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.Py_XINCREF">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Py_XINCREF</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">o</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_XINCREF" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="untranslated">Similar to <a class="reference internal" href="#c.Py_INCREF" title="Py_INCREF"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_INCREF()</span></code></a>, but the object <em>o</em> can be <code class="docutils literal notranslate"><span class="pre">NULL</span></code>,
+in which case this has no effect.</p>
+<p class="untranslated">See also <a class="reference internal" href="#c.Py_XNewRef" title="Py_XNewRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_XNewRef()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.Py_NewRef">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">Py_NewRef</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">o</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_NewRef" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a> (バージョン 3.10 より).</em><p class="untranslated">Create a new <a class="reference internal" href="../glossary.html#term-strong-reference"><span class="xref std std-term">strong reference</span></a> to an object:
+call <a class="reference internal" href="#c.Py_INCREF" title="Py_INCREF"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_INCREF()</span></code></a> on <em>o</em> and return the object <em>o</em>.</p>
+<p class="untranslated">When the <a class="reference internal" href="../glossary.html#term-strong-reference"><span class="xref std std-term">strong reference</span></a> is no longer needed, <a class="reference internal" href="#c.Py_DECREF" title="Py_DECREF"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_DECREF()</span></code></a>
+should be called on it to release the reference.</p>
+<p class="untranslated">The object <em>o</em> must not be <code class="docutils literal notranslate"><span class="pre">NULL</span></code>; use <a class="reference internal" href="#c.Py_XNewRef" title="Py_XNewRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_XNewRef()</span></code></a> if <em>o</em> can be
+<code class="docutils literal notranslate"><span class="pre">NULL</span></code>.</p>
+<p class="translated">例えば:</p>
+<div class="untranslated highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">Py_INCREF</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>
+<span class="n">self</span><span class="o">-&gt;</span><span class="n">attr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">obj</span><span class="p">;</span>
+</pre></div>
+</div>
+<p class="untranslated">can be written as:</p>
+<div class="untranslated highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">self</span><span class="o">-&gt;</span><span class="n">attr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Py_NewRef</span><span class="p">(</span><span class="n">obj</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="untranslated">See also <a class="reference internal" href="#c.Py_INCREF" title="Py_INCREF"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_INCREF()</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.Py_XNewRef">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">Py_XNewRef</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">o</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_XNewRef" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a> (バージョン 3.10 より).</em><p class="untranslated">Similar to <a class="reference internal" href="#c.Py_NewRef" title="Py_NewRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_NewRef()</span></code></a>, but the object <em>o</em> can be NULL.</p>
+<p class="untranslated">If the object <em>o</em> is <code class="docutils literal notranslate"><span class="pre">NULL</span></code>, the function just returns <code class="docutils literal notranslate"><span class="pre">NULL</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.Py_DECREF">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Py_DECREF</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">o</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_DECREF" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="untranslated">Release a <a class="reference internal" href="../glossary.html#term-strong-reference"><span class="xref std std-term">strong reference</span></a> to object <em>o</em>, indicating the
+reference is no longer used.</p>
+<p class="translated">この関数は永続 (<a class="reference internal" href="../glossary.html#term-immortal"><span class="xref std std-term">immortal</span></a>) オブジェクトには何もしません。</p>
+<p class="untranslated">Once the last <a class="reference internal" href="../glossary.html#term-strong-reference"><span class="xref std std-term">strong reference</span></a> is released
+(i.e. the object's reference count reaches 0),
+the object's type's deallocation
+function (which must not be <code class="docutils literal notranslate"><span class="pre">NULL</span></code>) is invoked.</p>
+<p class="untranslated">This function is usually used to delete a <a class="reference internal" href="../glossary.html#term-strong-reference"><span class="xref std std-term">strong reference</span></a> before
+exiting its scope.</p>
+<p class="translated">オブジェクトが <code class="docutils literal notranslate"><span class="pre">NULL</span></code> であってはいけません。それが <code class="docutils literal notranslate"><span class="pre">NULL</span></code> ではないと確信が持てないならば、 <a class="reference internal" href="#c.Py_XDECREF" title="Py_XDECREF"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_XDECREF()</span></code></a> を使ってください。</p>
+<p class="untranslated">Do not expect this function to actually modify <em>o</em> in any way.
+For at least <span class="target" id="index-1"></span><a class="pep reference external" href="https://peps.python.org/pep-0683/"><strong>some objects</strong></a>,
+this function has no effect.</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p class="untranslated">The deallocation function can cause arbitrary Python code to be invoked (e.g.
+when a class instance with a <a class="reference internal" href="../reference/datamodel.html#object.__del__" title="object.__del__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__del__()</span></code></a> method is deallocated).  While
+exceptions in such code are not propagated, the executed code has free access to
+all Python global variables.  This means that any object that is reachable from
+a global variable should be in a consistent state before <a class="reference internal" href="#c.Py_DECREF" title="Py_DECREF"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_DECREF()</span></code></a> is
+invoked.  For example, code to delete an object from a list should copy a
+reference to the deleted object in a temporary variable, update the list data
+structure, and then call <code class="xref c c-func docutils literal notranslate"><span class="pre">Py_DECREF()</span></code> for the temporary variable.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.12 で変更: </span>永続オブジェクトは変更されません。</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.Py_XDECREF">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Py_XDECREF</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">o</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_XDECREF" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="untranslated">Similar to <a class="reference internal" href="#c.Py_DECREF" title="Py_DECREF"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_DECREF()</span></code></a>, but the object <em>o</em> can be <code class="docutils literal notranslate"><span class="pre">NULL</span></code>,
+in which case this has no effect.
+The same warning from <code class="xref c c-func docutils literal notranslate"><span class="pre">Py_DECREF()</span></code> applies here as well.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.Py_CLEAR">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Py_CLEAR</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">o</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_CLEAR" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="untranslated">Release a <a class="reference internal" href="../glossary.html#term-strong-reference"><span class="xref std std-term">strong reference</span></a> for object <em>o</em>.
+The object may be <code class="docutils literal notranslate"><span class="pre">NULL</span></code>, in
+which case the macro has no effect; otherwise the effect is the same as for
+<a class="reference internal" href="#c.Py_DECREF" title="Py_DECREF"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_DECREF()</span></code></a>, except that the argument is also set to <code class="docutils literal notranslate"><span class="pre">NULL</span></code>.  The warning
+for <code class="xref c c-func docutils literal notranslate"><span class="pre">Py_DECREF()</span></code> does not apply with respect to the object passed because
+the macro carefully uses a temporary variable and sets the argument to <code class="docutils literal notranslate"><span class="pre">NULL</span></code>
+before releasing the reference.</p>
+<p class="untranslated">It is a good idea to use this macro whenever releasing a reference
+to an object that might be traversed during garbage collection.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.12 で変更: </span>The macro argument is now only evaluated once. If the argument has side
+effects, these are no longer duplicated.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.Py_IncRef">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Py_IncRef</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">o</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_IncRef" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><p class="untranslated">Indicate taking a new <a class="reference internal" href="../glossary.html#term-strong-reference"><span class="xref std std-term">strong reference</span></a> to object <em>o</em>.
+A function version of <a class="reference internal" href="#c.Py_XINCREF" title="Py_XINCREF"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_XINCREF()</span></code></a>.
+It can be used for runtime dynamic embedding of Python.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.Py_DecRef">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Py_DecRef</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">o</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_DecRef" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><p class="untranslated">Release a <a class="reference internal" href="../glossary.html#term-strong-reference"><span class="xref std std-term">strong reference</span></a> to object <em>o</em>.
+A function version of <a class="reference internal" href="#c.Py_XDECREF" title="Py_XDECREF"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_XDECREF()</span></code></a>.
+It can be used for runtime dynamic embedding of Python.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.Py_SETREF">
+<span class="sig-name descname"><span class="n"><span class="pre">Py_SETREF</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dst</span></span>, <span class="n"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_SETREF" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="untranslated">Macro safely releasing a <a class="reference internal" href="../glossary.html#term-strong-reference"><span class="xref std std-term">strong reference</span></a> to object <em>dst</em>
+and setting <em>dst</em> to <em>src</em>.</p>
+<p class="untranslated">As in case of <a class="reference internal" href="#c.Py_CLEAR" title="Py_CLEAR"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_CLEAR()</span></code></a>, &quot;the obvious&quot; code can be deadly:</p>
+<div class="untranslated highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">Py_DECREF</span><span class="p">(</span><span class="n">dst</span><span class="p">);</span>
+<span class="n">dst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">src</span><span class="p">;</span>
+</pre></div>
+</div>
+<p class="untranslated">The safe way is:</p>
+<div class="untranslated highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">Py_SETREF</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span><span class="w"> </span><span class="n">src</span><span class="p">);</span>
+</pre></div>
+</div>
+<p class="untranslated">That arranges to set <em>dst</em> to <em>src</em> <em>before</em> releasing the reference
+to the old value of <em>dst</em>, so that any code triggered as a side-effect
+of <em>dst</em> getting torn down no longer believes <em>dst</em> points
+to a valid object.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.6.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.12 で変更: </span>The macro arguments are now only evaluated once. If an argument has side
+effects, these are no longer duplicated.</p>
+</div>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.Py_XSETREF">
+<span class="sig-name descname"><span class="n"><span class="pre">Py_XSETREF</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">dst</span></span>, <span class="n"><span class="pre">src</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.Py_XSETREF" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="untranslated">Variant of <a class="reference internal" href="#c.Py_SETREF" title="Py_SETREF"><code class="xref c c-macro docutils literal notranslate"><span class="pre">Py_SETREF</span></code></a> macro that uses <a class="reference internal" href="#c.Py_XDECREF" title="Py_XDECREF"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_XDECREF()</span></code></a> instead
+of <a class="reference internal" href="#c.Py_DECREF" title="Py_DECREF"><code class="xref c c-func docutils literal notranslate"><span class="pre">Py_DECREF()</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.6.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.12 で変更: </span>The macro arguments are now only evaluated once. If an argument has side
+effects, these are no longer duplicated.</p>
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="veryhigh.html"
+                          title="前の章へ">超高水準レイヤ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="exceptions.html"
+                          title="次の章へ">例外処理</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "c-api/refcounting.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/c-api/refcounting.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/c-api/refcounting.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="exceptions.html" title="例外処理"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="veryhigh.html" title="超高水準レイヤ"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API reference manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">参照カウント</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

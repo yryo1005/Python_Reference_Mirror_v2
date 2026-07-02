@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="uuid --- RFC 9562 に基づく UUID オブジェクト" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/uuid.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/uuid.py This module provides immutable UUID objects (the UUID class) and functions for generating UUIDs corresponding to a specific UUID version as specified in RFC 9562(which supersede..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_uuid_a90ec510.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/uuid.py This module provides immutable UUID objects (the UUID class) and functions for generating UUIDs corresponding to a specific UUID version as specified in RFC 9562(which supersede..." />
+<meta name="description" content="ソースコード: Lib/uuid.py This module provides immutable UUID objects (the UUID class) and functions for generating UUIDs corresponding to a specific UUID version as specified in RFC 9562(which supersede..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>uuid --- RFC 9562 に基づく UUID オブジェクト &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="socketserver --- ネットワークサーバーのフレームワーク" href="socketserver.html" />
+    <link rel="prev" title="smtplib --- SMTP プロトコルクライアント" href="smtplib.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/uuid.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">uuid</span></code> --- <strong>RFC 9562</strong> に基づく UUID オブジェクト</a><ul>
+<li><a class="reference internal" href="#command-line-usage">コマンドラインからの使用</a></li>
+<li><a class="reference internal" href="#example">使用例</a></li>
+<li><a class="reference internal" href="#command-line-example">Command-Line Example</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="smtplib.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">smtplib</span></code> --- SMTP プロトコルクライアント</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="socketserver.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">socketserver</span></code> --- ネットワークサーバーのフレームワーク</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/uuid.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/uuid.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/uuid.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="socketserver.html" title="socketserver --- ネットワークサーバーのフレームワーク"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="smtplib.html" title="smtplib --- SMTP プロトコルクライアント"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="internet.html" accesskey="U">インターネットプロトコルとサポート</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">uuid</span></code> --- <strong>RFC 9562</strong> に基づく UUID オブジェクト</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-uuid">
+<span id="uuid-uuid-objects-according-to-rfc-9562"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">uuid</span></code> --- <span class="target" id="index-19"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc9562.html"><strong>RFC 9562</strong></a> に基づく UUID オブジェクト<a class="headerlink" href="#module-uuid" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/uuid.py">Lib/uuid.py</a></p>
+<hr class="docutils" />
+<p class="untranslated">This module provides immutable <a class="reference internal" href="#uuid.UUID" title="uuid.UUID"><code class="xref py py-class docutils literal notranslate"><span class="pre">UUID</span></code></a> objects (the <code class="xref py py-class docutils literal notranslate"><span class="pre">UUID</span></code> class)
+and <a class="reference internal" href="#uuid-factory-functions"><span class="std std-ref">functions</span></a> for generating UUIDs corresponding
+to a specific UUID version as specified in <span class="target" id="index-1"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc9562.html"><strong>RFC 9562</strong></a> (which supersedes <span class="target" id="index-2"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc4122.html"><strong>RFC 4122</strong></a>),
+for example, <a class="reference internal" href="#uuid.uuid1" title="uuid.uuid1"><code class="xref py py-func docutils literal notranslate"><span class="pre">uuid1()</span></code></a> for UUID version 1, <a class="reference internal" href="#uuid.uuid3" title="uuid.uuid3"><code class="xref py py-func docutils literal notranslate"><span class="pre">uuid3()</span></code></a> for UUID version 3, and so on.
+Note that UUID version 2 is deliberately omitted as it is outside the scope of the RFC.</p>
+<p class="translated">もしユニークな ID が必要なだけであれば、おそらく <a class="reference internal" href="#uuid.uuid1" title="uuid.uuid1"><code class="xref py py-func docutils literal notranslate"><span class="pre">uuid1()</span></code></a> か <a class="reference internal" href="#uuid.uuid4" title="uuid.uuid4"><code class="xref py py-func docutils literal notranslate"><span class="pre">uuid4()</span></code></a> を呼び出せば良いでしょう。 <code class="xref py py-func docutils literal notranslate"><span class="pre">uuid1()</span></code> はコンピュータのネットワークアドレスを含む UUID を生成するためにプライバシーを侵害するかもしれない点に注意してください。 <code class="xref py py-func docutils literal notranslate"><span class="pre">uuid4()</span></code> はランダムな UUID を生成します。</p>
+<p class="untranslated">Depending on support from the underlying platform, <a class="reference internal" href="#uuid.uuid1" title="uuid.uuid1"><code class="xref py py-func docutils literal notranslate"><span class="pre">uuid1()</span></code></a> may or may
+not return a &quot;safe&quot; UUID.  A safe UUID is one which is generated using
+synchronization methods that ensure no two processes can obtain the same
+UUID.  All instances of <a class="reference internal" href="#uuid.UUID" title="uuid.UUID"><code class="xref py py-class docutils literal notranslate"><span class="pre">UUID</span></code></a> have an <a class="reference internal" href="#uuid.UUID.is_safe" title="uuid.UUID.is_safe"><code class="xref py py-attr docutils literal notranslate"><span class="pre">is_safe</span></code></a> attribute
+which relays any information about the UUID's safety, using this enumeration:</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="uuid.SafeUUID">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">SafeUUID</span></span><a class="headerlink" href="#uuid.SafeUUID" title="Link to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.7.</span></p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.SafeUUID.safe">
+<span class="sig-name descname"><span class="pre">safe</span></span><a class="headerlink" href="#uuid.SafeUUID.safe" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">UUID は並列処理に対して安全なプラットフォームで生成された</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.SafeUUID.unsafe">
+<span class="sig-name descname"><span class="pre">unsafe</span></span><a class="headerlink" href="#uuid.SafeUUID.unsafe" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">UUID は並列処理に対して安全なプラットフォームで生成されなかった</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.SafeUUID.unknown">
+<span class="sig-name descname"><span class="pre">unknown</span></span><a class="headerlink" href="#uuid.SafeUUID.unknown" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">プラットフォームは、UUID が安全に生成されたかどうかの情報を提供しなかった</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="uuid.UUID">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">UUID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hex</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bytes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bytes_le</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">int</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_safe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">SafeUUID.unknown</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#uuid.UUID" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">32 桁の 16 進数文字列、<em>bytes</em> に 16 バイトのビッグエンディアンの文字列、<em>bytes_le</em> 引数に 16 バイトのリトルエンディアンの文字列、<em>fields</em> 引数に 6 つの整数のタプル（32ビット <em>time_low</em>, 16 ビット <em>time_mid</em>, 16ビット <em>time_hi_version</em>, 8ビット <em>clock_seq_hi_variant</em>, 8ビット <em>clock_seq_low</em>, 48ビット <em>node</em> ）、または <em>int</em> に一つの 128 ビット整数のいずれかから UUID を生成します。16 進数が与えられた時、波括弧、ハイフン、それと URN 接頭辞は無視されます。例えば、これらの表現は全て同じ UUID を払い出します:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">UUID</span><span class="p">(</span><span class="s1">&#39;{12345678-1234-5678-1234-567812345678}&#39;</span><span class="p">)</span>
+<span class="n">UUID</span><span class="p">(</span><span class="s1">&#39;12345678123456781234567812345678&#39;</span><span class="p">)</span>
+<span class="n">UUID</span><span class="p">(</span><span class="s1">&#39;urn:uuid:12345678-1234-5678-1234-567812345678&#39;</span><span class="p">)</span>
+<span class="n">UUID</span><span class="p">(</span><span class="nb">bytes</span><span class="o">=</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x12\x34\x56\x78</span><span class="s1">&#39;</span><span class="o">*</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">UUID</span><span class="p">(</span><span class="n">bytes_le</span><span class="o">=</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x78\x56\x34\x12\x34\x12\x78\x56</span><span class="s1">&#39;</span> <span class="o">+</span>
+              <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x12\x34\x56\x78\x12\x34\x56\x78</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">UUID</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">(</span><span class="mh">0x12345678</span><span class="p">,</span> <span class="mh">0x1234</span><span class="p">,</span> <span class="mh">0x5678</span><span class="p">,</span> <span class="mh">0x12</span><span class="p">,</span> <span class="mh">0x34</span><span class="p">,</span> <span class="mh">0x567812345678</span><span class="p">))</span>
+<span class="n">UUID</span><span class="p">(</span><span class="nb">int</span><span class="o">=</span><span class="mh">0x12345678123456781234567812345678</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="untranslated">Exactly one of <em>hex</em>, <em>bytes</em>, <em>bytes_le</em>, <em>fields</em>, or <em>int</em> must be given.
+The <em>version</em> argument is optional; if given, the resulting UUID will have its
+variant and version number set according to <span class="target" id="index-3"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc9562.html"><strong>RFC 9562</strong></a>, overriding bits in the
+given <em>hex</em>, <em>bytes</em>, <em>bytes_le</em>, <em>fields</em>, or <em>int</em>.</p>
+<p class="translated">2つのUUIDオブジェクトの比較は、<a class="reference internal" href="#uuid.UUID.int" title="uuid.UUID.int"><code class="xref py py-attr docutils literal notranslate"><span class="pre">UUID.int</span></code></a> 属性の比較によって行われます。UUIDではないオブジェクトとの比較は、 <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> を送出します。</p>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">str(uuid)</span></code> は 32桁の16進でUUIDを表す``12345678-1234-5678-1234-567812345678`` 形式の文字列を返します。</p>
+</dd></dl>
+
+<p class="translated"><a class="reference internal" href="#uuid.UUID" title="uuid.UUID"><code class="xref py py-class docutils literal notranslate"><span class="pre">UUID</span></code></a> インスタンスは以下の読み出し専用属性を持ちます:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.UUID.bytes">
+<span class="sig-prename descclassname"><span class="pre">UUID.</span></span><span class="sig-name descname"><span class="pre">bytes</span></span><a class="headerlink" href="#uuid.UUID.bytes" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">16 バイト文字列（バイトオーダーがビッグエンディアンの 6 つの整数フィールドを持つ）のUUID。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.UUID.bytes_le">
+<span class="sig-prename descclassname"><span class="pre">UUID.</span></span><span class="sig-name descname"><span class="pre">bytes_le</span></span><a class="headerlink" href="#uuid.UUID.bytes_le" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">16 バイト文字列（ <em>time_low</em>, <em>time_mid</em>, <em>time_hi_version</em> をリトルエンディアンで持つ）の UUID。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.UUID.fields">
+<span class="sig-prename descclassname"><span class="pre">UUID.</span></span><span class="sig-name descname"><span class="pre">fields</span></span><a class="headerlink" href="#uuid.UUID.fields" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">UUID の 6 つの整数フィールドを持つタプルで、これは 6 つの個別の属性と 2 つの派生した属性としても取得可能です:</p>
+</dd></dl>
+
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p class="translated">フィールド</p></td>
+<td><p class="translated">意味</p></td>
+</tr>
+<tr class="row-even"><td><dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.UUID.time_low">
+<span class="sig-prename descclassname"><span class="pre">UUID.</span></span><span class="sig-name descname"><span class="pre">time_low</span></span><a class="headerlink" href="#uuid.UUID.time_low" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</td>
+<td><p class="untranslated">The first 32 bits of the UUID. Only relevant to version 1.</p></td>
+</tr>
+<tr class="row-odd"><td><dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.UUID.time_mid">
+<span class="sig-prename descclassname"><span class="pre">UUID.</span></span><span class="sig-name descname"><span class="pre">time_mid</span></span><a class="headerlink" href="#uuid.UUID.time_mid" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</td>
+<td><p class="untranslated">The next 16 bits of the UUID. Only relevant to version 1.</p></td>
+</tr>
+<tr class="row-even"><td><dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.UUID.time_hi_version">
+<span class="sig-prename descclassname"><span class="pre">UUID.</span></span><span class="sig-name descname"><span class="pre">time_hi_version</span></span><a class="headerlink" href="#uuid.UUID.time_hi_version" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</td>
+<td><p class="untranslated">The next 16 bits of the UUID. Only relevant to version 1.</p></td>
+</tr>
+<tr class="row-odd"><td><dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.UUID.clock_seq_hi_variant">
+<span class="sig-prename descclassname"><span class="pre">UUID.</span></span><span class="sig-name descname"><span class="pre">clock_seq_hi_variant</span></span><a class="headerlink" href="#uuid.UUID.clock_seq_hi_variant" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</td>
+<td><p class="untranslated">The next 8 bits of the UUID. Only relevant to versions 1 and 6.</p></td>
+</tr>
+<tr class="row-even"><td><dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.UUID.clock_seq_low">
+<span class="sig-prename descclassname"><span class="pre">UUID.</span></span><span class="sig-name descname"><span class="pre">clock_seq_low</span></span><a class="headerlink" href="#uuid.UUID.clock_seq_low" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</td>
+<td><p class="untranslated">The next 8 bits of the UUID. Only relevant to versions 1 and 6.</p></td>
+</tr>
+<tr class="row-odd"><td><dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.UUID.node">
+<span class="sig-prename descclassname"><span class="pre">UUID.</span></span><span class="sig-name descname"><span class="pre">node</span></span><a class="headerlink" href="#uuid.UUID.node" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</td>
+<td><p class="untranslated">The last 48 bits of the UUID. Only relevant to version 1.</p></td>
+</tr>
+<tr class="row-even"><td><dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.UUID.time">
+<span class="sig-prename descclassname"><span class="pre">UUID.</span></span><span class="sig-name descname"><span class="pre">time</span></span><a class="headerlink" href="#uuid.UUID.time" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</td>
+<td><p class="untranslated">The 60-bit timestamp as a count of 100-nanosecond intervals since
+Gregorian epoch (1582-10-15 00:00:00) for versions 1 and 6, or the
+48-bit timestamp in milliseconds since Unix epoch (1970-01-01 00:00:00)
+for version 7.</p></td>
+</tr>
+<tr class="row-odd"><td><dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.UUID.clock_seq">
+<span class="sig-prename descclassname"><span class="pre">UUID.</span></span><span class="sig-name descname"><span class="pre">clock_seq</span></span><a class="headerlink" href="#uuid.UUID.clock_seq" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</td>
+<td><p class="untranslated">The 14-bit sequence number. Only relevant to versions 1 and 6.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.UUID.hex">
+<span class="sig-prename descclassname"><span class="pre">UUID.</span></span><span class="sig-name descname"><span class="pre">hex</span></span><a class="headerlink" href="#uuid.UUID.hex" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">32 文字の小文字 16 進数文字列での UUID。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.UUID.int">
+<span class="sig-prename descclassname"><span class="pre">UUID.</span></span><span class="sig-name descname"><span class="pre">int</span></span><a class="headerlink" href="#uuid.UUID.int" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">128 ビット整数での UUID。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.UUID.urn">
+<span class="sig-prename descclassname"><span class="pre">UUID.</span></span><span class="sig-name descname"><span class="pre">urn</span></span><a class="headerlink" href="#uuid.UUID.urn" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The UUID as a URN as specified in <span class="target" id="index-4"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc9562.html"><strong>RFC 9562</strong></a>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.UUID.variant">
+<span class="sig-prename descclassname"><span class="pre">UUID.</span></span><span class="sig-name descname"><span class="pre">variant</span></span><a class="headerlink" href="#uuid.UUID.variant" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">UUID の内部レイアウトを決定する UUID の variant。これは定数 <a class="reference internal" href="#uuid.RESERVED_NCS" title="uuid.RESERVED_NCS"><code class="xref py py-const docutils literal notranslate"><span class="pre">RESERVED_NCS</span></code></a>, <a class="reference internal" href="#uuid.RFC_4122" title="uuid.RFC_4122"><code class="xref py py-const docutils literal notranslate"><span class="pre">RFC_4122</span></code></a>, <a class="reference internal" href="#uuid.RESERVED_MICROSOFT" title="uuid.RESERVED_MICROSOFT"><code class="xref py py-const docutils literal notranslate"><span class="pre">RESERVED_MICROSOFT</span></code></a>, <a class="reference internal" href="#uuid.RESERVED_FUTURE" title="uuid.RESERVED_FUTURE"><code class="xref py py-const docutils literal notranslate"><span class="pre">RESERVED_FUTURE</span></code></a> のいずれかです。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.UUID.version">
+<span class="sig-prename descclassname"><span class="pre">UUID.</span></span><span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#uuid.UUID.version" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The UUID version number (1 through 8, meaningful only when the variant is
+<a class="reference internal" href="#uuid.RFC_4122" title="uuid.RFC_4122"><code class="xref py py-const docutils literal notranslate"><span class="pre">RFC_4122</span></code></a>).</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.14 で変更: </span>Added UUID versions 6, 7 and 8.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="uuid.UUID.is_safe">
+<span class="sig-prename descclassname"><span class="pre">UUID.</span></span><span class="sig-name descname"><span class="pre">is_safe</span></span><a class="headerlink" href="#uuid.UUID.is_safe" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#uuid.SafeUUID" title="uuid.SafeUUID"><code class="xref py py-class docutils literal notranslate"><span class="pre">SafeUUID</span></code></a> の列挙で、UUID は並列処理に対して安全なプラットフォームで生成されたかを示す。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.7.</span></p>
+</div>
+</dd></dl>
+
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">uuid</span></code> module defines the following functions:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="uuid.getnode">
+<span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">getnode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#uuid.getnode" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">48 ビットの正の整数としてハードウェアアドレスを取得します。最初にこれを起動すると、別個のプログラムが立ち上がって非常に遅くなることがあります。もしハードウェアを取得する試みが全て失敗すると、ランダムな 48 ビットを、<span class="target" id="index-21"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc4122.html"><strong>RFC 4122</strong></a> で推奨されているように、マルチキャストビット (最初のオクテットの最下位ビット) を 1 に設定して使います。&quot;ハードウェアアドレス&quot; とはネットワークインターフェースの MAC アドレスを指します。複数のネットワークインターフェースを持つマシンの場合、全域管理されたMACアドレス (最初のオクテットの下位より2番目のビットが <em>設定されていない</em> MACアドレス) が、他の個別管理アドレスよりも優先的に使用されます。この優先順序は保証されません。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7 で変更: </span>全域管理されたMACアドレスは、グローバルに固有であると保証されるため、固有である保証のない個別管理アドレスよりも好ましいです。</p>
+</div>
+</dd></dl>
+
+<dl class="py function" id="uuid-factory-functions">
+<dt class="sig sig-object py" id="uuid.uuid1">
+<span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">uuid1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clock_seq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#uuid.uuid1" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Generate a UUID from a host ID, sequence number, and the current time
+according to <span class="target" id="index-6"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc9562.html#section-5.1"><strong>RFC 9562, §5.1</strong></a>.</p>
+<p class="untranslated">When <em>node</em> is not specified, <a class="reference internal" href="#uuid.getnode" title="uuid.getnode"><code class="xref py py-func docutils literal notranslate"><span class="pre">getnode()</span></code></a> is used to obtain the hardware
+address as a 48-bit positive integer. When a sequence number <em>clock_seq</em> is
+not specified, a pseudo-random 14-bit positive integer is generated.</p>
+<p class="untranslated">If <em>node</em> or <em>clock_seq</em> exceed their expected bit count,
+only their least significant bits are kept.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="uuid.uuid3">
+<span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">uuid3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">namespace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#uuid.uuid3" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Generate a UUID based on the MD5 hash of a namespace identifier (which is a
+UUID) and a name (which is a <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object or a string
+that will be encoded using UTF-8)
+according to <span class="target" id="index-7"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc9562.html#section-5.3"><strong>RFC 9562, §5.3</strong></a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="uuid.uuid4">
+<span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">uuid4</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#uuid.uuid4" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Generate a random UUID in a cryptographically-secure method
+according to <span class="target" id="index-8"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc9562.html#section-5.4"><strong>RFC 9562, §5.4</strong></a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="uuid.uuid5">
+<span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">uuid5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">namespace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#uuid.uuid5" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Generate a UUID based on the SHA-1 hash of a namespace identifier (which is a
+UUID) and a name (which is a <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> object or a string
+that will be encoded using UTF-8)
+according to <span class="target" id="index-9"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc9562.html#section-5.5"><strong>RFC 9562, §5.5</strong></a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="uuid.uuid6">
+<span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">uuid6</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clock_seq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#uuid.uuid6" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Generate a UUID from a sequence number and the current time according to
+<span class="target" id="index-10"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc9562.html#section-5.6"><strong>RFC 9562, §5.6</strong></a>.</p>
+<p class="untranslated">This is an alternative to <a class="reference internal" href="#uuid.uuid1" title="uuid.uuid1"><code class="xref py py-func docutils literal notranslate"><span class="pre">uuid1()</span></code></a> to improve database locality.</p>
+<p class="untranslated">When <em>node</em> is not specified, <a class="reference internal" href="#uuid.getnode" title="uuid.getnode"><code class="xref py py-func docutils literal notranslate"><span class="pre">getnode()</span></code></a> is used to obtain the hardware
+address as a 48-bit positive integer. When a sequence number <em>clock_seq</em> is
+not specified, a pseudo-random 14-bit positive integer is generated.</p>
+<p class="untranslated">If <em>node</em> or <em>clock_seq</em> exceed their expected bit count,
+only their least significant bits are kept.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="uuid.uuid7">
+<span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">uuid7</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#uuid.uuid7" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Generate a time-based UUID according to
+<span class="target" id="index-11"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc9562.html#section-5.7"><strong>RFC 9562, §5.7</strong></a>.</p>
+<p class="untranslated">For portability across platforms lacking sub-millisecond precision, UUIDs
+produced by this function embed a 48-bit timestamp and use a 42-bit counter
+to guarantee monotonicity within a millisecond.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="uuid.uuid8">
+<span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">uuid8</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#uuid.uuid8" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Generate a pseudo-random UUID according to
+<span class="target" id="index-12"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc9562.html#section-5.8"><strong>RFC 9562, §5.8</strong></a>.</p>
+<p class="untranslated">When specified, the parameters <em>a</em>, <em>b</em> and <em>c</em> are expected to be
+positive integers of 48, 12 and 62 bits respectively. If they exceed
+their expected bit count, only their least significant bits are kept;
+non-specified arguments are substituted for a pseudo-random integer of
+appropriate size.</p>
+<p class="untranslated">By default, <em>a</em>, <em>b</em> and <em>c</em> are not generated by a cryptographically
+secure pseudo-random number generator (CSPRNG). Use <a class="reference internal" href="#uuid.uuid4" title="uuid.uuid4"><code class="xref py py-func docutils literal notranslate"><span class="pre">uuid4()</span></code></a> when
+a UUID needs to be used in a security-sensitive context.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">uuid</span></code> module defines the following namespace identifiers for use with
+<a class="reference internal" href="#uuid.uuid3" title="uuid.uuid3"><code class="xref py py-func docutils literal notranslate"><span class="pre">uuid3()</span></code></a> or <a class="reference internal" href="#uuid.uuid5" title="uuid.uuid5"><code class="xref py py-func docutils literal notranslate"><span class="pre">uuid5()</span></code></a>.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="uuid.NAMESPACE_DNS">
+<span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">NAMESPACE_DNS</span></span><a class="headerlink" href="#uuid.NAMESPACE_DNS" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">この名前空間が指定された場合、<em>name</em> 文字列は完全修飾ドメイン名です。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="uuid.NAMESPACE_URL">
+<span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">NAMESPACE_URL</span></span><a class="headerlink" href="#uuid.NAMESPACE_URL" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">この名前空間が指定された場合、<em>name</em> 文字列は URL です。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="uuid.NAMESPACE_OID">
+<span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">NAMESPACE_OID</span></span><a class="headerlink" href="#uuid.NAMESPACE_OID" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">この名前空間が指定された場合、<em>name</em> 文字列は ISO OID です。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="uuid.NAMESPACE_X500">
+<span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">NAMESPACE_X500</span></span><a class="headerlink" href="#uuid.NAMESPACE_X500" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">この名前空間が指定された場合、<em>name</em> 文字列は X.500 DN の DER またはテキスト出力形式です。</p>
+</dd></dl>
+
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">uuid</span></code> module defines the following constants for the possible values
+of the <a class="reference internal" href="#uuid.UUID.variant" title="uuid.UUID.variant"><code class="xref py py-attr docutils literal notranslate"><span class="pre">variant</span></code></a> attribute:</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="uuid.RESERVED_NCS">
+<span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">RESERVED_NCS</span></span><a class="headerlink" href="#uuid.RESERVED_NCS" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">NCS 互換性のために予約されています。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="uuid.RFC_4122">
+<span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">RFC_4122</span></span><a class="headerlink" href="#uuid.RFC_4122" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Specifies the UUID layout given in <span class="target" id="index-13"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc4122.html"><strong>RFC 4122</strong></a>. This constant is kept
+for backward compatibility even though <span class="target" id="index-14"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc4122.html"><strong>RFC 4122</strong></a> has been superseded
+by <span class="target" id="index-15"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc9562.html"><strong>RFC 9562</strong></a>.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="uuid.RESERVED_MICROSOFT">
+<span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">RESERVED_MICROSOFT</span></span><a class="headerlink" href="#uuid.RESERVED_MICROSOFT" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Microsoft の互換性のために予約されています。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="uuid.RESERVED_FUTURE">
+<span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">RESERVED_FUTURE</span></span><a class="headerlink" href="#uuid.RESERVED_FUTURE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">将来のために予約されています。</p>
+</dd></dl>
+
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">uuid</span></code> module defines the special Nil and Max UUID values:</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="uuid.NIL">
+<span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">NIL</span></span><a class="headerlink" href="#uuid.NIL" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">A special form of UUID that is specified to have all 128 bits set to zero
+according to <span class="target" id="index-16"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc9562.html#section-5.9"><strong>RFC 9562, §5.9</strong></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="uuid.MAX">
+<span class="sig-prename descclassname"><span class="pre">uuid.</span></span><span class="sig-name descname"><span class="pre">MAX</span></span><a class="headerlink" href="#uuid.MAX" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">A special form of UUID that is specified to have all 128 bits set to one
+according to <span class="target" id="index-17"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc9562.html#section-5.10"><strong>RFC 9562, §5.10</strong></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<dl class="simple">
+<dt class="untranslated"><span class="target" id="index-18"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc9562.html"><strong>RFC 9562</strong></a> - A Universally Unique IDentifier (UUID) URN Namespace</dt><dd><p class="translated">この仕様は UUID のための Uniform Resource Name 名前空間、UUID の内部フォーマットと UUID の生成方法を定義しています。</p>
+</dd>
+</dl>
+</div>
+<section id="command-line-usage">
+<span id="uuid-cli"></span><h2 class="translated">コマンドラインからの使用<a class="headerlink" href="#command-line-usage" title="Link to this heading">¶</a></h2>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.12.</span></p>
+</div>
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">uuid</span></code> module can be executed as a script from the command line.</p>
+<div class="untranslated highlight-sh notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>uuid<span class="w"> </span><span class="o">[</span>-h<span class="o">]</span><span class="w"> </span><span class="o">[</span>-u<span class="w"> </span><span class="o">{</span>uuid1,uuid3,uuid4,uuid5,uuid6,uuid7,uuid8<span class="o">}]</span><span class="w"> </span><span class="o">[</span>-n<span class="w"> </span>NAMESPACE<span class="o">]</span><span class="w"> </span><span class="o">[</span>-N<span class="w"> </span>NAME<span class="o">]</span>
+</pre></div>
+</div>
+<p class="translated">以下のオプションが使用できます:</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-uuid-h">
+<span id="cmdoption-uuid-help"></span><span class="sig-name descname"><span class="pre">-h</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--help</span></span><span class="sig-prename descclassname"></span><a class="headerlink" href="#cmdoption-uuid-h" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ヘルプメッセージを表示して終了します。</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-uuid-u">
+<span class="sig-name descname"><span class="pre">-u</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;uuid&gt;</span></span><a class="headerlink" href="#cmdoption-uuid-u" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object std" id="cmdoption-uuid-uuid">
+<span class="sig-name descname"><span class="pre">--uuid</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;uuid&gt;</span></span><a class="headerlink" href="#cmdoption-uuid-uuid" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Specify the function name to use to generate the uuid. By default <a class="reference internal" href="#uuid.uuid4" title="uuid.uuid4"><code class="xref py py-func docutils literal notranslate"><span class="pre">uuid4()</span></code></a>
+is used.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.14 で変更: </span>Allow generating UUID versions 6, 7 and 8.</p>
+</div>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-uuid-n">
+<span class="sig-name descname"><span class="pre">-n</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;namespace&gt;</span></span><a class="headerlink" href="#cmdoption-uuid-n" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object std" id="cmdoption-uuid-namespace">
+<span class="sig-name descname"><span class="pre">--namespace</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;namespace&gt;</span></span><a class="headerlink" href="#cmdoption-uuid-namespace" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The namespace is a <code class="docutils literal notranslate"><span class="pre">UUID</span></code>, or <code class="docutils literal notranslate"><span class="pre">&#64;ns</span></code> where <code class="docutils literal notranslate"><span class="pre">ns</span></code> is a well-known predefined UUID
+addressed by namespace name. Such as <code class="docutils literal notranslate"><span class="pre">&#64;dns</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;url</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;oid</span></code>, and <code class="docutils literal notranslate"><span class="pre">&#64;x500</span></code>.
+Only required for <a class="reference internal" href="#uuid.uuid3" title="uuid.uuid3"><code class="xref py py-func docutils literal notranslate"><span class="pre">uuid3()</span></code></a> / <a class="reference internal" href="#uuid.uuid5" title="uuid.uuid5"><code class="xref py py-func docutils literal notranslate"><span class="pre">uuid5()</span></code></a> functions.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-uuid-N">
+<span class="sig-name descname"><span class="pre">-N</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;name&gt;</span></span><a class="headerlink" href="#cmdoption-uuid-N" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object std" id="cmdoption-uuid-name">
+<span class="sig-name descname"><span class="pre">--name</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;name&gt;</span></span><a class="headerlink" href="#cmdoption-uuid-name" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The name used as part of generating the uuid. Only required for
+<a class="reference internal" href="#uuid.uuid3" title="uuid.uuid3"><code class="xref py py-func docutils literal notranslate"><span class="pre">uuid3()</span></code></a> / <a class="reference internal" href="#uuid.uuid5" title="uuid.uuid5"><code class="xref py py-func docutils literal notranslate"><span class="pre">uuid5()</span></code></a> functions.</p>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-uuid-C">
+<span class="sig-name descname"><span class="pre">-C</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;num&gt;</span></span><a class="headerlink" href="#cmdoption-uuid-C" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object std" id="cmdoption-uuid-count">
+<span class="sig-name descname"><span class="pre">--count</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;num&gt;</span></span><a class="headerlink" href="#cmdoption-uuid-count" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Generate <em>num</em> fresh UUIDs.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+</section>
+<section id="example">
+<span id="uuid-example"></span><h2 class="translated">使用例<a class="headerlink" href="#example" title="Link to this heading">¶</a></h2>
+<p class="untranslated">Here are some examples of typical usage of the <code class="xref py py-mod docutils literal notranslate"><span class="pre">uuid</span></code> module:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># make a UUID based on the host ID and current time</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid1</span><span class="p">()</span>
+<span class="go">UUID(&#39;a8098c1a-f86e-11da-bd1a-00112444be1e&#39;)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># make a UUID using an MD5 hash of a namespace UUID and a name</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid3</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">NAMESPACE_DNS</span><span class="p">,</span> <span class="s1">&#39;python.org&#39;</span><span class="p">)</span>
+<span class="go">UUID(&#39;6fa459ea-ee8a-3ca4-894e-db77e160355e&#39;)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># make a random UUID</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span>
+<span class="go">UUID(&#39;16fd2706-8baf-433b-82eb-8c7fada847da&#39;)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># make a UUID using a SHA-1 hash of a namespace UUID and a name</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid5</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">NAMESPACE_DNS</span><span class="p">,</span> <span class="s1">&#39;python.org&#39;</span><span class="p">)</span>
+<span class="go">UUID(&#39;886313e1-3b8a-5372-9b90-0c9aee199e5d&#39;)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># make a UUID from a string of hex digits (braces and hyphens ignored)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">(</span><span class="s1">&#39;{00010203-0405-0607-0809-0a0b0c0d0e0f}&#39;</span><span class="p">)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># convert a UUID to a string of hex digits in standard form</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">&#39;00010203-0405-0607-0809-0a0b0c0d0e0f&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># get the raw 16 bytes of the UUID</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span><span class="o">.</span><span class="n">bytes</span>
+<span class="go">b&#39;\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\x0c\r\x0e\x0f&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># make a UUID from a 16-byte string</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">(</span><span class="nb">bytes</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">bytes</span><span class="p">)</span>
+<span class="go">UUID(&#39;00010203-0405-0607-0809-0a0b0c0d0e0f&#39;)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># get the Nil UUID</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uuid</span><span class="o">.</span><span class="n">NIL</span>
+<span class="go">UUID(&#39;00000000-0000-0000-0000-000000000000&#39;)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># get the Max UUID</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uuid</span><span class="o">.</span><span class="n">MAX</span>
+<span class="go">UUID(&#39;ffffffff-ffff-ffff-ffff-ffffffffffff&#39;)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># same as UUIDv1 but with fields reordered to improve DB locality</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid6</span><span class="p">()</span>
+<span class="go">UUID(&#39;1f0799c0-98b9-62db-92c6-a0d365b91053&#39;)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># get UUIDv7 creation (local) time as a timestamp in milliseconds</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid7</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="o">.</span><span class="n">time</span>
+<span class="go">1743936859822</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># get UUIDv7 creation (local) time as a datetime object</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">u</span><span class="o">.</span><span class="n">time</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="go">datetime.datetime(...)</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># make a UUID with custom blocks</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid8</span><span class="p">(</span><span class="mh">0x12345678</span><span class="p">,</span> <span class="mh">0x9abcdef0</span><span class="p">,</span> <span class="mh">0x11223344</span><span class="p">)</span>
+<span class="go">UUID(&#39;00001234-5678-8ef0-8000-000011223344&#39;)</span>
+</pre></div>
+</div>
+</section>
+<section id="command-line-example">
+<span id="uuid-cli-example"></span><h2 class="untranslated">Command-Line Example<a class="headerlink" href="#command-line-example" title="Link to this heading">¶</a></h2>
+<p class="untranslated">Here are some examples of typical usage of the <code class="xref py py-mod docutils literal notranslate"><span class="pre">uuid</span></code> command-line interface:</p>
+<div class="untranslated highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># generate a random UUID - by default uuid4() is used</span>
+$<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>uuid
+
+<span class="c1"># generate a UUID using uuid1()</span>
+$<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>uuid<span class="w"> </span>-u<span class="w"> </span>uuid1
+
+<span class="c1"># generate a UUID using uuid5</span>
+$<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>uuid<span class="w"> </span>-u<span class="w"> </span>uuid5<span class="w"> </span>-n<span class="w"> </span>@url<span class="w"> </span>-N<span class="w"> </span>example.com
+
+<span class="c1"># generate 42 random UUIDs</span>
+$<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>uuid<span class="w"> </span>-C<span class="w"> </span><span class="m">42</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">uuid</span></code> --- <strong>RFC 9562</strong> に基づく UUID オブジェクト</a><ul>
+<li><a class="reference internal" href="#command-line-usage">コマンドラインからの使用</a></li>
+<li><a class="reference internal" href="#example">使用例</a></li>
+<li><a class="reference internal" href="#command-line-example">Command-Line Example</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="smtplib.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">smtplib</span></code> --- SMTP プロトコルクライアント</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="socketserver.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">socketserver</span></code> --- ネットワークサーバーのフレームワーク</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/uuid.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/uuid.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/uuid.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="socketserver.html" title="socketserver --- ネットワークサーバーのフレームワーク"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="smtplib.html" title="smtplib --- SMTP プロトコルクライアント"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="internet.html" >インターネットプロトコルとサポート</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">uuid</span></code> --- <strong>RFC 9562</strong> に基づく UUID オブジェクト</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="pdb --- The Python Debugger" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/pdb.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/pdb.py The module pdb defines an interactive source code debugger for Python programs. It supports setting (conditional) breakpoints and single stepping at the source line level, inspec..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_pdb_430415f9.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/pdb.py The module pdb defines an interactive source code debugger for Python programs. It supports setting (conditional) breakpoints and single stepping at the source line level, inspec..." />
+<meta name="description" content="ソースコード: Lib/pdb.py The module pdb defines an interactive source code debugger for Python programs. It supports setting (conditional) breakpoints and single stepping at the source line level, inspec..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>pdb --- The Python Debugger &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="The Python Profilers" href="profile.html" />
+    <link rel="prev" title="faulthandler --- Python トレースバックをダンプする" href="faulthandler.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/pdb.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pdb</span></code> --- The Python Debugger</a><ul>
+<li><a class="reference internal" href="#command-line-interface">コマンドライン・インターフェース</a></li>
+<li><a class="reference internal" href="#debugger-commands">Debugger commands</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="faulthandler.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">faulthandler</span></code> --- Python トレースバックをダンプする</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="profile.html"
+                          title="次の章へ">The Python Profilers</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/pdb.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/pdb.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/pdb.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="profile.html" title="The Python Profilers"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="faulthandler.html" title="faulthandler --- Python トレースバックをダンプする"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="debug.html" accesskey="U">Debugging and Profiling</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pdb</span></code> --- The Python Debugger</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-pdb">
+<span id="pdb-the-python-debugger"></span><span id="debugger"></span><h1 class="untranslated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pdb</span></code> --- The Python Debugger<a class="headerlink" href="#module-pdb" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/pdb.py">Lib/pdb.py</a></p>
+<hr class="docutils" id="index-0" />
+<p class="untranslated">The module <code class="xref py py-mod docutils literal notranslate"><span class="pre">pdb</span></code> defines an interactive source code debugger for Python
+programs.  It supports setting (conditional) breakpoints and single stepping at
+the source line level, inspection of stack frames, source code listing, and
+evaluation of arbitrary Python code in the context of any stack frame.  It also
+supports post-mortem debugging and can be called under program control.</p>
+<p class="translated" id="index-1">デバッガーは拡張可能です -- 実際にはクラス <a class="reference internal" href="#pdb.Pdb" title="pdb.Pdb"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pdb</span></code></a> として定義されています。現在これについてのドキュメントはありませんが、ソースを読めば簡単に理解できます。拡張インターフェースはモジュール <a class="reference internal" href="bdb.html#module-bdb" title="bdb: Debugger framework."><code class="xref py py-mod docutils literal notranslate"><span class="pre">bdb</span></code></a> と <a class="reference internal" href="cmd.html#module-cmd" title="cmd: Build line-oriented command interpreters."><code class="xref py py-mod docutils literal notranslate"><span class="pre">cmd</span></code></a> を使っています。</p>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<dl class="simple">
+<dt class="translated"><a class="reference internal" href="faulthandler.html#module-faulthandler" title="faulthandler: Dump the Python traceback."><code class="xref py py-mod docutils literal notranslate"><span class="pre">faulthandler</span></code></a> モジュール</dt><dd><p class="untranslated">Used to dump Python tracebacks explicitly, on a fault, after a timeout,
+or on a user signal.</p>
+</dd>
+<dt class="translated"><a class="reference internal" href="traceback.html#module-traceback" title="traceback: Print or retrieve a stack traceback."><code class="xref py py-mod docutils literal notranslate"><span class="pre">traceback</span></code></a> モジュール</dt><dd><p class="untranslated">Standard interface to extract, format and print stack traces of Python programs.</p>
+</dd>
+</dl>
+</div>
+<p class="untranslated">The typical usage to break into the debugger is to insert:</p>
+<div class="translated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pdb</span><span class="p">;</span> <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="translated">もしくは:</p>
+<div class="translated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nb">breakpoint</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="untranslated">at the location you want to break into the debugger, and then run the program.
+You can then step through the code following this statement, and continue
+running without the debugger using the <a class="reference internal" href="#pdbcommand-continue"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">continue</span></code></a> command.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7 で変更: </span>The built-in <a class="reference internal" href="functions.html#breakpoint" title="breakpoint"><code class="xref py py-func docutils literal notranslate"><span class="pre">breakpoint()</span></code></a>, when called with defaults, can be used
+instead of <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">pdb;</span> <span class="pre">pdb.set_trace()</span></code>.</p>
+</div>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">double</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+   <span class="nb">breakpoint</span><span class="p">()</span>
+   <span class="k">return</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span>
+<span class="n">val</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">val</span><span class="si">}</span><span class="s2"> * 2 is </span><span class="si">{</span><span class="n">double</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="untranslated">The debugger's prompt is <code class="docutils literal notranslate"><span class="pre">(Pdb)</span></code>, which is the indicator that you are in debug mode:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="o">...</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="n">double</span><span class="p">()</span>
+<span class="o">-&gt;</span> <span class="nb">breakpoint</span><span class="p">()</span>
+<span class="p">(</span><span class="n">Pdb</span><span class="p">)</span> <span class="n">p</span> <span class="n">x</span>
+<span class="mi">3</span>
+<span class="p">(</span><span class="n">Pdb</span><span class="p">)</span> <span class="k">continue</span>
+<span class="mi">3</span> <span class="o">*</span> <span class="mi">2</span> <span class="ow">is</span> <span class="mi">6</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span><a class="reference internal" href="readline.html#module-readline" title="readline: GNU readline support for Python."><code class="xref py py-mod docutils literal notranslate"><span class="pre">readline</span></code></a> モジュールによるコマンドおよびコマンド引数のタブ補完が利用できます。たとえば、<code class="docutils literal notranslate"><span class="pre">p</span></code> コマンドの引数では現在のグローバルおよびローカル名が候補として表示されます。</p>
+</div>
+<section id="command-line-interface">
+<span id="pdb-cli"></span><h2 class="translated">コマンドライン・インターフェース<a class="headerlink" href="#command-line-interface" title="Link to this heading">¶</a></h2>
+<p class="untranslated">You can also invoke <code class="xref py py-mod docutils literal notranslate"><span class="pre">pdb</span></code> from the command line to debug other scripts.  For
+example:</p>
+<div class="translated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pdb</span> <span class="p">[</span><span class="o">-</span><span class="n">c</span> <span class="n">command</span><span class="p">]</span> <span class="p">(</span><span class="o">-</span><span class="n">m</span> <span class="n">module</span> <span class="o">|</span> <span class="o">-</span><span class="n">p</span> <span class="n">pid</span> <span class="o">|</span> <span class="n">pyfile</span><span class="p">)</span> <span class="p">[</span><span class="n">args</span> <span class="o">...</span><span class="p">]</span>
+</pre></div>
+</div>
+<p class="translated">モジュールとして pdb を起動すると、デバッグ中のプログラムが異常終了したときに pdb が自動的に事後デバッグモードに入ります。事後デバッグ後 (またはプログラムの正常終了後)、pdb はプログラムを再起動します。自動再起動を行った場合、pdb の状態 (ブレークポイントなど) はそのまま維持されるので、たいていの場合、プログラム終了時にデバッガーも終了させるよりも便利なはずです。</p>
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-pdb-c">
+<span id="cmdoption-pdb-command"></span><span class="sig-name descname"><span class="pre">-c</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--command</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;command&gt;</span></span><a class="headerlink" href="#cmdoption-pdb-c" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">To execute commands as if given in a <code class="file docutils literal notranslate"><span class="pre">.pdbrc</span></code> file; see
+<a class="reference internal" href="#debugger-commands"><span class="std std-ref">Debugger commands</span></a>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span><code class="docutils literal notranslate"><span class="pre">-c</span></code> オプションが追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-pdb-m">
+<span class="sig-name descname"><span class="pre">-m</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;module&gt;</span></span><a class="headerlink" href="#cmdoption-pdb-m" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">To execute modules similar to the way <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span></code> does. As with a script,
+the debugger will pause execution just before the first line of the module.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7 で変更: </span><code class="docutils literal notranslate"><span class="pre">-m</span></code> オプションが追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="std option">
+<dt class="sig sig-object std" id="cmdoption-pdb-p">
+<span id="cmdoption-pdb-pid"></span><span class="sig-name descname"><span class="pre">-p</span></span><span class="sig-prename descclassname"></span><span class="sig-prename descclassname"><span class="pre">,</span> </span><span class="sig-name descname"><span class="pre">--pid</span></span><span class="sig-prename descclassname"> <span class="pre">&lt;pid&gt;</span></span><a class="headerlink" href="#cmdoption-pdb-p" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Attach to the process with the specified PID.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<p class="untranslated">To attach to a running Python process for remote debugging, use the <code class="docutils literal notranslate"><span class="pre">-p</span></code> or
+<code class="docutils literal notranslate"><span class="pre">--pid</span></code> option with the target process's PID:</p>
+<div class="translated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pdb</span> <span class="o">-</span><span class="n">p</span> <span class="mi">1234</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">Attaching to a process that is blocked in a system call or waiting for I/O
+will only work once the next bytecode instruction is executed or when the
+process receives a signal.</p>
+</div>
+<p class="untranslated">Typical usage to execute a statement under control of the debugger is:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pdb</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">x</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pdb</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;f(2)&quot;</span><span class="p">)</span>
+<span class="go">&gt; &lt;string&gt;(1)&lt;module&gt;()</span>
+<span class="go">(Pdb) continue</span>
+<span class="go">0.5</span>
+<span class="gp">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p class="translated">クラッシュしたプログラムを調べるための典型的な使い方は以下のようになります:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">pdb</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">x</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">f</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">1</span>, in <span class="n">&lt;module&gt;</span>
+  File <span class="nb">&quot;&lt;stdin&gt;&quot;</span>, line <span class="m">2</span>, in <span class="n">f</span>
+<span class="gr">ZeroDivisionError</span>: <span class="n">division by zero</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pdb</span><span class="o">.</span><span class="n">pm</span><span class="p">()</span>
+<span class="go">&gt; &lt;stdin&gt;(2)f()</span>
+<span class="go">(Pdb) p x</span>
+<span class="go">0</span>
+<span class="go">(Pdb)</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span>The implementation of <span class="target" id="index-2"></span><a class="pep reference external" href="https://peps.python.org/pep-0667/"><strong>PEP 667</strong></a> means that name assignments made via <code class="docutils literal notranslate"><span class="pre">pdb</span></code>
+will immediately affect the active scope, even when running inside an
+<a class="reference internal" href="../glossary.html#term-optimized-scope"><span class="xref std std-term">optimized scope</span></a>.</p>
+</div>
+<p class="translated">このモジュールは以下の関数を定義しています。それぞれが少しづつ違った方法でデバッガに入ります:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pdb.run">
+<span class="sig-prename descclassname"><span class="pre">pdb.</span></span><span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">statement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pdb.run" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">デバッガーに制御された状態で (文字列またはコードオブジェクトとして与えられた) <em>statement</em> を実行します。あらゆるコードが実行される前にデバッガープロンプトが現れます。ブレークポイントを設定し、<a class="reference internal" href="#pdbcommand-continue"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">continue</span></code></a> とタイプできます。あるいは、文を <a class="reference internal" href="#pdbcommand-step"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">step</span></code></a> や <a class="reference internal" href="#pdbcommand-next"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">next</span></code></a> を使って一つづつ実行することができます (これらのコマンドはすべて下で説明します)。オプションの <em>globals</em> と <em>locals</em> 引数はコードを実行する環境を指定します。デフォルトでは、モジュール <a class="reference internal" href="__main__.html#module-__main__" title="__main__: The environment where top-level code is run. Covers command-line interfaces, import-time behavior, and ``__name__ == '__main__'``."><code class="xref py py-mod docutils literal notranslate"><span class="pre">__main__</span></code></a> の辞書が使われます。(組み込み関数 <a class="reference internal" href="functions.html#exec" title="exec"><code class="xref py py-func docutils literal notranslate"><span class="pre">exec()</span></code></a> または <a class="reference internal" href="functions.html#eval" title="eval"><code class="xref py py-func docutils literal notranslate"><span class="pre">eval()</span></code></a> の説明を参照してください。)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pdb.runeval">
+<span class="sig-prename descclassname"><span class="pre">pdb.</span></span><span class="sig-name descname"><span class="pre">runeval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expression</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pdb.runeval" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">デバッガーに制御された状態で (文字列またはコードオブジェクトとして与えられる) <em>expression</em> を評価します。<a class="reference internal" href="#pdb.runeval" title="pdb.runeval"><code class="xref py py-func docutils literal notranslate"><span class="pre">runeval()</span></code></a> から復帰するとき、式の値を返します。その他の点では、この関数は <a class="reference internal" href="#pdb.run" title="pdb.run"><code class="xref py py-func docutils literal notranslate"><span class="pre">run()</span></code></a> と同様です。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pdb.runcall">
+<span class="sig-prename descclassname"><span class="pre">pdb.</span></span><span class="sig-name descname"><span class="pre">runcall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pdb.runcall" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>function</em> (関数またはメソッドオブジェクト、文字列ではありません) を与えられた引数とともに呼び出します。 <a class="reference internal" href="#pdb.runcall" title="pdb.runcall"><code class="xref py py-func docutils literal notranslate"><span class="pre">runcall()</span></code></a> から復帰するとき、関数呼び出しが返したものはなんでも返します。関数に入るとすぐにデバッガプロンプトが現れます。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pdb.set_trace">
+<span class="sig-prename descclassname"><span class="pre">pdb.</span></span><span class="sig-name descname"><span class="pre">set_trace</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commands</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pdb.set_trace" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Enter the debugger at the calling stack frame.  This is useful to hard-code
+a breakpoint at a given point in a program, even if the code is not
+otherwise being debugged (e.g. when an assertion fails).  If given,
+<em>header</em> is printed to the console just before debugging begins.
+The <em>commands</em> argument, if given, is a list of commands to execute
+when the debugger starts.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7 で変更: </span><em>header</em> キーワード専用引数。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span><code class="xref py py-func docutils literal notranslate"><span class="pre">set_trace()</span></code> will enter the debugger immediately, rather than
+on the next line of code to be executed.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14: </span>The <em>commands</em> argument.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pdb.set_trace_async">
+<em class="property"><span class="pre">awaitable</span> </em><span class="sig-prename descclassname"><span class="pre">pdb.</span></span><span class="sig-name descname"><span class="pre">set_trace_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">commands</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pdb.set_trace_async" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">async version of <a class="reference internal" href="#pdb.set_trace" title="pdb.set_trace"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_trace()</span></code></a>. This function should be used inside an
+async function with <a class="reference internal" href="../reference/expressions.html#await"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">await</span></code></a>.</p>
+<div class="untranslated highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">():</span>
+    <span class="k">await</span> <span class="n">pdb</span><span class="o">.</span><span class="n">set_trace_async</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="untranslated"><a class="reference internal" href="../reference/expressions.html#await"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">await</span></code></a> statements are supported if the debugger is invoked by this function.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pdb.post_mortem">
+<span class="sig-prename descclassname"><span class="pre">pdb.</span></span><span class="sig-name descname"><span class="pre">post_mortem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">t</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pdb.post_mortem" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Enter post-mortem debugging of the given exception or
+<a class="reference internal" href="../reference/datamodel.html#traceback-objects"><span class="std std-ref">traceback object</span></a>. If no value is given, it uses
+the exception that is currently being handled, or raises <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> if
+there isn’t one.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span>例外オブジェクトのサポートが追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pdb.pm">
+<span class="sig-prename descclassname"><span class="pre">pdb.</span></span><span class="sig-name descname"><span class="pre">pm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pdb.pm" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Enter post-mortem debugging of the exception found in
+<a class="reference internal" href="sys.html#sys.last_exc" title="sys.last_exc"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.last_exc</span></code></a>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pdb.set_default_backend">
+<span class="sig-prename descclassname"><span class="pre">pdb.</span></span><span class="sig-name descname"><span class="pre">set_default_backend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">backend</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pdb.set_default_backend" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">There are two supported backends for pdb: <code class="docutils literal notranslate"><span class="pre">'settrace'</span></code> and <code class="docutils literal notranslate"><span class="pre">'monitoring'</span></code>.
+See <a class="reference internal" href="bdb.html#bdb.Bdb" title="bdb.Bdb"><code class="xref py py-class docutils literal notranslate"><span class="pre">bdb.Bdb</span></code></a> for details. The user can set the default backend to
+use if none is specified when instantiating <a class="reference internal" href="#pdb.Pdb" title="pdb.Pdb"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pdb</span></code></a>. If no backend is
+specified, the default is <code class="docutils literal notranslate"><span class="pre">'settrace'</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated"><a class="reference internal" href="functions.html#breakpoint" title="breakpoint"><code class="xref py py-func docutils literal notranslate"><span class="pre">breakpoint()</span></code></a> and <a class="reference internal" href="#pdb.set_trace" title="pdb.set_trace"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_trace()</span></code></a> will not be affected by this
+function. They always use <code class="docutils literal notranslate"><span class="pre">'monitoring'</span></code> backend.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pdb.get_default_backend">
+<span class="sig-prename descclassname"><span class="pre">pdb.</span></span><span class="sig-name descname"><span class="pre">get_default_backend</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pdb.get_default_backend" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Returns the default backend for pdb.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">run*</span></code> 関数と <a class="reference internal" href="#pdb.set_trace" title="pdb.set_trace"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_trace()</span></code></a> は、 <a class="reference internal" href="#pdb.Pdb" title="pdb.Pdb"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pdb</span></code></a> クラスをインスタンス化して同名のメソッドを実行することのエイリアス関数です。それ以上の機能を利用したい場合は、インスタンス化を自分で行わなければなりません:</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pdb.Pdb">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pdb.</span></span><span class="sig-name descname"><span class="pre">Pdb</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">completekey</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tab'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stdin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stdout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nosigint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readrc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pdb.Pdb" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#pdb.Pdb" title="pdb.Pdb"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pdb</span></code></a> はデバッガクラスです。</p>
+<p class="translated"><em>completekey</em>, <em>stdin</em>, <em>stdout</em> 引数は、基底にある <a class="reference internal" href="cmd.html#cmd.Cmd" title="cmd.Cmd"><code class="xref py py-class docutils literal notranslate"><span class="pre">cmd.Cmd</span></code></a> クラスに渡されます。そちらの解説を参照してください。</p>
+<p class="translated"><em>skip</em> 引数が指定された場合、 glob スタイルのモジュール名パターンの iterable (イテレート可能オブジェクト) でなければなりません。デバッガはこのパターンのどれかにマッチするモジュールに属するフレームにはステップインしません。 <a class="footnote-reference brackets" href="#id3" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+<p class="translated">デフォルトでは、Pdb は <a class="reference internal" href="#pdbcommand-continue"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">continue</span></code></a> コマンドが投入されると、(ユーザーがコンソールから <kbd class="kbd docutils literal notranslate">Ctrl</kbd>-<kbd class="kbd docutils literal notranslate">C</kbd> を押したときに送られる) SIGINT シグナル用ハンドラーを設定します。これにより <kbd class="kbd docutils literal notranslate">Ctrl</kbd>-<kbd class="kbd docutils literal notranslate">C</kbd> を押すことで再度デバッガーを起動することができます。Pdb に SIGINT ハンドラーを変更させたくない場合は <em>nosigint</em> を true に設定してください。</p>
+<p class="translated"><em>readrc</em> 引数はデフォルトでは真で、 Pdb が .pdbrc ファイルをファイルシステムから読み込むかどうかを制御します。</p>
+<p class="untranslated">The <em>mode</em> argument specifies how the debugger was invoked.
+It impacts the workings of some debugger commands.
+Valid values are <code class="docutils literal notranslate"><span class="pre">'inline'</span></code> (used by the breakpoint() builtin),
+<code class="docutils literal notranslate"><span class="pre">'cli'</span></code> (used by the command line invocation)
+or <code class="docutils literal notranslate"><span class="pre">None</span></code> (for backwards compatible behaviour, as before the <em>mode</em>
+argument was added).</p>
+<p class="untranslated">The <em>backend</em> argument specifies the backend to use for the debugger. If <code class="docutils literal notranslate"><span class="pre">None</span></code>
+is passed, the default backend will be used. See <a class="reference internal" href="#pdb.set_default_backend" title="pdb.set_default_backend"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_default_backend()</span></code></a>.
+Otherwise the supported backends are <code class="docutils literal notranslate"><span class="pre">'settrace'</span></code> and <code class="docutils literal notranslate"><span class="pre">'monitoring'</span></code>.</p>
+<p class="untranslated">The <em>colorize</em> argument, if set to <code class="docutils literal notranslate"><span class="pre">True</span></code>, will enable colorized output in the
+debugger, if color is supported. This will highlight source code displayed in pdb.</p>
+<p class="translated"><em>skip</em> を使ってトレースする呼び出しの例:</p>
+<div class="translated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pdb</span><span class="p">;</span> <span class="n">pdb</span><span class="o">.</span><span class="n">Pdb</span><span class="p">(</span><span class="n">skip</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;django.*&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">set_trace</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="audit-hook translated">引数無しで <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">pdb.Pdb</span></code> を送出します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.1 で変更: </span><em>skip</em> パラメータが追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span>Added the <em>nosigint</em> parameter.
+Previously, a SIGINT handler was never set by Pdb.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><em>readrc</em> 引数。</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14: </span><em>mode</em> 引数が追加されました。</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14: </span><em>backend</em> 引数が追加されました。</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14: </span><em>colorize</em> 引数が追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.14 で変更: </span>Inline breakpoints like <a class="reference internal" href="functions.html#breakpoint" title="breakpoint"><code class="xref py py-func docutils literal notranslate"><span class="pre">breakpoint()</span></code></a> or <a class="reference internal" href="#pdb.set_trace" title="pdb.set_trace"><code class="xref py py-func docutils literal notranslate"><span class="pre">pdb.set_trace()</span></code></a> will
+always stop the program at calling frame, ignoring the <em>skip</em> pattern (if any).</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="pdb.Pdb.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">statement</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pdb.Pdb.run" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pdb.Pdb.runeval">
+<span class="sig-name descname"><span class="pre">runeval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expression</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">globals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pdb.Pdb.runeval" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pdb.Pdb.runcall">
+<span class="sig-name descname"><span class="pre">runcall</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pdb.Pdb.runcall" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pdb.Pdb.set_trace">
+<span class="sig-name descname"><span class="pre">set_trace</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pdb.Pdb.set_trace" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">前述のこれら関数のドキュメントを参照してください。</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="debugger-commands">
+<span id="id2"></span><h2 class="untranslated">Debugger commands<a class="headerlink" href="#debugger-commands" title="Link to this heading">¶</a></h2>
+<p class="translated">デバッガーに認識されるコマンドは以下に一覧されています。たいていのコマンドは以下のように 1、2 文字に省略できます。例えば <code class="docutils literal notranslate"><span class="pre">h(elp)</span></code> は <code class="docutils literal notranslate"><span class="pre">h</span></code> か <code class="docutils literal notranslate"><span class="pre">help</span></code> がで help コマンドを呼び出すことを意味します (ただし <code class="docutils literal notranslate"><span class="pre">he</span></code>, <code class="docutils literal notranslate"><span class="pre">hel</span></code>, <code class="docutils literal notranslate"><span class="pre">H</span></code>, <code class="docutils literal notranslate"><span class="pre">Help</span></code>, <code class="docutils literal notranslate"><span class="pre">HELP</span></code> は使用できません)。コマンドの引数はホワイトスペース (スペースかタブ) で区切ってください。コマンド構文として任意の引数は大括弧 (<code class="docutils literal notranslate"><span class="pre">[]</span></code>) で括られています (実際に大括弧はタイプしないでください)。いくつかから選択できる引数は縦線 (<code class="docutils literal notranslate"><span class="pre">|</span></code>) で分割されて記述されています。</p>
+<p class="translated">空行を入力すると入力された直前のコマンドを繰り返します。例外: 直前のコマンドが <a class="reference internal" href="#pdbcommand-list"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">list</span></code></a> コマンドならば、次の 11 行がリストされます。</p>
+<p class="translated">デバッガが認識しないコマンドは Python 文とみなして、デバッグしているプログラムのコンテキストおいて実行されます。先頭にに感嘆符 (<code class="docutils literal notranslate"><span class="pre">!</span></code>) を付けることで Python 文であると明示することもできます。これはデバッグ中のプログラムを調査する強力な方法です。変数を変更したり関数を呼び出したりすることも可能です。このような文で例外が発生した場合には例外名が出力されますが、デバッガの状態は変化しません。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span>Expressions/Statements whose prefix is a pdb command are now correctly
+identified and executed.</p>
+</div>
+<p class="translated">デバッガーは <a class="reference internal" href="#debugger-aliases"><span class="std std-ref">エイリアス</span></a> をサポートしています。エイリアスはデバッグ中のコンテキストに適用可能な一定レベルのパラメータを保持することができます。</p>
+<p class="untranslated">Multiple commands may be entered on a single line, separated by <code class="docutils literal notranslate"><span class="pre">;;</span></code>.  (A
+single <code class="docutils literal notranslate"><span class="pre">;</span></code> is not used as it is the separator for multiple commands in a line
+that is passed to the Python parser.)  No intelligence is applied to separating
+the commands; the input is split at the first <code class="docutils literal notranslate"><span class="pre">;;</span></code> pair, even if it is in the
+middle of a quoted string. A workaround for strings with double semicolons
+is to use implicit string concatenation <code class="docutils literal notranslate"><span class="pre">';'';'</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;;&quot;&quot;;&quot;</span></code>.</p>
+<p class="untranslated">To set a temporary global variable, use a <em>convenience variable</em>. A <em>convenience
+variable</em> is a variable whose name starts with <code class="docutils literal notranslate"><span class="pre">$</span></code>.  For example, <code class="docutils literal notranslate"><span class="pre">$foo</span> <span class="pre">=</span> <span class="pre">1</span></code>
+sets a global variable <code class="docutils literal notranslate"><span class="pre">$foo</span></code> which you can use in the debugger session.  The
+<em>convenience variables</em> are cleared when the program resumes execution so it's
+less likely to interfere with your program compared to using normal variables
+like <code class="docutils literal notranslate"><span class="pre">foo</span> <span class="pre">=</span> <span class="pre">1</span></code>.</p>
+<p class="untranslated">There are four preset <em>convenience variables</em>:</p>
+<ul class="simple">
+<li><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">$_frame</span></code>: the current frame you are debugging</p></li>
+<li><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">$_retval</span></code>: the return value if the frame is returning</p></li>
+<li><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">$_exception</span></code>: the exception if the frame is raising an exception</p></li>
+<li><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">$_asynctask</span></code>: the asyncio task if pdb stops in an async function</p></li>
+</ul>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.12: </span>Added the <em>convenience variable</em> feature.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14: </span>Added the <code class="docutils literal notranslate"><span class="pre">$_asynctask</span></code> convenience variable.</p>
+</div>
+<p class="untranslated" id="index-3">If a file <code class="file docutils literal notranslate"><span class="pre">.pdbrc</span></code> exists in the user's home directory or in the current
+directory, it is read with <code class="docutils literal notranslate"><span class="pre">'utf-8'</span></code> encoding and executed as if it had been
+typed at the debugger prompt, with the exception that empty lines and lines
+starting with <code class="docutils literal notranslate"><span class="pre">#</span></code> are ignored.  This is particularly useful for aliases.  If both
+files exist, the one in the home directory is read first and aliases defined there
+can be overridden by the local file.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span><code class="file docutils literal notranslate"><span class="pre">.pdbrc</span></code> に <a class="reference internal" href="#pdbcommand-continue"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">continue</span></code></a> や <a class="reference internal" href="#pdbcommand-next"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">next</span></code></a> のようなデバッグを続行するコマンドが使用できるようになりました。以前はこのようなコマンドは無視されていました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.11 で変更: </span><code class="file docutils literal notranslate"><span class="pre">.pdbrc</span></code> is now read with <code class="docutils literal notranslate"><span class="pre">'utf-8'</span></code> encoding. Previously, it was read
+with the system locale encoding.</p>
+</div>
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-help">
+<span class="sig-name descname"><span class="pre">h(elp)</span></span><span class="sig-prename descclassname"> <span class="pre">[command]</span></span><a class="headerlink" href="#pdbcommand-help" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">引数を指定しない場合、利用できるコマンドの一覧が表示されます。引数として <em>command</em> が与えられた場合、そのコマンドのヘルプが表示されます。<code class="docutils literal notranslate"><span class="pre">help</span> <span class="pre">pdb</span></code> で完全なドキュメント (<a class="reference internal" href="#module-pdb" title="pdb: The Python debugger for interactive interpreters."><code class="xref py py-mod docutils literal notranslate"><span class="pre">pdb</span></code></a> モジュールの doctring) が表示されます。<em>command</em> 引数は識別子でなければならないため、<code class="docutils literal notranslate"><span class="pre">!</span></code> コマンドのヘルプを表示するには <code class="docutils literal notranslate"><span class="pre">help</span> <span class="pre">exec</span></code> と入力します。</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-where">
+<span class="sig-name descname"><span class="pre">w(here)</span></span><span class="sig-prename descclassname"> <span class="pre">[count]</span></span><a class="headerlink" href="#pdbcommand-where" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Print a stack trace, with the most recent frame at the bottom.  if <em>count</em>
+is 0, print the current frame entry. If <em>count</em> is negative, print the least
+recent - <em>count</em> frames. If <em>count</em> is positive, print the most recent
+<em>count</em> frames.  An arrow (<code class="docutils literal notranslate"><span class="pre">&gt;</span></code>)
+indicates the current frame, which determines the context of most commands.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.14 で変更: </span><em>count</em> argument is added.</p>
+</div>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-down">
+<span class="sig-name descname"><span class="pre">d(own)</span></span><span class="sig-prename descclassname"> <span class="pre">[count]</span></span><a class="headerlink" href="#pdbcommand-down" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">スタックフレーム内で現在のフレームを <em>count</em> レベル (デフォルトは 1) 新しいフレーム方向に移動します。</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-up">
+<span class="sig-name descname"><span class="pre">u(p)</span></span><span class="sig-prename descclassname"> <span class="pre">[count]</span></span><a class="headerlink" href="#pdbcommand-up" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">スタックフレーム内で現在のフレームを <em>count</em> レベル (デフォルトは 1) 古いフレーム方向に移動します。</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-break">
+<span class="sig-name descname"><span class="pre">b(reak)</span></span><span class="sig-prename descclassname"> <span class="pre">[([filename:]lineno</span> <span class="pre">|</span> <span class="pre">function)</span> <span class="pre">[,</span> <span class="pre">condition]]</span></span><a class="headerlink" href="#pdbcommand-break" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">With a <em>lineno</em> argument, set a break at line <em>lineno</em> in the current file.
+The line number may be prefixed with a <em>filename</em> and a colon,
+to specify a breakpoint in another file (possibly one that hasn't been loaded
+yet).  The file is searched on <a class="reference internal" href="sys.html#sys.path" title="sys.path"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.path</span></code></a>.  Acceptable forms of <em>filename</em>
+are <code class="docutils literal notranslate"><span class="pre">/abspath/to/file.py</span></code>, <code class="docutils literal notranslate"><span class="pre">relpath/file.py</span></code>, <code class="docutils literal notranslate"><span class="pre">module</span></code> and
+<code class="docutils literal notranslate"><span class="pre">package.module</span></code>.</p>
+<p class="untranslated">With a <em>function</em> argument, set a break at the first executable statement within
+that function. <em>function</em> can be any expression that evaluates to a function
+in the current namespace.</p>
+<p class="translated">第二引数を指定する場合、その値は式で、その評価値が真でなければブレークポイントは有効になりません。</p>
+<p class="translated">引数なしの場合は、それぞれのブレークポイントに対して、そのブレークポイントに行き当たった回数、現在の通過カウント ( ignore count ) と、もしあれば関連条件を含めてすべてのブレークポイントをリストします。</p>
+<p class="untranslated">Each breakpoint is assigned a number to which all the other
+breakpoint commands refer.</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-tbreak">
+<span class="sig-name descname"><span class="pre">tbreak</span></span><span class="sig-prename descclassname"> <span class="pre">[([filename:]lineno</span> <span class="pre">|</span> <span class="pre">function)</span> <span class="pre">[,</span> <span class="pre">condition]]</span></span><a class="headerlink" href="#pdbcommand-tbreak" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">一時的なブレークポイントで、最初にそこに達したときに自動的に取り除かれます。引数は <a class="reference internal" href="#pdbcommand-break"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">break</span></code></a> と同じです。</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-clear">
+<span class="sig-name descname"><span class="pre">cl(ear)</span></span><span class="sig-prename descclassname"> <span class="pre">[filename:lineno</span> <span class="pre">|</span> <span class="pre">bpnumber</span> <span class="pre">...]</span></span><a class="headerlink" href="#pdbcommand-clear" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>filename:lineno</em> 引数を与えると、その行にある全てのブレークポイントを解除します。スペースで区切られたブレークポイントナンバーのリストを与えると、それらのブレークポイントを解除します。引数なしの場合は、すべてのブレークポイントを解除します ( が、はじめに確認します ) 。</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-disable">
+<span class="sig-name descname"><span class="pre">disable</span></span><span class="sig-prename descclassname"> <span class="pre">bpnumber</span> <span class="pre">[bpnumber</span> <span class="pre">...]</span></span><a class="headerlink" href="#pdbcommand-disable" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ブレークポイント番号 <em>bpnumber</em> のブレークポイントを無効にします。ブレークポイントを無効にすると、プログラムの実行を止めることができなくなりますが、ブレークポイントの解除と違いブレークポイントのリストに残っており、(再び) 有効にできます。</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-enable">
+<span class="sig-name descname"><span class="pre">enable</span></span><span class="sig-prename descclassname"> <span class="pre">bpnumber</span> <span class="pre">[bpnumber</span> <span class="pre">...]</span></span><a class="headerlink" href="#pdbcommand-enable" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">指定したブレークポイントを有効にします。</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-ignore">
+<span class="sig-name descname"><span class="pre">ignore</span></span><span class="sig-prename descclassname"> <span class="pre">bpnumber</span> <span class="pre">[count]</span></span><a class="headerlink" href="#pdbcommand-ignore" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">与えられたブレークポイントナンバーに通過カウントを設定します。count が省略されると、通過カウントは 0 に設定されます。通過カウントがゼロになったとき、ブレークポイントが機能する状態になります。ゼロでないときは、そのブレークポイントが無効にされず、どんな関連条件も真に評価されていて、ブレークポイントに来るたびに <em>count</em> が減らされます。</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-condition">
+<span class="sig-name descname"><span class="pre">condition</span></span><span class="sig-prename descclassname"> <span class="pre">bpnumber</span> <span class="pre">[condition]</span></span><a class="headerlink" href="#pdbcommand-condition" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ブレークポイントに新しい <em>condition</em> を設定します。<em>condition</em> はブレークポイントを制御する条件式で、この式が真を返す場合のみブレークポイントが有効になります。<em>condition</em> を指定しないと既存の条件が除去されます; ブレークポイントは常に有効になります。</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-commands">
+<span class="sig-name descname"><span class="pre">commands</span></span><span class="sig-prename descclassname"> <span class="pre">[bpnumber]</span></span><a class="headerlink" href="#pdbcommand-commands" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ブレークポイントナンバー <em>bpnumber</em> にコマンドのリストを指定します。コマンドそのものはその後の行に続けます。<code class="docutils literal notranslate"><span class="pre">end</span></code> だけからなる行を入力することでコマンド群の終わりを示します。例を挙げます:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">Pdb</span><span class="p">)</span> <span class="n">commands</span> <span class="mi">1</span>
+<span class="p">(</span><span class="n">com</span><span class="p">)</span> <span class="n">p</span> <span class="n">some_variable</span>
+<span class="p">(</span><span class="n">com</span><span class="p">)</span> <span class="n">end</span>
+<span class="p">(</span><span class="n">Pdb</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="translated">ブレークポイントからコマンドを取り除くには、 <code class="docutils literal notranslate"><span class="pre">commands</span></code> のあとに <code class="docutils literal notranslate"><span class="pre">end</span></code> だけを続けます。つまり、コマンドを一つも指定しないようにします。</p>
+<p class="untranslated">With no <em>bpnumber</em> argument, <code class="docutils literal notranslate"><span class="pre">commands</span></code> refers to the last breakpoint set.</p>
+<p class="translated">ブレークポイントコマンドはプログラムを走らせ直すのに使えます。単に <a class="reference internal" href="#pdbcommand-continue"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">continue</span></code></a> コマンドや <a class="reference internal" href="#pdbcommand-step"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">step</span></code></a>、その他実行を再開するコマンドを使えば良いのです。</p>
+<p class="untranslated">Specifying any command resuming execution
+(currently <a class="reference internal" href="#pdbcommand-continue"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">continue</span></code></a>, <a class="reference internal" href="#pdbcommand-step"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">step</span></code></a>, <a class="reference internal" href="#pdbcommand-next"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">next</span></code></a>,
+<a class="reference internal" href="#pdbcommand-return"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">return</span></code></a>, <a class="reference internal" href="#pdbcommand-until"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">until</span></code></a>, <a class="reference internal" href="#pdbcommand-jump"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">jump</span></code></a>, <a class="reference internal" href="#pdbcommand-quit"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">quit</span></code></a> and their abbreviations)
+terminates the command list (as if
+that command was immediately followed by end). This is because any time you
+resume execution (even with a simple next or step), you may encounter another
+breakpoint—which could have its own command list, leading to ambiguities about
+which list to execute.</p>
+<p class="untranslated">If the list of commands contains the <code class="docutils literal notranslate"><span class="pre">silent</span></code> command, or a command that
+resumes execution, then the breakpoint message containing information about
+the frame is not displayed.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.14 で変更: </span>Frame information will not be displayed if a command that resumes execution
+is present in the command list.</p>
+</div>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-step">
+<span class="sig-name descname"><span class="pre">s(tep)</span></span><a class="headerlink" href="#pdbcommand-step" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">現在の行を実行し、最初に実行可能なものがあらわれたときに (呼び出された関数の中か、現在の関数の次の行で) 停止します。</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-next">
+<span class="sig-name descname"><span class="pre">n(ext)</span></span><a class="headerlink" href="#pdbcommand-next" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">現在の関数の次の行に達するか、あるいは関数が返るまで実行を継続します。 (<a class="reference internal" href="#pdbcommand-next"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">next</span></code></a> と <a class="reference internal" href="#pdbcommand-step"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">step</span></code></a> の差は <code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">step</span></code> が呼び出された関数の内部で停止するのに対し、 <code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">next</span></code> は呼び出された関数を (ほぼ) 全速力で実行し、現在の関数内の次の行で停止するだけです。)</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-until">
+<span class="sig-name descname"><span class="pre">unt(il)</span></span><span class="sig-prename descclassname"> <span class="pre">[lineno]</span></span><a class="headerlink" href="#pdbcommand-until" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">引数なしだと、現在の行から 1 行先まで実行します。</p>
+<p class="translated"><em>lineno</em> を指定すると、番号が <em>lineno</em> 以上である行に到達するまで実行します。どちらにしても現在のフレームが返ってきた時点で停止します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span>明示的に行数指定ができるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-return">
+<span class="sig-name descname"><span class="pre">r(eturn)</span></span><a class="headerlink" href="#pdbcommand-return" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">現在の関数が返るまで実行を継続します。</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-continue">
+<span class="sig-name descname"><span class="pre">c(ont(inue))</span></span><a class="headerlink" href="#pdbcommand-continue" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ブレークポイントに出会うまで、実行を継続します。</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-jump">
+<span class="sig-name descname"><span class="pre">j(ump)</span></span><span class="sig-prename descclassname"> <span class="pre">lineno</span></span><a class="headerlink" href="#pdbcommand-jump" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">次に実行する行を指定します。最も底のフレーム中でのみ実行可能です。前に戻って実行したり、不要な部分をスキップして先の処理を実行する場合に使用します。</p>
+<p class="translated">ジャンプには制限があり、例えば <a class="reference internal" href="../reference/compound_stmts.html#for"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">for</span></code></a> ループの中には飛び込めませんし、 <a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">finally</span></code></a> 節の外にも飛ぶ事ができません。</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-list">
+<span class="sig-name descname"><span class="pre">l(ist)</span></span><span class="sig-prename descclassname"> <span class="pre">[first[,</span> <span class="pre">last]]</span></span><a class="headerlink" href="#pdbcommand-list" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">現在のファイルのソースコードを表示します。引数を指定しないと、現在の行の前後 11 行分を表示するか、直前の表示を続行します。引数に <code class="docutils literal notranslate"><span class="pre">.</span></code> を指定すると、現在の行の前後 11 行分を表示します。数値を 1 個指定すると、その行番号の前後 11 行分を表示します。数値を 2 個指定すると、開始行と最終行として表示します; 2 個めの引数が 1 個め未満だった場合、1 個目を開始行、2 個めを開始行からの行数とみなします。</p>
+<p class="translated">現在のフレーム内の現在の行は <code class="docutils literal notranslate"><span class="pre">-&gt;</span></code> で表示されます。例外をデバッグ中の場合、例外が発生または伝搬した行は、それが現在の行とは異なるとき <code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> で表示されます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span><code class="docutils literal notranslate"><span class="pre">&gt;&gt;</span></code> マーカーが追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-ll">
+<span class="sig-name descname"><span class="pre">ll</span></span><span class="sig-prename descclassname"> <span class="pre">|</span> <span class="pre">longlist</span></span><a class="headerlink" href="#pdbcommand-ll" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">現在の関数またはフレームの全ソースコードを表示します。注目する行は <a class="reference internal" href="#pdbcommand-list"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">list</span></code></a> と同じようにマーカーがつきます。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-args">
+<span class="sig-name descname"><span class="pre">a(rgs)</span></span><a class="headerlink" href="#pdbcommand-args" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Print the arguments of the current function and their current values.</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-p">
+<span class="sig-name descname"><span class="pre">p</span></span><span class="sig-prename descclassname"> <span class="pre">expression</span></span><a class="headerlink" href="#pdbcommand-p" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">現在のコンテキストにおいて <em>expression</em> を評価し、その値をプリントします。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">print()</span></code> も使えますが、これはデバッガーコマンドではありません --- これは Python の関数 <a class="reference internal" href="functions.html#print" title="print"><code class="xref py py-func docutils literal notranslate"><span class="pre">print()</span></code></a> が実行されます。</p>
+</div>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-pp">
+<span class="sig-name descname"><span class="pre">pp</span></span><span class="sig-prename descclassname"> <span class="pre">expression</span></span><a class="headerlink" href="#pdbcommand-pp" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#pdbcommand-p"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">p</span></code></a> コマンドに似ていますが、<em>expression</em> の値以外は <a class="reference internal" href="pprint.html#module-pprint" title="pprint: Data pretty printer."><code class="xref py py-mod docutils literal notranslate"><span class="pre">pprint</span></code></a> モジュールを使用して &quot;pretty-print&quot; されます。</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-whatis">
+<span class="sig-name descname"><span class="pre">whatis</span></span><span class="sig-prename descclassname"> <span class="pre">expression</span></span><a class="headerlink" href="#pdbcommand-whatis" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>expression</em> の型を表示します。</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-source">
+<span class="sig-name descname"><span class="pre">source</span></span><span class="sig-prename descclassname"> <span class="pre">expression</span></span><a class="headerlink" href="#pdbcommand-source" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>expression</em> のソースコードの取得を試み、可能であれば表示します。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-display">
+<span class="sig-name descname"><span class="pre">display</span></span><span class="sig-prename descclassname"> <span class="pre">[expression]</span></span><a class="headerlink" href="#pdbcommand-display" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>expression</em> の値が変更されていれば表示します。毎回実行は現在のフレームで停止します。</p>
+<p class="translated"><em>expression</em> を指定しない場合、現在のフレームのすべての式を表示します。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">Display evaluates <em>expression</em> and compares to the result of the previous
+evaluation of <em>expression</em>, so when the result is mutable, display may not
+be able to pick up the changes.</p>
+</div>
+<p class="translated">以下はプログラム例です:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">lst</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="nb">breakpoint</span><span class="p">()</span>
+<span class="k">pass</span>
+<span class="n">lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="untranslated">Display won't realize <code class="docutils literal notranslate"><span class="pre">lst</span></code> has been changed because the result of evaluation
+is modified in place by <code class="docutils literal notranslate"><span class="pre">lst.append(1)</span></code> before being compared:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">example</span><span class="o">.</span><span class="n">py</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="o">-&gt;</span> <span class="k">pass</span>
+<span class="p">(</span><span class="n">Pdb</span><span class="p">)</span> <span class="n">display</span> <span class="n">lst</span>
+<span class="n">display</span> <span class="n">lst</span><span class="p">:</span> <span class="p">[]</span>
+<span class="p">(</span><span class="n">Pdb</span><span class="p">)</span> <span class="n">n</span>
+<span class="o">&gt;</span> <span class="n">example</span><span class="o">.</span><span class="n">py</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="o">-&gt;</span> <span class="n">lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="n">Pdb</span><span class="p">)</span> <span class="n">n</span>
+<span class="o">&gt;</span> <span class="n">example</span><span class="o">.</span><span class="n">py</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="o">-&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+<span class="p">(</span><span class="n">Pdb</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="untranslated">You can do some tricks with copy mechanism to make it work:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">example</span><span class="o">.</span><span class="n">py</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="o">-&gt;</span> <span class="k">pass</span>
+<span class="p">(</span><span class="n">Pdb</span><span class="p">)</span> <span class="n">display</span> <span class="n">lst</span><span class="p">[:]</span>
+<span class="n">display</span> <span class="n">lst</span><span class="p">[:]:</span> <span class="p">[]</span>
+<span class="p">(</span><span class="n">Pdb</span><span class="p">)</span> <span class="n">n</span>
+<span class="o">&gt;</span> <span class="n">example</span><span class="o">.</span><span class="n">py</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="o">-&gt;</span> <span class="n">lst</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="p">(</span><span class="n">Pdb</span><span class="p">)</span> <span class="n">n</span>
+<span class="o">&gt;</span> <span class="n">example</span><span class="o">.</span><span class="n">py</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="o">-&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">lst</span><span class="p">)</span>
+<span class="n">display</span> <span class="n">lst</span><span class="p">[:]:</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="p">[</span><span class="n">old</span><span class="p">:</span> <span class="p">[]]</span>
+<span class="p">(</span><span class="n">Pdb</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-undisplay">
+<span class="sig-name descname"><span class="pre">undisplay</span></span><span class="sig-prename descclassname"> <span class="pre">[expression]</span></span><a class="headerlink" href="#pdbcommand-undisplay" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">現在のフレーム内で <em>expression</em> をこれ以上表示しないようにします。<em>expression</em> を指定しない場合、現在のフレームで display 指定されている式を全てクリアします。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-interact">
+<span class="sig-name descname"><span class="pre">interact</span></span><a class="headerlink" href="#pdbcommand-interact" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Start an interactive interpreter (using the <a class="reference internal" href="code.html#module-code" title="code: Facilities to implement read-eval-print loops."><code class="xref py py-mod docutils literal notranslate"><span class="pre">code</span></code></a> module) in a new
+global namespace initialised from the local and global namespaces for the
+current scope. Use <code class="docutils literal notranslate"><span class="pre">exit()</span></code> or <code class="docutils literal notranslate"><span class="pre">quit()</span></code> to exit the interpreter and
+return to the debugger.</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">As <code class="docutils literal notranslate"><span class="pre">interact</span></code> creates a new dedicated namespace for code execution,
+assignments to variables will not affect the original namespaces.
+However, modifications to any referenced mutable objects will be reflected
+in the original namespaces as usual.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span><code class="docutils literal notranslate"><span class="pre">exit()</span></code> and <code class="docutils literal notranslate"><span class="pre">quit()</span></code> can be used to exit the <a class="reference internal" href="#pdbcommand-interact"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">interact</span></code></a>
+command.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span><a class="reference internal" href="#pdbcommand-interact"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">interact</span></code></a> directs its output to the debugger's
+output channel rather than <a class="reference internal" href="sys.html#sys.stderr" title="sys.stderr"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.stderr</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="std pdbcommand" id="debugger-aliases">
+<dt class="sig sig-object std" id="pdbcommand-alias">
+<span class="sig-name descname"><span class="pre">alias</span></span><span class="sig-prename descclassname"> <span class="pre">[name</span> <span class="pre">[command]]</span></span><a class="headerlink" href="#pdbcommand-alias" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Create an alias called <em>name</em> that executes <em>command</em>.  The <em>command</em> must
+<em>not</em> be enclosed in quotes.  Replaceable parameters can be indicated by
+<code class="docutils literal notranslate"><span class="pre">%1</span></code>, <code class="docutils literal notranslate"><span class="pre">%2</span></code>, ... and <code class="docutils literal notranslate"><span class="pre">%9</span></code>, while <code class="docutils literal notranslate"><span class="pre">%*</span></code> is replaced by all the parameters.
+If <em>command</em> is omitted, the current alias for <em>name</em> is shown. If no
+arguments are given, all aliases are listed.</p>
+<p class="translated">エイリアスは入れ子になってもよく、pdb プロンプトで合法的にタイプできるどんなものでも含めることができます。内部 pdb コマンドをエイリアスによって上書きすることが <em>できます</em>。そのとき、このようなコマンドはエイリアスが取り除かれるまで隠されます。エイリアス化はコマンド行の最初の語へ再帰的に適用されます。行の他のすべての語はそのままです。</p>
+<p class="translated">例として、二つの便利なエイリアスがあります (特に <code class="file docutils literal notranslate"><span class="pre">.pdbrc</span></code> ファイルに置かれたときに):</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print instance variables (usage &quot;pi classInst&quot;)</span>
+<span class="n">alias</span> <span class="n">pi</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="o">%</span><span class="mf">1.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;%1.</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="o">%</span><span class="mf">1.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="c1"># Print instance variables in self</span>
+<span class="n">alias</span> <span class="n">ps</span> <span class="n">pi</span> <span class="bp">self</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-unalias">
+<span class="sig-name descname"><span class="pre">unalias</span></span><span class="sig-prename descclassname"> <span class="pre">name</span></span><a class="headerlink" href="#pdbcommand-unalias" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">指定したエイリアス <em>name</em> を削除します。</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-0">
+<span class="sig-name descname"><span class="pre">!</span></span><span class="sig-prename descclassname"> <span class="pre">statement</span></span><a class="headerlink" href="#pdbcommand-0" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Execute the (one-line) <em>statement</em> in the context of the current stack frame.
+The exclamation point can be omitted unless the first word of the statement
+resembles a debugger command, e.g.:</p>
+<div class="untranslated highlight-none notranslate"><div class="highlight"><pre><span></span>(Pdb) ! n=42
+(Pdb)
+</pre></div>
+</div>
+<p class="untranslated">To set a global variable, you can prefix the assignment command with a
+<a class="reference internal" href="../reference/simple_stmts.html#global"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">global</span></code></a> statement on the same line, e.g.:</p>
+<div class="untranslated highlight-none notranslate"><div class="highlight"><pre><span></span>(Pdb) global list_options; list_options = [&#39;-l&#39;]
+(Pdb)
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-prename descclassname"> <span class="pre">[args</span> <span class="pre">...]</span></span><a class="headerlink" href="#pdbcommand-run" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object std" id="pdbcommand-restart">
+<span class="sig-name descname"><span class="pre">restart</span></span><span class="sig-prename descclassname"> <span class="pre">[args</span> <span class="pre">...]</span></span><a class="headerlink" href="#pdbcommand-restart" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">デバッグ中の Python プログラムを再実行します。<em>args</em> が与えられると、 <a class="reference internal" href="shlex.html#module-shlex" title="shlex: Simple lexical analysis for Unix shell-like languages."><code class="xref py py-mod docutils literal notranslate"><span class="pre">shlex</span></code></a> で分割され、結果が新しい <a class="reference internal" href="sys.html#sys.argv" title="sys.argv"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.argv</span></code></a> として使われます。ヒストリー、ブレークポイント、アクション、そして、デバッガーオプションは引き継がれます。 <a class="reference internal" href="#pdbcommand-restart"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">restart</span></code></a> は <a class="reference internal" href="#pdbcommand-run"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">run</span></code></a> の別名です。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.14 で変更: </span><a class="reference internal" href="#pdbcommand-run"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">run</span></code></a> and <a class="reference internal" href="#pdbcommand-restart"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">restart</span></code></a> commands are disabled when the
+debugger is invoked in <code class="docutils literal notranslate"><span class="pre">'inline'</span></code> mode.</p>
+</div>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-quit">
+<span class="sig-name descname"><span class="pre">q(uit)</span></span><a class="headerlink" href="#pdbcommand-quit" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Quit from the debugger.  The program being executed is aborted.
+An end-of-file input is equivalent to <a class="reference internal" href="#pdbcommand-quit"><code class="xref std std-pdbcmd docutils literal notranslate"><span class="pre">quit</span></code></a>.</p>
+<p class="untranslated">A confirmation prompt will be shown if the debugger is invoked in
+<code class="docutils literal notranslate"><span class="pre">'inline'</span></code> mode. Either <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">Y</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;Enter&gt;</span></code> or <code class="docutils literal notranslate"><span class="pre">EOF</span></code>
+will confirm the quit.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.14 で変更: </span>A confirmation prompt will be shown if the debugger is invoked in
+<code class="docutils literal notranslate"><span class="pre">'inline'</span></code> mode. After the confirmation, the debugger will call
+<a class="reference internal" href="sys.html#sys.exit" title="sys.exit"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.exit()</span></code></a> immediately, instead of raising <a class="reference internal" href="bdb.html#bdb.BdbQuit" title="bdb.BdbQuit"><code class="xref py py-exc docutils literal notranslate"><span class="pre">bdb.BdbQuit</span></code></a>
+in the next trace event.</p>
+</div>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-debug">
+<span class="sig-name descname"><span class="pre">debug</span></span><span class="sig-prename descclassname"> <span class="pre">code</span></span><a class="headerlink" href="#pdbcommand-debug" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Enter a recursive debugger that steps through <em>code</em>
+(which is an arbitrary expression or statement to be
+executed in the current environment).</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-retval">
+<span class="sig-name descname"><span class="pre">retval</span></span><a class="headerlink" href="#pdbcommand-retval" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Print the return value for the last return of the current function.</p>
+</dd></dl>
+
+<dl class="std pdbcommand">
+<dt class="sig sig-object std" id="pdbcommand-exceptions">
+<span class="sig-name descname"><span class="pre">exceptions</span></span><span class="sig-prename descclassname"> <span class="pre">[excnumber]</span></span><a class="headerlink" href="#pdbcommand-exceptions" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">List or jump between chained exceptions.</p>
+<p class="untranslated">When using <code class="docutils literal notranslate"><span class="pre">pdb.pm()</span></code>  or <code class="docutils literal notranslate"><span class="pre">Pdb.post_mortem(...)</span></code> with a chained exception
+instead of a traceback, it allows the user to move between the
+chained exceptions using <code class="docutils literal notranslate"><span class="pre">exceptions</span></code> command to list exceptions, and
+<code class="docutils literal notranslate"><span class="pre">exceptions</span> <span class="pre">&lt;number&gt;</span></code> to switch to that exception.</p>
+<p class="translated">以下はプログラム例です:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">out</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">middle</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;reraise middle() error&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">middle</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">inner</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Middle fail&quot;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">inner</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="mi">1</span> <span class="o">/</span> <span class="n">x</span>
+
+ <span class="n">out</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="untranslated">calling <code class="docutils literal notranslate"><span class="pre">pdb.pm()</span></code> will allow to move between exceptions:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">example</span><span class="o">.</span><span class="n">py</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="n">out</span><span class="p">()</span>
+<span class="o">-&gt;</span> <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;reraise middle() error&quot;</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
+<span class="p">(</span><span class="n">Pdb</span><span class="p">)</span> <span class="n">exceptions</span>
+  <span class="mi">0</span> <span class="ne">ZeroDivisionError</span><span class="p">(</span><span class="s1">&#39;division by zero&#39;</span><span class="p">)</span>
+  <span class="mi">1</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Middle fail&#39;</span><span class="p">)</span>
+<span class="o">&gt;</span> <span class="mi">2</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;reraise middle() error&#39;</span><span class="p">)</span>
+
+<span class="p">(</span><span class="n">Pdb</span><span class="p">)</span> <span class="n">exceptions</span> <span class="mi">0</span>
+<span class="o">&gt;</span> <span class="n">example</span><span class="o">.</span><span class="n">py</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span><span class="n">inner</span><span class="p">()</span>
+<span class="o">-&gt;</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">x</span>
+
+<span class="p">(</span><span class="n">Pdb</span><span class="p">)</span> <span class="n">up</span>
+<span class="o">&gt;</span> <span class="n">example</span><span class="o">.</span><span class="n">py</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span><span class="n">middle</span><span class="p">()</span>
+<span class="o">-&gt;</span> <span class="k">return</span> <span class="n">inner</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+</dd></dl>
+
+<p class="translated rubric">脚注</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id3" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p class="translated">フレームが属するモジュールは、そのフレームのグローバルの <code class="docutils literal notranslate"><span class="pre">__name__</span></code> によって決定されます。</p>
+</aside>
+</aside>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pdb</span></code> --- The Python Debugger</a><ul>
+<li><a class="reference internal" href="#command-line-interface">コマンドライン・インターフェース</a></li>
+<li><a class="reference internal" href="#debugger-commands">Debugger commands</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="faulthandler.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">faulthandler</span></code> --- Python トレースバックをダンプする</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="profile.html"
+                          title="次の章へ">The Python Profilers</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/pdb.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/pdb.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/pdb.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="profile.html" title="The Python Profilers"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="faulthandler.html" title="faulthandler --- Python トレースバックをダンプする"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="debug.html" >Debugging and Profiling</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pdb</span></code> --- The Python Debugger</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="pydoc --- ドキュメント生成とオンラインヘルプシステム" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/pydoc.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/pydoc.py The pydoc module automatically generates documentation from Python modules. The documentation can be presented as pages of text on the console, served to a web browser, or save..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_pydoc_151a4c09.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/pydoc.py The pydoc module automatically generates documentation from Python modules. The documentation can be presented as pages of text on the console, served to a web browser, or save..." />
+<meta name="description" content="ソースコード: Lib/pydoc.py The pydoc module automatically generates documentation from Python modules. The documentation can be presented as pages of text on the console, served to a web browser, or save..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>pydoc --- ドキュメント生成とオンラインヘルプシステム &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="Python 開発モード" href="devmode.html" />
+    <link rel="prev" title="typing --- 型ヒントのサポート" href="typing.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/pydoc.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="typing.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code> --- 型ヒントのサポート</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="devmode.html"
+                          title="次の章へ">Python 開発モード</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/pydoc.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/pydoc.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/pydoc.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="devmode.html" title="Python 開発モード"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="typing.html" title="typing --- 型ヒントのサポート"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="development.html" accesskey="U">開発ツール</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pydoc</span></code> --- ドキュメント生成とオンラインヘルプシステム</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-pydoc">
+<span id="pydoc-documentation-generator-and-online-help-system"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pydoc</span></code> --- ドキュメント生成とオンラインヘルプシステム<a class="headerlink" href="#module-pydoc" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/pydoc.py">Lib/pydoc.py</a></p>
+<hr class="docutils" id="index-0" />
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">pydoc</span></code> module automatically generates documentation from Python
+modules.  The documentation can be presented as pages of text on the console,
+served to a web browser, or saved to HTML files.</p>
+<p class="untranslated">For modules, classes, functions and methods, the displayed documentation is
+derived from the docstring (i.e. the <a class="reference internal" href="stdtypes.html#definition.__doc__" title="definition.__doc__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__doc__</span></code></a> attribute) of the object,
+and recursively of its documentable members.  If there is no docstring,
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">pydoc</span></code> tries to obtain a description from the block of comment lines just
+above the definition of the class, function or method in the source file, or at
+the top of the module (see <a class="reference internal" href="inspect.html#inspect.getcomments" title="inspect.getcomments"><code class="xref py py-func docutils literal notranslate"><span class="pre">inspect.getcomments()</span></code></a>).</p>
+<p class="untranslated">The built-in function <a class="reference internal" href="functions.html#help" title="help"><code class="xref py py-func docutils literal notranslate"><span class="pre">help()</span></code></a> invokes the online help system in the
+interactive interpreter, which uses <code class="xref py py-mod docutils literal notranslate"><span class="pre">pydoc</span></code> to generate its documentation
+as text on the console.  The same text documentation can also be viewed from
+outside the Python interpreter by running <strong class="program">pydoc</strong> as a script at the
+operating system's command prompt. For example, running</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">pydoc</span> <span class="n">sys</span>
+</pre></div>
+</div>
+<p class="translated">シェルから行うと <a class="reference internal" href="sys.html#module-sys" title="sys: Access system-specific parameters and functions."><code class="xref py py-mod docutils literal notranslate"><span class="pre">sys</span></code></a> モジュールのドキュメントを、Unix の <strong class="program">man</strong> コマンドのような形式で表示させることができます。 <strong class="program">pydoc</strong> の引数として与えることができるのは、関数名・モジュール名・パッケージ名、また、モジュールやパッケージ内のモジュールに含まれるクラス・メソッド・関数へのドット形式での参照です。 <strong class="program">pydoc</strong> への引数がパスと解釈されるような場合で(オペレーティングシステムのパス区切り記号を含む場合です。例えばUnixならばスラッシュ含む場合になります)、さらに、そのパスがPythonのソースファイルを指しているなら、そのファイルに対するドキュメントが生成されます。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">In order to find objects and their documentation, <code class="xref py py-mod docutils literal notranslate"><span class="pre">pydoc</span></code> imports the
+module(s) to be documented.  Therefore, any code on module level will be
+executed on that occasion.  Use an <code class="docutils literal notranslate"><span class="pre">if</span> <span class="pre">__name__</span> <span class="pre">==</span> <span class="pre">'__main__':</span></code> guard to
+only execute code when a file is invoked as a script and not just imported.</p>
+</div>
+<p class="untranslated">When printing output to the console, <strong class="program">pydoc</strong> attempts to paginate the
+output for easier reading.  If either the <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">MANPAGER</span></code> or the
+<span class="target" id="index-2"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">PAGER</span></code> environment variable is set, <strong class="program">pydoc</strong> will use its
+value as a pagination program. When both are set, <span class="target" id="index-3"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">MANPAGER</span></code> is used.</p>
+<p class="translated">引数の前に <code class="docutils literal notranslate"><span class="pre">-w</span></code> フラグを指定すると、コンソールにテキストを表示させるかわりにカレントディレクトリにHTMLドキュメントを生成します。</p>
+<p class="translated">引数の前に <code class="docutils literal notranslate"><span class="pre">-k</span></code> フラグを指定すると、引数をキーワードとして利用可能な全てのモジュールの概要を検索します。検索のやりかたは、Unixの <strong class="program">man</strong> コマンドと同様です。モジュールの概要というのは、モジュールのドキュメントの一行目のことです。</p>
+<p class="translated">また、 <strong class="program">pydoc</strong> を使うことでローカルマシンにウェブブラウザから閲覧可能なドキュメントを提供するHTTPサーバーを起動することもできます。 <strong class="program">python -m pydoc -p 1234</strong> とすると、HTTPサーバーをポート1234に起動します。これで、お好きなウェブブラウザを使って <code class="docutils literal notranslate"><span class="pre">http://localhost:1234/</span></code> からドキュメントを見ることができます。ポート番号に <code class="docutils literal notranslate"><span class="pre">0</span></code> を指定すると、任意の空きポートが選択されます。</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">pydoc</span></code> HTTP server is intended for local use during
+development and is not suitable for production use.</p>
+</div>
+<p class="translated"><strong class="program">python -m pydoc -n &lt;hostname&gt;</strong> は、与えられたホスト名で listen するサーバーを起動します。
+デフォルトではホスト名は 'localhost' ですが、他のマシンからサーバーへ疎通できるようにしたい場合は、サーバーが応答するホスト名を変更したいと思うでしょう。
+開発作業中に、コンテナ内で pydoc を走らせたい場合は、これは特に便利です。</p>
+<p class="translated"><strong class="program">python -m pydoc -b</strong> では、サーバとして起動するとともにブラウザも起動し、モジュールインデクスページを開きます。提供されるページには、個別のヘルプページに飛ぶための <em>Get</em> ボタン、全モジュールから概要行に基くキーワード検索するための <em>Search</em> ボタン、と、<em>Module index</em>, <em>Topics</em> , <em>Keywords</em> へのそれぞれリンクがついたナビゲーションバーがページの一番上に付きます。</p>
+<p class="translated"><strong class="program">pydoc</strong> でドキュメントを生成する場合、その時点での環境とパス情報に基づいてモジュールがどこにあるのか決定されます。そのため、 <strong class="program">pydoc spam</strong> を実行した場合につくられるドキュメントは、 Pythonインタプリタを起動して <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">spam</span></code> と入力したときに読み込まれるモジュールに対するドキュメントになります。</p>
+<p class="untranslated">Module docs for core modules are assumed to reside in
+<code class="docutils literal notranslate"><span class="pre">https://docs.python.org/X.Y/library/</span></code> where <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">Y</span></code> are the
+major and minor version numbers of the Python interpreter.  This can
+be overridden by setting the <code class="xref std std-envvar docutils literal notranslate"><span class="pre">PYTHONDOCS</span></code> environment variable
+to a different URL or to a local directory containing the Library
+Reference Manual pages.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span><code class="docutils literal notranslate"><span class="pre">-b</span></code> オプションが追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span><code class="docutils literal notranslate"><span class="pre">-g</span></code> コマンドラインオプションが削除されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.4 で変更: </span><code class="xref py py-mod docutils literal notranslate"><span class="pre">pydoc</span></code> now uses <a class="reference internal" href="inspect.html#inspect.signature" title="inspect.signature"><code class="xref py py-func docutils literal notranslate"><span class="pre">inspect.signature()</span></code></a> rather than
+<a class="reference internal" href="inspect.html#inspect.getfullargspec" title="inspect.getfullargspec"><code class="xref py py-func docutils literal notranslate"><span class="pre">inspect.getfullargspec()</span></code></a> to extract signature information from
+callables.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7 で変更: </span><code class="docutils literal notranslate"><span class="pre">-n</span></code> オプションが追加されました。</p>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="typing.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">typing</span></code> --- 型ヒントのサポート</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="devmode.html"
+                          title="次の章へ">Python 開発モード</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/pydoc.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/pydoc.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/pydoc.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="devmode.html" title="Python 開発モード"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="typing.html" title="typing --- 型ヒントのサポート"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="development.html" >開発ツール</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">pydoc</span></code> --- ドキュメント生成とオンラインヘルプシステム</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

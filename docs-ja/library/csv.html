@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="csv --- CSV ファイルの読み書き" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/csv.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/csv.py CSV (Comma Separated Values、カンマ区切り値列) と呼ばれる形式は、 スプレッドシートやデータベース間でのデータのインポートやエクスポートにおける最も一般的な形式です。 CSVフォーマットは、 RFC 4180 によって標準的な方法でフォーマットを記述する試みが行われる以前から長年使用されました。明確に定義された標準がないという..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_csv_6e75a097.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/csv.py CSV (Comma Separated Values、カンマ区切り値列) と呼ばれる形式は、 スプレッドシートやデータベース間でのデータのインポートやエクスポートにおける最も一般的な形式です。 CSVフォーマットは、 RFC 4180 によって標準的な方法でフォーマットを記述する試みが行われる以前から長年使用されました。明確に定義された標準がないという..." />
+<meta name="description" content="ソースコード: Lib/csv.py CSV (Comma Separated Values、カンマ区切り値列) と呼ばれる形式は、 スプレッドシートやデータベース間でのデータのインポートやエクスポートにおける最も一般的な形式です。 CSVフォーマットは、 RFC 4180 によって標準的な方法でフォーマットを記述する試みが行われる以前から長年使用されました。明確に定義された標準がないという..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>csv --- CSV ファイルの読み書き &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="configparser --- 設定ファイルのパーサー" href="configparser.html" />
+    <link rel="prev" title="ファイルフォーマット" href="fileformats.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/csv.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">csv</span></code> --- CSV ファイルの読み書き</a><ul>
+<li><a class="reference internal" href="#module-contents">モジュールコンテンツ</a></li>
+<li><a class="reference internal" href="#dialects-and-formatting-parameters">Dialect クラスと書式化パラメータ</a></li>
+<li><a class="reference internal" href="#reader-objects">reader オブジェクト</a></li>
+<li><a class="reference internal" href="#writer-objects">writer オブジェクト</a></li>
+<li><a class="reference internal" href="#examples">使用例</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="fileformats.html"
+                          title="前の章へ">ファイルフォーマット</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="configparser.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">configparser</span></code> --- 設定ファイルのパーサー</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/csv.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/csv.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/csv.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="configparser.html" title="configparser --- 設定ファイルのパーサー"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="fileformats.html" title="ファイルフォーマット"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="fileformats.html" accesskey="U">ファイルフォーマット</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">csv</span></code> --- CSV ファイルの読み書き</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-csv">
+<span id="csv-csv-file-reading-and-writing"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">csv</span></code> --- CSV ファイルの読み書き<a class="headerlink" href="#module-csv" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/csv.py">Lib/csv.py</a></p>
+<hr class="docutils" id="index-0" />
+<p class="translated">CSV (Comma Separated Values、カンマ区切り値列) と呼ばれる形式は、 スプレッドシートやデータベース間でのデータのインポートやエクスポートにおける最も一般的な形式です。 CSVフォーマットは、 <span class="target" id="index-5"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc4180.html"><strong>RFC 4180</strong></a> によって標準的な方法でフォーマットを記述する試みが行われる以前から長年使用されました。明確に定義された標準がないということは、異なるアプリケーション によって生成されたり取り込まれたりするデータ間では、しばしば微妙な違いが発生するということを意味します。こうした違いのために、複数のデータ源から得られた CSV ファイルを処理する作業が鬱陶しいものになることがあります。とはいえ、デリミタ (delimiter) やクオート文字の 相違はあっても、全体的な形式は十分似通っているため、こうしたデータを効率的に操作し、データの読み書きにおける細々としたことをプログラマ から隠蔽するような単一のモジュールを書くことは可能です。</p>
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">csv</span></code> module implements classes to read and write tabular data in CSV
+format.  It allows programmers to say, &quot;write this data in the format preferred
+by Excel,&quot; or &quot;read data from this file which was generated by Excel,&quot; without
+knowing the precise details of the CSV format used by Excel.  Programmers can
+also describe the CSV formats understood by other applications or define their
+own special-purpose CSV formats.</p>
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">csv</span></code> module's <a class="reference internal" href="#csv.reader" title="csv.reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">reader</span></code></a> and <a class="reference internal" href="#csv.writer" title="csv.writer"><code class="xref py py-class docutils literal notranslate"><span class="pre">writer</span></code></a> objects read and
+write sequences.  Programmers can also read and write data in dictionary form
+using the <a class="reference internal" href="#csv.DictReader" title="csv.DictReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictReader</span></code></a> and <a class="reference internal" href="#csv.DictWriter" title="csv.DictWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictWriter</span></code></a> classes.</p>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<dl class="simple">
+<dt class="translated"><span class="target" id="index-2"></span><a class="pep reference external" href="https://peps.python.org/pep-0305/"><strong>PEP 305</strong></a> - CSV File API</dt><dd><p class="translated">Python へのこのモジュールの追加を提案している Python 改良案 (PEP: Python Enhancement Proposal)。</p>
+</dd>
+</dl>
+</div>
+<section id="module-contents">
+<span id="csv-contents"></span><h2 class="translated">モジュールコンテンツ<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">csv</span></code> module defines the following functions:</p>
+<dl class="py function" id="index-3">
+<dt class="sig sig-object py" id="csv.reader">
+<span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csvfile</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">dialect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'excel'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fmtparams</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#csv.reader" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return a <a class="reference internal" href="#reader-objects"><span class="std std-ref">reader object</span></a> that will process
+lines from the given <em>csvfile</em>.  A csvfile must be an iterable of
+strings, each in the reader's defined csv format.
+A csvfile is most commonly a file-like object or list.
+If <em>csvfile</em> is a file object,
+it should be opened with <code class="docutils literal notranslate"><span class="pre">newline=''</span></code>. <a class="footnote-reference brackets" href="#id4" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a>  An optional
+<em>dialect</em> parameter can be given which is used to define a set of parameters
+specific to a particular CSV dialect.  It may be an instance of a subclass of
+the <a class="reference internal" href="#csv.Dialect" title="csv.Dialect"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dialect</span></code></a> class or one of the strings returned by the
+<a class="reference internal" href="#csv.list_dialects" title="csv.list_dialects"><code class="xref py py-func docutils literal notranslate"><span class="pre">list_dialects()</span></code></a> function.  The other optional <em>fmtparams</em> keyword arguments
+can be given to override individual formatting parameters in the current
+dialect.  For full details about the dialect and formatting parameters, see
+section <a class="reference internal" href="#csv-fmt-params"><span class="std std-ref">Dialect クラスと書式化パラメータ</span></a>.</p>
+<p class="translated">csv ファイルから読み込まれた各行は、文字列のリストとして返されます。<a class="reference internal" href="#csv.QUOTE_NONNUMERIC" title="csv.QUOTE_NONNUMERIC"><code class="xref py py-data docutils literal notranslate"><span class="pre">QUOTE_NONNUMERIC</span></code></a> フォーマットオプションが指定された場合を除き、データ型の変換が自動的に行われることはありません (このオプションが指定された場合、クォートされていないフィールドは浮動小数点数に変換されます)。</p>
+<p class="translated">短い利用例:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;eggs.csv&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">spamreader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">quotechar</span><span class="o">=</span><span class="s1">&#39;|&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">spamreader</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">row</span><span class="p">))</span>
+<span class="go">Spam, Spam, Spam, Spam, Spam, Baked Beans</span>
+<span class="go">Spam, Lovely Spam, Wonderful Spam</span>
+</pre></div>
+</div>
+<p class="untranslated">where <code class="file docutils literal notranslate"><span class="pre">eggs.csv</span></code> contains:</p>
+<div class="untranslated highlight-text notranslate"><div class="highlight"><pre><span></span>Spam Spam Spam Spam Spam |Baked Beans|
+Spam |Lovely Spam| |Wonderful Spam|
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="csv.writer">
+<span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">writer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">csvfile</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">dialect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'excel'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fmtparams</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#csv.writer" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ユーザが与えたデータをデリミタで区切られた文字列に変換し、与えられたファイルオブジェクトに書き込むための writer オブジェクトを返します。 <em>csvfile</em> は <a class="reference internal" href="io.html#io.TextIOBase.write" title="io.TextIOBase.write"><code class="xref py py-meth docutils literal notranslate"><span class="pre">write()</span></code></a> メソッドを持つ任意のオブジェクトです。 <em>csvfile</em> がファイルオブジェクトの場合、 <code class="docutils literal notranslate"><span class="pre">newline=''</span></code> として開くべきです <a class="footnote-reference brackets" href="#id4" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> 。オプションとして <em>dialect</em> 引数を与えることができ、利用するCSV表現形式(dialect)を指定することができます。 <em>dialect</em> パラメータは <a class="reference internal" href="#csv.Dialect" title="csv.Dialect"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dialect</span></code></a> クラスのサブクラスのインスタンスか、 <a class="reference internal" href="#csv.list_dialects" title="csv.list_dialects"><code class="xref py py-func docutils literal notranslate"><span class="pre">list_dialects()</span></code></a> 関数が返す文字列の1つにすることができます。別のオプション引数である <em>fmtparams</em> キーワード引数は、現在の表現形式における個々の書式パラメータを上書きするために与えることができます。dialect と書式パラメータについての詳細は、 <a class="reference internal" href="#csv-fmt-params"><span class="std std-ref">Dialect クラスと書式化パラメータ</span></a> 節を参照してください。 DB API を実装するモジュールとのインターフェースを可能な限り容易にするために、 <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a> は空文字列として書き込まれます。この処理は可逆な変換ではありませんが、SQL で NULL データ値を CSV にダンプする処理を、 <code class="docutils literal notranslate"><span class="pre">cursor.fetch*</span></code> 呼び出しによって返されたデータを前処理することなく簡単に行うことができます。他の非文字列データは、書き出される前に <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-func docutils literal notranslate"><span class="pre">str()</span></code></a> を使って文字列に変換されます。</p>
+<p class="translated">短い利用例:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;eggs.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+    <span class="n">spamwriter</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span>
+                            <span class="n">quotechar</span><span class="o">=</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="n">quoting</span><span class="o">=</span><span class="n">csv</span><span class="o">.</span><span class="n">QUOTE_MINIMAL</span><span class="p">)</span>
+    <span class="n">spamwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;Spam&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;Baked Beans&#39;</span><span class="p">])</span>
+    <span class="n">spamwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;Spam&#39;</span><span class="p">,</span> <span class="s1">&#39;Lovely Spam&#39;</span><span class="p">,</span> <span class="s1">&#39;Wonderful Spam&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p class="untranslated">which writes <code class="file docutils literal notranslate"><span class="pre">eggs.csv</span></code> containing:</p>
+<div class="untranslated highlight-text notranslate"><div class="highlight"><pre><span></span>Spam Spam Spam Spam Spam |Baked Beans|
+Spam |Lovely Spam| |Wonderful Spam|
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="csv.register_dialect">
+<span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">register_dialect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">dialect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'excel'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fmtparams</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#csv.register_dialect" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>dialect</em> を <em>name</em> と関連付けます。 <em>name</em> は文字列でなければなりません。表現形式(dialect)は <a class="reference internal" href="#csv.Dialect" title="csv.Dialect"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dialect</span></code></a> のサブクラスを渡すか、またはキーワード引数 <em>fmtparams</em> 、もしくは両方で指定できますが、キーワード引数の方が優先されます。表現形式と書式化パラメータについての詳細は、 <a class="reference internal" href="#csv-fmt-params"><span class="std std-ref">Dialect クラスと書式化パラメータ</span></a> 節を参照してください。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="csv.unregister_dialect">
+<span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">unregister_dialect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#csv.unregister_dialect" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>name</em> に関連づけられた表現形式を表現形式レジストリから削除します。 <em>name</em> が表現形式名でない場合には <a class="reference internal" href="#csv.Error" title="csv.Error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Error</span></code></a> を送出します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="csv.get_dialect">
+<span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">get_dialect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#csv.get_dialect" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>name</em> に関連づけられた表現形式を返します。 <em>name</em> が表現形式名でない場合には <a class="reference internal" href="#csv.Error" title="csv.Error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Error</span></code></a> を送出します。この関数は不変の <a class="reference internal" href="#csv.Dialect" title="csv.Dialect"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dialect</span></code></a> を返します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="csv.list_dialects">
+<span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">list_dialects</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#csv.list_dialects" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">登録されている全ての表現形式を返します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="csv.field_size_limit">
+<span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">field_size_limit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#csv.field_size_limit" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">field_size_limit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_limit</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p class="translated">パーサが許容する現在の最大フィールドサイズを返します。 <em>new_limit</em> が渡されたときは、その値が新しい上限になります。</p>
+</dd></dl>
+
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">csv</span></code> module defines the following classes:</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="csv.DictReader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">DictReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fieldnames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restkey</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dialect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'excel'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#csv.DictReader" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">通常の reader のように動作しますが、個々の行の情報を <a class="reference internal" href="stdtypes.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> にマップするオブジェクトを生成します。マップのキーは省略可能な <em>fieldnames</em> パラメータで与えられます。</p>
+<p class="untranslated">The <em>fieldnames</em> parameter is a <a class="reference internal" href="../glossary.html#term-sequence"><span class="xref std std-term">sequence</span></a>.  If <em>fieldnames</em> is
+omitted, the values in the first row of file <em>f</em> will be used as the
+fieldnames and will be omitted from the results. If
+<em>fieldnames</em> is provided, they will be used and the first row will be
+included in the results.  Regardless of how the fieldnames are determined,
+the dictionary preserves their original ordering.</p>
+<p class="translated">行がフィールド名より多くのフィールドを持っていた場合、残りのデータはリストに入れられて、 <em>restkey</em> により指定されたフィールド名 (デフォルトでは <code class="docutils literal notranslate"><span class="pre">None</span></code>) で保存されます。空白でない行がフィールド名よりも少ないフィールドしか持たない場合、足りない値は <em>restval</em> の値 (デフォルトは <code class="docutils literal notranslate"><span class="pre">None</span></code> ) によって埋められます。</p>
+<p class="translated">その他の省略可能またはキーワード形式のパラメータは、ベースになっている <a class="reference internal" href="#csv.reader" title="csv.reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">reader</span></code></a> インスタンスに渡されます。</p>
+<p class="translated"><em>fieldnames</em> に渡された引数がイテレータの場合、 <a class="reference internal" href="stdtypes.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> に変換されます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span>返される行の型は <code class="xref py py-class docutils literal notranslate"><span class="pre">OrderedDict</span></code> になりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.8 で変更: </span>返される行の型は <a class="reference internal" href="stdtypes.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> になりました。</p>
+</div>
+<p class="translated">短い利用例:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;names.csv&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">csvfile</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;first_name&#39;</span><span class="p">],</span> <span class="n">row</span><span class="p">[</span><span class="s1">&#39;last_name&#39;</span><span class="p">])</span>
+<span class="gp">...</span>
+<span class="go">Eric Idle</span>
+<span class="go">John Cleese</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+<span class="go">{&#39;first_name&#39;: &#39;John&#39;, &#39;last_name&#39;: &#39;Cleese&#39;}</span>
+</pre></div>
+</div>
+<p class="untranslated">where <code class="file docutils literal notranslate"><span class="pre">names.csv</span></code> contains:</p>
+<div class="untranslated highlight-text notranslate"><div class="highlight"><pre><span></span>first_name,last_name
+Eric,Idle
+John,Cleese
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="csv.DictWriter">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">DictWriter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fieldnames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extrasaction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'raise'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dialect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'excel'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#csv.DictWriter" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">通常の writer のように動作しますが、辞書を出力行にマップするオブジェクトを生成します。 <em>fieldnames</em> パラメータは、<a class="reference internal" href="#csv.csvwriter.writerow" title="csv.csvwriter.writerow"><code class="xref py py-meth docutils literal notranslate"><span class="pre">writerow()</span></code></a> メソッドに渡された辞書の値がどのような順番でファイル <em>f</em> に書かれるかを指定するキーの <a class="reference internal" href="collections.abc.html#module-collections.abc" title="collections.abc: Abstract base classes for containers"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sequence</span></code></a> です。 <code class="xref py py-meth docutils literal notranslate"><span class="pre">writerow()</span></code> メソッドに渡された辞書に <em>fieldnames</em> には存在しないキーが含まれている場合、オプションの <em>extrasaction</em> パラメータによってどんな動作を行うかが指定されます。この値がデフォルト値である <code class="docutils literal notranslate"><span class="pre">'raise'</span></code> に設定されている場合、 <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> が送出されます。 <code class="docutils literal notranslate"><span class="pre">'ignore'</span></code> に設定されている場合、辞書の余分な値は無視されます。その他のパラメータはベースになっている <a class="reference internal" href="#csv.writer" title="csv.writer"><code class="xref py py-class docutils literal notranslate"><span class="pre">writer</span></code></a> インスタンスに渡されます。</p>
+<p class="translated"><a class="reference internal" href="#csv.DictReader" title="csv.DictReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictReader</span></code></a> クラスとは異なり、 <a class="reference internal" href="#csv.DictWriter" title="csv.DictWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictWriter</span></code></a> の <em>fieldnames</em> パラメータは省略可能ではありません。</p>
+<p class="translated"><em>fieldnames</em> に渡された引数がイテレータの場合、 <a class="reference internal" href="stdtypes.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> に変換されます。</p>
+<p class="translated">短い利用例:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;names.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+    <span class="n">fieldnames</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;first_name&#39;</span><span class="p">,</span> <span class="s1">&#39;last_name&#39;</span><span class="p">]</span>
+    <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="n">fieldnames</span><span class="p">)</span>
+
+    <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">({</span><span class="s1">&#39;first_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Baked&#39;</span><span class="p">,</span> <span class="s1">&#39;last_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Beans&#39;</span><span class="p">})</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">({</span><span class="s1">&#39;first_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Lovely&#39;</span><span class="p">,</span> <span class="s1">&#39;last_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Spam&#39;</span><span class="p">})</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">({</span><span class="s1">&#39;first_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Wonderful&#39;</span><span class="p">,</span> <span class="s1">&#39;last_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Spam&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p class="untranslated">which writes <code class="file docutils literal notranslate"><span class="pre">names.csv</span></code> containing:</p>
+<div class="untranslated highlight-text notranslate"><div class="highlight"><pre><span></span>first_name,last_name
+Baked,Beans
+Lovely,Spam
+Wonderful,Spam
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="csv.Dialect">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">Dialect</span></span><a class="headerlink" href="#csv.Dialect" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#csv.Dialect" title="csv.Dialect"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dialect</span></code></a> クラスはコンテナクラスです。その属性に、ダブルクォート、空白文字、デリミタなどの扱い方に関する情報を含みます。CSV には厳密な規格がないため、アプリケーションによって生成される CSV データはそれぞれ僅かに異なります。 <code class="xref py py-class docutils literal notranslate"><span class="pre">Dialect</span></code> クラスのインスタンスは <a class="reference internal" href="#csv.reader" title="csv.reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">reader</span></code></a> と <a class="reference internal" href="#csv.writer" title="csv.writer"><code class="xref py py-class docutils literal notranslate"><span class="pre">writer</span></code></a> のインスタンスの挙動を定義します。</p>
+<p class="untranslated">All available <code class="xref py py-class docutils literal notranslate"><span class="pre">Dialect</span></code> names are returned by <a class="reference internal" href="#csv.list_dialects" title="csv.list_dialects"><code class="xref py py-func docutils literal notranslate"><span class="pre">list_dialects()</span></code></a>,
+and they can be registered with specific <a class="reference internal" href="#csv.reader" title="csv.reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">reader</span></code></a> and <a class="reference internal" href="#csv.writer" title="csv.writer"><code class="xref py py-class docutils literal notranslate"><span class="pre">writer</span></code></a>
+classes through their initializer (<code class="docutils literal notranslate"><span class="pre">__init__</span></code>) functions like this:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;students.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+    <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="s1">&#39;unix&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="csv.excel">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">excel</span></span><a class="headerlink" href="#csv.excel" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#csv.excel" title="csv.excel"><code class="xref py py-class docutils literal notranslate"><span class="pre">excel</span></code></a> クラスは Excel で生成される CSV ファイルの通常のプロパティを定義します。これは <code class="docutils literal notranslate"><span class="pre">'excel'</span></code> という名前の dialect として登録されています。</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="csv.excel_tab">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">excel_tab</span></span><a class="headerlink" href="#csv.excel_tab" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#csv.excel_tab" title="csv.excel_tab"><code class="xref py py-class docutils literal notranslate"><span class="pre">excel_tab</span></code></a> クラスは Excel で生成されるタブ分割ファイルの通常のプロパティを定義します。これは <code class="docutils literal notranslate"><span class="pre">'excel-tab'</span></code> という名前の dialect として登録されています。</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="csv.unix_dialect">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">unix_dialect</span></span><a class="headerlink" href="#csv.unix_dialect" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#csv.unix_dialect" title="csv.unix_dialect"><code class="xref py py-class docutils literal notranslate"><span class="pre">unix_dialect</span></code></a> クラスは UNIX システムで生成される CSV ファイルの通常のプロパティ (行終端記号として <code class="docutils literal notranslate"><span class="pre">'\n'</span></code> を用い全てのフィールドをクォートするもの) を定義します。これは <code class="docutils literal notranslate"><span class="pre">'unix'</span></code> という名前の dialect として登録されています。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="csv.Sniffer">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">Sniffer</span></span><a class="headerlink" href="#csv.Sniffer" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#csv.Sniffer" title="csv.Sniffer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sniffer</span></code></a> クラスは CSV ファイルの書式を推理するために用いられるクラスです。</p>
+<p class="translated"><a class="reference internal" href="#csv.Sniffer" title="csv.Sniffer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sniffer</span></code></a> クラスではメソッドを二つ提供しています:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="csv.Sniffer.sniff">
+<span class="sig-name descname"><span class="pre">sniff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delimiters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#csv.Sniffer.sniff" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">与えられた <em>sample</em> を解析し、発見されたパラメータを反映した <a class="reference internal" href="#csv.Dialect" title="csv.Dialect"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dialect</span></code></a> サブクラスを返します。オプションの <em>delimiters</em> パラメータを与えた場合、有効なデリミタ文字を含んでいるはずの文字列として解釈されます。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="csv.Sniffer.has_header">
+<span class="sig-name descname"><span class="pre">has_header</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sample</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#csv.Sniffer.has_header" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Analyze the sample text (presumed to be in CSV format) and return
+<a class="reference internal" href="constants.html#True" title="True"><code class="xref py py-const docutils literal notranslate"><span class="pre">True</span></code></a> if the first row appears to be a series of column headers.
+Inspecting each column, one of two key criteria will be considered to
+estimate if the sample contains a header:</p>
+<ul class="simple">
+<li><p class="translated">2番目からn番目の行は数値を含みます。</p></li>
+<li><p class="untranslated">the second through n-th rows contain strings where at least one value's
+length differs from that of the putative header of that column.</p></li>
+</ul>
+<p class="untranslated">Twenty-one rows after the header are sampled; if more than half of the
+columns + rows meet the criteria, <a class="reference internal" href="constants.html#True" title="True"><code class="xref py py-const docutils literal notranslate"><span class="pre">True</span></code></a> is returned.</p>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated">このメソッドは大雑把なヒューリスティックであり、結果が偽陽性や偽陰性である可能性があります。</p>
+</div>
+</dd></dl>
+
+<p class="translated"><a class="reference internal" href="#csv.Sniffer" title="csv.Sniffer"><code class="xref py py-class docutils literal notranslate"><span class="pre">Sniffer</span></code></a> の利用例:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;example.csv&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+    <span class="n">dialect</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">Sniffer</span><span class="p">()</span><span class="o">.</span><span class="n">sniff</span><span class="p">(</span><span class="n">csvfile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1024</span><span class="p">))</span>
+    <span class="n">csvfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">dialect</span><span class="p">)</span>
+    <span class="c1"># ... process CSV file contents here ...</span>
+</pre></div>
+</div>
+<p class="untranslated" id="csv-constants">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">csv</span></code> module defines the following constants:</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="csv.QUOTE_ALL">
+<span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">QUOTE_ALL</span></span><a class="headerlink" href="#csv.QUOTE_ALL" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#csv.writer" title="csv.writer"><code class="xref py py-class docutils literal notranslate"><span class="pre">writer</span></code></a> オブジェクトに対し、全てのフィールドをクオートするように指示します。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="csv.QUOTE_MINIMAL">
+<span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">QUOTE_MINIMAL</span></span><a class="headerlink" href="#csv.QUOTE_MINIMAL" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#csv.writer" title="csv.writer"><code class="xref py py-class docutils literal notranslate"><span class="pre">writer</span></code></a> オブジェクトに対し、 <em>delimiter</em> 、 <em>quotechar</em>、<code class="docutils literal notranslate"><span class="pre">'\r'</span></code>、<code class="docutils literal notranslate"><span class="pre">'\n'</span></code> または <em>lineterminator</em> に含まれる任意の文字のような特別な文字を含むフィールドだけをクオートするように指示します。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="csv.QUOTE_NONNUMERIC">
+<span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">QUOTE_NONNUMERIC</span></span><a class="headerlink" href="#csv.QUOTE_NONNUMERIC" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#csv.writer" title="csv.writer"><code class="xref py py-class docutils literal notranslate"><span class="pre">writer</span></code></a> オブジェクトに対し、全ての非数値フィールドをクオートするように指示します。</p>
+<p class="translated"><a class="reference internal" href="#csv.reader" title="csv.reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">reader</span></code></a> オブジェクトに、クォーテーションで囲まれていないすべてのフィールドを <a class="reference internal" href="functions.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a> 型に変換するよう指示します。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">Some numeric types, such as <a class="reference internal" href="functions.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>, <a class="reference internal" href="fractions.html#fractions.Fraction" title="fractions.Fraction"><code class="xref py py-class docutils literal notranslate"><span class="pre">Fraction</span></code></a>,
+or <a class="reference internal" href="enum.html#enum.IntEnum" title="enum.IntEnum"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></a>, have a string representation that cannot be
+converted to <a class="reference internal" href="functions.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>.
+They cannot be read in the <code class="xref py py-data docutils literal notranslate"><span class="pre">QUOTE_NONNUMERIC</span></code> and
+<a class="reference internal" href="#csv.QUOTE_STRINGS" title="csv.QUOTE_STRINGS"><code class="xref py py-data docutils literal notranslate"><span class="pre">QUOTE_STRINGS</span></code></a> modes.</p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="csv.QUOTE_NONE">
+<span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">QUOTE_NONE</span></span><a class="headerlink" href="#csv.QUOTE_NONE" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Instructs <a class="reference internal" href="#csv.writer" title="csv.writer"><code class="xref py py-class docutils literal notranslate"><span class="pre">writer</span></code></a> objects to never quote fields.
+When the current <em>delimiter</em>, <em>quotechar</em>, <em>escapechar</em>, <code class="docutils literal notranslate"><span class="pre">'\r'</span></code>, <code class="docutils literal notranslate"><span class="pre">'\n'</span></code>
+or any of the characters in <em>lineterminator</em> occurs in output data
+it is preceded by the current <em>escapechar</em> character.
+If <em>escapechar</em> is not set, the writer will raise <a class="reference internal" href="#csv.Error" title="csv.Error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Error</span></code></a> if
+any characters that require escaping are encountered.
+Set <em>quotechar</em> to <code class="docutils literal notranslate"><span class="pre">None</span></code> to prevent its escaping.</p>
+<p class="translated"><a class="reference internal" href="#csv.reader" title="csv.reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">reader</span></code></a> オブジェクトに、クオート文字に対する特殊処理を行わないよう指示します。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="csv.QUOTE_NOTNULL">
+<span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">QUOTE_NOTNULL</span></span><a class="headerlink" href="#csv.QUOTE_NOTNULL" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Instructs <a class="reference internal" href="#csv.writer" title="csv.writer"><code class="xref py py-class docutils literal notranslate"><span class="pre">writer</span></code></a> objects to quote all fields which are not
+<code class="docutils literal notranslate"><span class="pre">None</span></code>.  This is similar to <a class="reference internal" href="#csv.QUOTE_ALL" title="csv.QUOTE_ALL"><code class="xref py py-data docutils literal notranslate"><span class="pre">QUOTE_ALL</span></code></a>, except that if a
+field value is <code class="docutils literal notranslate"><span class="pre">None</span></code> an empty (unquoted) string is written.</p>
+<p class="untranslated">Instructs <a class="reference internal" href="#csv.reader" title="csv.reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">reader</span></code></a> objects to interpret an empty (unquoted) field
+as <code class="docutils literal notranslate"><span class="pre">None</span></code> and to otherwise behave as <a class="reference internal" href="#csv.QUOTE_ALL" title="csv.QUOTE_ALL"><code class="xref py py-data docutils literal notranslate"><span class="pre">QUOTE_ALL</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.12.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="csv.QUOTE_STRINGS">
+<span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">QUOTE_STRINGS</span></span><a class="headerlink" href="#csv.QUOTE_STRINGS" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Instructs <a class="reference internal" href="#csv.writer" title="csv.writer"><code class="xref py py-class docutils literal notranslate"><span class="pre">writer</span></code></a> objects to always place quotes around fields
+which are strings.  This is similar to <a class="reference internal" href="#csv.QUOTE_NONNUMERIC" title="csv.QUOTE_NONNUMERIC"><code class="xref py py-data docutils literal notranslate"><span class="pre">QUOTE_NONNUMERIC</span></code></a>, except that if a
+field value is <code class="docutils literal notranslate"><span class="pre">None</span></code> an empty (unquoted) string is written.</p>
+<p class="untranslated">Instructs <a class="reference internal" href="#csv.reader" title="csv.reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">reader</span></code></a> objects to interpret an empty (unquoted) string as <code class="docutils literal notranslate"><span class="pre">None</span></code> and
+to otherwise behave as <a class="reference internal" href="#csv.QUOTE_NONNUMERIC" title="csv.QUOTE_NONNUMERIC"><code class="xref py py-data docutils literal notranslate"><span class="pre">QUOTE_NONNUMERIC</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.12.</span></p>
+</div>
+</dd></dl>
+
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">csv</span></code> module defines the following exception:</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="csv.Error">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">csv.</span></span><span class="sig-name descname"><span class="pre">Error</span></span><a class="headerlink" href="#csv.Error" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">全ての関数において、エラーが検出された際に送出される例外です。</p>
+</dd></dl>
+
+</section>
+<section id="dialects-and-formatting-parameters">
+<span id="csv-fmt-params"></span><h2 class="translated">Dialect クラスと書式化パラメータ<a class="headerlink" href="#dialects-and-formatting-parameters" title="Link to this heading">¶</a></h2>
+<p class="untranslated">To make it easier to specify the format of input and output records, specific
+formatting parameters are grouped together into dialects.  A dialect is a
+subclass of the <a class="reference internal" href="#csv.Dialect" title="csv.Dialect"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dialect</span></code></a> class containing various attributes
+describing the format of the CSV file.  When creating <a class="reference internal" href="#csv.reader" title="csv.reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">reader</span></code></a> or
+<a class="reference internal" href="#csv.writer" title="csv.writer"><code class="xref py py-class docutils literal notranslate"><span class="pre">writer</span></code></a> objects, the programmer can specify a string or a subclass of
+the <code class="xref py py-class docutils literal notranslate"><span class="pre">Dialect</span></code> class as the dialect parameter.  In addition to, or instead
+of, the <em>dialect</em> parameter, the programmer can also specify individual
+formatting parameters, which have the same names as the attributes defined below
+for the <code class="xref py py-class docutils literal notranslate"><span class="pre">Dialect</span></code> class.</p>
+<p class="translated">Dialect は以下の属性をサポートしています:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="csv.Dialect.delimiter">
+<span class="sig-prename descclassname"><span class="pre">Dialect.</span></span><span class="sig-name descname"><span class="pre">delimiter</span></span><a class="headerlink" href="#csv.Dialect.delimiter" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">フィールド間を分割するのに用いられる 1 文字からなる文字列です。デフォルトでは <code class="docutils literal notranslate"><span class="pre">','</span></code> です。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="csv.Dialect.doublequote">
+<span class="sig-prename descclassname"><span class="pre">Dialect.</span></span><span class="sig-name descname"><span class="pre">doublequote</span></span><a class="headerlink" href="#csv.Dialect.doublequote" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">フィールド内に現れた <em>quotechar</em> のインスタンスで、クオートではないその文字自身でなければならない文字をどのようにクオートするかを制御します。 <a class="reference internal" href="constants.html#True" title="True"><code class="xref py py-const docutils literal notranslate"><span class="pre">True</span></code></a> の場合、この文字は二重化されます。 <a class="reference internal" href="constants.html#False" title="False"><code class="xref py py-const docutils literal notranslate"><span class="pre">False</span></code></a> の場合、 <em>escapechar</em> は <em>quotechar</em> の前に置かれます。デフォルトでは <code class="xref py py-const docutils literal notranslate"><span class="pre">True</span></code> です。</p>
+<p class="translated">出力においては、 <em>doublequote</em> が <a class="reference internal" href="constants.html#False" title="False"><code class="xref py py-const docutils literal notranslate"><span class="pre">False</span></code></a> で <em>escapechar</em> がセットされていない場合、フィールド内に <em>quotechar</em> が現れると <a class="reference internal" href="#csv.Error" title="csv.Error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Error</span></code></a> が送出されます。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="csv.Dialect.escapechar">
+<span class="sig-prename descclassname"><span class="pre">Dialect.</span></span><span class="sig-name descname"><span class="pre">escapechar</span></span><a class="headerlink" href="#csv.Dialect.escapechar" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">A one-character string used by the writer to escape characters that
+require escaping:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p class="untranslated">the <em>delimiter</em>, the <em>quotechar</em>, <code class="docutils literal notranslate"><span class="pre">'\r'</span></code>, <code class="docutils literal notranslate"><span class="pre">'\n'</span></code> and any of the
+characters in <em>lineterminator</em> are escaped if <em>quoting</em> is set to
+<a class="reference internal" href="#csv.QUOTE_NONE" title="csv.QUOTE_NONE"><code class="xref py py-const docutils literal notranslate"><span class="pre">QUOTE_NONE</span></code></a>;</p></li>
+<li><p class="untranslated">the <em>quotechar</em> is escaped if <em>doublequote</em> is <a class="reference internal" href="constants.html#False" title="False"><code class="xref py py-const docutils literal notranslate"><span class="pre">False</span></code></a>;</p></li>
+<li><p class="untranslated">the <em>escapechar</em> itself.</p></li>
+</ul>
+</div></blockquote>
+<p class="untranslated">On reading, the <em>escapechar</em> removes any special meaning from
+the following character. It defaults to <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a>, which disables escaping.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.11 で変更: </span>空の <em>escapechar</em> は許可されていません。</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="csv.Dialect.lineterminator">
+<span class="sig-prename descclassname"><span class="pre">Dialect.</span></span><span class="sig-name descname"><span class="pre">lineterminator</span></span><a class="headerlink" href="#csv.Dialect.lineterminator" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#csv.writer" title="csv.writer"><code class="xref py py-class docutils literal notranslate"><span class="pre">writer</span></code></a> が作り出す各行を終端する際に用いられる文字列です。デフォルトでは <code class="docutils literal notranslate"><span class="pre">'\r\n'</span></code> です。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated"><a class="reference internal" href="#csv.reader" title="csv.reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">reader</span></code></a> は <code class="docutils literal notranslate"><span class="pre">'\r'</span></code> または <code class="docutils literal notranslate"><span class="pre">'\n'</span></code> のどちらかを行末と認識するようにハードコードされており、 <em>lineterminator</em> を無視します。この振る舞いは将来変更されるかもしれません。</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="csv.Dialect.quotechar">
+<span class="sig-prename descclassname"><span class="pre">Dialect.</span></span><span class="sig-name descname"><span class="pre">quotechar</span></span><a class="headerlink" href="#csv.Dialect.quotechar" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">A one-character string used to quote fields containing special characters,
+such as the <em>delimiter</em> or the <em>quotechar</em>, or which contain new-line
+characters (<code class="docutils literal notranslate"><span class="pre">'\r'</span></code>, <code class="docutils literal notranslate"><span class="pre">'\n'</span></code> or any of the characters in <em>lineterminator</em>).
+It defaults to <code class="docutils literal notranslate"><span class="pre">'&quot;'</span></code>.
+Can be set to <code class="docutils literal notranslate"><span class="pre">None</span></code> to prevent escaping <code class="docutils literal notranslate"><span class="pre">'&quot;'</span></code> if <em>quoting</em> is set
+to <a class="reference internal" href="#csv.QUOTE_NONE" title="csv.QUOTE_NONE"><code class="xref py py-const docutils literal notranslate"><span class="pre">QUOTE_NONE</span></code></a>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.11 で変更: </span>空の <em>quotechar</em> は許可されていません。</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="csv.Dialect.quoting">
+<span class="sig-prename descclassname"><span class="pre">Dialect.</span></span><span class="sig-name descname"><span class="pre">quoting</span></span><a class="headerlink" href="#csv.Dialect.quoting" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Controls when quotes should be generated by the writer and recognised by the
+reader.  It can take on any of the <a class="reference internal" href="#csv-constants"><span class="std std-ref">QUOTE_* constants</span></a>
+and defaults to <a class="reference internal" href="#csv.QUOTE_MINIMAL" title="csv.QUOTE_MINIMAL"><code class="xref py py-const docutils literal notranslate"><span class="pre">QUOTE_MINIMAL</span></code></a> if <em>quotechar</em> is not <code class="docutils literal notranslate"><span class="pre">None</span></code>,
+and <a class="reference internal" href="#csv.QUOTE_NONE" title="csv.QUOTE_NONE"><code class="xref py py-const docutils literal notranslate"><span class="pre">QUOTE_NONE</span></code></a> otherwise.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="csv.Dialect.skipinitialspace">
+<span class="sig-prename descclassname"><span class="pre">Dialect.</span></span><span class="sig-name descname"><span class="pre">skipinitialspace</span></span><a class="headerlink" href="#csv.Dialect.skipinitialspace" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">When <a class="reference internal" href="constants.html#True" title="True"><code class="xref py py-const docutils literal notranslate"><span class="pre">True</span></code></a>, spaces immediately following the <em>delimiter</em> are ignored.
+The default is <a class="reference internal" href="constants.html#False" title="False"><code class="xref py py-const docutils literal notranslate"><span class="pre">False</span></code></a>.  When combining <code class="docutils literal notranslate"><span class="pre">delimiter='</span> <span class="pre">'</span></code> with
+<code class="docutils literal notranslate"><span class="pre">skipinitialspace=True</span></code>, unquoted empty fields are not allowed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="csv.Dialect.strict">
+<span class="sig-prename descclassname"><span class="pre">Dialect.</span></span><span class="sig-name descname"><span class="pre">strict</span></span><a class="headerlink" href="#csv.Dialect.strict" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><code class="docutils literal notranslate"><span class="pre">True</span></code> の場合、 不正な CSV 入力に対して <a class="reference internal" href="#csv.Error" title="csv.Error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Error</span></code></a> を送出します。デフォルトでは <code class="docutils literal notranslate"><span class="pre">False</span></code> です。</p>
+</dd></dl>
+
+</section>
+<section id="reader-objects">
+<span id="id3"></span><h2 class="translated">reader オブジェクト<a class="headerlink" href="#reader-objects" title="Link to this heading">¶</a></h2>
+<p class="translated">reader オブジェクト(<a class="reference internal" href="#csv.DictReader" title="csv.DictReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictReader</span></code></a> インスタンス、および <a class="reference internal" href="#csv.reader" title="csv.reader"><code class="xref py py-func docutils literal notranslate"><span class="pre">reader()</span></code></a> 関数によって返されたオブジェクト) は、以下の public なメソッドを持っています:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="csv.csvreader.__next__">
+<span class="sig-prename descclassname"><span class="pre">csvreader.</span></span><span class="sig-name descname"><span class="pre">__next__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#csv.csvreader.__next__" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">reader の反復可能なオブジェクトから、現在の表現形式 (<a class="reference internal" href="#csv.Dialect" title="csv.Dialect"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dialect</span></code></a>) に基づいて次の行を解析してリスト（オブジェクトが <a class="reference internal" href="#csv.reader" title="csv.reader"><code class="xref py py-func docutils literal notranslate"><span class="pre">reader()</span></code></a> から返された場合）または辞書 （ <a class="reference internal" href="#csv.DictReader" title="csv.DictReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictReader</span></code></a> のインスタンスの場合）として返します。通常は <code class="docutils literal notranslate"><span class="pre">next(reader)</span></code> のようにして呼び出すことになります。</p>
+</dd></dl>
+
+<p class="translated">reader オブジェクトには以下の公開属性があります:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="csv.csvreader.dialect">
+<span class="sig-prename descclassname"><span class="pre">csvreader.</span></span><span class="sig-name descname"><span class="pre">dialect</span></span><a class="headerlink" href="#csv.csvreader.dialect" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">パーサで使われる表現形式の読み出し専用の記述です。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="csv.csvreader.line_num">
+<span class="sig-prename descclassname"><span class="pre">csvreader.</span></span><span class="sig-name descname"><span class="pre">line_num</span></span><a class="headerlink" href="#csv.csvreader.line_num" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ソースイテレータから読んだ行数です。この数は返されるレコードの数とは、レコードが複数行に亘ることがあるので、一致しません。</p>
+</dd></dl>
+
+<p class="translated">DictReader オブジェクトは、以下の public な属性を持っています:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="csv.DictReader.fieldnames">
+<span class="sig-prename descclassname"><span class="pre">DictReader.</span></span><span class="sig-name descname"><span class="pre">fieldnames</span></span><a class="headerlink" href="#csv.DictReader.fieldnames" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">オブジェクトを生成するときに渡されなかった場合、この属性は最初のアクセス時か、ファイルから最初のレコードを読み出したときに初期化されます。</p>
+</dd></dl>
+
+</section>
+<section id="writer-objects">
+<h2 class="translated">writer オブジェクト<a class="headerlink" href="#writer-objects" title="Link to this heading">¶</a></h2>
+<p class="translated"><a class="reference internal" href="#csv.writer" title="csv.writer"><code class="xref py py-class docutils literal notranslate"><span class="pre">writer</span></code></a> オブジェクト(<a class="reference internal" href="#csv.DictWriter" title="csv.DictWriter"><code class="xref py py-class docutils literal notranslate"><span class="pre">DictWriter</span></code></a> インスタンス、および  <a class="reference internal" href="#csv.writer" title="csv.writer"><code class="xref py py-func docutils literal notranslate"><span class="pre">writer()</span></code></a> 関数によって返されたオブジェクト) は、以下の public なメソッドを持っています: <em>row</em> には、 <code class="xref py py-class docutils literal notranslate"><span class="pre">writer</span></code> オブジェクトの場合には文字列か数値のイテラブルを指定し、 <code class="xref py py-class docutils literal notranslate"><span class="pre">DictWriter</span></code> オブジェクトの場合はフィールド名をキーとして対応する文字列か数値を格納した辞書オブジェクトを指定します(数値は <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-func docutils literal notranslate"><span class="pre">str()</span></code></a> で変換されます)。複素数を出力する場合、値をかっこで囲んで出力します。このため、CSV ファイルを読み込むアプリケーションで（そのアプリケーションが複素数をサポートしていたとしても）問題が発生する場合があります。</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="csv.csvwriter.writerow">
+<span class="sig-prename descclassname"><span class="pre">csvwriter.</span></span><span class="sig-name descname"><span class="pre">writerow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#csv.csvwriter.writerow" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">現在の表現形式 (<a class="reference internal" href="#csv.Dialect" title="csv.Dialect"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dialect</span></code></a>.)に沿ってフォーマットされた <em>row</em> パラメータを writer のファイルオブジェクトに書き込みます。ファイルオブジェクトの <em>write</em> メソッドを呼び出した際の戻り値を返します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span>任意のイテラブルのサポートの追加。</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="csv.csvwriter.writerows">
+<span class="sig-prename descclassname"><span class="pre">csvwriter.</span></span><span class="sig-name descname"><span class="pre">writerows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rows</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#csv.csvwriter.writerows" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>rows</em> 引数 (上で解説した <em>row</em> オブジェクトのイテラブル) の全ての要素を現在の表現形式に基づいて書式化し、writer のファイルオブジェクトに書き込みます。</p>
+</dd></dl>
+
+<p class="translated">writer オブジェクトには以下の公開属性があります:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="csv.csvwriter.dialect">
+<span class="sig-prename descclassname"><span class="pre">csvwriter.</span></span><span class="sig-name descname"><span class="pre">dialect</span></span><a class="headerlink" href="#csv.csvwriter.dialect" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">writer で使われる表現形式の読み出し専用の記述です。</p>
+</dd></dl>
+
+<p class="translated">DictWriter のオブジェクトは以下の public メソッドを持っています:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="csv.DictWriter.writeheader">
+<span class="sig-prename descclassname"><span class="pre">DictWriter.</span></span><span class="sig-name descname"><span class="pre">writeheader</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#csv.DictWriter.writeheader" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Write a row with the field names (as specified in the constructor) to
+the writer's file object, formatted according to the current dialect. Return
+the return value of the <a class="reference internal" href="#csv.csvwriter.writerow" title="csv.csvwriter.writerow"><code class="xref py py-meth docutils literal notranslate"><span class="pre">csvwriter.writerow()</span></code></a> call used internally.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.8 で変更: </span><a class="reference internal" href="#csv.DictWriter.writeheader" title="csv.DictWriter.writeheader"><code class="xref py py-meth docutils literal notranslate"><span class="pre">writeheader()</span></code></a> は内部的に利用している <a class="reference internal" href="#csv.csvwriter.writerow" title="csv.csvwriter.writerow"><code class="xref py py-meth docutils literal notranslate"><span class="pre">csvwriter.writerow()</span></code></a> メソッドの返り値を返すようになりました。</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="examples">
+<span id="csv-examples"></span><h2 class="translated">使用例<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p class="translated">最も簡単な CSV ファイル読み込みの例です:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;some.csv&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="translated">別の書式での読み込み:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;passwd&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">quoting</span><span class="o">=</span><span class="n">csv</span><span class="o">.</span><span class="n">QUOTE_NONE</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="translated">上に対して、単純な書き込みのプログラム例は以下のようになります。</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;some.csv&#39;</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">writer</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">someiterable</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="translated"><a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a> が CSV ファイルの読み込みに使われるため、ファイルはデフォルトではシステムのデフォルトエンコーディングでユニコード文字列にデコードされます (<a class="reference internal" href="locale.html#locale.getencoding" title="locale.getencoding"><code class="xref py py-func docutils literal notranslate"><span class="pre">locale.getencoding()</span></code></a> を参照)。他のエンコーディングを用いてデコードするには、open の引数 <code class="docutils literal notranslate"><span class="pre">encoding</span></code> を設定して、以下のようにします:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;some.csv&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="translated">システムのデフォルトエンコーディング以外で書き込む場合も同様です。出力ファイルを開く際に引数 <code class="docutils literal notranslate"><span class="pre">encoding</span></code> を明示してください。</p>
+<p class="translated">新しい表現形式の登録:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="n">csv</span><span class="o">.</span><span class="n">register_dialect</span><span class="p">(</span><span class="s1">&#39;unixpwd&#39;</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">quoting</span><span class="o">=</span><span class="n">csv</span><span class="o">.</span><span class="n">QUOTE_NONE</span><span class="p">)</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;passwd&#39;</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s1">&#39;unixpwd&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="translated">もう少し手の込んだ reader の使い方 --- エラーを捉えてレポートします。</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span><span class="o">,</span><span class="w"> </span><span class="nn">sys</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;some.csv&#39;</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">csv</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;file </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s1">, line </span><span class="si">{</span><span class="n">reader</span><span class="o">.</span><span class="n">line_num</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="translated">このモジュールは文字列の解析は直接サポートしませんが、簡単にできます。</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">([</span><span class="s1">&#39;one,two,three&#39;</span><span class="p">]):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="translated rubric">脚注</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id4" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>)</span>
+<p class="untranslated">If <code class="docutils literal notranslate"><span class="pre">newline=''</span></code> is not specified, newlines embedded inside quoted fields
+will not be interpreted correctly, and on platforms that use <code class="docutils literal notranslate"><span class="pre">\r\n</span></code> line endings
+on write an extra <code class="docutils literal notranslate"><span class="pre">\r</span></code> will be added.  It should always be safe to specify
+<code class="docutils literal notranslate"><span class="pre">newline=''</span></code>, since the csv module does its own
+(<a class="reference internal" href="../glossary.html#term-universal-newlines"><span class="xref std std-term">universal</span></a>) newline handling.</p>
+</aside>
+</aside>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">csv</span></code> --- CSV ファイルの読み書き</a><ul>
+<li><a class="reference internal" href="#module-contents">モジュールコンテンツ</a></li>
+<li><a class="reference internal" href="#dialects-and-formatting-parameters">Dialect クラスと書式化パラメータ</a></li>
+<li><a class="reference internal" href="#reader-objects">reader オブジェクト</a></li>
+<li><a class="reference internal" href="#writer-objects">writer オブジェクト</a></li>
+<li><a class="reference internal" href="#examples">使用例</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="fileformats.html"
+                          title="前の章へ">ファイルフォーマット</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="configparser.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">configparser</span></code> --- 設定ファイルのパーサー</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/csv.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/csv.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/csv.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="configparser.html" title="configparser --- 設定ファイルのパーサー"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="fileformats.html" title="ファイルフォーマット"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="fileformats.html" >ファイルフォーマット</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">csv</span></code> --- CSV ファイルの読み書き</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

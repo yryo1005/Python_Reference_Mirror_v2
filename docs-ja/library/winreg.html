@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="winreg --- Windows レジストリへのアクセス" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/winreg.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="これらの関数は Windows レジストリ API を Python から使えるようにします。プログラマがレジストリハンドルを明示的にクローズするのを忘れた場合でも、確実にハンドルがクローズされるようにするために、レジストリハンドルとして整数値ではなく ハンドルオブジェクト が使われます。 Availability: Windows. 関数: このモジュールでは以下の関数を提供します: 定数..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_winreg_cdca99bd.png" />
+<meta property="og:image:alt" content="これらの関数は Windows レジストリ API を Python から使えるようにします。プログラマがレジストリハンドルを明示的にクローズするのを忘れた場合でも、確実にハンドルがクローズされるようにするために、レジストリハンドルとして整数値ではなく ハンドルオブジェクト が使われます。 Availability: Windows. 関数: このモジュールでは以下の関数を提供します: 定数..." />
+<meta name="description" content="これらの関数は Windows レジストリ API を Python から使えるようにします。プログラマがレジストリハンドルを明示的にクローズするのを忘れた場合でも、確実にハンドルがクローズされるようにするために、レジストリハンドルとして整数値ではなく ハンドルオブジェクト が使われます。 Availability: Windows. 関数: このモジュールでは以下の関数を提供します: 定数..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>winreg --- Windows レジストリへのアクセス &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="winsound --- Windows 用の音声再生インターフェース" href="winsound.html" />
+    <link rel="prev" title="msvcrt --- MS VC++ ランタイムの有用なルーチン群" href="msvcrt.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/winreg.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">winreg</span></code> --- Windows レジストリへのアクセス</a><ul>
+<li><a class="reference internal" href="#functions">関数</a></li>
+<li><a class="reference internal" href="#constants">定数</a><ul>
+<li><a class="reference internal" href="#hkey-constants">HKEY_* 定数</a></li>
+<li><a class="reference internal" href="#access-rights">アクセス権限</a><ul>
+<li><a class="reference internal" href="#bit-specific">64-bit 特有のアクセス権</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#value-types">値の型</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#registry-handle-objects">レジストリハンドルオブジェクト</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="msvcrt.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">msvcrt</span></code> --- MS VC++ ランタイムの有用なルーチン群</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="winsound.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">winsound</span></code> --- Windows 用の音声再生インターフェース</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/winreg.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/winreg.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/winreg.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="winsound.html" title="winsound --- Windows 用の音声再生インターフェース"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="msvcrt.html" title="msvcrt --- MS VC++ ランタイムの有用なルーチン群"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="windows.html" accesskey="U">MS Windows 固有のサービス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">winreg</span></code> --- Windows レジストリへのアクセス</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-winreg">
+<span id="winreg-windows-registry-access"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">winreg</span></code> --- Windows レジストリへのアクセス<a class="headerlink" href="#module-winreg" title="Link to this heading">¶</a></h1>
+<hr class="docutils" />
+<p class="translated">これらの関数は Windows レジストリ API を Python から使えるようにします。プログラマがレジストリハンドルを明示的にクローズするのを忘れた場合でも、確実にハンドルがクローズされるようにするために、レジストリハンドルとして整数値ではなく <a class="reference internal" href="#handle-object"><span class="std std-ref">ハンドルオブジェクト</span></a> が使われます。</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: Windows.</p>
+</div>
+<div class="versionchanged" id="exception-changed">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span>このモジュールのいくつかの関数は以前は <a class="reference internal" href="exceptions.html#WindowsError" title="WindowsError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">WindowsError</span></code></a> を送出していました。それは今では <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> の別名です。</p>
+</div>
+<section id="functions">
+<span id="id1"></span><h2 class="translated">関数<a class="headerlink" href="#functions" title="Link to this heading">¶</a></h2>
+<p class="translated">このモジュールでは以下の関数を提供します:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.CloseKey">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">CloseKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hkey</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.CloseKey" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">以前開かれたレジストリキーを閉じます。<em>hkey</em> 引数は以前開かれたレジストリキーを指定します。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated">このメソッドを使って (または <a class="reference internal" href="#winreg.PyHKEY.Close" title="winreg.PyHKEY.Close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">hkey.Close()</span></code></a> によって) <em>hkey</em> が閉じられなかった場合、Python が <em>hkey</em> オブジェクトを破壊する際に閉じられます。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.ConnectRegistry">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">ConnectRegistry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">computer_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.ConnectRegistry" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">他のコンピュータ上にある事前に定義されたレジストリハンドルとの接続を確立し、 <a class="reference internal" href="#handle-object"><span class="std std-ref">ハンドルオブジェクト</span></a> を返します。</p>
+<p class="translated"><em>computer_name</em> はリモートコンピュータの名前で、<code class="docutils literal notranslate"><span class="pre">r&quot;\\computername&quot;</span></code> の形式をとります。<code class="docutils literal notranslate"><span class="pre">None</span></code> の場合、ローカルのコンピュータが使われます。</p>
+<p class="translated"><em>key</em> は、事前に定義された接続先のハンドルです。</p>
+<p class="translated">戻り値は開かれたキーのハンドルです。関数が失敗した場合、 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> 例外が送出されます。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">computer_name</span></code>, <code class="docutils literal notranslate"><span class="pre">key</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.ConnectRegistry</span></code> を送出します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span><a class="reference internal" href="#exception-changed"><span class="std std-ref">上記</span></a> を参照。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.CreateKey">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">CreateKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.CreateKey" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">指定されたキーを生成するか開き、 <a class="reference internal" href="#handle-object"><span class="std std-ref">ハンドルオブジェクト</span></a> を返します。</p>
+<p class="translated"><em>key</em> はすでに開かれたキーか、既定の <a class="reference internal" href="#hkey-constants"><span class="std std-ref">HKEY_* 定数</span></a> のうちの一つです。</p>
+<p class="translated"><em>sub_key</em> はこのメソッドが開く、または新規作成するキーの名前です。</p>
+<p class="translated"><em>key</em> が事前に定義されたキーのうちの一つなら、<em>sub_key</em> は <code class="docutils literal notranslate"><span class="pre">None</span></code> でかまいません。その場合、この関数に渡されるキーハンドルと同じハンドルが返されます。</p>
+<p class="translated">キーがすでに存在する場合、この関数はその既存のキーを開きます。</p>
+<p class="translated">戻り値は開かれたキーのハンドルです。関数が失敗した場合、 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> 例外が送出されます。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">sub_key</span></code>, <code class="docutils literal notranslate"><span class="pre">access</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.CreateKey</span></code> を送出します。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.OpenKey/result</span></code> を送出します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span><a class="reference internal" href="#exception-changed"><span class="std std-ref">上記</span></a> を参照。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.CreateKeyEx">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">CreateKeyEx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reserved</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">KEY_WRITE</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.CreateKeyEx" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">指定されたキーを生成するか開き、 <a class="reference internal" href="#handle-object"><span class="std std-ref">ハンドルオブジェクト</span></a> を返します。</p>
+<p class="translated"><em>key</em> はすでに開かれたキーか、既定の <a class="reference internal" href="#hkey-constants"><span class="std std-ref">HKEY_* 定数</span></a> のうちの一つです。</p>
+<p class="translated"><em>sub_key</em> はこのメソッドが開く、または新規作成するキーの名前です。</p>
+<p class="translated"><em>reserved</em> は予約された整数で、 0 でなくてはなりません。デフォルト値は 0 です。</p>
+<p class="translated"><em>access</em> は、 key に対して想定されるセキュリティアクセスを示すアクセスマスクを指定する整数です。デフォルトは <a class="reference internal" href="#winreg.KEY_WRITE" title="winreg.KEY_WRITE"><code class="xref py py-const docutils literal notranslate"><span class="pre">KEY_WRITE</span></code></a> です。その他の利用可能な値については <a class="reference internal" href="#access-rights"><span class="std std-ref">アクセス権</span></a> を参照してください。</p>
+<p class="translated"><em>key</em> が事前に定義されたキーのうちの一つなら、<em>sub_key</em> は <code class="docutils literal notranslate"><span class="pre">None</span></code> でかまいません。その場合、この関数に渡されるキーハンドルと同じハンドルが返されます。</p>
+<p class="translated">キーがすでに存在する場合、この関数はその既存のキーを開きます。</p>
+<p class="translated">戻り値は開かれたキーのハンドルです。関数が失敗した場合、 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> 例外が送出されます。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">sub_key</span></code>, <code class="docutils literal notranslate"><span class="pre">access</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.CreateKey</span></code> を送出します。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.OpenKey/result</span></code> を送出します。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span><a class="reference internal" href="#exception-changed"><span class="std std-ref">上記</span></a> を参照。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.DeleteKey">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">DeleteKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.DeleteKey" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">指定されたキーを削除します。</p>
+<p class="translated"><em>key</em> はすでに開かれたキーか、既定の <a class="reference internal" href="#hkey-constants"><span class="std std-ref">HKEY_* 定数</span></a> のうちの一つです。</p>
+<p class="translated"><em>sub_key</em>  は文字列で、<em>key</em> 引数によって指定されたキーのサブキーでなければなりません。この値は <code class="docutils literal notranslate"><span class="pre">None</span></code> であってはならず、キーはサブキーを持っていなくてもかまいません。</p>
+<p class="translated"><em>このメソッドはサブキーをもつキーを削除することはできません。</em></p>
+<p class="translated">このメソッドの実行が成功すると、キー全体が、その値すべてを含めて削除されます。このメソッドが失敗した場合、 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> 例外が送出されます。</p>
+<p class="audit-hook untranslated">Raises an <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">auditing event</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.DeleteKey</span></code> with arguments <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">sub_key</span></code>, <code class="docutils literal notranslate"><span class="pre">access</span></code>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span><a class="reference internal" href="#exception-changed"><span class="std std-ref">上記</span></a> を参照。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.DeleteKeyEx">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">DeleteKeyEx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">KEY_WOW64_64KEY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reserved</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.DeleteKeyEx" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">指定されたキーを削除します。</p>
+<p class="translated"><em>key</em> はすでに開かれたキーか、既定の <a class="reference internal" href="#hkey-constants"><span class="std std-ref">HKEY_* 定数</span></a> のうちの一つです。</p>
+<p class="translated"><em>sub_key</em> は <em>key</em> 引数によって指定された key の subkey でなければなりません。この値は <code class="docutils literal notranslate"><span class="pre">None</span></code> であってはなりません。また、key は subkey を持たないかもしれません。</p>
+<p class="translated"><em>reserved</em> は予約された整数で、 0 でなくてはなりません。デフォルト値は 0 です。</p>
+<p class="translated"><em>access</em> は、 key に対して想定されるセキュリティアクセスを示すアクセスマスクを指定する整数です。デフォルトは <a class="reference internal" href="#winreg.KEY_WOW64_64KEY" title="winreg.KEY_WOW64_64KEY"><code class="xref py py-const docutils literal notranslate"><span class="pre">KEY_WOW64_64KEY</span></code></a> です。32 bit Windows では、WOW64 定数は無視されます。その他の利用可能な値については <a class="reference internal" href="#access-rights"><span class="std std-ref">アクセス権</span></a> を参照してください。</p>
+<p class="translated"><em>このメソッドはサブキーをもつキーを削除することはできません。</em></p>
+<p class="translated">このメソッドの実行が成功すると、キー全体が、その値すべてを含めて削除されます。このメソッドが失敗した場合、 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> 例外が送出されます。</p>
+<p class="translated">サポートされていない Windows バージョンでは、 <a class="reference internal" href="exceptions.html#NotImplementedError" title="NotImplementedError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NotImplementedError</span></code></a> 例外を発生させます。</p>
+<p class="audit-hook untranslated">Raises an <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">auditing event</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.DeleteKey</span></code> with arguments <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">sub_key</span></code>, <code class="docutils literal notranslate"><span class="pre">access</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span><a class="reference internal" href="#exception-changed"><span class="std std-ref">上記</span></a> を参照。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.DeleteValue">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">DeleteValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.DeleteValue" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">レジストリキーから指定された名前つきの値を削除します。</p>
+<p class="translated"><em>key</em> はすでに開かれたキーか、既定の <a class="reference internal" href="#hkey-constants"><span class="std std-ref">HKEY_* 定数</span></a> のうちの一つです。</p>
+<p class="translated"><em>value</em> は削除したい値を指定するための文字列です。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">value</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.DeleteValue</span></code> を送出します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.EnumKey">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">EnumKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.EnumKey" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">開かれているレジストリキーのサブキーを列挙し、文字列で返します。</p>
+<p class="translated"><em>key</em> はすでに開かれたキーか、既定の <a class="reference internal" href="#hkey-constants"><span class="std std-ref">HKEY_* 定数</span></a> のうちの一つです。</p>
+<p class="translated"><em>index</em> は整数値で、取得するキーのインデクスを指定します。</p>
+<p class="translated">この関数は、呼び出されるたびに一つのサブキーの名前を取得します。この関数は通常、これ以上値がないことを示す <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> 例外が送出されるまで繰り返し呼び出されます。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">index</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.EnumKey</span></code> を送出します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span><a class="reference internal" href="#exception-changed"><span class="std std-ref">上記</span></a> を参照。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.EnumValue">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">EnumValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.EnumValue" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">開かれているレジストリキーの値を列挙し、タプルで返します。</p>
+<p class="translated"><em>key</em> はすでに開かれたキーか、既定の <a class="reference internal" href="#hkey-constants"><span class="std std-ref">HKEY_* 定数</span></a> のうちの一つです。</p>
+<p class="translated"><em>index</em> は整数値で、取得する値のインデクスを指定します。</p>
+<p class="translated">この関数は、呼び出されるたびに一つのサブキーの名前を取得します。この関数は通常、これ以上値がないことを示す <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> 例外が送出されるまで繰り返し呼び出されます。</p>
+<p class="translated">結果は 3 要素のタプルになります:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p class="translated">インデックス</p></th>
+<th class="head"><p class="translated">意味</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p class="translated">値の名前を指定する文字列</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p class="translated">値のデータを保持するためのオブジェクトで、その型は背後のレジストリ型に依存します</p></td>
+</tr>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p class="translated">値のデータ型を指定する整数です (<a class="reference internal" href="#winreg.SetValueEx" title="winreg.SetValueEx"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SetValueEx()</span></code></a> のドキュメント内のテーブルを参照してください)</p></td>
+</tr>
+</tbody>
+</table>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">index</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.EnumValue</span></code> を送出します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span><a class="reference internal" href="#exception-changed"><span class="std std-ref">上記</span></a> を参照。</p>
+</div>
+</dd></dl>
+
+<dl class="py function" id="index-0">
+<dt class="sig sig-object py" id="winreg.ExpandEnvironmentStrings">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">ExpandEnvironmentStrings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.ExpandEnvironmentStrings" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#winreg.REG_EXPAND_SZ" title="winreg.REG_EXPAND_SZ"><code class="xref py py-const docutils literal notranslate"><span class="pre">REG_EXPAND_SZ</span></code></a> のように、環境変数プレースホルダ <code class="docutils literal notranslate"><span class="pre">%NAME%</span></code> を文字列で展開します:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ExpandEnvironmentStrings</span><span class="p">(</span><span class="s1">&#39;%windir%&#39;</span><span class="p">)</span>
+<span class="go">&#39;C:\\Windows&#39;</span>
+</pre></div>
+</div>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">str</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.ExpandEnvironmentStrings</span></code> を送出します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.FlushKey">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">FlushKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.FlushKey" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">キーのすべての属性をレジストリに書き込みます。</p>
+<p class="translated"><em>key</em> はすでに開かれたキーか、既定の <a class="reference internal" href="#hkey-constants"><span class="std std-ref">HKEY_* 定数</span></a> のうちの一つです。</p>
+<p class="translated">キーを変更するために <a class="reference internal" href="#winreg.FlushKey" title="winreg.FlushKey"><code class="xref py py-func docutils literal notranslate"><span class="pre">FlushKey()</span></code></a> を呼ぶ必要はありません。レジストリの変更は怠惰なフラッシュ機構 (lazy flusher) を使ってフラッシュされます。また、システムの遮断時にもディスクにフラッシュされます。 <a class="reference internal" href="#winreg.CloseKey" title="winreg.CloseKey"><code class="xref py py-func docutils literal notranslate"><span class="pre">CloseKey()</span></code></a> と違って、 <code class="xref py py-func docutils literal notranslate"><span class="pre">FlushKey()</span></code> メソッドはレジストリに全てのデータを書き終えたときにのみ返ります。アプリケーションは、レジストリへの変更を絶対に確実にディスク上に反映させる必要がある場合にのみ、 <code class="xref py py-func docutils literal notranslate"><span class="pre">FlushKey()</span></code> を呼ぶべきです。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated"><a class="reference internal" href="#winreg.FlushKey" title="winreg.FlushKey"><code class="xref py py-func docutils literal notranslate"><span class="pre">FlushKey()</span></code></a> を呼び出す必要があるかどうか分からない場合、おそらくその必要はありません。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.LoadKey">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">LoadKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.LoadKey" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">指定されたキーの下にサブキーを生成し、サブキーに指定されたファイルのレジストリ情報を記録します。</p>
+<p class="translated"><em>key</em> は <a class="reference internal" href="#winreg.ConnectRegistry" title="winreg.ConnectRegistry"><code class="xref py py-func docutils literal notranslate"><span class="pre">ConnectRegistry()</span></code></a> が返したハンドルか、定数 <a class="reference internal" href="#winreg.HKEY_USERS" title="winreg.HKEY_USERS"><code class="xref py py-const docutils literal notranslate"><span class="pre">HKEY_USERS</span></code></a> と <a class="reference internal" href="#winreg.HKEY_LOCAL_MACHINE" title="winreg.HKEY_LOCAL_MACHINE"><code class="xref py py-const docutils literal notranslate"><span class="pre">HKEY_LOCAL_MACHINE</span></code></a> のどちらかです。</p>
+<p class="translated"><em>sub_key</em> は記録先のサブキーを指定する文字列です。</p>
+<p class="translated"><em>file_name</em> はレジストリデータを読み出すためのファイル名です。このファイルは <a class="reference internal" href="#winreg.SaveKey" title="winreg.SaveKey"><code class="xref py py-func docutils literal notranslate"><span class="pre">SaveKey()</span></code></a> 関数で生成されたファイルでなくてはなりません。ファイル割り当てテーブル (FAT) ファイルシステム下では、ファイル名は拡張子を持っていてはなりません。</p>
+<p class="untranslated">A call to <a class="reference internal" href="#winreg.LoadKey" title="winreg.LoadKey"><code class="xref py py-func docutils literal notranslate"><span class="pre">LoadKey()</span></code></a> fails if the calling process does not have the
+<code class="xref c c-data docutils literal notranslate"><span class="pre">SE_RESTORE_PRIVILEGE</span></code> privilege.  Note that privileges are different
+from permissions -- see the <a class="reference external" href="https://msdn.microsoft.com/en-us/library/ms724889%28v=VS.85%29.aspx">RegLoadKey documentation</a> for
+more details.</p>
+<p class="translated"><em>key</em> が <a class="reference internal" href="#winreg.ConnectRegistry" title="winreg.ConnectRegistry"><code class="xref py py-func docutils literal notranslate"><span class="pre">ConnectRegistry()</span></code></a> によって返されたハンドルの場合、 <em>file_name</em> に指定されたパスはリモートコンピュータに対する相対パス名になります。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">sub_key</span></code>, <code class="docutils literal notranslate"><span class="pre">file_name</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.LoadKey</span></code> を送出します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.OpenKey">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">OpenKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reserved</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">KEY_READ</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.OpenKey" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="winreg.OpenKeyEx">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">OpenKeyEx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reserved</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">KEY_READ</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.OpenKeyEx" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">指定されたキーを開き、 <a class="reference internal" href="#handle-object"><span class="std std-ref">ハンドルオブジェクト</span></a> を返します。</p>
+<p class="translated"><em>key</em> はすでに開かれたキーか、既定の <a class="reference internal" href="#hkey-constants"><span class="std std-ref">HKEY_* 定数</span></a> のうちの一つです。</p>
+<p class="translated"><em>sub_key</em> は開くサブキーを指定する文字列です。</p>
+<p class="translated"><em>reserved</em> は予約された整数で、 0 でなくてはなりません。デフォルト値は 0 です。</p>
+<p class="translated"><em>access</em> は、 key に対して想定されるセキュリティアクセスを示すアクセスマスクを指定する整数です。デフォルトは <a class="reference internal" href="#winreg.KEY_READ" title="winreg.KEY_READ"><code class="xref py py-const docutils literal notranslate"><span class="pre">KEY_READ</span></code></a> です。その他の利用可能な値については <a class="reference internal" href="#access-rights"><span class="std std-ref">アクセス権</span></a> を参照してください。</p>
+<p class="translated">指定されたキーへの新しいハンドルが返されます。</p>
+<p class="translated">この関数が失敗すると、 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> が送出されます。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">sub_key</span></code>, <code class="docutils literal notranslate"><span class="pre">access</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.OpenKey</span></code> を送出します。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.OpenKey/result</span></code> を送出します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span>名前付き引数が使用できるようになりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span><a class="reference internal" href="#exception-changed"><span class="std std-ref">上記</span></a> を参照。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.QueryInfoKey">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">QueryInfoKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.QueryInfoKey" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">キーに関する情報をタプルとして返します。</p>
+<p class="translated"><em>key</em> はすでに開かれたキーか、既定の <a class="reference internal" href="#hkey-constants"><span class="std std-ref">HKEY_* 定数</span></a> のうちの一つです。</p>
+<p class="translated">結果は 3 要素のタプルになります:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p class="translated">インデックス</p></th>
+<th class="head"><p class="translated">意味</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p class="translated">このキーが持つサブキーの数を表す整数。</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p class="translated">このキーが持つ値の数を表す整数。</p></td>
+</tr>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p class="translated">最後のキーの変更が (あれば) いつだったかを表す整数で、1601 年 1 月 1 日からの 100 ナノ秒単位で数えたもの。</p></td>
+</tr>
+</tbody>
+</table>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.QueryInfoKey</span></code> を送出します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.QueryValue">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">QueryValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.QueryValue" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">キーに対する、名前付けられていない値を文字列で取得します。</p>
+<p class="translated"><em>key</em> はすでに開かれたキーか、既定の <a class="reference internal" href="#hkey-constants"><span class="std std-ref">HKEY_* 定数</span></a> のうちの一つです。</p>
+<p class="translated"><em>sub_key</em> は値が関連付けられているサブキーの名前を保持する文字列です。この引数が <code class="docutils literal notranslate"><span class="pre">None</span></code> または空文字列の場合、この関数は <em>key</em> で指定されたキーに対して <a class="reference internal" href="#winreg.SetValue" title="winreg.SetValue"><code class="xref py py-func docutils literal notranslate"><span class="pre">SetValue()</span></code></a> メソッドで設定された値を取得します。</p>
+<p class="translated">レジストリ中の値は名前、型、およびデータから構成されています。このメソッドはあるキーのデータ中で、名前 <code class="docutils literal notranslate"><span class="pre">NULL</span></code> をもつ最初の値を取得します。しかし背後のAPI 呼び出しは型情報を返しません。なので、可能ならいつでも <a class="reference internal" href="#winreg.QueryValueEx" title="winreg.QueryValueEx"><code class="xref py py-func docutils literal notranslate"><span class="pre">QueryValueEx()</span></code></a> を使うべきです。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">sub_key</span></code>, <code class="docutils literal notranslate"><span class="pre">value_name</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.QueryValue</span></code> を送出します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.QueryValueEx">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">QueryValueEx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.QueryValueEx" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">開かれたレジストリキーに関連付けられている、指定した名前の値に対して、型およびデータを取得します。</p>
+<p class="translated"><em>key</em> はすでに開かれたキーか、既定の <a class="reference internal" href="#hkey-constants"><span class="std std-ref">HKEY_* 定数</span></a> のうちの一つです。</p>
+<p class="translated"><em>value_name</em> は要求する値を指定する文字列です。</p>
+<p class="translated">結果は 2 つの要素からなるタプルです:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p class="translated">インデックス</p></th>
+<th class="head"><p class="translated">意味</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p class="translated">レジストリ要素の値。</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p class="translated">この値のレジストリ型を表す整数。 (<a class="reference internal" href="#winreg.SetValueEx" title="winreg.SetValueEx"><code class="xref py py-meth docutils literal notranslate"><span class="pre">SetValueEx()</span></code></a> のドキュメント内のテーブルを参照してください。)</p></td>
+</tr>
+</tbody>
+</table>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">sub_key</span></code>, <code class="docutils literal notranslate"><span class="pre">value_name</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.QueryValue</span></code> を送出します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.SaveKey">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">SaveKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.SaveKey" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">指定されたキーと、そのサブキー全てを指定したファイルに保存します。</p>
+<p class="translated"><em>key</em> はすでに開かれたキーか、既定の <a class="reference internal" href="#hkey-constants"><span class="std std-ref">HKEY_* 定数</span></a> のうちの一つです。</p>
+<p class="translated"><em>file_name</em> はレジストリデータを保存するファイルの名前です、このファイルはすでに存在していてはいけません。このファイル名が拡張子を含んでいる場合、 <a class="reference internal" href="#winreg.LoadKey" title="winreg.LoadKey"><code class="xref py py-meth docutils literal notranslate"><span class="pre">LoadKey()</span></code></a> メソッドは、FAT ファイルシステムを使うことができません。</p>
+<p class="untranslated">If <em>key</em> represents a key on a remote computer, the path described by
+<em>file_name</em> is relative to the remote computer. The caller of this method must
+possess the <strong>SeBackupPrivilege</strong> security privilege.  Note that
+privileges are different than permissions -- see the
+<a class="reference external" href="https://msdn.microsoft.com/en-us/library/ms724878%28v=VS.85%29.aspx">Conflicts Between User Rights and Permissions documentation</a>
+for more details.</p>
+<p class="translated">この関数は <em>security_attributes</em> を <code class="docutils literal notranslate"><span class="pre">NULL</span></code> にして API に渡します。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">file_name</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.SaveKey</span></code> を送出します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.SetValue">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">SetValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.SetValue" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">値を指定したキーに関連付けます。</p>
+<p class="translated"><em>key</em> はすでに開かれたキーか、既定の <a class="reference internal" href="#hkey-constants"><span class="std std-ref">HKEY_* 定数</span></a> のうちの一つです。</p>
+<p class="translated"><em>sub_key</em> は値が関連付けられているサブキーの名前を表す文字列です。</p>
+<p class="translated"><em>type</em> はデータの型を指定する整数です。現状では、この値は <a class="reference internal" href="#winreg.REG_SZ" title="winreg.REG_SZ"><code class="xref py py-const docutils literal notranslate"><span class="pre">REG_SZ</span></code></a> でなければならず、これは文字列だけがサポートされていることを示します。他のデータ型をサポートするには <a class="reference internal" href="#winreg.SetValueEx" title="winreg.SetValueEx"><code class="xref py py-func docutils literal notranslate"><span class="pre">SetValueEx()</span></code></a> を使ってください。</p>
+<p class="translated"><em>value</em> は新たな値を指定する文字列です。</p>
+<p class="translated"><em>sub_key</em> 引数で指定されたキーが存在しなければ、SetValue 関数で生成されます。</p>
+<p class="translated">値の長さは利用可能なメモリによって制限されます。(2048 バイト以上の) 長い値はファイルに保存して、そのファイル名を設定レジストリに保存するべきです。そうすればレジストリを効率的に動作させる役に立ちます。</p>
+<p class="translated"><em>key</em> 引数に指定されたキーは <a class="reference internal" href="#winreg.KEY_SET_VALUE" title="winreg.KEY_SET_VALUE"><code class="xref py py-const docutils literal notranslate"><span class="pre">KEY_SET_VALUE</span></code></a> アクセスで開かれていなければなりません。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">sub_key</span></code>, <code class="docutils literal notranslate"><span class="pre">type</span></code>, <code class="docutils literal notranslate"><span class="pre">value</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.SetValue</span></code> を送出します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.SetValueEx">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">SetValueEx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reserved</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.SetValueEx" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">開かれたレジストリキーの値フィールドにデータを記録します。</p>
+<p class="translated"><em>key</em> はすでに開かれたキーか、既定の <a class="reference internal" href="#hkey-constants"><span class="std std-ref">HKEY_* 定数</span></a> のうちの一つです。</p>
+<p class="translated"><em>value_name</em> は値が関連付けられているサブキーの名前を表す文字列です。</p>
+<p class="translated"><em>reserved</em> は何もしません - API には常にゼロが渡されます。</p>
+<p class="translated"><em>type</em> はデータの型を指定する整数です。利用できる型については <a class="reference internal" href="#value-types"><span class="std std-ref">値の型</span></a> を参照してください。</p>
+<p class="translated"><em>value</em> は新たな値を指定する文字列です。</p>
+<p class="translated">このメソッドではまた、指定されたキーに対して、さらに別の値や型情報を設定することができます。 <em>key</em> 引数で指定されたキーは <a class="reference internal" href="#winreg.KEY_SET_VALUE" title="winreg.KEY_SET_VALUE"><code class="xref py py-const docutils literal notranslate"><span class="pre">KEY_SET_VALUE</span></code></a> アクセスで開かれていなければなりません。</p>
+<p class="translated">キーを開くには、 <a class="reference internal" href="#winreg.CreateKey" title="winreg.CreateKey"><code class="xref py py-func docutils literal notranslate"><span class="pre">CreateKey()</span></code></a> または <a class="reference internal" href="#winreg.OpenKey" title="winreg.OpenKey"><code class="xref py py-func docutils literal notranslate"><span class="pre">OpenKey()</span></code></a> メソッドを使ってください。</p>
+<p class="translated">値の長さは利用可能なメモリによって制限されます。(2048 バイト以上の) 長い値はファイルに保存して、そのファイル名を設定レジストリに保存するべきです。そうすればレジストリを効率的に動作させる役に立ちます。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code>, <code class="docutils literal notranslate"><span class="pre">sub_key</span></code>, <code class="docutils literal notranslate"><span class="pre">type</span></code>, <code class="docutils literal notranslate"><span class="pre">value</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.SetValue</span></code> を送出します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.DisableReflectionKey">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">DisableReflectionKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.DisableReflectionKey" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">64ビット OS上で動作している 32bit プロセスに対するレジストリリフレクションを無効にします。</p>
+<p class="translated"><em>key</em> はすでに開かれたキーか、既定の <a class="reference internal" href="#hkey-constants"><span class="std std-ref">HKEY_* 定数</span></a> のうちの一つです。</p>
+<p class="translated">32bit OS上では一般的に <a class="reference internal" href="exceptions.html#NotImplementedError" title="NotImplementedError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NotImplementedError</span></code></a> 例外を発生させます。</p>
+<p class="translated">key がリフレクションリストに無い場合は、この関数は成功しますが効果はありません。あるキーのリフレクションを無効にしても、そのキーのサブキーのリフレクションには全く影響しません。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.DisableReflectionKey</span></code> を送出します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.EnableReflectionKey">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">EnableReflectionKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.EnableReflectionKey" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">指定された、リフレクションが無効にされたキーのリフレクションを再び有効にします。</p>
+<p class="translated"><em>key</em> はすでに開かれたキーか、既定の <a class="reference internal" href="#hkey-constants"><span class="std std-ref">HKEY_* 定数</span></a> のうちの一つです。</p>
+<p class="translated">32bit OS上では一般的に <a class="reference internal" href="exceptions.html#NotImplementedError" title="NotImplementedError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NotImplementedError</span></code></a> 例外を発生させます。</p>
+<p class="translated">あるキーのリフレクションを再開しても、その全てのサブキーには影響しません。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.EnableReflectionKey</span></code> を送出します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winreg.QueryReflectionKey">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">QueryReflectionKey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.QueryReflectionKey" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">指定されたキーのリフレクション状態を確認します。</p>
+<p class="translated"><em>key</em> はすでに開かれたキーか、既定の <a class="reference internal" href="#hkey-constants"><span class="std std-ref">HKEY_* 定数</span></a> のうちの一つです。</p>
+<p class="translated">リフレクションが無効になっている場合、<code class="docutils literal notranslate"><span class="pre">True</span></code> を返します。</p>
+<p class="translated">32bit OS上では一般的に <a class="reference internal" href="exceptions.html#NotImplementedError" title="NotImplementedError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NotImplementedError</span></code></a> 例外を発生させます。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">key</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.QueryReflectionKey</span></code> を送出します。</p>
+</dd></dl>
+
+</section>
+<section id="constants">
+<span id="id2"></span><h2 class="translated">定数<a class="headerlink" href="#constants" title="Link to this heading">¶</a></h2>
+<p class="untranslated">The following constants are defined for use in many <code class="xref py py-mod docutils literal notranslate"><span class="pre">winreg</span></code> functions.</p>
+<section id="hkey-constants">
+<span id="id3"></span><h3 class="translated">HKEY_* 定数<a class="headerlink" href="#hkey-constants" title="Link to this heading">¶</a></h3>
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.HKEY_CLASSES_ROOT">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">HKEY_CLASSES_ROOT</span></span><a class="headerlink" href="#winreg.HKEY_CLASSES_ROOT" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このキー以下のレジストリエントリは、ドキュメントのタイプ（またはクラス）や、それに関連付けられたプロパティを定義しています。シェルと COM アプリケーションがこの情報を利用します。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.HKEY_CURRENT_USER">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">HKEY_CURRENT_USER</span></span><a class="headerlink" href="#winreg.HKEY_CURRENT_USER" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このキー以下のレジストリエントリは、現在のユーザーの設定を定義します。この設定には、環境変数、プログラムグループに関するデータ、カラー、プリンター、ネットワーク接続、アプリケーション設定などが含まれます。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.HKEY_LOCAL_MACHINE">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">HKEY_LOCAL_MACHINE</span></span><a class="headerlink" href="#winreg.HKEY_LOCAL_MACHINE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このキー以下のレジストリエントリは、コンピュータの物理的な状態を定義します。これには、バスタイプ、システムメモリ、インストールされているソフトウェアやハードウェアが含まれます。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.HKEY_USERS">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">HKEY_USERS</span></span><a class="headerlink" href="#winreg.HKEY_USERS" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このキー以下のレジストリエントリは、ローカルコンピュータの新規ユーザーのためのデフォルト設定や、現在のユーザーの設定を定義しています。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.HKEY_PERFORMANCE_DATA">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">HKEY_PERFORMANCE_DATA</span></span><a class="headerlink" href="#winreg.HKEY_PERFORMANCE_DATA" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このキー以下のレジストリエントリは、パフォーマンスデータへのアクセスを可能にしています。実際にはデータはレジストリには格納されていません。レジストリ関数がシステムにソースからデータを集めさせます。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.HKEY_CURRENT_CONFIG">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">HKEY_CURRENT_CONFIG</span></span><a class="headerlink" href="#winreg.HKEY_CURRENT_CONFIG" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ローカルコンピュータシステムの現在のハードウェアプロファイルに関する情報を含みます。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.HKEY_DYN_DATA">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">HKEY_DYN_DATA</span></span><a class="headerlink" href="#winreg.HKEY_DYN_DATA" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このキーは Windows の 98 以降のバージョンでは利用されていません。</p>
+</dd></dl>
+
+</section>
+<section id="access-rights">
+<span id="id4"></span><h3 class="translated">アクセス権限<a class="headerlink" href="#access-rights" title="Link to this heading">¶</a></h3>
+<p class="translated">より詳しい情報については、 <a class="reference external" href="https://msdn.microsoft.com/en-us/library/ms724878%28v=VS.85%29.aspx">Registry Key Security and Access</a> を参照してください。</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.KEY_ALL_ACCESS">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">KEY_ALL_ACCESS</span></span><a class="headerlink" href="#winreg.KEY_ALL_ACCESS" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">STANDARD_RIGHTS_REQUIRED (<a class="reference internal" href="#winreg.KEY_QUERY_VALUE" title="winreg.KEY_QUERY_VALUE"><code class="xref py py-const docutils literal notranslate"><span class="pre">KEY_QUERY_VALUE</span></code></a>, <a class="reference internal" href="#winreg.KEY_SET_VALUE" title="winreg.KEY_SET_VALUE"><code class="xref py py-const docutils literal notranslate"><span class="pre">KEY_SET_VALUE</span></code></a>, <a class="reference internal" href="#winreg.KEY_CREATE_SUB_KEY" title="winreg.KEY_CREATE_SUB_KEY"><code class="xref py py-const docutils literal notranslate"><span class="pre">KEY_CREATE_SUB_KEY</span></code></a>, <a class="reference internal" href="#winreg.KEY_ENUMERATE_SUB_KEYS" title="winreg.KEY_ENUMERATE_SUB_KEYS"><code class="xref py py-const docutils literal notranslate"><span class="pre">KEY_ENUMERATE_SUB_KEYS</span></code></a>, <a class="reference internal" href="#winreg.KEY_NOTIFY" title="winreg.KEY_NOTIFY"><code class="xref py py-const docutils literal notranslate"><span class="pre">KEY_NOTIFY</span></code></a>, <a class="reference internal" href="#winreg.KEY_CREATE_LINK" title="winreg.KEY_CREATE_LINK"><code class="xref py py-const docutils literal notranslate"><span class="pre">KEY_CREATE_LINK</span></code></a>) アクセス権限の組み合わせ。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.KEY_WRITE">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">KEY_WRITE</span></span><a class="headerlink" href="#winreg.KEY_WRITE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">STANDARD_RIGHTS_WRITE (<a class="reference internal" href="#winreg.KEY_SET_VALUE" title="winreg.KEY_SET_VALUE"><code class="xref py py-const docutils literal notranslate"><span class="pre">KEY_SET_VALUE</span></code></a>, <a class="reference internal" href="#winreg.KEY_CREATE_SUB_KEY" title="winreg.KEY_CREATE_SUB_KEY"><code class="xref py py-const docutils literal notranslate"><span class="pre">KEY_CREATE_SUB_KEY</span></code></a>) アクセス権限の組み合わせ。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.KEY_READ">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">KEY_READ</span></span><a class="headerlink" href="#winreg.KEY_READ" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">STANDARD_RIGHTS_READ (<a class="reference internal" href="#winreg.KEY_QUERY_VALUE" title="winreg.KEY_QUERY_VALUE"><code class="xref py py-const docutils literal notranslate"><span class="pre">KEY_QUERY_VALUE</span></code></a>, <a class="reference internal" href="#winreg.KEY_ENUMERATE_SUB_KEYS" title="winreg.KEY_ENUMERATE_SUB_KEYS"><code class="xref py py-const docutils literal notranslate"><span class="pre">KEY_ENUMERATE_SUB_KEYS</span></code></a>, <a class="reference internal" href="#winreg.KEY_NOTIFY" title="winreg.KEY_NOTIFY"><code class="xref py py-const docutils literal notranslate"><span class="pre">KEY_NOTIFY</span></code></a>) アクセス権限の組み合わせ。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.KEY_EXECUTE">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">KEY_EXECUTE</span></span><a class="headerlink" href="#winreg.KEY_EXECUTE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#winreg.KEY_READ" title="winreg.KEY_READ"><code class="xref py py-const docutils literal notranslate"><span class="pre">KEY_READ</span></code></a> と同じ。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.KEY_QUERY_VALUE">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">KEY_QUERY_VALUE</span></span><a class="headerlink" href="#winreg.KEY_QUERY_VALUE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">レジストリキーの値を問い合わせるのに必要。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.KEY_SET_VALUE">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">KEY_SET_VALUE</span></span><a class="headerlink" href="#winreg.KEY_SET_VALUE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">レジストリの値を作成、削除、設定するのに必要。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.KEY_CREATE_SUB_KEY">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">KEY_CREATE_SUB_KEY</span></span><a class="headerlink" href="#winreg.KEY_CREATE_SUB_KEY" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">レジストリキーのサブキーを作るのに必要。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.KEY_ENUMERATE_SUB_KEYS">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">KEY_ENUMERATE_SUB_KEYS</span></span><a class="headerlink" href="#winreg.KEY_ENUMERATE_SUB_KEYS" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">レジストリキーのサブキーを列挙するのに必要。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.KEY_NOTIFY">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">KEY_NOTIFY</span></span><a class="headerlink" href="#winreg.KEY_NOTIFY" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">レジストリキーやそのサブキーに対する変更通知を要求するのに必要。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.KEY_CREATE_LINK">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">KEY_CREATE_LINK</span></span><a class="headerlink" href="#winreg.KEY_CREATE_LINK" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">システムでの利用のために予約されている。</p>
+</dd></dl>
+
+<section id="bit-specific">
+<span id="bit-access-rights"></span><h4 class="translated">64-bit 特有のアクセス権<a class="headerlink" href="#bit-specific" title="Link to this heading">¶</a></h4>
+<p class="translated">より詳しい情報については、 <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa384129(v=VS.85).aspx">Accessing an Alternate Registry View</a> を参照してください。</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.KEY_WOW64_64KEY">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">KEY_WOW64_64KEY</span></span><a class="headerlink" href="#winreg.KEY_WOW64_64KEY" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">64 bit Windows 上のアプリケーションが、64 bit のレジストリビュー上で操作する事を示します。32 bit Windows では、この定数は無視されます。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.KEY_WOW64_32KEY">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">KEY_WOW64_32KEY</span></span><a class="headerlink" href="#winreg.KEY_WOW64_32KEY" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">64 bit Windows 上のアプリケーションが、32 bit のレジストリビュー上で操作する事を示します。32 bit Windows では、この定数は無視されます。</p>
+</dd></dl>
+
+</section>
+</section>
+<section id="value-types">
+<span id="id5"></span><h3 class="translated">値の型<a class="headerlink" href="#value-types" title="Link to this heading">¶</a></h3>
+<p class="translated">より詳しい情報については、 <a class="reference external" href="https://msdn.microsoft.com/en-us/library/ms724884%28v=VS.85%29.aspx">Registry Value Types</a> を参照してください。</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.REG_BINARY">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">REG_BINARY</span></span><a class="headerlink" href="#winreg.REG_BINARY" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">何らかの形式のバイナリデータ。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.REG_DWORD">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">REG_DWORD</span></span><a class="headerlink" href="#winreg.REG_DWORD" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">32 ビットの数。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.REG_DWORD_LITTLE_ENDIAN">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">REG_DWORD_LITTLE_ENDIAN</span></span><a class="headerlink" href="#winreg.REG_DWORD_LITTLE_ENDIAN" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">32 ビットのリトルエンディアン形式の数。<a class="reference internal" href="#winreg.REG_DWORD" title="winreg.REG_DWORD"><code class="xref py py-const docutils literal notranslate"><span class="pre">REG_DWORD</span></code></a> と等価。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.REG_DWORD_BIG_ENDIAN">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">REG_DWORD_BIG_ENDIAN</span></span><a class="headerlink" href="#winreg.REG_DWORD_BIG_ENDIAN" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">32 ビットのビッグエンディアン形式の数。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.REG_EXPAND_SZ">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">REG_EXPAND_SZ</span></span><a class="headerlink" href="#winreg.REG_EXPAND_SZ" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">環境変数を参照している、ヌル文字で終端された文字列。(<code class="docutils literal notranslate"><span class="pre">%PATH%</span></code>)。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.REG_LINK">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">REG_LINK</span></span><a class="headerlink" href="#winreg.REG_LINK" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Unicode のシンボリックリンク。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.REG_MULTI_SZ">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">REG_MULTI_SZ</span></span><a class="headerlink" href="#winreg.REG_MULTI_SZ" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ヌル文字で終端された文字列からなり、二つのヌル文字で終端されている配列。 (Python はこの終端の処理を自動的に行います。)</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.REG_NONE">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">REG_NONE</span></span><a class="headerlink" href="#winreg.REG_NONE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">定義されていない値の形式。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.REG_QWORD">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">REG_QWORD</span></span><a class="headerlink" href="#winreg.REG_QWORD" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">64 ビットの数。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.REG_QWORD_LITTLE_ENDIAN">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">REG_QWORD_LITTLE_ENDIAN</span></span><a class="headerlink" href="#winreg.REG_QWORD_LITTLE_ENDIAN" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">64 ビットのリトルエンディアン形式の数。<a class="reference internal" href="#winreg.REG_QWORD" title="winreg.REG_QWORD"><code class="xref py py-const docutils literal notranslate"><span class="pre">REG_QWORD</span></code></a> と等価。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.REG_RESOURCE_LIST">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">REG_RESOURCE_LIST</span></span><a class="headerlink" href="#winreg.REG_RESOURCE_LIST" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">デバイスドライバリソースのリスト。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.REG_FULL_RESOURCE_DESCRIPTOR">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">REG_FULL_RESOURCE_DESCRIPTOR</span></span><a class="headerlink" href="#winreg.REG_FULL_RESOURCE_DESCRIPTOR" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ハードウェアセッティング。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.REG_RESOURCE_REQUIREMENTS_LIST">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">REG_RESOURCE_REQUIREMENTS_LIST</span></span><a class="headerlink" href="#winreg.REG_RESOURCE_REQUIREMENTS_LIST" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ハードウェアリソースリスト。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winreg.REG_SZ">
+<span class="sig-prename descclassname"><span class="pre">winreg.</span></span><span class="sig-name descname"><span class="pre">REG_SZ</span></span><a class="headerlink" href="#winreg.REG_SZ" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ヌル文字で終端された文字列。</p>
+</dd></dl>
+
+</section>
+</section>
+<section id="registry-handle-objects">
+<span id="handle-object"></span><h2 class="translated">レジストリハンドルオブジェクト<a class="headerlink" href="#registry-handle-objects" title="Link to this heading">¶</a></h2>
+<p class="translated">このオブジェクトは Windows の HKEY オブジェクトをラップし、オブジェクトが破壊されたときに自動的にハンドルを閉じます。オブジェクトの <a class="reference internal" href="#winreg.PyHKEY.Close" title="winreg.PyHKEY.Close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Close()</span></code></a> メソッドと <a class="reference internal" href="#winreg.CloseKey" title="winreg.CloseKey"><code class="xref py py-func docutils literal notranslate"><span class="pre">CloseKey()</span></code></a> 関数のどちらも、後始末がきちんと行われることを保証するために呼び出すことができます。</p>
+<p class="translated">このモジュールのレジストリ関数は全て、これらのハンドルオブジェクトの一つを返します。</p>
+<p class="translated">このモジュールのレジストリ関数でハンドルオブジェクトを受理するものは全て整数も受理しますが、ハンドルオブジェクトを利用することを推奨します。</p>
+<p class="untranslated">Handle objects provide semantics for <a class="reference internal" href="../reference/datamodel.html#object.__bool__" title="object.__bool__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__bool__()</span></code></a> -- thus</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">handle</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Yes&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="translated">は、ハンドルが現在有効な (閉じられたり切り離されたりしていない) 場合には <code class="docutils literal notranslate"><span class="pre">Yes</span></code> となります。</p>
+<p class="translated">ハンドルオブジェクトは (例えば組み込みの <a class="reference internal" href="functions.html#int" title="int"><code class="xref py py-func docutils literal notranslate"><span class="pre">int()</span></code></a> 関数を使って) 整数に変換することができます。この場合、背後の Windows ハンドル値が返されます、また、 <a class="reference internal" href="#winreg.PyHKEY.Detach" title="winreg.PyHKEY.Detach"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Detach()</span></code></a>  メソッドを使って整数のハンドル値を返させると同時に、ハンドルオブジェクトから Windows ハンドルを切り離すこともできます。</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="winreg.PyHKEY.Close">
+<span class="sig-prename descclassname"><span class="pre">PyHKEY.</span></span><span class="sig-name descname"><span class="pre">Close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#winreg.PyHKEY.Close" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">背後の Windows ハンドルを閉じます。</p>
+<p class="translated">ハンドルがすでに閉じられていてもエラーは送出されません。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="winreg.PyHKEY.Detach">
+<span class="sig-prename descclassname"><span class="pre">PyHKEY.</span></span><span class="sig-name descname"><span class="pre">Detach</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#winreg.PyHKEY.Detach" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ハンドルオブジェクトから Windows ハンドルを切り離します。</p>
+<p class="translated">切り離される以前にそのハンドルを保持していた整数オブジェクトが返されます。ハンドルがすでに切り離されていたり閉じられていたりした場合、ゼロが返されます。</p>
+<p class="translated">この関数を呼び出した後、ハンドルは確実に無効化されますが、閉じられるわけではありません。背後の Win32 ハンドルがハンドルオブジェクトよりも長く維持される必要がある場合にはこの関数を呼び出すとよいでしょう。</p>
+<p class="audit-hook untranslated">Raises an <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">auditing event</span></a> <code class="docutils literal notranslate"><span class="pre">winreg.PyHKEY.Detach</span></code> with argument <code class="docutils literal notranslate"><span class="pre">key</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="winreg.PyHKEY.__enter__">
+<span class="sig-prename descclassname"><span class="pre">PyHKEY.</span></span><span class="sig-name descname"><span class="pre">__enter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#winreg.PyHKEY.__enter__" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="winreg.PyHKEY.__exit__">
+<span class="sig-prename descclassname"><span class="pre">PyHKEY.</span></span><span class="sig-name descname"><span class="pre">__exit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">exc_info</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winreg.PyHKEY.__exit__" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">HKEY オブジェクトは <a class="reference internal" href="../reference/datamodel.html#object.__enter__" title="object.__enter__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__enter__()</span></code></a>, <a class="reference internal" href="../reference/datamodel.html#object.__exit__" title="object.__exit__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__exit__()</span></code></a> メソッドを実装していて、 <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> 文のためのコンテキストプロトコルをサポートしています:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">OpenKey</span><span class="p">(</span><span class="n">HKEY_LOCAL_MACHINE</span><span class="p">,</span> <span class="s2">&quot;foo&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">key</span><span class="p">:</span>
+    <span class="o">...</span>  <span class="c1"># work with key</span>
+</pre></div>
+</div>
+<p class="translated">このコードは、 <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> ブロックから抜けるときに自動的に <em>key</em> を閉じます。</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">winreg</span></code> --- Windows レジストリへのアクセス</a><ul>
+<li><a class="reference internal" href="#functions">関数</a></li>
+<li><a class="reference internal" href="#constants">定数</a><ul>
+<li><a class="reference internal" href="#hkey-constants">HKEY_* 定数</a></li>
+<li><a class="reference internal" href="#access-rights">アクセス権限</a><ul>
+<li><a class="reference internal" href="#bit-specific">64-bit 特有のアクセス権</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#value-types">値の型</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#registry-handle-objects">レジストリハンドルオブジェクト</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="msvcrt.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">msvcrt</span></code> --- MS VC++ ランタイムの有用なルーチン群</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="winsound.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">winsound</span></code> --- Windows 用の音声再生インターフェース</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/winreg.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/winreg.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/winreg.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="winsound.html" title="winsound --- Windows 用の音声再生インターフェース"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="msvcrt.html" title="msvcrt --- MS VC++ ランタイムの有用なルーチン群"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="windows.html" >MS Windows 固有のサービス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">winreg</span></code> --- Windows レジストリへのアクセス</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

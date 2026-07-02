@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="バグへの対処" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/bugs.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="Python は安定性について高い評価を得た、成熟した言語です。この評価を守るために、開発者たちはあなたが見つけた Python の不備を知りたいと思っています。 It can be sometimes faster to fix bugs yourself and contribute patches to Python as it streamlines the process and ..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_bugs_a4468253.png" />
+<meta property="og:image:alt" content="Python は安定性について高い評価を得た、成熟した言語です。この評価を守るために、開発者たちはあなたが見つけた Python の不備を知りたいと思っています。 It can be sometimes faster to fix bugs yourself and contribute patches to Python as it streamlines the process and ..." />
+<meta name="description" content="Python は安定性について高い評価を得た、成熟した言語です。この評価を守るために、開発者たちはあなたが見つけた Python の不備を知りたいと思っています。 It can be sometimes faster to fix bugs yourself and contribute patches to Python as it streamlines the process and ..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>バグへの対処 &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/translations.js?v=4755f45a"></script>
+    
+    <script src="_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="about.html" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="copyright" title="Copyright" href="copyright.html" />
+    <link rel="next" title="Copyright" href="copyright.html" />
+    <link rel="prev" title="このドキュメントについて" href="about.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/bugs.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="_static/py.svg">
+            <script type="text/javascript" src="_static/copybutton.js"></script>
+            <script type="text/javascript" src="_static/menu.js"></script>
+            <script type="text/javascript" src="_static/search-focus.js"></script>
+            <script type="text/javascript" src="_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">バグへの対処</a><ul>
+<li><a class="reference internal" href="#documentation-bugs">ドキュメントの不備</a></li>
+<li><a class="reference internal" href="#using-the-python-issue-tracker">Python の課題管理システムを使う</a></li>
+<li><a class="reference internal" href="#getting-started-contributing-to-python-yourself">Python への貢献をはじめる</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="about.html"
+                          title="前の章へ">このドキュメントについて</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="copyright.html"
+                          title="次の章へ">Copyright</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "bugs.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="#">Report a bug</a></li>
+      <li><a class="improvepage" href="improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/bugs.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/bugs.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="copyright.html" title="Copyright"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="about.html" title="このドキュメントについて"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+        <li class="nav-item nav-item-this"><a href="">バグへの対処</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="dealing-with-bugs">
+<span id="reporting-bugs"></span><h1 class="translated">バグへの対処<a class="headerlink" href="#dealing-with-bugs" title="Link to this heading">¶</a></h1>
+<p class="translated">Python は安定性について高い評価を得た、成熟した言語です。この評価を守るために、開発者たちはあなたが見つけた Python の不備を知りたいと思っています。</p>
+<p class="untranslated">It can be sometimes faster to fix bugs yourself and contribute patches to
+Python as it streamlines the process and involves fewer people. Learn how to
+<a class="reference internal" href="#contributing-to-python"><span class="std std-ref">contribute</span></a>.</p>
+<section id="documentation-bugs">
+<h2 class="translated">ドキュメントの不備<a class="headerlink" href="#documentation-bugs" title="Link to this heading">¶</a></h2>
+<p class="untranslated">If you find a bug in this documentation or would like to propose an improvement,
+please submit a bug report on the <a class="reference internal" href="#using-the-tracker"><span class="std std-ref">issue tracker</span></a>.  If you
+have a suggestion on how to fix it, include that as well.</p>
+<p class="untranslated">If the bug or suggested improvement concerns the translation of this
+documentation, submit the report to the
+<a class="reference external" href="https://github.com/python/python-docs-ja">translation’s repository</a> instead.</p>
+<p class="translated">または  <a class="reference external" href="https://discuss.python.org/c/documentation/26">Documentation Discourse forum</a> でディスカッションを行うこともできます。</p>
+<p class="untranslated">If you find a bug in the theme (HTML / CSS / JavaScript) of the
+documentation, please submit a bug report on the <a class="reference external" href="https://github.com/python/python-docs-theme">python-doc-theme issue
+tracker</a>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<dl class="simple">
+<dt class="translated"><a class="reference external" href="https://github.com/python/cpython/issues?q=is%3Aissue+is%3Aopen+label%3Adocs">ドキュメントのバグ</a></dt><dd><p class="translated">Python issue tracker に出されたドキュメントバグのリスト。</p>
+</dd>
+<dt class="translated"><a class="reference external" href="https://devguide.python.org/tracker/">イシュートラッカー</a></dt><dd><p class="translated">issue tracker への改善報告に関する作業過程の概観。</p>
+</dd>
+<dt class="translated"><a class="reference external" href="https://devguide.python.org/docquality/#helping-with-documentation">ドキュメントを手伝う</a></dt><dd><p class="translated">Python ドキュメントへの貢献に興味がある個人へ向けた包括的なガイド。</p>
+</dd>
+<dt class="untranslated"><a class="reference external" href="https://devguide.python.org/documentation/translating/">Documentation Translations</a></dt><dd><p class="untranslated">A list of GitHub pages for documentation translation and their primary contacts.</p>
+</dd>
+</dl>
+</div>
+</section>
+<section id="using-the-python-issue-tracker">
+<span id="using-the-tracker"></span><h2 class="translated">Python の課題管理システムを使う<a class="headerlink" href="#using-the-python-issue-tracker" title="Link to this heading">¶</a></h2>
+<p class="translated">Python 自体に関する問題は Githubのissue tracker (<a class="reference external" href="https://github.com/python/cpython/issues">https://github.com/python/cpython/issues</a>) で報告してください。このGithub issue trackerは、関連情報を入力して開発者に報告するための Web フォームを提供しています。</p>
+<p class="translated">レポートを書くには、初めにその問題が既にレポートされていないか確認します。これにより、開発者の時間が無駄にならないだけでなく、あなたが、問題に対して為された対処について知ることもできます。次のリリースに向けて問題が修正されたのかもしれませんし、追加の情報が必要とされているのかもしれません（この場合は是非情報を提供してください）。確認のためにはページの上の検索ボックスを利用してください。</p>
+<p class="translated">報告しようとしている問題がまだリストにない場合は、GitHub にログインしてください。GitHubのアカウントをまだお持ちでない場合は、「Sign up」リンクから新しいアカウントを作成してください。匿名でバグレポートを提出することはできません。</p>
+<p class="translated">ログインした状態で、課題を送信することができます。トップバーの「New issue」ボタンをクリックして、新しい課題を報告してください。</p>
+<p class="translated">報告のフォームには、「Title」と「Comment」の2つのフィールドがあります。</p>
+<p class="translated">「Title」フィールドには、問題の <em>とても</em> 短い説明を（訳注: 英語で）入力してください。10語以内が望ましいです。</p>
+<p class="translated">&quot;Comment&quot; フィールドで、あなたが期待した結果と実際の結果も含め、問題の詳細を説明してください。拡張モジュールが関与しているかどうかと、使用しているハードウェアとソフトウェアプラットフォームも (必要に応じてバージョン情報も) 必ず報告に含めてください。</p>
+<p class="translated">各問題レポートは開発者によってレビューされ、問題を修正するために何が必要かを判断します。issueで何らかの行動があるたびに、最新情報を通知します。</p>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<dl class="simple">
+<dt class="translated"><a class="reference external" href="https://www.chiark.greenend.org.uk/~sgtatham/bugs.html">How to Report Bugs Effectively</a></dt><dd><p class="translated">有益なバグ報告について詳しく説明した記事です。どんな情報が、なぜ有益なのかを説明しています。</p>
+</dd>
+<dt class="translated"><a class="reference external" href="http://developer.mozilla.org/en/docs/Bug_writing_guidelines">Bug Writing Guidelines</a></dt><dd><p class="translated">良いバグ報告を書くための情報です。この情報の一部はMozillaプロジェクト独自のものですが、一般的に良い習慣を解説しています。</p>
+</dd>
+</dl>
+</div>
+</section>
+<section id="getting-started-contributing-to-python-yourself">
+<span id="contributing-to-python"></span><h2 class="translated">Python への貢献をはじめる<a class="headerlink" href="#getting-started-contributing-to-python-yourself" title="Link to this heading">¶</a></h2>
+<p class="translated">見つけたバグの報告だけでなく、修正パッチの提出も歓迎します。<a class="reference external" href="https://devguide.python.org/">Python Developer's Guide</a> には Python へのパッチの始め方について詳しい情報があります。疑問があれば、<a class="reference external" href="https://mail.python.org/mailman3/lists/core-mentorship.python.org/">core-mentorship mailing list</a> は Python の問題解決の過程に関するありとあらゆる疑問への答えを得ることが出来るフレンドリーな場所です。</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">バグへの対処</a><ul>
+<li><a class="reference internal" href="#documentation-bugs">ドキュメントの不備</a></li>
+<li><a class="reference internal" href="#using-the-python-issue-tracker">Python の課題管理システムを使う</a></li>
+<li><a class="reference internal" href="#getting-started-contributing-to-python-yourself">Python への貢献をはじめる</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="about.html"
+                          title="前の章へ">このドキュメントについて</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="copyright.html"
+                          title="次の章へ">Copyright</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "bugs.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="#">Report a bug</a></li>
+      <li><a class="improvepage" href="improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/bugs.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/bugs.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="copyright.html" title="Copyright"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="about.html" title="このドキュメントについて"
+             >前へ</a> |</li>
+
+          <li><img src="_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+        <li class="nav-item nav-item-this"><a href="">バグへの対処</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

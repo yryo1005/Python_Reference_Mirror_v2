@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Migrating optparse code to argparse" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/howto/argparse-optparse.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="The argparse module offers several higher level features not natively provided by the optparse module, including: 位置引数を扱う, Supporting subcommands.,+,/ のような代替オプションプレフィクスを許容する, zero-or-more スタイル、one-..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_howto_argparse-optparse_b7b632b5.png" />
+<meta property="og:image:alt" content="The argparse module offers several higher level features not natively provided by the optparse module, including: 位置引数を扱う, Supporting subcommands.,+,/ のような代替オプションプレフィクスを許容する, zero-or-more スタイル、one-..." />
+<meta name="description" content="The argparse module offers several higher level features not natively provided by the optparse module, including: 位置引数を扱う, Supporting subcommands.,+,/ のような代替オプションプレフィクスを許容する, zero-or-more スタイル、one-..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>Migrating optparse code to argparse &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="optparse --- Parser for command line options" href="../library/optparse.html" />
+    <link rel="prev" title="Argparse チュートリアル" href="argparse.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/howto/argparse-optparse.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="argparse.html"
+                          title="前の章へ">Argparse チュートリアル</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../library/optparse.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">optparse</span></code> --- Parser for command line options</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "howto/argparse-optparse.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/howto/argparse-optparse.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/howto/argparse-optparse.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="../library/optparse.html" title="optparse --- Parser for command line options"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="argparse.html" title="Argparse チュートリアル"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="../library/index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../library/cmdlinelibs.html" >コマンドラインインターフェースライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../library/argparse.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">argparse</span></code> --- コマンドラインオプションや引数、サブコマンド向けのパーサー</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Migrating <code class="docutils literal notranslate"><span class="pre">optparse</span></code> code to <code class="docutils literal notranslate"><span class="pre">argparse</span></code></a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="migrating-optparse-code-to-argparse">
+<span id="migrating-optparse-code"></span><span id="upgrading-optparse-code"></span><h1 class="untranslated">Migrating <code class="docutils literal notranslate"><span class="pre">optparse</span></code> code to <code class="docutils literal notranslate"><span class="pre">argparse</span></code><a class="headerlink" href="#migrating-optparse-code-to-argparse" title="Link to this heading">¶</a></h1>
+<p class="untranslated">The <a class="reference internal" href="../library/argparse.html#module-argparse" title="argparse: Command-line option and argument parsing library."><code class="xref py py-mod docutils literal notranslate"><span class="pre">argparse</span></code></a> module offers several higher level features not natively
+provided by the <a class="reference internal" href="../library/optparse.html#module-optparse" title="optparse: Command-line option parsing library."><code class="xref py py-mod docutils literal notranslate"><span class="pre">optparse</span></code></a> module, including:</p>
+<ul class="simple">
+<li><p class="translated">位置引数を扱う</p></li>
+<li><p class="untranslated">Supporting subcommands.</p></li>
+<li><p class="translated"><code class="docutils literal notranslate"><span class="pre">+</span></code>, <code class="docutils literal notranslate"><span class="pre">/</span></code> のような代替オプションプレフィクスを許容する</p></li>
+<li><p class="translated">zero-or-more スタイル、one-or-more スタイルの引数を扱う</p></li>
+<li><p class="translated">より有益な使用方法メッセージの生成</p></li>
+<li><p class="translated">カスタム <code class="docutils literal notranslate"><span class="pre">type</span></code>, カスタム <code class="docutils literal notranslate"><span class="pre">action</span></code> のために遥かに簡単なインターフェイスを提供する</p></li>
+</ul>
+<p class="untranslated">Originally, the <a class="reference internal" href="../library/argparse.html#module-argparse" title="argparse: Command-line option and argument parsing library."><code class="xref py py-mod docutils literal notranslate"><span class="pre">argparse</span></code></a> module attempted to maintain compatibility
+with <a class="reference internal" href="../library/optparse.html#module-optparse" title="optparse: Command-line option parsing library."><code class="xref py py-mod docutils literal notranslate"><span class="pre">optparse</span></code></a>.  However, the fundamental design differences between
+supporting declarative command line option processing (while leaving positional
+argument processing to application code), and supporting both named options
+and positional arguments in the declarative interface mean that the
+API has diverged from that of <code class="docutils literal notranslate"><span class="pre">optparse</span></code> over time.</p>
+<p class="untranslated">As described in <a class="reference internal" href="../library/optparse.html#choosing-an-argument-parser"><span class="std std-ref">Choosing an argument parsing library</span></a>, applications that are
+currently using <a class="reference internal" href="../library/optparse.html#module-optparse" title="optparse: Command-line option parsing library."><code class="xref py py-mod docutils literal notranslate"><span class="pre">optparse</span></code></a> and are happy with the way it works can
+just continue to use <code class="docutils literal notranslate"><span class="pre">optparse</span></code>.</p>
+<p class="untranslated">Application developers that are considering migrating should also review
+the list of intrinsic behavioural differences described in that section
+before deciding whether or not migration is desirable.</p>
+<p class="untranslated">For applications that do choose to migrate from <a class="reference internal" href="../library/optparse.html#module-optparse" title="optparse: Command-line option parsing library."><code class="xref py py-mod docutils literal notranslate"><span class="pre">optparse</span></code></a> to <a class="reference internal" href="../library/argparse.html#module-argparse" title="argparse: Command-line option and argument parsing library."><code class="xref py py-mod docutils literal notranslate"><span class="pre">argparse</span></code></a>,
+the following suggestions should be helpful:</p>
+<ul class="simple">
+<li><p class="translated">すべての <a class="reference internal" href="../library/optparse.html#optparse.OptionParser.add_option" title="optparse.OptionParser.add_option"><code class="xref py py-meth docutils literal notranslate"><span class="pre">optparse.OptionParser.add_option()</span></code></a> の呼び出しを、<a class="reference internal" href="../library/argparse.html#argparse.ArgumentParser.add_argument" title="argparse.ArgumentParser.add_argument"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ArgumentParser.add_argument()</span></code></a> の呼び出しに置き換える。</p></li>
+<li><p class="translated"><code class="docutils literal notranslate"><span class="pre">(options,</span> <span class="pre">args)</span> <span class="pre">=</span> <span class="pre">parser.parse_args()</span></code> を <code class="docutils literal notranslate"><span class="pre">args</span> <span class="pre">=</span> <span class="pre">parser.parse_args()</span></code> に置き換え、位置引数のために必要に応じて <a class="reference internal" href="../library/argparse.html#argparse.ArgumentParser.add_argument" title="argparse.ArgumentParser.add_argument"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ArgumentParser.add_argument()</span></code></a> の呼び出しを追加する。これまで <code class="docutils literal notranslate"><span class="pre">options</span></code> と呼ばれていたものが、<a class="reference internal" href="../library/argparse.html#module-argparse" title="argparse: Command-line option and argument parsing library."><code class="xref py py-mod docutils literal notranslate"><span class="pre">argparse</span></code></a> では <code class="docutils literal notranslate"><span class="pre">args</span></code> と呼ばれていることに留意してください。</p></li>
+<li><p class="translated"><a class="reference internal" href="../library/optparse.html#optparse.OptionParser.disable_interspersed_args" title="optparse.OptionParser.disable_interspersed_args"><code class="xref py py-meth docutils literal notranslate"><span class="pre">optparse.OptionParser.disable_interspersed_args()</span></code></a> を、<a class="reference internal" href="../library/argparse.html#argparse.ArgumentParser.parse_args" title="argparse.ArgumentParser.parse_args"><code class="xref py py-meth docutils literal notranslate"><span class="pre">parse_args()</span></code></a> ではなく <a class="reference internal" href="../library/argparse.html#argparse.ArgumentParser.parse_intermixed_args" title="argparse.ArgumentParser.parse_intermixed_args"><code class="xref py py-meth docutils literal notranslate"><span class="pre">parse_intermixed_args()</span></code></a> で置き換える。</p></li>
+<li><p class="translated">コールバック・アクションと <code class="docutils literal notranslate"><span class="pre">callback_*</span></code> キーワード引数を <code class="docutils literal notranslate"><span class="pre">type</span></code> や <code class="docutils literal notranslate"><span class="pre">action</span></code> 引数に置き換える。</p></li>
+<li><p class="translated"><code class="docutils literal notranslate"><span class="pre">type</span></code> キーワード引数に渡していた文字列の名前を、それに応じたオブジェクト (例: int, float, complex, ...) に置き換える。</p></li>
+<li><p class="translated"><a class="reference internal" href="../library/optparse.html#optparse.Values" title="optparse.Values"><code class="xref py py-class docutils literal notranslate"><span class="pre">optparse.Values</span></code></a> を <a class="reference internal" href="../library/argparse.html#argparse.Namespace" title="argparse.Namespace"><code class="xref py py-class docutils literal notranslate"><span class="pre">Namespace</span></code></a> に置き換え、<a class="reference internal" href="../library/optparse.html#optparse.OptionError" title="optparse.OptionError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">optparse.OptionError</span></code></a> と <a class="reference internal" href="../library/optparse.html#optparse.OptionValueError" title="optparse.OptionValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">optparse.OptionValueError</span></code></a> を <a class="reference internal" href="../library/argparse.html#argparse.ArgumentError" title="argparse.ArgumentError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ArgumentError</span></code></a> に置き換える。</p></li>
+<li><p class="translated"><code class="docutils literal notranslate"><span class="pre">%default</span></code> や <code class="docutils literal notranslate"><span class="pre">%prog</span></code> などの暗黙の引数を含む文字列を、<code class="docutils literal notranslate"><span class="pre">%(default)s</span></code> や <code class="docutils literal notranslate"><span class="pre">%(prog)s</span></code> などの、通常の Python で辞書を使う場合のフォーマット文字列に置き換える。</p></li>
+<li><p class="translated">OptionParser のコンストラクターの <code class="docutils literal notranslate"><span class="pre">version</span></code> 引数を、<code class="docutils literal notranslate"><span class="pre">parser.add_argument('--version',</span> <span class="pre">action='version',</span> <span class="pre">version='&lt;the</span> <span class="pre">version&gt;')</span></code> に置き換える</p></li>
+</ul>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="argparse.html"
+                          title="前の章へ">Argparse チュートリアル</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="../library/optparse.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">optparse</span></code> --- Parser for command line options</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "howto/argparse-optparse.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/howto/argparse-optparse.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/howto/argparse-optparse.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="../library/optparse.html" title="optparse --- Parser for command line options"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="argparse.html" title="Argparse チュートリアル"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="../library/index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="../library/cmdlinelibs.html" >コマンドラインインターフェースライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="../library/argparse.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">argparse</span></code> --- コマンドラインオプションや引数、サブコマンド向けのパーサー</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Migrating <code class="docutils literal notranslate"><span class="pre">optparse</span></code> code to <code class="docutils literal notranslate"><span class="pre">argparse</span></code></a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

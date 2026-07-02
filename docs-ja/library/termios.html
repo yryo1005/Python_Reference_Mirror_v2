@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="termios --- POSIX スタイルの端末制御" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/termios.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="このモジュールでは端末 I/O 制御のための POSIX 準拠の関数呼び出しインターフェースを提供します。これら呼び出しのための完全な記述については、 Unix マニュアルページの termios(3) を参照してください。これは POSIX termios 形式の端末制御をサポートしていてインストール時に有効にした Unix のバージョンでのみ利用可能です。 Availability: U..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_termios_0dba6f92.png" />
+<meta property="og:image:alt" content="このモジュールでは端末 I/O 制御のための POSIX 準拠の関数呼び出しインターフェースを提供します。これら呼び出しのための完全な記述については、 Unix マニュアルページの termios(3) を参照してください。これは POSIX termios 形式の端末制御をサポートしていてインストール時に有効にした Unix のバージョンでのみ利用可能です。 Availability: U..." />
+<meta name="description" content="このモジュールでは端末 I/O 制御のための POSIX 準拠の関数呼び出しインターフェースを提供します。これら呼び出しのための完全な記述については、 Unix マニュアルページの termios(3) を参照してください。これは POSIX termios 形式の端末制御をサポートしていてインストール時に有効にした Unix のバージョンでのみ利用可能です。 Availability: U..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>termios --- POSIX スタイルの端末制御 &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="tty --- 端末制御用の関数群" href="tty.html" />
+    <link rel="prev" title="grp --- グループデータベース" href="grp.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/termios.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">termios</span></code> --- POSIX スタイルの端末制御</a><ul>
+<li><a class="reference internal" href="#example">使用例</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="grp.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">grp</span></code> --- グループデータベース</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="tty.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tty</span></code> --- 端末制御用の関数群</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/termios.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/termios.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/termios.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="tty.html" title="tty --- 端末制御用の関数群"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="grp.html" title="grp --- グループデータベース"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="unix.html" accesskey="U">Unix-specific services</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">termios</span></code> --- POSIX スタイルの端末制御</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-termios">
+<span id="termios-posix-style-tty-control"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">termios</span></code> --- POSIX スタイルの端末制御<a class="headerlink" href="#module-termios" title="Link to this heading">¶</a></h1>
+<hr class="docutils" id="index-0" />
+<p class="translated">このモジュールでは端末 I/O 制御のための POSIX 準拠の関数呼び出しインターフェースを提供します。これら呼び出しのための完全な記述については、 Unix マニュアルページの <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/termios(3)">termios(3)</a></em> を参照してください。これは POSIX <em>termios</em> 形式の端末制御をサポートしていてインストール時に有効にした Unix のバージョンでのみ利用可能です。</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: Unix.</p>
+</div>
+<p class="translated">このモジュールの関数は全て、ファイル記述子 <em>fd</em> を最初の引数としてとります。この値は、 <code class="docutils literal notranslate"><span class="pre">sys.stdin.fileno()</span></code> が返すような整数のファイル記述子でも、 <code class="docutils literal notranslate"><span class="pre">sys.stdin</span></code> 自体のような <a class="reference internal" href="../glossary.html#term-file-object"><span class="xref std std-term">file object</span></a> でもかまいません。</p>
+<p class="translated">このモジュールではまた、モジュールで提供されている関数を使う上で必要となる全ての定数を定義しています; これらの定数は C の対応する関数と同じ名前を持っています。これらの端末制御インターフェースを利用する上でのさらなる情報については、あなたのシステムのドキュメンテーションを参考にしてください。</p>
+<p class="translated">このモジュールには、以下の関数が定義されています:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="termios.tcgetattr">
+<span class="sig-prename descclassname"><span class="pre">termios.</span></span><span class="sig-name descname"><span class="pre">tcgetattr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#termios.tcgetattr" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return a list containing the tty attributes for file descriptor <em>fd</em>, as
+follows: <code class="docutils literal notranslate"><span class="pre">[iflag,</span> <span class="pre">oflag,</span> <span class="pre">cflag,</span> <span class="pre">lflag,</span> <span class="pre">ispeed,</span> <span class="pre">ospeed,</span> <span class="pre">cc]</span></code> where <em>cc</em> is a
+list of the tty special characters (each a string of length 1, except the
+items with indices <code class="xref py py-const docutils literal notranslate"><span class="pre">VMIN</span></code> and <code class="xref py py-const docutils literal notranslate"><span class="pre">VTIME</span></code>, which are integers when
+these fields are defined).  The interpretation of the flags and the speeds as
+well as the indexing in the <em>cc</em> array must be done using the symbolic
+constants defined in the <code class="xref py py-mod docutils literal notranslate"><span class="pre">termios</span></code> module.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="termios.tcsetattr">
+<span class="sig-prename descclassname"><span class="pre">termios.</span></span><span class="sig-name descname"><span class="pre">tcsetattr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">when</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">attributes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#termios.tcsetattr" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Set the tty attributes for file descriptor <em>fd</em> from the <em>attributes</em>, which is
+a list like the one returned by <a class="reference internal" href="#termios.tcgetattr" title="termios.tcgetattr"><code class="xref py py-func docutils literal notranslate"><span class="pre">tcgetattr()</span></code></a>.  The <em>when</em> argument
+determines when the attributes are changed:</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="termios.TCSANOW">
+<span class="sig-prename descclassname"><span class="pre">termios.</span></span><span class="sig-name descname"><span class="pre">TCSANOW</span></span><a class="headerlink" href="#termios.TCSANOW" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Change attributes immediately.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="termios.TCSADRAIN">
+<span class="sig-prename descclassname"><span class="pre">termios.</span></span><span class="sig-name descname"><span class="pre">TCSADRAIN</span></span><a class="headerlink" href="#termios.TCSADRAIN" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Change attributes after transmitting all queued output.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="termios.TCSAFLUSH">
+<span class="sig-prename descclassname"><span class="pre">termios.</span></span><span class="sig-name descname"><span class="pre">TCSAFLUSH</span></span><a class="headerlink" href="#termios.TCSAFLUSH" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Change attributes after transmitting all queued output and
+discarding all queued input.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="termios.tcsendbreak">
+<span class="sig-prename descclassname"><span class="pre">termios.</span></span><span class="sig-name descname"><span class="pre">tcsendbreak</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#termios.tcsendbreak" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイル記述子 <em>fd</em> にブレークを送信します。<em>duration</em> をゼロにすると、0.25〜0.5 秒間のブレークを送信します; <em>duration</em> の値がゼロでない場合、その意味はシステム依存です。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="termios.tcdrain">
+<span class="sig-prename descclassname"><span class="pre">termios.</span></span><span class="sig-name descname"><span class="pre">tcdrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#termios.tcdrain" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイル記述子 <em>fd</em> に書き込まれた全ての出力が転送されるまで待ちます。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="termios.tcflush">
+<span class="sig-prename descclassname"><span class="pre">termios.</span></span><span class="sig-name descname"><span class="pre">tcflush</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">queue</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#termios.tcflush" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイル記述子 <em>fd</em> にキューされたデータを無視します。どのキューかは <em>queue</em> セレクタで指定します: <code class="xref py py-const docutils literal notranslate"><span class="pre">TCIFLUSH</span></code> は入力キュー、 <code class="xref py py-const docutils literal notranslate"><span class="pre">TCOFLUSH</span></code> は出力キュー、 <code class="xref py py-const docutils literal notranslate"><span class="pre">TCIOFLUSH</span></code> は両方のキューです。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="termios.tcflow">
+<span class="sig-prename descclassname"><span class="pre">termios.</span></span><span class="sig-name descname"><span class="pre">tcflow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#termios.tcflow" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイル記述子 <em>fd</em> の入力または出力をサスペンドしたりレジュームしたりします。引数 <em>action</em> は出力をサスペンドする <code class="xref py py-const docutils literal notranslate"><span class="pre">TCOOFF</span></code> 、出力をレジュームする <code class="xref py py-const docutils literal notranslate"><span class="pre">TCOON</span></code> 、入力をサスペンドする <code class="xref py py-const docutils literal notranslate"><span class="pre">TCIOFF</span></code> 、入力をレジュームする <code class="xref py py-const docutils literal notranslate"><span class="pre">TCION</span></code> をとることができます。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="termios.tcgetwinsize">
+<span class="sig-prename descclassname"><span class="pre">termios.</span></span><span class="sig-name descname"><span class="pre">tcgetwinsize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#termios.tcgetwinsize" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return a tuple <code class="docutils literal notranslate"><span class="pre">(ws_row,</span> <span class="pre">ws_col)</span></code> containing the tty window size for file
+descriptor <em>fd</em>. Requires <code class="xref py py-const docutils literal notranslate"><span class="pre">termios.TIOCGWINSZ</span></code> or
+<code class="xref py py-const docutils literal notranslate"><span class="pre">termios.TIOCGSIZE</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.11.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="termios.tcsetwinsize">
+<span class="sig-prename descclassname"><span class="pre">termios.</span></span><span class="sig-name descname"><span class="pre">tcsetwinsize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">winsize</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#termios.tcsetwinsize" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Set the tty window size for file descriptor <em>fd</em> from <em>winsize</em>, which is
+a two-item tuple <code class="docutils literal notranslate"><span class="pre">(ws_row,</span> <span class="pre">ws_col)</span></code> like the one returned by
+<a class="reference internal" href="#termios.tcgetwinsize" title="termios.tcgetwinsize"><code class="xref py py-func docutils literal notranslate"><span class="pre">tcgetwinsize()</span></code></a>. Requires at least one of the pairs
+(<code class="xref py py-const docutils literal notranslate"><span class="pre">termios.TIOCGWINSZ</span></code>, <code class="xref py py-const docutils literal notranslate"><span class="pre">termios.TIOCSWINSZ</span></code>);
+(<code class="xref py py-const docutils literal notranslate"><span class="pre">termios.TIOCGSIZE</span></code>, <code class="xref py py-const docutils literal notranslate"><span class="pre">termios.TIOCSSIZE</span></code>) to be defined.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.11.</span></p>
+</div>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<dl class="simple">
+<dt class="translated"><a class="reference internal" href="tty.html#module-tty" title="tty: Utility functions that perform common terminal control operations."><code class="xref py py-mod docutils literal notranslate"><span class="pre">tty</span></code></a> モジュール</dt><dd><p class="translated">一般的な端末制御操作のための便利な関数。</p>
+</dd>
+</dl>
+</div>
+<section id="example">
+<span id="termios-example"></span><h2 class="translated">使用例<a class="headerlink" href="#example" title="Link to this heading">¶</a></h2>
+<p class="translated">以下はエコーバックを切った状態でパスワード入力を促す関数です。ユーザの入力に関わらず以前の端末属性を正確に回復するために、二つの <a class="reference internal" href="#termios.tcgetattr" title="termios.tcgetattr"><code class="xref py py-func docutils literal notranslate"><span class="pre">tcgetattr()</span></code></a> と <a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">try</span></code></a> ... <a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">finally</span></code></a> 文によるテクニックが使われています:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">getpass</span><span class="p">(</span><span class="n">prompt</span><span class="o">=</span><span class="s2">&quot;Password: &quot;</span><span class="p">):</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">termios</span><span class="o">,</span><span class="w"> </span><span class="nn">sys</span>
+    <span class="n">fd</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">fileno</span><span class="p">()</span>
+    <span class="n">old</span> <span class="o">=</span> <span class="n">termios</span><span class="o">.</span><span class="n">tcgetattr</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+    <span class="n">new</span> <span class="o">=</span> <span class="n">termios</span><span class="o">.</span><span class="n">tcgetattr</span><span class="p">(</span><span class="n">fd</span><span class="p">)</span>
+    <span class="n">new</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">termios</span><span class="o">.</span><span class="n">ECHO</span>          <span class="c1"># lflags</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">termios</span><span class="o">.</span><span class="n">tcsetattr</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">termios</span><span class="o">.</span><span class="n">TCSADRAIN</span><span class="p">,</span> <span class="n">new</span><span class="p">)</span>
+        <span class="n">passwd</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">termios</span><span class="o">.</span><span class="n">tcsetattr</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">termios</span><span class="o">.</span><span class="n">TCSADRAIN</span><span class="p">,</span> <span class="n">old</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">passwd</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">termios</span></code> --- POSIX スタイルの端末制御</a><ul>
+<li><a class="reference internal" href="#example">使用例</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="grp.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">grp</span></code> --- グループデータベース</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="tty.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tty</span></code> --- 端末制御用の関数群</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/termios.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/termios.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/termios.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="tty.html" title="tty --- 端末制御用の関数群"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="grp.html" title="grp --- グループデータベース"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="unix.html" >Unix-specific services</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">termios</span></code> --- POSIX スタイルの端末制御</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

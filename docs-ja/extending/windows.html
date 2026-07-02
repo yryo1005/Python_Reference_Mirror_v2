@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="5. Windows 上での C および C++ 拡張モジュールのビルド" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/extending/windows.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="この章では Windows 向けの Python 拡張モジュールを Microsoft Visual C++ を使って作成する方法について簡単に述べ、その後に拡張モジュールのビルドがどのように動作するのかについて詳しい背景を述べます。この説明は、Python 拡張モジュールを作成する Windows プログラマと、Unix と Windows の双方でうまくビルドできるようなソフトウェアの作..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_extending_windows_2f19c0c8.png" />
+<meta property="og:image:alt" content="この章では Windows 向けの Python 拡張モジュールを Microsoft Visual C++ を使って作成する方法について簡単に述べ、その後に拡張モジュールのビルドがどのように動作するのかについて詳しい背景を述べます。この説明は、Python 拡張モジュールを作成する Windows プログラマと、Unix と Windows の双方でうまくビルドできるようなソフトウェアの作..." />
+<meta name="description" content="この章では Windows 向けの Python 拡張モジュールを Microsoft Visual C++ を使って作成する方法について簡単に述べ、その後に拡張モジュールのビルドがどのように動作するのかについて詳しい背景を述べます。この説明は、Python 拡張モジュールを作成する Windows プログラマと、Unix と Windows の双方でうまくビルドできるようなソフトウェアの作..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>5. Windows 上での C および C++ 拡張モジュールのビルド &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="1. 他のアプリケーションへの Python の埋め込み" href="embedding.html" />
+    <link rel="prev" title="4. C および C++ 拡張のビルド" href="building.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/extending/windows.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5. Windows 上での C および C++ 拡張モジュールのビルド</a><ul>
+<li><a class="reference internal" href="#a-cookbook-approach">5.1. 型どおりのアプローチ</a></li>
+<li><a class="reference internal" href="#differences-between-unix-and-windows">5.2. Unix と Windows の相違点</a></li>
+<li><a class="reference internal" href="#using-dlls-in-practice">5.3. DLL 使用の実際</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="building.html"
+                          title="前の章へ"><span class="section-number">4. </span>C および C++ 拡張のビルド</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="embedding.html"
+                          title="次の章へ"><span class="section-number">1. </span>他のアプリケーションへの Python の埋め込み</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "extending/windows.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/extending/windows.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/extending/windows.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="embedding.html" title="1. 他のアプリケーションへの Python の埋め込み"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="building.html" title="4. C および C++ 拡張のビルド"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Python インタプリタの拡張と埋め込み</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5. </span>Windows 上での C および C++ 拡張モジュールのビルド</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="building-c-and-c-extensions-on-windows">
+<span id="building-on-windows"></span><h1 class="translated"><span class="section-number">5. </span>Windows 上での C および C++ 拡張モジュールのビルド<a class="headerlink" href="#building-c-and-c-extensions-on-windows" title="Link to this heading">¶</a></h1>
+<p class="translated">この章では Windows 向けの Python 拡張モジュールを Microsoft Visual C++ を使って作成する方法について簡単に述べ、その後に拡張モジュールのビルドがどのように動作するのかについて詳しい背景を述べます。この説明は、Python 拡張モジュールを作成する Windows プログラマと、Unix と Windows の双方でうまくビルドできるようなソフトウェアの作成に興味がある Unix プログラマの双方にとって有用です。</p>
+<p class="translated">モジュールの作者には、この節で説明している方法よりも、distutils によるアプローチで拡張モジュールをビルドするよう勧めます。また、Python をビルドした際に使われた C コンパイラが必要です; 通常は Microsoft Visual C++です。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated">この章では、Python のバージョン番号が符号化されて入っているたくさんのファイル名について触れます。これらのファイル名は <code class="docutils literal notranslate"><span class="pre">XY</span></code> で表されるバージョン名付きで表現されます; <code class="docutils literal notranslate"><span class="pre">'X'</span></code> は使っている Python リリースのメジャーバージョン番号、<code class="docutils literal notranslate"><span class="pre">'Y'</span></code> はマイナーバージョン番号です。例えば、Python 2.2.1 を使っているなら、<code class="docutils literal notranslate"><span class="pre">XY</span></code> は実際には <code class="docutils literal notranslate"><span class="pre">22</span></code> になります。</p>
+</div>
+<section id="a-cookbook-approach">
+<span id="win-cookbook"></span><h2 class="translated"><span class="section-number">5.1. </span>型どおりのアプローチ<a class="headerlink" href="#a-cookbook-approach" title="Link to this heading">¶</a></h2>
+<p class="untranslated">There are two approaches to building extension modules on Windows, just as there
+are on Unix: use the <code class="docutils literal notranslate"><span class="pre">setuptools</span></code> package to control the build process, or
+do things manually.  The setuptools approach works well for most extensions;
+documentation on using <code class="docutils literal notranslate"><span class="pre">setuptools</span></code> to build and package extension modules
+is available in <a class="reference internal" href="building.html#setuptools-index"><span class="std std-ref">setuptools による C および C++ 拡張のビルド</span></a>.  If you find you really need to do
+things manually, it may be instructive to study the project file for the
+<a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/PCbuild/winsound.vcxproj">winsound</a> standard library module.</p>
+</section>
+<section id="differences-between-unix-and-windows">
+<span id="dynamic-linking"></span><h2 class="translated"><span class="section-number">5.2. </span>Unix と Windows の相違点<a class="headerlink" href="#differences-between-unix-and-windows" title="Link to this heading">¶</a></h2>
+<p class="translated">Unix と Windows では、コードの実行時読み込みに全く異なるパラダイムを用いています。動的ロードされるようなモジュールをビルドしようとする前に、自分のシステムがどのように動作するか知っておいてください。</p>
+<p class="translated">Unix では、共有オブジェクト (<code class="file docutils literal notranslate"><span class="pre">.so</span></code>) ファイルにプログラムが使うコード、そしてプログラム内で使う関数名やデータが入っています。ファイルがプログラムに結合されると、これらの関数やデータに対するファイルのコード内の全ての参照は、メモリ内で関数やデータが配置されている、プログラム中の実際の場所を指すように変更されます。これは基本的にはリンク操作にあたります。</p>
+<p class="translated">Windows では、動的リンクライブラリ (<code class="file docutils literal notranslate"><span class="pre">.dll</span></code>) ファイルにはぶら下がり参照 (dangling reference) はありません。その代わり、関数やデータへのアクセスはルックアップテーブルを介します。従って DLL コードの場合、実行時にポインタがプログラムメモリ上の正しい場所を指すように修正する必要はありません; その代わり、コードは常に DLL のルックアップテーブルを使い、ルックアップテーブル自体は実行時に実際の関数やデータを指すように修正されます。</p>
+<p class="translated">Unix には、唯一のライブラリファイル形式 (<code class="file docutils literal notranslate"><span class="pre">.a</span></code>) しかありません。 <code class="file docutils literal notranslate"><span class="pre">.a</span></code> ファイルには複数のオブジェクトファイル (<code class="file docutils literal notranslate"><span class="pre">.o</span></code>) 由来のコードが入っています。共有オブジェクトファイル (<code class="file docutils literal notranslate"><span class="pre">.so</span></code>) を作成するリンク処理の段階中に、リンカは定義場所の不明な識別子に遭遇することがあります。このときリンカはライブラリ内のオブジェクトファイルを検索します; もし識別子が見つかると、リンカはそのオブジェクトファイルから全てのコードを取り込みます。</p>
+<p class="translated">Windows では、二つの形式のライブラリ、静的ライブラリとインポートライブラリがあります (どちらも <code class="file docutils literal notranslate"><span class="pre">.lib</span></code> と呼ばれています)。静的ライブラリは Unix における <code class="file docutils literal notranslate"><span class="pre">.a</span></code> ファイルに似ています; このファイルには、必要に応じて取り込まれるようなコードが入っています。インポートライブラリは、基本的には特定の識別子が不正ではなく、 DLL がロードされた時点で存在することを保証するためにだけ使われます。リンカはインポートライブラリからの情報を使ってルックアップテーブルを作成し、DLL に入っていない識別子を使えるようにします。アプリケーションや DLL がリンクされるさい、インポートライブラリが生成されることがあります。このライブラリは、アプリケーションや DLL 内のシンボルに依存するような、将来作成される全ての DLL で使うために必要になります。</p>
+<p class="translated">二つの動的ロードモジュール、B と C を作成し、別のコードブロック A を共有するとします。Unix では、 <code class="file docutils literal notranslate"><span class="pre">A.a</span></code> を <code class="file docutils literal notranslate"><span class="pre">B.so</span></code> や <code class="file docutils literal notranslate"><span class="pre">C.so</span></code>  をビルドするときのリンカに渡したりは <em>しません</em> ; そんなことをすれば、コードは二度取り込まれ、B と C のそれぞれが自分用のコピーを持ってしまいます。 Windows では、 <code class="file docutils literal notranslate"><span class="pre">A.dll</span></code> をビルドすると <code class="file docutils literal notranslate"><span class="pre">A.lib</span></code> もビルドされます。 B や C のリンクには <code class="file docutils literal notranslate"><span class="pre">A.lib</span></code> を渡します。 <code class="file docutils literal notranslate"><span class="pre">A.lib</span></code> にはコードは入っていません; 単に A のコードにアクセスするするために実行時に用いられる情報が入っているだけです。</p>
+<p class="translated">Windows ではインポートライブラリの使用は <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">spam</span></code> とするようなものです; この操作によって spam の名前にアクセスできますが、コードのコピーを個別に作成したりはしません。Unix では、ライブラリとのリンクはむしろ <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">spam</span> <span class="pre">import</span> <span class="pre">*</span></code> に似ています;  この操作では個別にコードのコピーを生成します。</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.Py_NO_LINK_LIB">
+<span class="sig-name descname"><span class="n"><span class="pre">Py_NO_LINK_LIB</span></span></span><a class="headerlink" href="#c.Py_NO_LINK_LIB" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="untranslated">Turn off the implicit, <code class="docutils literal notranslate"><span class="pre">#pragma</span></code>-based linkage with the Python
+library, performed inside CPython header files.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+</section>
+<section id="using-dlls-in-practice">
+<span id="win-dlls"></span><h2 class="translated"><span class="section-number">5.3. </span>DLL 使用の実際<a class="headerlink" href="#using-dlls-in-practice" title="Link to this heading">¶</a></h2>
+<p class="untranslated">Windows Python is built in Microsoft Visual C++; using other compilers may or
+may not work.  The rest of this section is MSVC++ specific.</p>
+<p class="untranslated">When creating DLLs in Windows, you can use the CPython library in two ways:</p>
+<ol class="arabic">
+<li><p class="untranslated">By default, inclusion of <code class="file docutils literal notranslate"><span class="pre">PC/pyconfig.h</span></code> directly or via
+<code class="file docutils literal notranslate"><span class="pre">Python.h</span></code> triggers an implicit, configure-aware link with the
+library.  The header file chooses <code class="file docutils literal notranslate"><span class="pre">pythonXY_d.lib</span></code> for Debug,
+<code class="file docutils literal notranslate"><span class="pre">pythonXY.lib</span></code> for Release, and <code class="file docutils literal notranslate"><span class="pre">pythonX.lib</span></code> for Release with
+the <a class="reference internal" href="../c-api/stable.html#stable-application-binary-interface"><span class="std std-ref">Limited API</span></a> enabled.</p>
+<p class="untranslated">To build two DLLs, spam and ni (which uses C functions found in spam), you
+could use these commands:</p>
+<div class="untranslated highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">cl</span><span class="w"> </span><span class="o">/</span><span class="n">LD</span><span class="w"> </span><span class="o">/</span><span class="n">I</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">include</span><span class="w"> </span><span class="n">spam</span><span class="p">.</span><span class="n">c</span>
+<span class="n">cl</span><span class="w"> </span><span class="o">/</span><span class="n">LD</span><span class="w"> </span><span class="o">/</span><span class="n">I</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">include</span><span class="w"> </span><span class="n">ni</span><span class="p">.</span><span class="n">c</span><span class="w"> </span><span class="n">spam</span><span class="p">.</span><span class="n">lib</span>
+</pre></div>
+</div>
+<p class="untranslated">The first command created three files: <code class="file docutils literal notranslate"><span class="pre">spam.obj</span></code>, <code class="file docutils literal notranslate"><span class="pre">spam.dll</span></code>
+and <code class="file docutils literal notranslate"><span class="pre">spam.lib</span></code>.  <code class="file docutils literal notranslate"><span class="pre">Spam.dll</span></code> does not contain any Python
+functions (such as <a class="reference internal" href="../c-api/arg.html#c.PyArg_ParseTuple" title="PyArg_ParseTuple"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyArg_ParseTuple()</span></code></a>), but it does know how to find
+the Python code thanks to the implicitly linked <code class="file docutils literal notranslate"><span class="pre">pythonXY.lib</span></code>.</p>
+<p class="translated">二つ目のコマンドでは、 <code class="file docutils literal notranslate"><span class="pre">ni.dll</span></code> (および <code class="file docutils literal notranslate"><span class="pre">.obj</span></code> と <code class="file docutils literal notranslate"><span class="pre">.lib</span></code>) ができ、このライブラリは spam と Python 実行形式中の必要な関数をどうやって見つければよいか知っています。</p>
+</li>
+<li><p class="untranslated">Manually by defining <a class="reference internal" href="#c.Py_NO_LINK_LIB" title="Py_NO_LINK_LIB"><code class="xref c c-macro docutils literal notranslate"><span class="pre">Py_NO_LINK_LIB</span></code></a> macro before including
+<code class="file docutils literal notranslate"><span class="pre">Python.h</span></code>. You must pass <code class="file docutils literal notranslate"><span class="pre">pythonXY.lib</span></code> to the linker.</p>
+<p class="untranslated">To build two DLLs, spam and ni (which uses C functions found in spam), you
+could use these commands:</p>
+<div class="untranslated highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">cl</span><span class="w"> </span><span class="o">/</span><span class="n">LD</span><span class="w"> </span><span class="o">/</span><span class="n">DPy_NO_LINK_LIB</span><span class="w"> </span><span class="o">/</span><span class="n">I</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">include</span><span class="w"> </span><span class="n">spam</span><span class="p">.</span><span class="n">c</span><span class="w"> </span><span class="p">..</span><span class="o">/</span><span class="n">libs</span><span class="o">/</span><span class="n">pythonXY</span><span class="p">.</span><span class="n">lib</span>
+<span class="n">cl</span><span class="w"> </span><span class="o">/</span><span class="n">LD</span><span class="w"> </span><span class="o">/</span><span class="n">DPy_NO_LINK_LIB</span><span class="w"> </span><span class="o">/</span><span class="n">I</span><span class="o">/</span><span class="n">python</span><span class="o">/</span><span class="n">include</span><span class="w"> </span><span class="n">ni</span><span class="p">.</span><span class="n">c</span><span class="w"> </span><span class="n">spam</span><span class="p">.</span><span class="n">lib</span><span class="w"> </span><span class="p">..</span><span class="o">/</span><span class="n">libs</span><span class="o">/</span><span class="n">pythonXY</span><span class="p">.</span><span class="n">lib</span>
+</pre></div>
+</div>
+<p class="translated">最初のコマンドで、三つのファイル: <code class="file docutils literal notranslate"><span class="pre">spam.obj</span></code> 、 <code class="file docutils literal notranslate"><span class="pre">spam.dll</span></code>  および <code class="file docutils literal notranslate"><span class="pre">spam.lib</span></code> ができます。 <code class="file docutils literal notranslate"><span class="pre">Spam.dll</span></code> には (<a class="reference internal" href="../c-api/arg.html#c.PyArg_ParseTuple" title="PyArg_ParseTuple"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyArg_ParseTuple()</span></code></a> のような) Python 関数は全く入っていませんが、 <code class="file docutils literal notranslate"><span class="pre">pythonXY.lib</span></code> のおかげで Python コードを見つけることはできます。</p>
+<p class="translated">二つ目のコマンドでは、 <code class="file docutils literal notranslate"><span class="pre">ni.dll</span></code> (および <code class="file docutils literal notranslate"><span class="pre">.obj</span></code> と <code class="file docutils literal notranslate"><span class="pre">.lib</span></code>) ができ、このライブラリは spam と Python 実行形式中の必要な関数をどうやって見つければよいか知っています。</p>
+</li>
+</ol>
+<p class="translated">全ての識別子がルックアップテーブル上に公開されるわけではありません。他のモジュール (Python 自体を含みます) から、自作の識別子が見えるようにするには、<code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">_declspec(dllexport)</span> <span class="pre">initspam(void)</span></code> や <code class="docutils literal notranslate"><span class="pre">PyObject</span> <span class="pre">_declspec(dllexport)</span> <span class="pre">*NiGetSpamData(void)</span></code> のように、<code class="docutils literal notranslate"><span class="pre">_declspec(dllexport)</span></code> で宣言せねばなりません。</p>
+<p class="untranslated">Developer Studio will throw in a lot of import libraries that you do not really
+need, adding about 100K to your executable.  To get rid of them, use the Project
+Settings dialog, Link tab, to specify <em>ignore default libraries</em>.  Add the
+correct <code class="file docutils literal notranslate"><span class="pre">msvcrt</span><em><span class="pre">xx</span></em><span class="pre">.lib</span></code> to the list of libraries.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">5. Windows 上での C および C++ 拡張モジュールのビルド</a><ul>
+<li><a class="reference internal" href="#a-cookbook-approach">5.1. 型どおりのアプローチ</a></li>
+<li><a class="reference internal" href="#differences-between-unix-and-windows">5.2. Unix と Windows の相違点</a></li>
+<li><a class="reference internal" href="#using-dlls-in-practice">5.3. DLL 使用の実際</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="building.html"
+                          title="前の章へ"><span class="section-number">4. </span>C および C++ 拡張のビルド</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="embedding.html"
+                          title="次の章へ"><span class="section-number">1. </span>他のアプリケーションへの Python の埋め込み</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "extending/windows.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/extending/windows.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/extending/windows.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="embedding.html" title="1. 他のアプリケーションへの Python の埋め込み"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="building.html" title="4. C および C++ 拡張のビルド"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python インタプリタの拡張と埋め込み</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">5. </span>Windows 上での C および C++ 拡張モジュールのビルド</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

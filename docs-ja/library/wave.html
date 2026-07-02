@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="wave --- WAV ファイルの読み書き" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/wave.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/wave.py The wave module provides a convenient interface to the Waveform Audio &quot;WAVE&quot; (or &quot;WAV&quot;) file format. Only uncompressed PCM encoded wave files are supported. ..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_wave_a5bd42b4.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/wave.py The wave module provides a convenient interface to the Waveform Audio &quot;WAVE&quot; (or &quot;WAV&quot;) file format. Only uncompressed PCM encoded wave files are supported. ..." />
+<meta name="description" content="ソースコード: Lib/wave.py The wave module provides a convenient interface to the Waveform Audio &quot;WAVE&quot; (or &quot;WAV&quot;) file format. Only uncompressed PCM encoded wave files are supported. ..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>wave --- WAV ファイルの読み書き &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="colorsys --- 色体系間の変換" href="colorsys.html" />
+    <link rel="prev" title="マルチメディアサービス" href="mm.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/wave.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wave</span></code> --- WAV ファイルの読み書き</a><ul>
+<li><a class="reference internal" href="#wave-read-objects">Wave_read オブジェクト</a></li>
+<li><a class="reference internal" href="#wave-write-objects">Wave_write オブジェクト</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="mm.html"
+                          title="前の章へ">マルチメディアサービス</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="colorsys.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">colorsys</span></code> --- 色体系間の変換</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/wave.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/wave.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/wave.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="colorsys.html" title="colorsys --- 色体系間の変換"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="mm.html" title="マルチメディアサービス"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="mm.html" accesskey="U">マルチメディアサービス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">wave</span></code> --- WAV ファイルの読み書き</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-wave">
+<span id="wave-read-and-write-wav-files"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wave</span></code> --- WAV ファイルの読み書き<a class="headerlink" href="#module-wave" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/wave.py">Lib/wave.py</a></p>
+<hr class="docutils" />
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">wave</span></code> module provides a convenient interface to the Waveform Audio
+&quot;WAVE&quot; (or &quot;WAV&quot;) file format. Only uncompressed PCM encoded wave files are
+supported.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.12 で変更: </span>Support for <code class="docutils literal notranslate"><span class="pre">WAVE_FORMAT_EXTENSIBLE</span></code> headers was added, provided that the
+extended format is <code class="docutils literal notranslate"><span class="pre">KSDATAFORMAT_SUBTYPE_PCM</span></code>.</p>
+</div>
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">wave</span></code> module defines the following function and exception:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="wave.open">
+<span class="sig-prename descclassname"><span class="pre">wave.</span></span><span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wave.open" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">If <em>file</em> is a string, open the file by that name, otherwise treat it as a
+file-like object.  <em>mode</em> can be:</p>
+<dl class="simple">
+<dt class="translated"><code class="docutils literal notranslate"><span class="pre">'rb'</span></code></dt><dd><p class="translated">読み出しのみのモード。</p>
+</dd>
+<dt class="translated"><code class="docutils literal notranslate"><span class="pre">'wb'</span></code></dt><dd><p class="translated">書き込みのみのモード。</p>
+</dd>
+</dl>
+<p class="translated">WAVファイルに対して読み込み／書き込み両方のモードで開くことはできないことに注意して下さい。</p>
+<p class="translated"><em>mode</em> が <code class="docutils literal notranslate"><span class="pre">'rb'</span></code> の場合 <a class="reference internal" href="#wave.Wave_read" title="wave.Wave_read"><code class="xref py py-class docutils literal notranslate"><span class="pre">Wave_read</span></code></a> オブジェクトを返し、 <code class="docutils literal notranslate"><span class="pre">'wb'</span></code> の場合 <a class="reference internal" href="#wave.Wave_write" title="wave.Wave_write"><code class="xref py py-class docutils literal notranslate"><span class="pre">Wave_write</span></code></a> オブジェクトを返します。 <em>mode</em> が省略されていて、 file-like オブジェクトが <em>file</em> として渡されると、 <code class="docutils literal notranslate"><span class="pre">file.mode</span></code> が <em>mode</em> のデフォルト値として使われます。</p>
+<p class="untranslated">If you pass in a file-like object, the wave object will not close it when its
+<code class="docutils literal notranslate"><span class="pre">close()</span></code> method is called; it is the caller's responsibility to close
+the file object.</p>
+<p class="untranslated">The <code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code> function may be used in a <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> statement.  When
+the <code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code> block completes, the <a class="reference internal" href="#wave.Wave_read.close" title="wave.Wave_read.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Wave_read.close()</span></code></a> or
+<a class="reference internal" href="#wave.Wave_write.close" title="wave.Wave_write.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Wave_write.close()</span></code></a> method is called.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.4 で変更: </span>シーク不能なファイルのサポートが追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="wave.Error">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wave.</span></span><span class="sig-name descname"><span class="pre">Error</span></span><a class="headerlink" href="#wave.Error" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">WAVの仕様を犯したり、実装の欠陥に遭遇して何か実行不可能となった時に発生するエラー。</p>
+</dd></dl>
+
+<section id="wave-read-objects">
+<span id="id1"></span><h2 class="translated">Wave_read オブジェクト<a class="headerlink" href="#wave-read-objects" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="wave.Wave_read">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wave.</span></span><span class="sig-name descname"><span class="pre">Wave_read</span></span><a class="headerlink" href="#wave.Wave_read" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Read a WAV file.</p>
+<p class="translated"><a class="reference internal" href="#wave.open" title="wave.open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a> によって返される Wave_read オブジェクトには、以下のメソッドがあります:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_read.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_read.close" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Close the stream if it was opened by <code class="xref py py-mod docutils literal notranslate"><span class="pre">wave</span></code>, and make the instance
+unusable.  This is called automatically on object collection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_read.getnchannels">
+<span class="sig-name descname"><span class="pre">getnchannels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_read.getnchannels" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">オーディオチャンネル数（モノラルなら <code class="docutils literal notranslate"><span class="pre">1</span></code> 、ステレオなら <code class="docutils literal notranslate"><span class="pre">2</span></code> ）を返します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_read.getsampwidth">
+<span class="sig-name descname"><span class="pre">getsampwidth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_read.getsampwidth" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">サンプルサイズをバイト数で返します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_read.getframerate">
+<span class="sig-name descname"><span class="pre">getframerate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_read.getframerate" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">サンプリングレートを返します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_read.getnframes">
+<span class="sig-name descname"><span class="pre">getnframes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_read.getnframes" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">オーディオフレーム数を返します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_read.getcomptype">
+<span class="sig-name descname"><span class="pre">getcomptype</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_read.getcomptype" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">圧縮形式を返します（ <code class="docutils literal notranslate"><span class="pre">'NONE'</span></code> だけがサポートされている形式です）。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_read.getcompname">
+<span class="sig-name descname"><span class="pre">getcompname</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_read.getcompname" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#wave.Wave_read.getcomptype" title="wave.Wave_read.getcomptype"><code class="xref py py-meth docutils literal notranslate"><span class="pre">getcomptype()</span></code></a> を人に判読可能な形にしたものです。通常、 <code class="docutils literal notranslate"><span class="pre">'NONE'</span></code> に対して <code class="docutils literal notranslate"><span class="pre">'not</span> <span class="pre">compressed'</span></code> が返されます。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_read.getparams">
+<span class="sig-name descname"><span class="pre">getparams</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_read.getparams" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Returns a <a class="reference internal" href="collections.html#collections.namedtuple" title="collections.namedtuple"><code class="xref py py-func docutils literal notranslate"><span class="pre">namedtuple()</span></code></a> <code class="docutils literal notranslate"><span class="pre">(nchannels,</span> <span class="pre">sampwidth,</span>
+<span class="pre">framerate,</span> <span class="pre">nframes,</span> <span class="pre">comptype,</span> <span class="pre">compname)</span></code>, equivalent to output of the
+<code class="docutils literal notranslate"><span class="pre">get*()</span></code> methods.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_read.readframes">
+<span class="sig-name descname"><span class="pre">readframes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_read.readframes" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">最大 <em>n</em> 個のオーディオフレームを読み込んで、 <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> オブジェクトとして返します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_read.rewind">
+<span class="sig-name descname"><span class="pre">rewind</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_read.rewind" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルのポインタをオーディオストリームの先頭に戻します。</p>
+</dd></dl>
+
+<p class="untranslated">The following two methods are defined for compatibility with the old <code class="xref py py-mod docutils literal notranslate"><span class="pre">aifc</span></code>
+module, and don't do anything interesting.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_read.getmarkers">
+<span class="sig-name descname"><span class="pre">getmarkers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_read.getmarkers" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Returns <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<div class="deprecated-removed">
+<p><span class="versionmodified deprecated">バージョン 3.13 で非推奨、バージョン 3.15 で削除予定: </span>The method only existed for compatibility with the <code class="xref py py-mod docutils literal notranslate"><span class="pre">aifc</span></code> module
+which has been removed in Python 3.13.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_read.getmark">
+<span class="sig-name descname"><span class="pre">getmark</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_read.getmark" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Raise an error.</p>
+<div class="deprecated-removed">
+<p><span class="versionmodified deprecated">バージョン 3.13 で非推奨、バージョン 3.15 で削除予定: </span>The method only existed for compatibility with the <code class="xref py py-mod docutils literal notranslate"><span class="pre">aifc</span></code> module
+which has been removed in Python 3.13.</p>
+</div>
+</dd></dl>
+
+<p class="translated">以下の2つのメソッドは共通の&quot;位置&quot;を定義しています。&quot;位置&quot;は他の関数とは独立して実装されています。</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_read.setpos">
+<span class="sig-name descname"><span class="pre">setpos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_read.setpos" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルのポインタを指定した位置に設定します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_read.tell">
+<span class="sig-name descname"><span class="pre">tell</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_read.tell" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルの現在のポインタ位置を返します。</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="wave-write-objects">
+<span id="id2"></span><h2 class="translated">Wave_write オブジェクト<a class="headerlink" href="#wave-write-objects" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="wave.Wave_write">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">wave.</span></span><span class="sig-name descname"><span class="pre">Wave_write</span></span><a class="headerlink" href="#wave.Wave_write" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Write a WAV file.</p>
+<p class="untranslated">Wave_write objects, as returned by <a class="reference internal" href="#wave.open" title="wave.open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a>.</p>
+<p class="untranslated">For seekable output streams, the <code class="docutils literal notranslate"><span class="pre">wave</span></code> header will automatically be updated
+to reflect the number of frames actually written.  For unseekable streams, the
+<em>nframes</em> value must be accurate when the first frame data is written.  An
+accurate <em>nframes</em> value can be achieved either by calling
+<a class="reference internal" href="#wave.Wave_write.setnframes" title="wave.Wave_write.setnframes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setnframes()</span></code></a> or <a class="reference internal" href="#wave.Wave_write.setparams" title="wave.Wave_write.setparams"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setparams()</span></code></a> with the number
+of frames that will be written before <a class="reference internal" href="#wave.Wave_write.close" title="wave.Wave_write.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">close()</span></code></a> is called and
+then using <a class="reference internal" href="#wave.Wave_write.writeframesraw" title="wave.Wave_write.writeframesraw"><code class="xref py py-meth docutils literal notranslate"><span class="pre">writeframesraw()</span></code></a> to write the frame data, or by
+calling <a class="reference internal" href="#wave.Wave_write.writeframes" title="wave.Wave_write.writeframes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">writeframes()</span></code></a> with all of the frame data to be
+written.  In the latter case <code class="xref py py-meth docutils literal notranslate"><span class="pre">writeframes()</span></code> will calculate
+the number of frames in the data and set <em>nframes</em> accordingly before writing
+the frame data.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.4 で変更: </span>シーク不能なファイルのサポートが追加されました。</p>
+</div>
+<p class="untranslated">Wave_write objects have the following methods:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_write.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_write.close" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Make sure <em>nframes</em> is correct, and close the file if it was opened by
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">wave</span></code>.  This method is called upon object collection.  It will raise
+an exception if the output stream is not seekable and <em>nframes</em> does not
+match the number of frames actually written.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_write.setnchannels">
+<span class="sig-name descname"><span class="pre">setnchannels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_write.setnchannels" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">チャンネル数を設定します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_write.getnchannels">
+<span class="sig-name descname"><span class="pre">getnchannels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_write.getnchannels" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return the number of channels.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_write.setsampwidth">
+<span class="sig-name descname"><span class="pre">setsampwidth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_write.setsampwidth" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">サンプルサイズを <em>n</em> バイトに設定します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_write.getsampwidth">
+<span class="sig-name descname"><span class="pre">getsampwidth</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_write.getsampwidth" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return the sample width in bytes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_write.setframerate">
+<span class="sig-name descname"><span class="pre">setframerate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_write.setframerate" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">サンプリングレートを <em>n</em> に設定します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span>整数ではない値がこのメソッドに入力された場合は、直近の整数に丸められます。</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_write.getframerate">
+<span class="sig-name descname"><span class="pre">getframerate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_write.getframerate" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return the frame rate.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_write.setnframes">
+<span class="sig-name descname"><span class="pre">setnframes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_write.setnframes" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">フレーム数を <em>n</em> に設定します。もし実際に書き込まれたフレームの数と異なるなら、これは後で変更されます (出力ストリームがシーク不能なら、更新しようとした時にエラーが起きます)。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_write.getnframes">
+<span class="sig-name descname"><span class="pre">getnframes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_write.getnframes" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return the number of audio frames written so far.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_write.setcomptype">
+<span class="sig-name descname"><span class="pre">setcomptype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_write.setcomptype" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">圧縮形式とその記述を設定します。現在のところ、非圧縮を示す圧縮形式 <code class="docutils literal notranslate"><span class="pre">NONE</span></code> だけがサポートされています。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_write.getcomptype">
+<span class="sig-name descname"><span class="pre">getcomptype</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_write.getcomptype" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return the compression type (<code class="docutils literal notranslate"><span class="pre">'NONE'</span></code>).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_write.getcompname">
+<span class="sig-name descname"><span class="pre">getcompname</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_write.getcompname" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return the human-readable compression type name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_write.setparams">
+<span class="sig-name descname"><span class="pre">setparams</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tuple</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_write.setparams" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The <em>tuple</em> should be <code class="docutils literal notranslate"><span class="pre">(nchannels,</span> <span class="pre">sampwidth,</span> <span class="pre">framerate,</span> <span class="pre">nframes,</span> <span class="pre">comptype,</span>
+<span class="pre">compname)</span></code>, with values valid for the <code class="docutils literal notranslate"><span class="pre">set*()</span></code> methods.  Sets all
+parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_write.getparams">
+<span class="sig-name descname"><span class="pre">getparams</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_write.getparams" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return a <a class="reference internal" href="collections.html#collections.namedtuple" title="collections.namedtuple"><code class="xref py py-func docutils literal notranslate"><span class="pre">namedtuple()</span></code></a>
+<code class="docutils literal notranslate"><span class="pre">(nchannels,</span> <span class="pre">sampwidth,</span> <span class="pre">framerate,</span> <span class="pre">nframes,</span> <span class="pre">comptype,</span> <span class="pre">compname)</span></code>
+containing the current output parameters.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_write.tell">
+<span class="sig-name descname"><span class="pre">tell</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_write.tell" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルの中の現在位置を返します。 <a class="reference internal" href="#wave.Wave_read.tell" title="wave.Wave_read.tell"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Wave_read.tell()</span></code></a> と <a class="reference internal" href="#wave.Wave_read.setpos" title="wave.Wave_read.setpos"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Wave_read.setpos()</span></code></a> メソッドでお断りしたことがこのメソッドにも当てはまります。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_write.writeframesraw">
+<span class="sig-name descname"><span class="pre">writeframesraw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_write.writeframesraw" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>nframes</em> の修正なしにオーディオフレームを書き込みます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.4 で変更: </span>どのような <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a> も使用できるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="wave.Wave_write.writeframes">
+<span class="sig-name descname"><span class="pre">writeframes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#wave.Wave_write.writeframes" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">出力ストリームが seek 不可能で、 <em>data</em> が書き込まれた後でそれ以前に <em>nframes</em> に設定された値と書き込まれた全フレーム数が一致しなければ、エラーを送出します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.4 で変更: </span>どのような <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a> も使用できるようになりました。</p>
+</div>
+<p class="translated"><a class="reference internal" href="#wave.Wave_write.writeframes" title="wave.Wave_write.writeframes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">writeframes()</span></code></a> や <a class="reference internal" href="#wave.Wave_write.writeframesraw" title="wave.Wave_write.writeframesraw"><code class="xref py py-meth docutils literal notranslate"><span class="pre">writeframesraw()</span></code></a> メソッドを呼び出したあとで、どんなパラメータを設定しようとしても不正となることに注意して下さい。そうすると <a class="reference internal" href="#wave.Error" title="wave.Error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">wave.Error</span></code></a> を発生します。</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">wave</span></code> --- WAV ファイルの読み書き</a><ul>
+<li><a class="reference internal" href="#wave-read-objects">Wave_read オブジェクト</a></li>
+<li><a class="reference internal" href="#wave-write-objects">Wave_write オブジェクト</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="mm.html"
+                          title="前の章へ">マルチメディアサービス</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="colorsys.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">colorsys</span></code> --- 色体系間の変換</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/wave.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/wave.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/wave.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="colorsys.html" title="colorsys --- 色体系間の変換"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="mm.html" title="マルチメディアサービス"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="mm.html" >マルチメディアサービス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">wave</span></code> --- WAV ファイルの読み書き</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

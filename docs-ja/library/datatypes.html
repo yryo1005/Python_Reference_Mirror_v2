@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="データ型" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/datatypes.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="この章で解説されるモジュールは日付や時間、型が固定された配列、ヒープキュー、両端キュー、列挙型のような種々の特殊なデータ型を提供します。 Python にはその他にもいくつかの組み込みデータ型があります。特に、 dict 、 list 、 set 、 frozenset 、そして tuple があります。 str クラスは Unicode データを扱うことができ、 bytes と bytea..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_datatypes_7c86e469.png" />
+<meta property="og:image:alt" content="この章で解説されるモジュールは日付や時間、型が固定された配列、ヒープキュー、両端キュー、列挙型のような種々の特殊なデータ型を提供します。 Python にはその他にもいくつかの組み込みデータ型があります。特に、 dict 、 list 、 set 、 frozenset 、そして tuple があります。 str クラスは Unicode データを扱うことができ、 bytes と bytea..." />
+<meta name="description" content="この章で解説されるモジュールは日付や時間、型が固定された配列、ヒープキュー、両端キュー、列挙型のような種々の特殊なデータ型を提供します。 Python にはその他にもいくつかの組み込みデータ型があります。特に、 dict 、 list 、 set 、 frozenset 、そして tuple があります。 str クラスは Unicode データを扱うことができ、 bytes と bytea..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>データ型 &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="datetime --- 基本的な日付と時間の型" href="datetime.html" />
+    <link rel="prev" title="codecs --- codec レジストリと基底クラス" href="codecs.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/datatypes.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="codecs.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">codecs</span></code> --- codec レジストリと基底クラス</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="datetime.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datetime</span></code> --- 基本的な日付と時間の型</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/datatypes.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/datatypes.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/datatypes.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="datetime.html" title="datetime --- 基本的な日付と時間の型"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="codecs.html" title="codecs --- codec レジストリと基底クラス"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Python 標準ライブラリ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">データ型</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="data-types">
+<span id="datatypes"></span><h1 class="translated">データ型<a class="headerlink" href="#data-types" title="Link to this heading">¶</a></h1>
+<p class="translated">この章で解説されるモジュールは日付や時間、型が固定された配列、ヒープキュー、両端キュー、列挙型のような種々の特殊なデータ型を提供します。</p>
+<p class="translated">Python にはその他にもいくつかの組み込みデータ型があります。特に、 <a class="reference internal" href="stdtypes.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> 、 <a class="reference internal" href="stdtypes.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> 、 <a class="reference internal" href="stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> 、 <a class="reference internal" href="stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a> 、そして <a class="reference internal" href="stdtypes.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> があります。 <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> クラスは Unicode データを扱うことができ、 <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> と <a class="reference internal" href="stdtypes.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytearray</span></code></a> クラスはバイナリデータを扱うことができます。</p>
+<p class="translated">この章では以下のモジュールが記述されています:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="datetime.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datetime</span></code> --- 基本的な日付と時間の型</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html#aware-and-naive-objects">Aware and naive objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html#constants">定数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html#available-types">Available types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="datetime.html#common-properties">Common properties</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datetime.html#determining-if-an-object-is-aware-or-naive">Determining if an object is aware or naive</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html#timedelta-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">timedelta</span></code> objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="datetime.html#examples-of-usage-timedelta">Examples of usage: <code class="xref py py-class docutils literal notranslate"><span class="pre">timedelta</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html#date-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">date</span></code> objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="datetime.html#examples-of-usage-date">Examples of usage: <code class="xref py py-class docutils literal notranslate"><span class="pre">date</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html#datetime-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code> objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="datetime.html#examples-of-usage-datetime">Examples of usage: <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html#time-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">time</span></code> objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="datetime.html#examples-of-usage-time">Examples of usage: <code class="xref py py-class docutils literal notranslate"><span class="pre">time</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html#tzinfo-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">tzinfo</span></code> objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html#timezone-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">timezone</span></code> objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datetime.html#strftime-and-strptime-behavior"><code class="xref py py-meth docutils literal notranslate"><span class="pre">strftime()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">strptime()</span></code> behavior</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="datetime.html#strftime-and-strptime-format-codes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">strftime()</span></code> and <code class="xref py py-meth docutils literal notranslate"><span class="pre">strptime()</span></code> format codes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datetime.html#technical-detail">Technical detail</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="zoneinfo.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">zoneinfo</span></code> --- IANA タイムゾーンのサポート</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="zoneinfo.html#using-zoneinfo"><code class="docutils literal notranslate"><span class="pre">ZoneInfo</span></code> を使用する</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zoneinfo.html#data-sources">データソース</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="zoneinfo.html#configuring-the-data-sources">Configuring the data sources</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="zoneinfo.html#compile-time-configuration">Compile-time configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zoneinfo.html#environment-configuration">Environment configuration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="zoneinfo.html#runtime-configuration">Runtime configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="zoneinfo.html#the-zoneinfo-class"><code class="docutils literal notranslate"><span class="pre">ZoneInfo</span></code> クラス</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="zoneinfo.html#string-representations">文字列表現</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zoneinfo.html#pickle-serialization">Pickle serialization</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="zoneinfo.html#functions">関数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zoneinfo.html#globals">Globals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="zoneinfo.html#exceptions-and-warnings">例外と警告</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="calendar.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">calendar</span></code> --- 一般的なカレンダーに関係する機能群</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="calendar.html#command-line-usage">コマンドラインでの使用</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="collections.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">collections</span></code> --- コンテナデータ型</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="collections.html#chainmap-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChainMap</span></code> オブジェクト</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="collections.html#chainmap-examples-and-recipes"><code class="xref py py-class docutils literal notranslate"><span class="pre">ChainMap</span></code> の例とレシピ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="collections.html#counter-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">Counter</span></code> オブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collections.html#deque-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">deque</span></code> オブジェクト</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="collections.html#deque-recipes"><code class="xref py py-class docutils literal notranslate"><span class="pre">deque</span></code> のレシピ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="collections.html#defaultdict-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">defaultdict</span></code> オブジェクト</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="collections.html#defaultdict-examples"><code class="xref py py-class docutils literal notranslate"><span class="pre">defaultdict</span></code> の使用例</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="collections.html#namedtuple-factory-function-for-tuples-with-named-fields"><code class="xref py py-func docutils literal notranslate"><span class="pre">namedtuple()</span></code> 名前付きフィールドを持つタプルのファクトリ関数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collections.html#ordereddict-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrderedDict</span></code> オブジェクト</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="collections.html#ordereddict-examples-and-recipes"><code class="xref py py-class docutils literal notranslate"><span class="pre">OrderedDict</span></code> の例とレシピ</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="collections.html#userdict-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code> オブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collections.html#userlist-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserList</span></code> オブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collections.html#userstring-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">UserString</span></code> オブジェクト</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="collections.abc.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">collections.abc</span></code> --- コンテナの抽象基底クラス</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="collections.abc.html#collections-abstract-base-classes">コレクション抽象基底クラス</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collections.abc.html#collections-abstract-base-classes-detailed-descriptions">コレクションの抽象基底クラス -- 詳細な説明</a></li>
+<li class="toctree-l2"><a class="reference internal" href="collections.abc.html#examples-and-recipes">例とレシピ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="heapq.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">heapq</span></code> --- ヒープキューアルゴリズム</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="heapq.html#basic-examples">基本的な例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heapq.html#other-applications">Other Applications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heapq.html#priority-queue-implementation-notes">優先度キュー実装の注釈</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heapq.html#theory">理論</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bisect.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">bisect</span></code> --- 配列二分法アルゴリズム</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bisect.html#performance-notes">パフォーマンスに関するメモ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bisect.html#searching-sorted-lists">ソート済みリストの探索</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bisect.html#examples">使用例</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="array.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">array</span></code> --- 効率的な数値配列</a></li>
+<li class="toctree-l1"><a class="reference internal" href="weakref.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">weakref</span></code> --- Weak references</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="weakref.html#weak-reference-objects">弱参照オブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weakref.html#example">使用例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weakref.html#finalizer-objects">ファイナライザオブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="weakref.html#comparing-finalizers-with-del-methods">Comparing finalizers with <code class="xref py py-meth docutils literal notranslate"><span class="pre">__del__()</span></code> methods</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="types.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">types</span></code> --- 動的な型生成と組み込み型の名前</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="types.html#dynamic-type-creation">動的な型生成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html#standard-interpreter-types">標準的なインタプリタ型</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html#additional-utility-classes-and-functions">追加のユーティリティクラスと関数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="types.html#coroutine-utility-functions">コルーチンユーティリティ関数</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="copy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">copy</span></code> --- 浅いコピーおよび深いコピー操作</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pprint.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pprint</span></code> --- データの整形表示</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pprint.html#functions">関数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pprint.html#prettyprinter-objects">PrettyPrinter オブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pprint.html#example">使用例</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reprlib.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">reprlib</span></code> --- もう一つの <code class="xref py py-func docutils literal notranslate"><span class="pre">repr()</span></code> の実装</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="reprlib.html#repr-objects">Reprオブジェクト</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reprlib.html#subclassing-repr-objects">Reprオブジェクトをサブクラス化する</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="enum.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">enum</span></code> --- 列挙型のサポート</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="enum.html#module-contents">モジュールの内容</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum.html#data-types">データ型</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="enum.html#supported-dunder-names"><code class="docutils literal notranslate"><span class="pre">__dunder__</span></code> 名のサポート</a></li>
+<li class="toctree-l3"><a class="reference internal" href="enum.html#supported-sunder-names"><code class="docutils literal notranslate"><span class="pre">_sunder_</span></code> 名のサポート</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="enum.html#utilities-and-decorators">Utilities and decorators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="enum.html#notes">注釈</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="graphlib.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">graphlib</span></code> --- グラフ構造を操作する機能</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="graphlib.html#exceptions">例外</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="codecs.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">codecs</span></code> --- codec レジストリと基底クラス</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="datetime.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">datetime</span></code> --- 基本的な日付と時間の型</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/datatypes.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/datatypes.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/datatypes.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="datetime.html" title="datetime --- 基本的な日付と時間の型"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="codecs.html" title="codecs --- codec レジストリと基底クラス"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">データ型</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

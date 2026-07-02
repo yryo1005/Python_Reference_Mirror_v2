@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="glob --- Unix 形式のパス名のパターン展開" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/glob.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/glob.py The glob module finds pathnames using pattern matching rules similar to the Unix shell. No tilde expansion is done, but*,?, and character ranges expressed with[] will be correct..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_glob_aa72fde4.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/glob.py The glob module finds pathnames using pattern matching rules similar to the Unix shell. No tilde expansion is done, but*,?, and character ranges expressed with[] will be correct..." />
+<meta name="description" content="ソースコード: Lib/glob.py The glob module finds pathnames using pattern matching rules similar to the Unix shell. No tilde expansion is done, but*,?, and character ranges expressed with[] will be correct..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>glob --- Unix 形式のパス名のパターン展開 &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="fnmatch --- Unix のファイル名パターンマッチ" href="fnmatch.html" />
+    <link rel="prev" title="tempfile --- 一時ファイルやディレクトリの作成" href="tempfile.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/glob.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">glob</span></code> --- Unix 形式のパス名のパターン展開</a><ul>
+<li><a class="reference internal" href="#examples">使用例</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="tempfile.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tempfile</span></code> --- 一時ファイルやディレクトリの作成</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="fnmatch.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fnmatch</span></code> --- Unix のファイル名パターンマッチ</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/glob.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/glob.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/glob.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="fnmatch.html" title="fnmatch --- Unix のファイル名パターンマッチ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="tempfile.html" title="tempfile --- 一時ファイルやディレクトリの作成"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="filesys.html" accesskey="U">ファイルとディレクトリへのアクセス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">glob</span></code> --- Unix 形式のパス名のパターン展開</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-glob">
+<span id="glob-unix-style-pathname-pattern-expansion"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">glob</span></code> --- Unix 形式のパス名のパターン展開<a class="headerlink" href="#module-glob" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/glob.py">Lib/glob.py</a></p>
+<hr class="docutils" id="index-0" />
+<p class="untranslated" id="index-1">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">glob</span></code> module finds pathnames
+using pattern matching rules similar to the Unix shell.
+No tilde expansion is done, but <code class="docutils literal notranslate"><span class="pre">*</span></code>, <code class="docutils literal notranslate"><span class="pre">?</span></code>, and character
+ranges expressed with <code class="docutils literal notranslate"><span class="pre">[]</span></code> will be correctly matched.  This is done by using
+the <a class="reference internal" href="os.html#os.scandir" title="os.scandir"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.scandir()</span></code></a> and <a class="reference internal" href="fnmatch.html#fnmatch.fnmatch" title="fnmatch.fnmatch"><code class="xref py py-func docutils literal notranslate"><span class="pre">fnmatch.fnmatch()</span></code></a> functions in concert, and
+not by actually invoking a subshell.</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">The pathnames are returned in no particular order.  If you need a specific
+order, sort the results.</p>
+</div>
+<p class="untranslated">Files beginning with a dot (<code class="docutils literal notranslate"><span class="pre">.</span></code>) can only be matched by
+patterns that also start with a dot,
+unlike <a class="reference internal" href="fnmatch.html#fnmatch.fnmatch" title="fnmatch.fnmatch"><code class="xref py py-func docutils literal notranslate"><span class="pre">fnmatch.fnmatch()</span></code></a> or <a class="reference internal" href="pathlib.html#pathlib.Path.glob" title="pathlib.Path.glob"><code class="xref py py-func docutils literal notranslate"><span class="pre">pathlib.Path.glob()</span></code></a>.
+For tilde and shell variable expansion, use <a class="reference internal" href="os.path.html#os.path.expanduser" title="os.path.expanduser"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.path.expanduser()</span></code></a> and
+<a class="reference internal" href="os.path.html#os.path.expandvars" title="os.path.expandvars"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.path.expandvars()</span></code></a>.</p>
+<p class="translated">リテラルにマッチさせるには、メタ文字を括弧に入れてください。例えば、<code class="docutils literal notranslate"><span class="pre">'[?]'</span></code> は文字 <code class="docutils literal notranslate"><span class="pre">'?'</span></code> にマッチします。</p>
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">glob</span></code> module defines the following functions:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="glob.glob">
+<span class="sig-prename descclassname"><span class="pre">glob.</span></span><span class="sig-name descname"><span class="pre">glob</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pathname</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_fd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_hidden</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#glob.glob" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">パスの仕様を含む文字列 <em>pathname</em> にマッチするパス名のリストを返します。戻り値のリストは空になる可能性があります。 <em>pathname</em> は (<code class="file docutils literal notranslate"><span class="pre">/usr/src/Python-1.5/Makefile</span></code> のような) 絶対パスも、 (<code class="file docutils literal notranslate"><span class="pre">../../Tools/*/*.gif</span></code> のような) 相対パスもどちらも指定可能で、シェル形式のワイルドカードを含めることもできます。参照先が存在しない、壊れたシンボリックリンクも (シェルの場合と同様に) 結果に含まれます。結果がソートされているかどうかはファイルシステムによります。条件を満たすファイルがこの関数の呼び出し中に追加または削除された場合、それらのファイルに対するパス名が結果に含まれるかどうかはの動作は不定です。</p>
+<p class="untranslated">If <em>root_dir</em> is not <code class="docutils literal notranslate"><span class="pre">None</span></code>, it should be a <a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a>
+specifying the root directory for searching.  It has the same effect on
+<code class="xref py py-func docutils literal notranslate"><span class="pre">glob()</span></code> as changing the current directory before calling it.  If
+<em>pathname</em> is relative, the result will contain paths relative to
+<em>root_dir</em>.</p>
+<p class="translated">この関数は <em>dir_fd</em> パラメタで <a class="reference internal" href="os.html#dir-fd"><span class="std std-ref">ディレクトリ記述子への相対パス</span></a> をサポートしています。</p>
+<p class="translated" id="index-2"><em>recursive</em> が真の場合、パターン &quot;<code class="docutils literal notranslate"><span class="pre">**</span></code>&quot; はあらゆるファイルや0個以上のディレクトリ、サブディレクトリおよびディレクトリへのシンボリックリンクにマッチします。パターンの末尾が <a class="reference internal" href="os.html#os.sep" title="os.sep"><code class="xref py py-data docutils literal notranslate"><span class="pre">os.sep</span></code></a> または <a class="reference internal" href="os.html#os.altsep" title="os.altsep"><code class="xref py py-data docutils literal notranslate"><span class="pre">os.altsep</span></code></a> の場合、ファイルは一致しません。</p>
+<p class="translated"><em>include_hidden</em> が真の場合、パターン &quot;<code class="docutils literal notranslate"><span class="pre">**</span></code>&quot; は隠しディレクトリにマッチします。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">pathname</span></code>, <code class="docutils literal notranslate"><span class="pre">recursive</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">glob.glob</span></code> を送出します。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">pathname</span></code>, <code class="docutils literal notranslate"><span class="pre">recursive</span></code>, <code class="docutils literal notranslate"><span class="pre">root_dir</span></code>, <code class="docutils literal notranslate"><span class="pre">dir_fd</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">glob.glob/2</span></code> を送出します。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated">パターン &quot;<code class="docutils literal notranslate"><span class="pre">**</span></code>&quot; を大きなディレクトリツリーで使用するととてつもなく時間がかかるかもしれません。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated"><em>pathname</em> が複数の &quot;<code class="docutils literal notranslate"><span class="pre">**</span></code>&quot; パターンを含み、かつ <em>recursive</em> が真の場合、この関数は同じパスを重複して返す可能性があります。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">Any <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> exceptions raised from scanning the filesystem are
+suppressed. This includes <a class="reference internal" href="exceptions.html#PermissionError" title="PermissionError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">PermissionError</span></code></a> when accessing
+directories without read permission.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span>&quot;<code class="docutils literal notranslate"><span class="pre">**</span></code>&quot; を使った再帰的な glob がサポートされました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.10 で変更: </span><em>root_dir</em> と <em>dir_fd</em> 引数が追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.11 で変更: </span><em>include_hidden</em> パラメータが追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="glob.iglob">
+<span class="sig-prename descclassname"><span class="pre">glob.</span></span><span class="sig-name descname"><span class="pre">iglob</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pathname</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">root_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dir_fd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_hidden</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#glob.iglob" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">実際には一度にすべてを格納せずに、<a class="reference internal" href="#module-glob" title="glob: Unix shell style pathname pattern expansion."><code class="xref py py-func docutils literal notranslate"><span class="pre">glob()</span></code></a> と同じ値を順に生成する <a class="reference internal" href="../glossary.html#term-iterator"><span class="xref std std-term">イテレーター</span></a> を返します。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">pathname</span></code>, <code class="docutils literal notranslate"><span class="pre">recursive</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">glob.glob</span></code> を送出します。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">pathname</span></code>, <code class="docutils literal notranslate"><span class="pre">recursive</span></code>, <code class="docutils literal notranslate"><span class="pre">root_dir</span></code>, <code class="docutils literal notranslate"><span class="pre">dir_fd</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">glob.glob/2</span></code> を送出します。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated"><em>pathname</em> が複数の &quot;<code class="docutils literal notranslate"><span class="pre">**</span></code>&quot; パターンを含み、かつ <em>recursive</em> が真の場合、この関数は同じパスを重複して返す可能性があります。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">Any <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> exceptions raised from scanning the filesystem are
+suppressed. This includes <a class="reference internal" href="exceptions.html#PermissionError" title="PermissionError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">PermissionError</span></code></a> when accessing
+directories without read permission.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span>&quot;<code class="docutils literal notranslate"><span class="pre">**</span></code>&quot; を使った再帰的な glob がサポートされました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.10 で変更: </span><em>root_dir</em> と <em>dir_fd</em> 引数が追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.11 で変更: </span><em>include_hidden</em> パラメータが追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="glob.escape">
+<span class="sig-prename descclassname"><span class="pre">glob.</span></span><span class="sig-name descname"><span class="pre">escape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pathname</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#glob.escape" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">すべての特殊文字 (<code class="docutils literal notranslate"><span class="pre">'?'</span></code> 、 <code class="docutils literal notranslate"><span class="pre">'*'</span></code> 、 <code class="docutils literal notranslate"><span class="pre">'['</span></code>) をエスケープします。特殊文字を含んでいる可能性のある任意のリテラル文字列をマッチさせたいときに便利です。drive/UNC sharepoints の特殊文字はエスケープされません。たとえば Windows では <code class="docutils literal notranslate"><span class="pre">escape('//?/c:/Quo</span> <span class="pre">vadis?.txt')</span></code> は <code class="docutils literal notranslate"><span class="pre">'//?/c:/Quo</span> <span class="pre">vadis[?].txt'</span></code> を返します。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="glob.translate">
+<span class="sig-prename descclassname"><span class="pre">glob.</span></span><span class="sig-name descname"><span class="pre">translate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pathname</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_hidden</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#glob.translate" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Convert the given path specification to a regular expression for use with
+<a class="reference internal" href="re.html#re.match" title="re.match"><code class="xref py py-func docutils literal notranslate"><span class="pre">re.match()</span></code></a>. The path specification can contain shell-style wildcards.</p>
+<p class="translated">例えば:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">glob</span><span class="o">,</span><span class="w"> </span><span class="nn">re</span>
+<span class="gp">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">regex</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="s1">&#39;**/*.txt&#39;</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">include_hidden</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">regex</span>
+<span class="go">&#39;(?s:(?:.+/)?[^/]*\\.txt)\\z&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reobj</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">regex</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reobj</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s1">&#39;foo/bar/baz.txt&#39;</span><span class="p">)</span>
+<span class="go">&lt;re.Match object; span=(0, 15), match=&#39;foo/bar/baz.txt&#39;&gt;</span>
+</pre></div>
+</div>
+<p class="translated"><a class="reference internal" href="fnmatch.html#fnmatch.translate" title="fnmatch.translate"><code class="xref py py-func docutils literal notranslate"><span class="pre">fnmatch.translate()</span></code></a> と違って、この関数ではパスの要素を区切るセパレータとセグメントには意味があります。デフォルトでは、ワイルドカードはパスのセパレータにはマッチしません。また <code class="docutils literal notranslate"><span class="pre">*</span></code> パターンのセグメントは厳密に単一のパスのセグメントにマッチします。</p>
+<p class="translated"><em>recursive</em> が真の場合、パターンセグメント &quot;<code class="docutils literal notranslate"><span class="pre">**</span></code>&quot; は任意の数のパスセグメントにマッチします。</p>
+<p class="translated"><em>include_hidden</em> が真の場合、ワイルドカードはドット (<code class="docutils literal notranslate"><span class="pre">.</span></code>) で始まるパスセグメントにもマッチします。</p>
+<p class="translated">パスの要素を区切るセパレータのシーケンスを <em>seps</em> 引数に渡すことができます。渡さない場合は <a class="reference internal" href="os.html#os.sep" title="os.sep"><code class="xref py py-data docutils literal notranslate"><span class="pre">os.sep</span></code></a> と (もしあれば) <a class="reference internal" href="os.html#os.altsep" title="os.altsep"><code class="xref py py-data docutils literal notranslate"><span class="pre">altsep</span></code></a> が使われます。</p>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p class="translated"><a class="reference internal" href="pathlib.html#pathlib.PurePath.full_match" title="pathlib.PurePath.full_match"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pathlib.PurePath.full_match()</span></code></a> と <a class="reference internal" href="pathlib.html#pathlib.Path.glob" title="pathlib.Path.glob"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pathlib.Path.glob()</span></code></a> の2つのメソッドは、それぞれパターンマッチと glob 相当の操作を実装するためにこの関数を呼んでいます。</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+</dd></dl>
+
+<section id="examples">
+<h2 class="translated">使用例<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p class="translated">次のファイルを含むディレクトリを考えます: <code class="file docutils literal notranslate"><span class="pre">1.gif</span></code>, <code class="file docutils literal notranslate"><span class="pre">2.txt</span></code>, <code class="file docutils literal notranslate"><span class="pre">card.gif</span></code> および:file:<cite>3.txt</cite> だけを含む <code class="file docutils literal notranslate"><span class="pre">sub</span></code> サブディレクトリ。このとき、  <a class="reference internal" href="#module-glob" title="glob: Unix shell style pathname pattern expansion."><code class="xref py py-func docutils literal notranslate"><span class="pre">glob()</span></code></a> は以下の結果を返します。パスにおける先頭の要素がどのように保持されるかに注意してください:</p>
+<div class="translated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;./[0-9].*&#39;</span><span class="p">)</span>
+<span class="go">[&#39;./1.gif&#39;, &#39;./2.txt&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*.gif&#39;</span><span class="p">)</span>
+<span class="go">[&#39;1.gif&#39;, &#39;card.gif&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;?.gif&#39;</span><span class="p">)</span>
+<span class="go">[&#39;1.gif&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;**/*.txt&#39;</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">[&#39;2.txt&#39;, &#39;sub/3.txt&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;./**/&#39;</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">[&#39;./&#39;, &#39;./sub/&#39;]</span>
+</pre></div>
+</div>
+<p class="translated">ディレクトリが <code class="docutils literal notranslate"><span class="pre">.</span></code> で始まるファイルを含んでいる場合、デフォルトでそれらはマッチしません。例えば、 <code class="file docutils literal notranslate"><span class="pre">card.gif</span></code> と <code class="file docutils literal notranslate"><span class="pre">.card.gif</span></code> を含むディレクトリを考えてください:</p>
+<div class="translated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;*.gif&#39;</span><span class="p">)</span>
+<span class="go">[&#39;card.gif&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;.c*&#39;</span><span class="p">)</span>
+<span class="go">[&#39;.card.gif&#39;]</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p class="translated"><a class="reference internal" href="fnmatch.html#module-fnmatch" title="fnmatch: Unix shell style filename pattern matching."><code class="xref py py-mod docutils literal notranslate"><span class="pre">fnmatch</span></code></a> モジュールは、シェル形式の (パスではなく) ファイル名の展開機能を提供します。</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p class="translated"><a class="reference internal" href="pathlib.html#module-pathlib" title="pathlib: Object-oriented filesystem paths"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pathlib</span></code></a> モジュールは高水準のパスオブジェクトを提供します。</p>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">glob</span></code> --- Unix 形式のパス名のパターン展開</a><ul>
+<li><a class="reference internal" href="#examples">使用例</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="tempfile.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tempfile</span></code> --- 一時ファイルやディレクトリの作成</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="fnmatch.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fnmatch</span></code> --- Unix のファイル名パターンマッチ</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/glob.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/glob.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/glob.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="fnmatch.html" title="fnmatch --- Unix のファイル名パターンマッチ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="tempfile.html" title="tempfile --- 一時ファイルやディレクトリの作成"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="filesys.html" >ファイルとディレクトリへのアクセス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">glob</span></code> --- Unix 形式のパス名のパターン展開</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="具象オブジェクト (concrete object) レイヤ" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/c-api/concrete.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="この章では、特定の Python オブジェクト型固有の関数について述べています。これらの関数に間違った型のオブジェクトを渡すのは良い考えではありません; Python プログラムから何らかのオブジェクトを受け取ったとき、そのオブジェクトが正しい型になっているか確信をもてないのなら、まず型チェックを行わなければなりません; 例えば、あるオブジェクトが辞書型か調べるには、 PyDict_Chec..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_c-api_concrete_96d4663d.png" />
+<meta property="og:image:alt" content="この章では、特定の Python オブジェクト型固有の関数について述べています。これらの関数に間違った型のオブジェクトを渡すのは良い考えではありません; Python プログラムから何らかのオブジェクトを受け取ったとき、そのオブジェクトが正しい型になっているか確信をもてないのなら、まず型チェックを行わなければなりません; 例えば、あるオブジェクトが辞書型か調べるには、 PyDict_Chec..." />
+<meta name="description" content="この章では、特定の Python オブジェクト型固有の関数について述べています。これらの関数に間違った型のオブジェクトを渡すのは良い考えではありません; Python プログラムから何らかのオブジェクトを受け取ったとき、そのオブジェクトが正しい型になっているか確信をもてないのなら、まず型チェックを行わなければなりません; 例えば、あるオブジェクトが辞書型か調べるには、 PyDict_Chec..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>具象オブジェクト (concrete object) レイヤ &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="型オブジェクト" href="type.html" />
+    <link rel="prev" title="バッファプロトコル (buffer Protocol)" href="buffer.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/c-api/concrete.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">具象オブジェクト (concrete object) レイヤ</a><ul>
+<li><a class="reference internal" href="#fundamental-objects">基本オブジェクト (fundamental object)</a></li>
+<li><a class="reference internal" href="#numeric-objects">数値型オブジェクト (numeric object)</a></li>
+<li><a class="reference internal" href="#sequence-objects">シーケンスオブジェクト (sequence object)</a></li>
+<li><a class="reference internal" href="#container-objects">Container オブジェクト</a></li>
+<li><a class="reference internal" href="#function-objects">Function オブジェクト</a></li>
+<li><a class="reference internal" href="#other-objects">その他のオブジェクト</a></li>
+<li><a class="reference internal" href="#c-api-for-extension-modules">C API for extension modules</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="buffer.html"
+                          title="前の章へ">バッファプロトコル (buffer Protocol)</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="type.html"
+                          title="次の章へ">型オブジェクト</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "c-api/concrete.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/c-api/concrete.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/c-api/concrete.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="type.html" title="型オブジェクト"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="buffer.html" title="バッファプロトコル (buffer Protocol)"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Python/C API reference manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">具象オブジェクト (concrete object) レイヤ</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="concrete-objects-layer">
+<span id="concrete"></span><h1 class="translated">具象オブジェクト (concrete object) レイヤ<a class="headerlink" href="#concrete-objects-layer" title="Link to this heading">¶</a></h1>
+<p class="translated">この章では、特定の Python オブジェクト型固有の関数について述べています。これらの関数に間違った型のオブジェクトを渡すのは良い考えではありません; Python プログラムから何らかのオブジェクトを受け取ったとき、そのオブジェクトが正しい型になっているか確信をもてないのなら、まず型チェックを行わなければなりません; 例えば、あるオブジェクトが辞書型か調べるには、 <a class="reference internal" href="dict.html#c.PyDict_Check" title="PyDict_Check"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyDict_Check()</span></code></a> を使います。この章は Python のオブジェクト型における &quot;家計図&quot; に従って構成されています。</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p class="translated">この章で述べている関数は、渡されたオブジェクトの型を注意深くチェックしはするものの、多くの関数は渡されたオブジェクトが有効な <code class="docutils literal notranslate"><span class="pre">NULL</span></code> なのか有効なオブジェクトなのかをチェックしません。これらの関数に <code class="docutils literal notranslate"><span class="pre">NULL</span></code> を渡させてしまうと、関数はメモリアクセス違反を起こして、インタプリタを即座に終了させてしまうはずです。</p>
+</div>
+<section id="fundamental-objects">
+<span id="fundamental"></span><h2 class="translated">基本オブジェクト (fundamental object)<a class="headerlink" href="#fundamental-objects" title="Link to this heading">¶</a></h2>
+<p class="translated">この節では、Python の型オブジェクトとシングルトン(singleton)オブジェクト <code class="docutils literal notranslate"><span class="pre">None</span></code> について述べます。</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="type.html">型オブジェクト</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="type.html#creating-heap-allocated-types">Creating Heap-Allocated Types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="none.html"><code class="docutils literal notranslate"><span class="pre">None</span></code> オブジェクト</a></li>
+</ul>
+</div>
+</section>
+<section id="numeric-objects">
+<span id="numericobjects"></span><h2 class="translated">数値型オブジェクト (numeric object)<a class="headerlink" href="#numeric-objects" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound" id="index-0">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="long.html">整数型オブジェクト (integer object)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="long.html#export-api">Export API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="long.html#pylongwriter-api">PyLongWriter API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="long.html#deprecated-api">Deprecated API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="bool.html">Boolean オブジェクト</a></li>
+<li class="toctree-l1"><a class="reference internal" href="float.html">Floating-Point Objects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="float.html#pack-and-unpack-functions">Pack and Unpack functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="float.html#pack-functions">Pack functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="float.html#unpack-functions">Unpack functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="complex.html">複素数オブジェクト</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="complex.html#complex-numbers-as-c-structures">C 構造体としての複素数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="complex.html#complex-numbers-as-python-objects">Complex Numbers as Python Objects</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="sequence-objects">
+<span id="sequenceobjects"></span><h2 class="translated">シーケンスオブジェクト (sequence object)<a class="headerlink" href="#sequence-objects" title="Link to this heading">¶</a></h2>
+<p class="translated" id="index-1">シーケンスオブジェクトに対する一般的な操作については前の章ですでに述べました; この節では、Python 言語にもともと備わっている特定のシーケンスオブジェクトについて扱います。</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bytes.html">バイトオブジェクト</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bytearray.html">bytearray オブジェクト</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bytearray.html#type-check-macros">型チェックマクロ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bytearray.html#direct-api-functions">ダイレクト API 関数</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bytearray.html#macros">マクロ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="unicode.html">Unicode オブジェクトと codec</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="unicode.html#unicode-objects">Unicode オブジェクト</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="unicode.html#unicode-type">Unicode 型</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unicode.html#unicode-character-properties">Unicode 文字プロパティ</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unicode.html#creating-and-accessing-unicode-strings">Unicode 文字列の生成とアクセス</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unicode.html#locale-encoding">ロケールエンコーディング</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unicode.html#file-system-encoding">ファイルシステムエンコーディング</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unicode.html#wchar-t-support">wchar_t サポート</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="unicode.html#built-in-codecs">組み込み codec (built-in codec)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="unicode.html#generic-codecs">汎用 codec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unicode.html#utf-8-codecs">UTF-8 Codecs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unicode.html#utf-32-codecs">UTF-32 Codecs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unicode.html#utf-16-codecs">UTF-16 Codecs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unicode.html#utf-7-codecs">UTF-7 Codecs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unicode.html#unicode-escape-codecs">Unicode-Escape Codecs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unicode.html#raw-unicode-escape-codecs">Raw-Unicode-Escape Codecs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unicode.html#latin-1-codecs">Latin-1 Codecs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unicode.html#ascii-codecs">ASCII Codecs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unicode.html#character-map-codecs">Character Map Codecs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unicode.html#mbcs-codecs-for-windows">Windows 用の MBCS codec</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="unicode.html#methods-and-slot-functions">メソッドおよびスロット関数 (slot function)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unicode.html#pyunicodewriter">PyUnicodeWriter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unicode.html#deprecated-api">Deprecated API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tuple.html">タプルオブジェクト (tuple object)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tuple.html#struct-sequence-objects">Struct Sequence オブジェクト</a></li>
+<li class="toctree-l1"><a class="reference internal" href="list.html">リストオブジェクト</a></li>
+</ul>
+</div>
+</section>
+<section id="container-objects">
+<span id="mapobjects"></span><h2 class="translated">Container オブジェクト<a class="headerlink" href="#container-objects" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound" id="index-2">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="dict.html">Dictionary Objects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="dict.html#dictionary-view-objects">Dictionary View Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dict.html#ordered-dictionaries">Ordered Dictionaries</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="set.html">Set オブジェクト</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="set.html#deprecated-api">Deprecated API</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="function-objects">
+<span id="otherobjects"></span><h2 class="translated">Function オブジェクト<a class="headerlink" href="#function-objects" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function.html">Function オブジェクト</a></li>
+<li class="toctree-l1"><a class="reference internal" href="method.html">インスタンスメソッドオブジェクト(Instance Method Objects)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="method.html#method-objects">メソッドオブジェクト</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cell.html">セルオブジェクト (cell object)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">コードオブジェクト</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html#code-object-flags">Code Object Flags</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html#extra-information">Extra information</a></li>
+</ul>
+</div>
+</section>
+<section id="other-objects">
+<h2 class="translated">その他のオブジェクト<a class="headerlink" href="#other-objects" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="file.html">File objects</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="file.html#soft-deprecated-api">Soft-deprecated API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module.html">モジュールオブジェクト (module object)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module.html#module-definitions">Module definitions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module.html#module-slots">Module slots</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="module.html#creating-extension-modules-dynamically">Creating extension modules dynamically</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module.html#support-functions">サポート関数</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="module.html#module-lookup-single-phase-initialization">Module lookup (single-phase initialization)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="iterator.html">イテレータオブジェクト (iterator object)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="iterator.html#range-objects">Range Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="iterator.html#builtin-iterator-types">Builtin Iterator Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="iterator.html#other-iterator-objects">Other Iterator Objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="descriptor.html">デスクリプタオブジェクト (descriptor object)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="descriptor.html#built-in-descriptors">Built-in descriptors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="slice.html">スライスオブジェクト (slice object)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="slice.html#ellipsis-object">Ellipsis オブジェクト</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="memoryview.html">memoryview オブジェクト</a></li>
+<li class="toctree-l1"><a class="reference internal" href="picklebuffer.html">Pickle buffer objects</a></li>
+<li class="toctree-l1"><a class="reference internal" href="weakref.html">弱参照オブジェクト</a></li>
+<li class="toctree-l1"><a class="reference internal" href="capsule.html">カプセル</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frame.html">フレーム (frame) オブジェクト</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="frame.html#frame-locals-proxies">Frame locals proxies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="frame.html#legacy-local-variable-apis">Legacy local variable APIs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="frame.html#internal-frames">Internal frames</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="gen.html">ジェネレータオブジェクト</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="gen.html#asynchronous-generator-objects">Asynchronous Generator Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="gen.html#deprecated-api">Deprecated API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="coro.html">コルーチンオブジェクト</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contextvars.html">コンテキスト変数オブジェクト</a></li>
+<li class="toctree-l1"><a class="reference internal" href="typehints.html">型ヒントのためのオブジェクト</a></li>
+</ul>
+</div>
+</section>
+<section id="c-api-for-extension-modules">
+<h2 class="untranslated">C API for extension modules<a class="headerlink" href="#c-api-for-extension-modules" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="curses.html">Curses C API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="curses.html#internal-data">Internal data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datetime.html">DateTime オブジェクト</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datetime.html#internal-data">Internal data</a></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">具象オブジェクト (concrete object) レイヤ</a><ul>
+<li><a class="reference internal" href="#fundamental-objects">基本オブジェクト (fundamental object)</a></li>
+<li><a class="reference internal" href="#numeric-objects">数値型オブジェクト (numeric object)</a></li>
+<li><a class="reference internal" href="#sequence-objects">シーケンスオブジェクト (sequence object)</a></li>
+<li><a class="reference internal" href="#container-objects">Container オブジェクト</a></li>
+<li><a class="reference internal" href="#function-objects">Function オブジェクト</a></li>
+<li><a class="reference internal" href="#other-objects">その他のオブジェクト</a></li>
+<li><a class="reference internal" href="#c-api-for-extension-modules">C API for extension modules</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="buffer.html"
+                          title="前の章へ">バッファプロトコル (buffer Protocol)</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="type.html"
+                          title="次の章へ">型オブジェクト</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "c-api/concrete.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/c-api/concrete.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/c-api/concrete.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="type.html" title="型オブジェクト"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="buffer.html" title="バッファプロトコル (buffer Protocol)"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API reference manual</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">具象オブジェクト (concrete object) レイヤ</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

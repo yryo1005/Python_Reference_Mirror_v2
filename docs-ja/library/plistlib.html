@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="plistlib --- Apple .plist ファイルを生成・解析する" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/plistlib.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/plistlib.py このモジュールは Apple (主に macOS と iOS) で使われる「プロパティーリスト」ファイルを読み書きするインターフェイスを提供します。このモジュールはバイナリと XML の plist ファイルの両方をサポートします。 The property list (.plist) file format is a simple seria..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_plistlib_5122df6b.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/plistlib.py このモジュールは Apple (主に macOS と iOS) で使われる「プロパティーリスト」ファイルを読み書きするインターフェイスを提供します。このモジュールはバイナリと XML の plist ファイルの両方をサポートします。 The property list (.plist) file format is a simple seria..." />
+<meta name="description" content="ソースコード: Lib/plistlib.py このモジュールは Apple (主に macOS と iOS) で使われる「プロパティーリスト」ファイルを読み書きするインターフェイスを提供します。このモジュールはバイナリと XML の plist ファイルの両方をサポートします。 The property list (.plist) file format is a simple seria..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>plistlib --- Apple .plist ファイルを生成・解析する &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="暗号関連のサービス" href="crypto.html" />
+    <link rel="prev" title="netrc --- netrc ファイルの処理" href="netrc.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/plistlib.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plistlib</span></code> --- Apple <code class="docutils literal notranslate"><span class="pre">.plist</span></code> ファイルを生成・解析する</a><ul>
+<li><a class="reference internal" href="#examples">使用例</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="netrc.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netrc</span></code> --- netrc ファイルの処理</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="crypto.html"
+                          title="次の章へ">暗号関連のサービス</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/plistlib.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/plistlib.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/plistlib.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="crypto.html" title="暗号関連のサービス"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="netrc.html" title="netrc --- netrc ファイルの処理"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="fileformats.html" accesskey="U">ファイルフォーマット</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">plistlib</span></code> --- Apple <code class="docutils literal notranslate"><span class="pre">.plist</span></code> ファイルを生成・解析する</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-plistlib">
+<span id="plistlib-generate-and-parse-apple-plist-files"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plistlib</span></code> --- Apple <code class="docutils literal notranslate"><span class="pre">.plist</span></code> ファイルを生成・解析する<a class="headerlink" href="#module-plistlib" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/plistlib.py">Lib/plistlib.py</a></p>
+<hr class="docutils" id="index-0" />
+<p class="translated">このモジュールは Apple (主に macOS と iOS) で使われる「プロパティーリスト」ファイルを読み書きするインターフェイスを提供します。このモジュールはバイナリと XML の plist ファイルの両方をサポートします。</p>
+<p class="untranslated">The property list (<code class="docutils literal notranslate"><span class="pre">.plist</span></code>) file format is a simple serialization supporting
+basic object types, like dictionaries, lists, numbers and strings.  Usually the
+top level object is a dictionary.</p>
+<p class="translated">plist ファイルを書き出したり解析したりするには <a class="reference internal" href="#plistlib.dump" title="plistlib.dump"><code class="xref py py-func docutils literal notranslate"><span class="pre">dump()</span></code></a> や <a class="reference internal" href="#plistlib.load" title="plistlib.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">load()</span></code></a> 関数を利用します。</p>
+<p class="translated">バイトオブジェクトや文字列オブジェクトの plist データを扱うためには <a class="reference internal" href="#plistlib.dumps" title="plistlib.dumps"><code class="xref py py-func docutils literal notranslate"><span class="pre">dumps()</span></code></a> や <a class="reference internal" href="#plistlib.loads" title="plistlib.loads"><code class="xref py py-func docutils literal notranslate"><span class="pre">loads()</span></code></a> を利用します。</p>
+<p class="translated">値は文字列、整数、浮動小数点数、ブール型、タプル、リスト、辞書 (ただし文字列だけがキーになれます)、 <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>、<a class="reference internal" href="stdtypes.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytearray</span></code></a> または <a class="reference internal" href="datetime.html#datetime.datetime" title="datetime.datetime"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code></a> のオブジェクトです。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.4 で変更: </span>新しい API となり、古い API は非推奨となりました。バイナリ形式の plist がサポートされました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.8 で変更: </span>バイナリの plist で NSKeyedArchiver や NSKeyedUnarchiver によって使用される <a class="reference internal" href="#plistlib.UID" title="plistlib.UID"><code class="xref py py-class docutils literal notranslate"><span class="pre">UID</span></code></a> トークンの読み込み・書き込みのサポートが追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.9 で変更: </span>古い API が削除されました。</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<dl class="simple">
+<dt class="translated"><a class="reference external" href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/PropertyLists/">PList マニュアルページ</a></dt><dd><p class="translated">このファイル形式の Apple の文書。</p>
+</dd>
+</dl>
+</div>
+<p class="translated">このモジュールは以下の関数を定義しています:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="plistlib.load">
+<span class="sig-prename descclassname"><span class="pre">plistlib.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fp</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aware_datetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plistlib.load" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">plist ファイルを読み込みます。<em>fp</em> は読み込み可能かつバイナリのファイルオブジェクトです。展開されたルートオブジェクト (通常は辞書です) を返します。</p>
+<p class="translated"><em>fmt</em> はファイルの形式で、次の値が有効です。</p>
+<ul class="simple">
+<li><p class="translated"><a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a>: ファイル形式を自動検出します</p></li>
+<li><p class="translated"><a class="reference internal" href="#plistlib.FMT_XML" title="plistlib.FMT_XML"><code class="xref py py-data docutils literal notranslate"><span class="pre">FMT_XML</span></code></a>: XML ファイル形式です</p></li>
+<li><p class="translated"><a class="reference internal" href="#plistlib.FMT_BINARY" title="plistlib.FMT_BINARY"><code class="xref py py-data docutils literal notranslate"><span class="pre">FMT_BINARY</span></code></a>: バイナリの plist 形式です</p></li>
+</ul>
+<p class="translated"><em>dict_type</em> は、 plist ファイルから読み出された辞書に使われる型です。</p>
+<p class="untranslated">When <em>aware_datetime</em> is true, fields with type <code class="docutils literal notranslate"><span class="pre">datetime.datetime</span></code> will
+be created as <a class="reference internal" href="datetime.html#datetime-naive-aware"><span class="std std-ref">aware object</span></a>, with
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">tzinfo</span></code> as <a class="reference internal" href="datetime.html#datetime.UTC" title="datetime.UTC"><code class="xref py py-const docutils literal notranslate"><span class="pre">datetime.UTC</span></code></a>.</p>
+<p class="translated"><a class="reference internal" href="#plistlib.FMT_XML" title="plistlib.FMT_XML"><code class="xref py py-data docutils literal notranslate"><span class="pre">FMT_XML</span></code></a> 形式の XML データは <a class="reference internal" href="pyexpat.html#module-xml.parsers.expat" title="xml.parsers.expat: An interface to the Expat non-validating XML parser."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.parsers.expat</span></code></a> にある Expat パーサーを使って解析されます。不正な形式の XML に対して送出される可能性のある例外については、そちらの文書を参照してください。plist 解析器では、未知の要素は単純に無視されます。</p>
+<p class="untranslated">The parser raises <a class="reference internal" href="#plistlib.InvalidFileException" title="plistlib.InvalidFileException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">InvalidFileException</span></code></a> when the file cannot be parsed.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span>キーワード専用引数 <em>aware_datetime</em> が追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="plistlib.loads">
+<span class="sig-prename descclassname"><span class="pre">plistlib.</span></span><span class="sig-name descname"><span class="pre">loads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">dict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aware_datetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plistlib.loads" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">バイナリまたは文字列オブジェクトから plist をロードします。キーワード引数の説明については、 <a class="reference internal" href="#plistlib.load" title="plistlib.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">load()</span></code></a> を参照してください。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span><em>fmt</em> が <a class="reference internal" href="#plistlib.FMT_XML" title="plistlib.FMT_XML"><code class="xref py py-data docutils literal notranslate"><span class="pre">FMT_XML</span></code></a> の場合、 <em>data</em> は文字列たり得ます。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="plistlib.dump">
+<span class="sig-prename descclassname"><span class="pre">plistlib.</span></span><span class="sig-name descname"><span class="pre">dump</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fp</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">FMT_XML</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skipkeys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aware_datetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plistlib.dump" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Write <em>value</em> to a plist file. <em>fp</em> should be a writable, binary
+file object.</p>
+<p class="translated"><em>fmt</em> 引数は plist ファイルの形式を指定し、次のいずれかの値をとることができます。</p>
+<ul class="simple">
+<li><p class="translated"><a class="reference internal" href="#plistlib.FMT_XML" title="plistlib.FMT_XML"><code class="xref py py-data docutils literal notranslate"><span class="pre">FMT_XML</span></code></a>: XML 形式の plist ファイルです</p></li>
+<li><p class="translated"><a class="reference internal" href="#plistlib.FMT_BINARY" title="plistlib.FMT_BINARY"><code class="xref py py-data docutils literal notranslate"><span class="pre">FMT_BINARY</span></code></a>: バイナリ形式の plist ファイルです</p></li>
+</ul>
+<p class="translated"><em>sort_keys</em> が真 (デフォルト) の場合、辞書内のキーは、plist にソートされた順序で書き込まれます。偽の場合、ディクショナリのイテレートの順序で書き込まれます。</p>
+<p class="translated"><em>skipkeys</em> が偽 (デフォルト) の場合、この関数は辞書のキーが文字列でない場合に <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> を送出します。真の場合、そのようなキーは読み飛ばされます。</p>
+<p class="untranslated">When <em>aware_datetime</em> is true and any field with type <code class="docutils literal notranslate"><span class="pre">datetime.datetime</span></code>
+is set as an <a class="reference internal" href="datetime.html#datetime-naive-aware"><span class="std std-ref">aware object</span></a>, it will convert to
+UTC timezone before writing it.</p>
+<p class="translated"><a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> が、オブジェクトがサポート外の型のものであったりサポート外の型のオブジェクトを含むコンテナだった場合に、送出されます。</p>
+<p class="translated">(バイナリの) plist ファイル内で表現できない整数値に対しては、 <a class="reference internal" href="exceptions.html#OverflowError" title="OverflowError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OverflowError</span></code></a> が送出されます。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span>キーワード専用引数 <em>aware_datetime</em> が追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="plistlib.dumps">
+<span class="sig-prename descclassname"><span class="pre">plistlib.</span></span><span class="sig-name descname"><span class="pre">dumps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">FMT_XML</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skipkeys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aware_datetime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plistlib.dumps" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>value</em> を plist 形式のバイトオブジェクトとして返します。この関数のキーワード引数の説明については、 <a class="reference internal" href="#plistlib.dump" title="plistlib.dump"><code class="xref py py-func docutils literal notranslate"><span class="pre">dump()</span></code></a> を参照してください。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<p class="translated">以下のクラスが使用可能です:</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="plistlib.UID">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">plistlib.</span></span><span class="sig-name descname"><span class="pre">UID</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plistlib.UID" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="functions.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> をラップします。これは NSKeyedArchiver でエンコードされた UID を含むデータ、の読み込みや書き込みに使用されます (PList マニュアルを参照) 。</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="plistlib.UID.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#plistlib.UID.data" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Int value of the UID.  It must be in the range <code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">&lt;=</span> <span class="pre">data</span> <span class="pre">&lt;</span> <span class="pre">2**64</span></code>.</p>
+</dd></dl>
+
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.8.</span></p>
+</div>
+</dd></dl>
+
+<p class="translated">以下の定数が利用可能です:</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="plistlib.FMT_XML">
+<span class="sig-prename descclassname"><span class="pre">plistlib.</span></span><span class="sig-name descname"><span class="pre">FMT_XML</span></span><a class="headerlink" href="#plistlib.FMT_XML" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">plist ファイルの XML 形式です</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="plistlib.FMT_BINARY">
+<span class="sig-prename descclassname"><span class="pre">plistlib.</span></span><span class="sig-name descname"><span class="pre">FMT_BINARY</span></span><a class="headerlink" href="#plistlib.FMT_BINARY" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">plist ファイルのバイナリ形式です</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<p class="untranslated">The module defines the following exceptions:</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="plistlib.InvalidFileException">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">plistlib.</span></span><span class="sig-name descname"><span class="pre">InvalidFileException</span></span><a class="headerlink" href="#plistlib.InvalidFileException" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Raised when a file cannot be parsed.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<section id="examples">
+<h2 class="translated">使用例<a class="headerlink" href="#examples" title="Link to this heading">¶</a></h2>
+<p class="translated">plist を作ります:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">plistlib</span>
+
+<span class="n">pl</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="n">aString</span> <span class="o">=</span> <span class="s2">&quot;Doodah&quot;</span><span class="p">,</span>
+    <span class="n">aList</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mf">32.1</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]],</span>
+    <span class="n">aFloat</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="n">anInt</span> <span class="o">=</span> <span class="mi">728</span><span class="p">,</span>
+    <span class="n">aDict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="n">anotherString</span> <span class="o">=</span> <span class="s2">&quot;&lt;hello &amp; hi there!&gt;&quot;</span><span class="p">,</span>
+        <span class="n">aThirdString</span> <span class="o">=</span> <span class="s2">&quot;M</span><span class="se">\xe4</span><span class="s2">ssig, Ma</span><span class="se">\xdf</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">aTrueValue</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">aFalseValue</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">someData</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&lt;binary gunk&gt;&quot;</span><span class="p">,</span>
+    <span class="n">someMoreData</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&lt;lots of binary gunk&gt;&quot;</span> <span class="o">*</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">aDate</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">plistlib</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">pl</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+</pre></div>
+</div>
+<p class="translated">plist を解析します:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">plistlib</span>
+
+<span class="n">plist</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;&quot;&lt;plist version=&quot;1.0&quot;&gt;</span>
+<span class="s2">&lt;dict&gt;</span>
+<span class="s2">    &lt;key&gt;foo&lt;/key&gt;</span>
+<span class="s2">    &lt;string&gt;bar&lt;/string&gt;</span>
+<span class="s2">&lt;/dict&gt;</span>
+<span class="s2">&lt;/plist&gt;&quot;&quot;&quot;</span>
+<span class="n">pl</span> <span class="o">=</span> <span class="n">plistlib</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">plist</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">pl</span><span class="p">[</span><span class="s2">&quot;foo&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">plistlib</span></code> --- Apple <code class="docutils literal notranslate"><span class="pre">.plist</span></code> ファイルを生成・解析する</a><ul>
+<li><a class="reference internal" href="#examples">使用例</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="netrc.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">netrc</span></code> --- netrc ファイルの処理</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="crypto.html"
+                          title="次の章へ">暗号関連のサービス</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/plistlib.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/plistlib.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/plistlib.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="crypto.html" title="暗号関連のサービス"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="netrc.html" title="netrc --- netrc ファイルの処理"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="fileformats.html" >ファイルフォーマット</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">plistlib</span></code> --- Apple <code class="docutils literal notranslate"><span class="pre">.plist</span></code> ファイルを生成・解析する</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

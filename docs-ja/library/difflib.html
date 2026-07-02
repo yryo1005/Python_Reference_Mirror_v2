@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="difflib --- 差分の計算の補助" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/difflib.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/difflib.py このモジュールは、シーケンスを比較するためのクラスや関数を提供しています。例えば、ファイルの差分を計算して、それを HTML や context diff, unified diff などいろいろなフォーマットで出力するために、このモジュールを利用できます。ディレクトリやファイル群を比較するためには、 filecmp モジュールも参照してください..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_difflib_4557e951.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/difflib.py このモジュールは、シーケンスを比較するためのクラスや関数を提供しています。例えば、ファイルの差分を計算して、それを HTML や context diff, unified diff などいろいろなフォーマットで出力するために、このモジュールを利用できます。ディレクトリやファイル群を比較するためには、 filecmp モジュールも参照してください..." />
+<meta name="description" content="ソースコード: Lib/difflib.py このモジュールは、シーケンスを比較するためのクラスや関数を提供しています。例えば、ファイルの差分を計算して、それを HTML や context diff, unified diff などいろいろなフォーマットで出力するために、このモジュールを利用できます。ディレクトリやファイル群を比較するためには、 filecmp モジュールも参照してください..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>difflib --- 差分の計算の補助 &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="textwrap --- テキストの折り返しと詰め込み" href="textwrap.html" />
+    <link rel="prev" title="re --- 正規表現操作" href="re.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/difflib.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">difflib</span></code> --- 差分の計算の補助</a><ul>
+<li><a class="reference internal" href="#sequencematcher-objects">SequenceMatcher objects</a></li>
+<li><a class="reference internal" href="#sequencematcher-examples">SequenceMatcher examples</a></li>
+<li><a class="reference internal" href="#differ-objects">Differ objects</a></li>
+<li><a class="reference internal" href="#differ-example">Differ example</a></li>
+<li><a class="reference internal" href="#a-command-line-interface-to-difflib">difflib のコマンドラインインターフェース</a></li>
+<li><a class="reference internal" href="#ndiff-example">ndiff example</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="re.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">re</span></code> --- 正規表現操作</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="textwrap.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textwrap</span></code> --- テキストの折り返しと詰め込み</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/difflib.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/difflib.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/difflib.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="textwrap.html" title="textwrap --- テキストの折り返しと詰め込み"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="re.html" title="re --- 正規表現操作"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="text.html" accesskey="U">テキスト処理サービス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">difflib</span></code> --- 差分の計算の補助</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-difflib">
+<span id="difflib-helpers-for-computing-deltas"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">difflib</span></code> --- 差分の計算の補助<a class="headerlink" href="#module-difflib" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/difflib.py">Lib/difflib.py</a></p>
+<hr class="docutils" />
+<p class="translated">このモジュールは、シーケンスを比較するためのクラスや関数を提供しています。例えば、ファイルの差分を計算して、それを HTML や context diff, unified diff などいろいろなフォーマットで出力するために、このモジュールを利用できます。ディレクトリやファイル群を比較するためには、 <a class="reference internal" href="filecmp.html#module-filecmp" title="filecmp: Compare files efficiently."><code class="xref py py-mod docutils literal notranslate"><span class="pre">filecmp</span></code></a> モジュールも参照してください。</p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">difflib.</span></span><span class="sig-name descname"><span class="pre">SequenceMatcher</span></span></dt>
+<dd><p class="translated">柔軟性のあるクラスで、二つのシーケンスの要素が <a class="reference internal" href="../glossary.html#term-hashable"><span class="xref std std-term">ハッシュ可能</span></a> な型であれば、どの型の要素を含むシーケンスも比較可能です。基本的なアルゴリズムは、1980年代の後半に発表された Ratcliff と Obershelp による&quot;ゲシュタルトパターンマッチング&quot;と大げさに名づけられたアルゴリズム以前から知られている、やや凝ったアルゴリズムです。その考え方は、&quot;junk&quot; 要素を含まない最も長い互いに隣接したマッチ列を探すことです。ここで、  &quot;junk&quot; 要素とは、空行や空白などの、意味を持たない要素のことです。 (junk を処理するのは、Ratcliff と Obershelp のアルゴリズムに追加された拡張です。)この考え方は、マッチ列の左右に隣接するシーケンスの断片に対して再帰的にあてはめられます。この方法では編集を最小にするシーケンスは生まれませんが、人間の目からみて「正しい感じ」にマッチする傾向があります。</p>
+<p class="translated"><strong>実行時間:</strong> 基本的な Ratcliff-Obershelp アルゴリズムは、最悪の場合3乗、期待値で2乗となります。 <a class="reference internal" href="#difflib.SequenceMatcher" title="difflib.SequenceMatcher"><code class="xref py py-class docutils literal notranslate"><span class="pre">SequenceMatcher</span></code></a> オブジェクトでは、最悪のケースで2乗、期待値は比較されるシーケンス中に共通に現れる要素数に非常にややこしく依存しています。最良の場合は線形時間になります。</p>
+<p class="translated"><strong>自動 junk ヒューリスティック:</strong> <a class="reference internal" href="#difflib.SequenceMatcher" title="difflib.SequenceMatcher"><code class="xref py py-class docutils literal notranslate"><span class="pre">SequenceMatcher</span></code></a> は、シーケンスの特定の要素を自動的に junk として扱うヒューリスティックをサポートしています。このヒューリスティックは、各個要素がシーケンス内に何回現れるかを数えます。ある要素の重複数が (最初のものは除いて) 合計でシーケンスの 1% 以上になり、そのシーケンスが 200 要素以上なら、その要素は &quot;popular&quot; であるものとしてマークされ、シーケンスのマッチングの目的からは junk として扱われます。このヒューリスティックは、 <code class="xref py py-class docutils literal notranslate"><span class="pre">SequenceMatcher</span></code> の作成時に <code class="docutils literal notranslate"><span class="pre">autojunk</span></code> パラメタを <code class="docutils literal notranslate"><span class="pre">False</span></code> に設定することで無効化できます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span>Added the <em>autojunk</em> parameter.</p>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="difflib.Differ">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">difflib.</span></span><span class="sig-name descname"><span class="pre">Differ</span></span><a class="headerlink" href="#difflib.Differ" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">テキスト行からなるシーケンスを比較するクラスです。人が読むことのできる差分を作成します。 Differ クラスは <a class="reference internal" href="#difflib.SequenceMatcher" title="difflib.SequenceMatcher"><code class="xref py py-class docutils literal notranslate"><span class="pre">SequenceMatcher</span></code></a> クラスを利用して、行からなるシーケンスを比較したり、(ほぼ)同一の行内の文字を比較したりします。</p>
+<p class="translated"><a class="reference internal" href="#difflib.Differ" title="difflib.Differ"><code class="xref py py-class docutils literal notranslate"><span class="pre">Differ</span></code></a> クラスによる差分の各行は、2文字のコードで始まります:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p class="translated">コード</p></th>
+<th class="head"><p class="translated">意味</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">'-</span> <span class="pre">'</span></code></p></td>
+<td><p class="translated">行はシーケンス1にのみ存在する</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">'+</span> <span class="pre">'</span></code></p></td>
+<td><p class="translated">行はシーケンス2にのみ存在する</p></td>
+</tr>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">'</span>&#160; <span class="pre">'</span></code></p></td>
+<td><p class="translated">行は両方のシーケンスで同一</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">'?</span> <span class="pre">'</span></code></p></td>
+<td><p class="translated">行は入力シーケンスのどちらにも存在しない</p></td>
+</tr>
+</tbody>
+</table>
+<p class="untranslated">Lines beginning with '<code class="docutils literal notranslate"><span class="pre">?</span></code>' attempt to guide the eye to intraline differences,
+and were not present in either input sequence. These lines can be confusing if
+the sequences contain whitespace characters, such as spaces, tabs or line breaks.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="difflib.HtmlDiff">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">difflib.</span></span><span class="sig-name descname"><span class="pre">HtmlDiff</span></span><a class="headerlink" href="#difflib.HtmlDiff" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このクラスは、二つのテキストを左右に並べて比較表示し、行間あるいは行内の変更点を強調表示するような HTML テーブル (またはテーブルの入った完全な HTML ファイル) を生成するために使います。テーブルは完全差分モード、コンテキスト差分モードのいずれでも生成できます。</p>
+<p class="translated">このクラスのコンストラクタは以下のようになっています:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="difflib.HtmlDiff.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tabsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wrapcolumn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linejunk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charjunk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">IS_CHARACTER_JUNK</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#difflib.HtmlDiff.__init__" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#difflib.HtmlDiff" title="difflib.HtmlDiff"><code class="xref py py-class docutils literal notranslate"><span class="pre">HtmlDiff</span></code></a> のインスタンスを初期化します。</p>
+<p class="translated"><em>tabsize</em> はオプションのキーワード引数で、タブストップ幅を指定します。デフォルトは <code class="docutils literal notranslate"><span class="pre">8</span></code> です。</p>
+<p class="translated"><em>wrapcolumn</em> はオプションのキーワード引数で、テキストを折り返すカラム幅を指定します。デフォルトは <code class="docutils literal notranslate"><span class="pre">None</span></code> で折り返しを行いません。</p>
+<p class="translated"><em>linejunk</em> および <em>charjunk</em> はオプションのキーワード引数で、 <a class="reference internal" href="#difflib.ndiff" title="difflib.ndiff"><code class="xref py py-func docutils literal notranslate"><span class="pre">ndiff()</span></code></a>  (<a class="reference internal" href="#difflib.HtmlDiff" title="difflib.HtmlDiff"><code class="xref py py-class docutils literal notranslate"><span class="pre">HtmlDiff</span></code></a> はこの関数を使って左右のテキストの差分を HTML で生成します) に渡されます。それぞれの引数のデフォルト値および説明は <code class="xref py py-func docutils literal notranslate"><span class="pre">ndiff()</span></code> のドキュメントを参照してください。</p>
+</dd></dl>
+
+<p class="translated">以下のメソッドが public になっています:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="difflib.HtmlDiff.make_file">
+<span class="sig-name descname"><span class="pre">make_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fromlines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromdesc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">todesc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numlines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">charset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'utf-8'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#difflib.HtmlDiff.make_file" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>fromlines</em> と <em>tolines</em> (いずれも文字列のリスト) を比較し、行間または行内の変更点が強調表示された行差分の入った表を持つ完全な HTML ファイルを文字列で返します。</p>
+<p class="translated"><em>fromdesc</em> および <em>todesc</em> はオプションのキーワード引数で、差分表示テーブルにおけるそれぞれ差分元、差分先ファイルのカラムのヘッダになる文字列を指定します (いずれもデフォルト値は空文字列です)。</p>
+<p class="translated"><em>context</em> および <em>numlines</em> はともにオプションのキーワード引数です。<em>context</em> を <code class="docutils literal notranslate"><span class="pre">True</span></code> にするとコンテキスト差分を表示し、デフォルトの <code class="docutils literal notranslate"><span class="pre">False</span></code> にすると完全なファイル差分を表示します。<em>numlines</em> のデフォルト値は <code class="docutils literal notranslate"><span class="pre">5</span></code> で、<em>context</em> が <code class="docutils literal notranslate"><span class="pre">True</span></code> の場合、<em>numlines</em> は強調部分の前後にあるコンテキスト行の数を制御します。<em>context</em> が <code class="docutils literal notranslate"><span class="pre">False</span></code> の場合、<em>numlines</em> は &quot;next&quot; と書かれたハイパーリンクをたどった時に到達する場所が次の変更部分より何行前にあるかを制御します (値をゼロにした場合、&quot;next&quot; ハイパーリンクを辿ると変更部分の強調表示がブラウザの最上部に表示されるようになります)。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated"><em>fromdesc</em> と <em>todesc</em> はエスケープされていないHTMLとして解釈されます。信頼できないソースからの入力を受け取る際には適切にエスケープされるべきです。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span><em>charset</em> キーワード専用引数が追加されました。HTML 文書のデフォルトの文字集合が <code class="docutils literal notranslate"><span class="pre">'ISO-8859-1'</span></code> から <code class="docutils literal notranslate"><span class="pre">'utf-8'</span></code> に変更されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="difflib.HtmlDiff.make_table">
+<span class="sig-name descname"><span class="pre">make_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fromlines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromdesc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">todesc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numlines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#difflib.HtmlDiff.make_table" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>fromlines</em> と <em>tolines</em> (いずれも文字列のリスト) を比較し、行間または行内の変更点が強調表示された行差分の入った完全な HTML テーブルを文字列で返します。</p>
+<p class="translated">このメソッドの引数は、 <a class="reference internal" href="#difflib.HtmlDiff.make_file" title="difflib.HtmlDiff.make_file"><code class="xref py py-meth docutils literal notranslate"><span class="pre">make_file()</span></code></a> メソッドの引数と同じです。</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="difflib.context_diff">
+<span class="sig-prename descclassname"><span class="pre">difflib.</span></span><span class="sig-name descname"><span class="pre">context_diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tofile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromfiledate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tofiledate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineterm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'\n'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#difflib.context_diff" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>a</em> と <em>b</em> (文字列のリスト) を比較し、差分 (差分形式の行を生成する <a class="reference internal" href="../glossary.html#term-generator"><span class="xref std std-term">ジェネレータ</span></a>) を、 context diff のフォーマット(以下「コンテキスト形式」)で返します。</p>
+<p class="translated">コンテキスト形式は、変更があった行に前後数行を加えてある、コンパクトな表現方法です。変更箇所は、変更前/変更後に分けて表します。コンテキスト (変更箇所前後の行) の行数は <em>n</em> で指定し、デフォルト値は 3 です。</p>
+<p class="translated">デフォルトで、 diff 制御行 (<code class="docutils literal notranslate"><span class="pre">***</span></code> や <code class="docutils literal notranslate"><span class="pre">---</span></code> を含む行) は改行付きで生成されます。 <a class="reference internal" href="io.html#io.IOBase.readlines" title="io.IOBase.readlines"><code class="xref py py-func docutils literal notranslate"><span class="pre">io.IOBase.readlines()</span></code></a> で作られた入力が <a class="reference internal" href="io.html#io.IOBase.writelines" title="io.IOBase.writelines"><code class="xref py py-func docutils literal notranslate"><span class="pre">io.IOBase.writelines()</span></code></a> で扱うのに適した diff になるので (なぜなら入力と出力の両方が改行付きのため) 、これは有用です。</p>
+<p class="translated">行末に改行文字を持たない入力に対しては、出力でも改行文字を付加しないように <em>lineterm</em> 引数に <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> を渡してください。</p>
+<p class="translated">コンテキスト形式は、通常、ヘッダにファイル名と変更時刻を持っています。この情報は、文字列 <em>fromfile</em>, <em>tofile</em>, <em>fromfiledate</em>, <em>tofiledate</em> で指定できます。変更時刻の書式は、通常、ISO 8601 フォーマットで表されます。指定しなかった場合のデフォルト値は、空文字列です。</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">difflib</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;bacon</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;eggs</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;ham</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;guido</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s2</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;python</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;eggy</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;hamster</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;guido</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">context_diff</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">fromfile</span><span class="o">=</span><span class="s1">&#39;before.py&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                       <span class="n">tofile</span><span class="o">=</span><span class="s1">&#39;after.py&#39;</span><span class="p">))</span>
+<span class="go">*** before.py</span>
+<span class="go">--- after.py</span>
+<span class="go">***************</span>
+<span class="go">*** 1,4 ****</span>
+<span class="go">! bacon</span>
+<span class="go">! eggs</span>
+<span class="go">! ham</span>
+<span class="go">  guido</span>
+<span class="go">--- 1,4 ----</span>
+<span class="go">! python</span>
+<span class="go">! eggy</span>
+<span class="go">! hamster</span>
+<span class="go">  guido</span>
+</pre></div>
+</div>
+<p class="translated">より詳細な例は、 <a class="reference internal" href="#difflib-interface"><span class="std std-ref">difflib のコマンドラインインターフェース</span></a> を参照してください。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="difflib.get_close_matches">
+<span class="sig-prename descclassname"><span class="pre">difflib.</span></span><span class="sig-name descname"><span class="pre">get_close_matches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">word</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">possibilities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cutoff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#difflib.get_close_matches" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">「十分」なマッチの上位のリストを返します。<em>word</em> はマッチさせたいシーケンス (大概は文字列) です。<em>possibilities</em> は <em>word</em> にマッチさせるシーケンスのリスト (大概は文字列のリスト) です。</p>
+<p class="translated">オプションの引数 <em>n</em> (デフォルトでは <code class="docutils literal notranslate"><span class="pre">3</span></code>)はメソッドの返すマッチの最大数です。<em>n</em> は <code class="docutils literal notranslate"><span class="pre">0</span></code> より大きくなければなりません。</p>
+<p class="translated">オプションの引数 <em>cutoff</em> (デフォルトでは <code class="docutils literal notranslate"><span class="pre">0.6</span></code>)は、区間 [0, 1] に入る小数の値です。<em>word</em> との一致率がそれ未満の <em>possibilities</em> の要素は無視されます。</p>
+<p class="translated"><em>possibilities</em> の要素でマッチした上位(多くても <em>n</em> 個)は、類似度のスコアに応じて(一番似たものを先頭に)ソートされたリストとして返されます。</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">get_close_matches</span><span class="p">(</span><span class="s1">&#39;appel&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;ape&#39;</span><span class="p">,</span> <span class="s1">&#39;apple&#39;</span><span class="p">,</span> <span class="s1">&#39;peach&#39;</span><span class="p">,</span> <span class="s1">&#39;puppy&#39;</span><span class="p">])</span>
+<span class="go">[&#39;apple&#39;, &#39;ape&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">keyword</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_close_matches</span><span class="p">(</span><span class="s1">&#39;wheel&#39;</span><span class="p">,</span> <span class="n">keyword</span><span class="o">.</span><span class="n">kwlist</span><span class="p">)</span>
+<span class="go">[&#39;while&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_close_matches</span><span class="p">(</span><span class="s1">&#39;pineapple&#39;</span><span class="p">,</span> <span class="n">keyword</span><span class="o">.</span><span class="n">kwlist</span><span class="p">)</span>
+<span class="go">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_close_matches</span><span class="p">(</span><span class="s1">&#39;accept&#39;</span><span class="p">,</span> <span class="n">keyword</span><span class="o">.</span><span class="n">kwlist</span><span class="p">)</span>
+<span class="go">[&#39;except&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="difflib.ndiff">
+<span class="sig-prename descclassname"><span class="pre">difflib.</span></span><span class="sig-name descname"><span class="pre">ndiff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">linejunk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charjunk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">IS_CHARACTER_JUNK</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#difflib.ndiff" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>a</em> と <em>b</em> (文字列のリスト) を比較し、差分 (差分形式の行を生成する <a class="reference internal" href="../glossary.html#term-generator"><span class="xref std std-term">ジェネレータ</span></a>) を、 <a class="reference internal" href="#difflib.Differ" title="difflib.Differ"><code class="xref py py-class docutils literal notranslate"><span class="pre">Differ</span></code></a> のスタイルで返します。</p>
+<p class="translated">オプションのキーワード引数 <em>linejunk</em> と <em>charjunk</em> には、フィルタ関数 (または <code class="docutils literal notranslate"><span class="pre">None</span></code>) を渡します。</p>
+<p class="untranslated"><em>linejunk</em>: A function that accepts a single string argument, and returns
+true if the string is junk, or false if not. The default is <code class="docutils literal notranslate"><span class="pre">None</span></code>. There
+is also a module-level function <a class="reference internal" href="#difflib.IS_LINE_JUNK" title="difflib.IS_LINE_JUNK"><code class="xref py py-func docutils literal notranslate"><span class="pre">IS_LINE_JUNK()</span></code></a>, which filters out lines
+without visible characters, except for at most one hash character (<code class="docutils literal notranslate"><span class="pre">'#'</span></code>)
+-- however the underlying <a class="reference internal" href="#difflib.SequenceMatcher" title="difflib.SequenceMatcher"><code class="xref py py-class docutils literal notranslate"><span class="pre">SequenceMatcher</span></code></a> class does a dynamic
+analysis of which lines are so frequent as to constitute noise, and this
+usually works better than using this function.</p>
+<p class="translated"><em>charjunk</em>: 文字 (長さ1の文字列) を受け取る関数です。文字列が junk の場合は真を、そうでない場合は偽を返します。デフォルトでは、モジュールレべルの関数 <a class="reference internal" href="#difflib.IS_CHARACTER_JUNK" title="difflib.IS_CHARACTER_JUNK"><code class="xref py py-func docutils literal notranslate"><span class="pre">IS_CHARACTER_JUNK()</span></code></a> であり、これは空白文字類 (空白またはタブ、改行文字をこれに含めてはいけません) をフィルタして排除します。</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span> <span class="o">=</span> <span class="n">ndiff</span><span class="p">(</span><span class="s1">&#39;one</span><span class="se">\n</span><span class="s1">two</span><span class="se">\n</span><span class="s1">three</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="gp">... </span>             <span class="s1">&#39;ore</span><span class="se">\n</span><span class="s1">tree</span><span class="se">\n</span><span class="s1">emu</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">diff</span><span class="p">),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="go">- one</span>
+<span class="go">?  ^</span>
+<span class="go">+ ore</span>
+<span class="go">?  ^</span>
+<span class="go">- two</span>
+<span class="go">- three</span>
+<span class="go">?  -</span>
+<span class="go">+ tree</span>
+<span class="go">+ emu</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="difflib.restore">
+<span class="sig-prename descclassname"><span class="pre">difflib.</span></span><span class="sig-name descname"><span class="pre">restore</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">which</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#difflib.restore" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">差分を生成した元の二つのシーケンスのうち一つを返します。</p>
+<p class="translated"><a class="reference internal" href="#difflib.Differ.compare" title="difflib.Differ.compare"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Differ.compare()</span></code></a> または <a class="reference internal" href="#difflib.ndiff" title="difflib.ndiff"><code class="xref py py-func docutils literal notranslate"><span class="pre">ndiff()</span></code></a> によって生成された <em>sequence</em> を与えられると、行頭のプレフィクスを取りのぞいてファイル 1 または 2 (引数 <em>which</em> で指定される) に由来する行を復元します。</p>
+<p class="translated">例:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span> <span class="o">=</span> <span class="n">ndiff</span><span class="p">(</span><span class="s1">&#39;one</span><span class="se">\n</span><span class="s1">two</span><span class="se">\n</span><span class="s1">three</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="gp">... </span>             <span class="s1">&#39;ore</span><span class="se">\n</span><span class="s1">tree</span><span class="se">\n</span><span class="s1">emu</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">diff</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span> <span class="c1"># materialize the generated delta into a list</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">restore</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="go">one</span>
+<span class="go">two</span>
+<span class="go">three</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">restore</span><span class="p">(</span><span class="n">diff</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="go">ore</span>
+<span class="go">tree</span>
+<span class="go">emu</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="difflib.unified_diff">
+<span class="sig-prename descclassname"><span class="pre">difflib.</span></span><span class="sig-name descname"><span class="pre">unified_diff</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tofile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromfiledate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tofiledate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineterm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'\n'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#difflib.unified_diff" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>a</em> と <em>b</em> (文字列のリスト) を比較し、差分 (差分形式の行を生成する <a class="reference internal" href="../glossary.html#term-generator"><span class="xref std std-term">ジェネレータ</span></a>) を、 unified diff フォーマット(以下「ユニファイド形式」)で返します。</p>
+<p class="translated">ユニファイド形式は変更があった行にコンテキストとなる前後数行を加えた、コンパクトな表現方法です。変更箇所は (変更前/変更後を分離したブロックではなく) インラインスタイルで表されます。コンテキストの行数は、<em>n</em> で指定し、デフォルト値は 3 です。</p>
+<p class="translated">デフォルトで、 diff 制御行 (<code class="docutils literal notranslate"><span class="pre">---</span></code>, <code class="docutils literal notranslate"><span class="pre">+++</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;&#64;</span></code> を含む行) は改行付きで生成されます。 <a class="reference internal" href="io.html#io.IOBase.readlines" title="io.IOBase.readlines"><code class="xref py py-func docutils literal notranslate"><span class="pre">io.IOBase.readlines()</span></code></a> で作られた入力が <a class="reference internal" href="io.html#io.IOBase.writelines" title="io.IOBase.writelines"><code class="xref py py-func docutils literal notranslate"><span class="pre">io.IOBase.writelines()</span></code></a> で扱うのに適した diff になるので (なぜなら入力と出力の両方が改行付きのため) 、これは有用です。</p>
+<p class="translated">行末に改行文字を持たない入力に対しては、出力でも改行文字を付加しないように <em>lineterm</em> 引数に <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> を渡してください。</p>
+<p class="untranslated">The unified diff format normally has a header for filenames and modification
+times.  Any or all of these may be specified using strings for <em>fromfile</em>,
+<em>tofile</em>, <em>fromfiledate</em>, and <em>tofiledate</em>.  The modification times are normally
+expressed in the ISO 8601 format. If not specified, the
+strings default to blanks.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s1</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;bacon</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;eggs</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;ham</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;guido</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s2</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;python</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;eggy</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;hamster</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;guido</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">unified_diff</span><span class="p">(</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">fromfile</span><span class="o">=</span><span class="s1">&#39;before.py&#39;</span><span class="p">,</span> <span class="n">tofile</span><span class="o">=</span><span class="s1">&#39;after.py&#39;</span><span class="p">))</span>
+<span class="go">--- before.py</span>
+<span class="go">+++ after.py</span>
+<span class="go">@@ -1,4 +1,4 @@</span>
+<span class="go">-bacon</span>
+<span class="go">-eggs</span>
+<span class="go">-ham</span>
+<span class="go">+python</span>
+<span class="go">+eggy</span>
+<span class="go">+hamster</span>
+<span class="go"> guido</span>
+</pre></div>
+</div>
+<p class="translated">より詳細な例は、 <a class="reference internal" href="#difflib-interface"><span class="std std-ref">difflib のコマンドラインインターフェース</span></a> を参照してください。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="difflib.diff_bytes">
+<span class="sig-prename descclassname"><span class="pre">difflib.</span></span><span class="sig-name descname"><span class="pre">diff_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dfunc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">b''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tofile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">b''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fromfiledate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">b''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tofiledate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">b''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lineterm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">b'\n'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#difflib.diff_bytes" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>dfunc</em> を使用して <em>a</em> と <em>b</em> (bytes オブジェクトのリスト) を比較して、差分形式の行 (これも bytes オブジェクトです) を*dfunc* の戻り値の形式で返します。<em>dfunc</em> は、呼び出し可能である必要があります。一般に、これは <a class="reference internal" href="#difflib.unified_diff" title="difflib.unified_diff"><code class="xref py py-func docutils literal notranslate"><span class="pre">unified_diff()</span></code></a> または <a class="reference internal" href="#difflib.context_diff" title="difflib.context_diff"><code class="xref py py-func docutils literal notranslate"><span class="pre">context_diff()</span></code></a> です。</p>
+<p class="translated">未知のエンコーディングまたは一貫性のないエンコーディングのデータ同士を比較できます。<em>n</em> 以外のすべての入力は、bytes オブジェクトである必要があります。<em>n</em> 以外のすべての入力を損失なく str に変換して、<code class="docutils literal notranslate"><span class="pre">dfunc(a,</span> <span class="pre">b,</span> <span class="pre">fromfile,</span> <span class="pre">tofile,</span> <span class="pre">fromfiledate,</span> <span class="pre">tofiledate,</span> <span class="pre">n,</span> <span class="pre">lineterm)</span></code> を呼び出すことにより動作します。<em>dfunc</em> の出力は、bytes 型に変換されます。これにより、受け取る差分形式の行のエンコーディングは、<em>a</em> と <em>b</em> の未知または一貫性のないエンコーディングと同一になります。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.5.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="difflib.IS_LINE_JUNK">
+<span class="sig-prename descclassname"><span class="pre">difflib.</span></span><span class="sig-name descname"><span class="pre">IS_LINE_JUNK</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#difflib.IS_LINE_JUNK" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">無視できる行のとき <code class="docutils literal notranslate"><span class="pre">True</span></code> を返します。行 <em>line</em> は空白、または  <code class="docutils literal notranslate"><span class="pre">'#'</span></code> ひとつのときに無視できます。それ以外のときには無視できません。古いバージョンでは <a class="reference internal" href="#difflib.ndiff" title="difflib.ndiff"><code class="xref py py-func docutils literal notranslate"><span class="pre">ndiff()</span></code></a> の引数 <em>linejunk</em> にデフォルトで使用されました。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="difflib.IS_CHARACTER_JUNK">
+<span class="sig-prename descclassname"><span class="pre">difflib.</span></span><span class="sig-name descname"><span class="pre">IS_CHARACTER_JUNK</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#difflib.IS_CHARACTER_JUNK" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">無視できる文字のとき <code class="docutils literal notranslate"><span class="pre">True</span></code> を返します。文字 <em>ch</em> が空白、またはタブ文字のときには無視できます。それ以外の時には無視できません。 <a class="reference internal" href="#difflib.ndiff" title="difflib.ndiff"><code class="xref py py-func docutils literal notranslate"><span class="pre">ndiff()</span></code></a> の引数 <em>charjunk</em> としてデフォルトで使用されます。</p>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<dl class="simple">
+<dt class="untranslated"><a class="reference external" href="https://jacobfilipp.com/DrDobbs/articles/DDJ/1988/8807/8807c/8807c.htm">Pattern Matching: The Gestalt Approach</a></dt><dd><p class="untranslated">Discussion of a similar algorithm by John W. Ratcliff and D. E. Metzener. This
+was published in Dr. Dobb's Journal in July, 1988.</p>
+</dd>
+</dl>
+</div>
+<section id="sequencematcher-objects">
+<span id="sequence-matcher"></span><h2 class="untranslated">SequenceMatcher objects<a class="headerlink" href="#sequencematcher-objects" title="Link to this heading">¶</a></h2>
+<p class="translated"><a class="reference internal" href="#difflib.SequenceMatcher" title="difflib.SequenceMatcher"><code class="xref py py-class docutils literal notranslate"><span class="pre">SequenceMatcher</span></code></a> クラスには、以下のようなコンストラクタがあります:</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="difflib.SequenceMatcher">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">difflib.</span></span><span class="sig-name descname"><span class="pre">SequenceMatcher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">isjunk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autojunk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#difflib.SequenceMatcher" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">オプションの引数 <em>isjunk</em> は、<code class="docutils literal notranslate"><span class="pre">None</span></code> (デフォルトの値です) にするか、単一の引数をとる関数でなければなりません。後者の場合、関数はシーケンスの要素を受け取り、要素が junk であり、無視すべきである場合に限り真を返すようにしなければなりません。<em>isjunk</em> に <code class="docutils literal notranslate"><span class="pre">None</span></code> を渡すと、<code class="docutils literal notranslate"><span class="pre">lambda</span> <span class="pre">x:</span> <span class="pre">False</span></code> を渡したのと同じになります; すなわち、いかなる要素も無視しなくなります。例えば以下のような引数を渡すと:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="ow">in</span> <span class="s2">&quot; </span><span class="se">\t</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+<p class="translated">空白とタブ文字を無視して文字のシーケンスを比較します。</p>
+<p class="translated">オプションの引数 <em>a</em> と <em>b</em> は、比較される文字列で、デフォルトでは空の文字列です。両方のシーケンスの要素は、 <a class="reference internal" href="../glossary.html#term-hashable"><span class="xref std std-term">ハッシュ可能</span></a> である必要があります。</p>
+<p class="translated">オプションの引数 <em>autojunk</em> は、自動 junk ヒューリスティックを無効にするために使えます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span>Added the <em>autojunk</em> parameter.</p>
+</div>
+<p class="translated">SequenceMatcher オブジェクトは3つのデータ属性を持っています: <em>bjunk</em> は、 <em>isjunk</em> が <code class="docutils literal notranslate"><span class="pre">True</span></code> であるような <em>b</em> の要素の集合です; <em>bpopular</em> は、 (無効でなければ) ヒューリスティックによって popular であると考えられる非ジャンク要素の集合です; <em>b2j</em> は、 <em>b</em> の残りの要素をそれらが生じる位置のリストに写像する dict です。この 3 つは <a class="reference internal" href="#difflib.SequenceMatcher.set_seqs" title="difflib.SequenceMatcher.set_seqs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_seqs()</span></code></a> または <a class="reference internal" href="#difflib.SequenceMatcher.set_seq2" title="difflib.SequenceMatcher.set_seq2"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_seq2()</span></code></a> で <em>b</em> がリセットされる場合は常にリセットされます。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2: </span><em>bjunk</em> および <em>bpopular</em> 属性。</p>
+</div>
+<p class="translated"><a class="reference internal" href="#difflib.SequenceMatcher" title="difflib.SequenceMatcher"><code class="xref py py-class docutils literal notranslate"><span class="pre">SequenceMatcher</span></code></a> オブジェクトは以下のメソッドを持ちます:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="difflib.SequenceMatcher.set_seqs">
+<span class="sig-name descname"><span class="pre">set_seqs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#difflib.SequenceMatcher.set_seqs" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">比較される2つの文字列を設定します。</p>
+</dd></dl>
+
+<p class="translated"><a class="reference internal" href="#difflib.SequenceMatcher" title="difflib.SequenceMatcher"><code class="xref py py-class docutils literal notranslate"><span class="pre">SequenceMatcher</span></code></a> オブジェクトは、2つ目のシーケンスについての詳細な情報を計算し、キャッシュします。 1つのシーケンスをいくつものシーケンスと比較する場合、まず <a class="reference internal" href="#difflib.SequenceMatcher.set_seq2" title="difflib.SequenceMatcher.set_seq2"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_seq2()</span></code></a> を使って文字列を設定しておき、別の文字列を1つずつ比較するために、繰り返し <a class="reference internal" href="#difflib.SequenceMatcher.set_seq1" title="difflib.SequenceMatcher.set_seq1"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_seq1()</span></code></a> を呼び出します。</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="difflib.SequenceMatcher.set_seq1">
+<span class="sig-name descname"><span class="pre">set_seq1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#difflib.SequenceMatcher.set_seq1" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">比較を行う1つ目のシーケンスを設定します。比較される2つ目のシーケンスは変更されません。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="difflib.SequenceMatcher.set_seq2">
+<span class="sig-name descname"><span class="pre">set_seq2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#difflib.SequenceMatcher.set_seq2" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">比較を行う2つ目のシーケンスを設定します。比較される1つ目のシーケンスは変更されません。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="difflib.SequenceMatcher.find_longest_match">
+<span class="sig-name descname"><span class="pre">find_longest_match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ahi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bhi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#difflib.SequenceMatcher.find_longest_match" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><code class="docutils literal notranslate"><span class="pre">a[alo:ahi]</span></code> と <code class="docutils literal notranslate"><span class="pre">b[blo:bhi]</span></code> の中から、最長のマッチ列を探します。</p>
+<p class="translated"><em>isjunk</em> が省略されたか <code class="docutils literal notranslate"><span class="pre">None</span></code> の時、 <a class="reference internal" href="#difflib.SequenceMatcher.find_longest_match" title="difflib.SequenceMatcher.find_longest_match"><code class="xref py py-meth docutils literal notranslate"><span class="pre">find_longest_match()</span></code></a> は <code class="docutils literal notranslate"><span class="pre">a[i:i+k]</span></code> が <code class="docutils literal notranslate"><span class="pre">b[j:j+k]</span></code> と等しいような <code class="docutils literal notranslate"><span class="pre">(i,</span> <span class="pre">j,</span> <span class="pre">k)</span></code> を返します。その値は <code class="docutils literal notranslate"><span class="pre">alo</span> <span class="pre">&lt;=</span> <span class="pre">i</span> <span class="pre">&lt;=</span> <span class="pre">i+k</span> <span class="pre">&lt;=</span> <span class="pre">ahi</span></code> かつ <code class="docutils literal notranslate"><span class="pre">blo</span> <span class="pre">&lt;=</span> <span class="pre">j</span> <span class="pre">&lt;=</span> <span class="pre">j+k</span> <span class="pre">&lt;=</span> <span class="pre">bhi</span></code> となります。 <code class="docutils literal notranslate"><span class="pre">(i',</span> <span class="pre">j',</span> <span class="pre">k')</span></code> でも、同じようになります。さらに <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">&gt;=</span> <span class="pre">k'</span></code>, <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">&lt;=</span> <span class="pre">i'</span></code> が <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">==</span> <span class="pre">i'</span></code>, <code class="docutils literal notranslate"><span class="pre">j</span> <span class="pre">&lt;=</span> <span class="pre">j'</span></code> でも同様です。言い換えると、いくつものマッチ列すべてのうち、 <em>a</em> 内で最初に始まるものを返します。そしてその <em>a</em> 内で最初のマッチ列すべてのうち <em>b</em> 内で最初に始まるものを返します。</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">SequenceMatcher</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot; abcd&quot;</span><span class="p">,</span> <span class="s2">&quot;abcd abcd&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">find_longest_match</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+<span class="go">Match(a=0, b=4, size=5)</span>
+</pre></div>
+</div>
+<p class="translated">引数 <em>isjunk</em> が与えられている場合、上記の通り、はじめに最長のマッチ列を判定します。ブロック内に junk 要素が見当たらないような追加条件の際はこれに該当しません。次にそのマッチ列を、その両側の junk 要素にマッチするよう、できる限り広げていきます。そのため結果となる列は、探している列のたまたま直前にあった同一の junk 以外の junk にはマッチしません。</p>
+<p class="translated">以下は前と同じサンプルですが、空白を junk とみなしています。これは <code class="docutils literal notranslate"><span class="pre">'</span> <span class="pre">abcd'</span></code> が2つ目の列の末尾にある <code class="docutils literal notranslate"><span class="pre">'</span> <span class="pre">abcd'</span></code> にマッチしないようにしています。代わりに <code class="docutils literal notranslate"><span class="pre">'abcd'</span></code> にはマッチします。そして 2つ目の文字列中、一番左の <code class="docutils literal notranslate"><span class="pre">'abcd'</span></code> にマッチします:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">SequenceMatcher</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">==</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot; abcd&quot;</span><span class="p">,</span> <span class="s2">&quot;abcd abcd&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">find_longest_match</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+<span class="go">Match(a=1, b=0, size=4)</span>
+</pre></div>
+</div>
+<p class="translated">どんな列にもマッチしない時は、<code class="docutils literal notranslate"><span class="pre">(alo,</span> <span class="pre">blo,</span> <span class="pre">0)</span></code> を返します。</p>
+<p class="translated">このメソッドは <a class="reference internal" href="../glossary.html#term-named-tuple"><span class="xref std std-term">named tuple</span></a> <code class="docutils literal notranslate"><span class="pre">Match(a,</span> <span class="pre">b,</span> <span class="pre">size)</span></code> を返します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.9 で変更: </span>デフォルト引数が追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="difflib.SequenceMatcher.get_matching_blocks">
+<span class="sig-name descname"><span class="pre">get_matching_blocks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#difflib.SequenceMatcher.get_matching_blocks" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">マッチした互いに重複の無いシーケンスを表す、3つ組の値のリストを返します。
+それぞれの値は <code class="docutils literal notranslate"><span class="pre">(i,</span> <span class="pre">j,</span> <span class="pre">n)</span></code> という形式で表され、<code class="docutils literal notranslate"><span class="pre">a[i:i+n]</span> <span class="pre">==</span> <span class="pre">b[j:j+n]</span></code> という関係を意味します。3つの値は <em>i</em> と <em>j</em> の間で単調に増加します。</p>
+<p class="translated">最後の3つ組はダミーで、<code class="docutils literal notranslate"><span class="pre">(len(a),</span> <span class="pre">len(b),</span> <span class="pre">0)</span></code> という値を持ちます。これは <code class="docutils literal notranslate"><span class="pre">n</span> <span class="pre">==</span> <span class="pre">0</span></code> である唯一のタプルです。もし <code class="docutils literal notranslate"><span class="pre">(i,</span> <span class="pre">j,</span> <span class="pre">n)</span></code> と <code class="docutils literal notranslate"><span class="pre">(i',</span> <span class="pre">j',</span> <span class="pre">n')</span></code> がリストで並んでいる3つ組で、2つ目が最後の3つ組でなければ、<code class="docutils literal notranslate"><span class="pre">i+n</span> <span class="pre">&lt;</span> <span class="pre">i'</span></code> または <code class="docutils literal notranslate"><span class="pre">j+n</span> <span class="pre">&lt;</span> <span class="pre">j'</span></code> です。言い換えると並んでいる3つ組は常に隣接していない同じブロックを表しています。</p>
+<div class="untranslated highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">SequenceMatcher</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;abxcd&quot;</span><span class="p">,</span> <span class="s2">&quot;abcd&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">get_matching_blocks</span><span class="p">()</span>
+<span class="go">[Match(a=0, b=0, size=2), Match(a=3, b=2, size=2), Match(a=5, b=4, size=0)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="difflib.SequenceMatcher.get_opcodes">
+<span class="sig-name descname"><span class="pre">get_opcodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#difflib.SequenceMatcher.get_opcodes" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>a</em> を <em>b</em> にするための方法を記述する5つのタプルを返します。それぞれのタプルは <code class="docutils literal notranslate"><span class="pre">(tag,</span> <span class="pre">i1,</span> <span class="pre">i2,</span> <span class="pre">j1,</span> <span class="pre">j2)</span></code> という形式であらわされます。最初のタプルは <code class="docutils literal notranslate"><span class="pre">i1</span> <span class="pre">==</span> <span class="pre">j1</span> <span class="pre">==</span> <span class="pre">0</span></code> であり、<em>i1</em> はその前にあるタプルの <em>i2</em> と同じ値です。同様に <em>j1</em> は前の <em>j2</em> と同じ値になります。</p>
+<p class="translated"><em>tag</em> の値は文字列であり、次のような意味です:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p class="translated">値</p></th>
+<th class="head"><p class="translated">意味</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">'replace'</span></code></p></td>
+<td><p class="translated"><code class="docutils literal notranslate"><span class="pre">a[i1:i2]</span></code> は <code class="docutils literal notranslate"><span class="pre">b[j1:j2]</span></code> に置き換えられる。</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">'delete'</span></code></p></td>
+<td><p class="translated"><code class="docutils literal notranslate"><span class="pre">a[i1:i2]</span></code> は削除される。この時、<code class="docutils literal notranslate"><span class="pre">j1</span> <span class="pre">==</span> <span class="pre">j2</span></code> である。</p></td>
+</tr>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">'insert'</span></code></p></td>
+<td><p class="translated"><code class="docutils literal notranslate"><span class="pre">b[j1:j2]</span></code> が <code class="docutils literal notranslate"><span class="pre">a[i1:i1]</span></code> に挿入される。この時 <code class="docutils literal notranslate"><span class="pre">i1</span> <span class="pre">==</span> <span class="pre">i2</span></code> である。</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">'equal'</span></code></p></td>
+<td><p class="translated"><code class="docutils literal notranslate"><span class="pre">a[i1:i2]</span> <span class="pre">==</span> <span class="pre">b[j1:j2]</span></code> (サブシーケンスは等しい).</p></td>
+</tr>
+</tbody>
+</table>
+<p class="translated">例えば:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="s2">&quot;qabxcd&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">b</span> <span class="o">=</span> <span class="s2">&quot;abycdf&quot;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">SequenceMatcher</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">tag</span><span class="p">,</span> <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">,</span> <span class="n">j1</span><span class="p">,</span> <span class="n">j2</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">get_opcodes</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{:7}</span><span class="s1">   a[</span><span class="si">{}</span><span class="s1">:</span><span class="si">{}</span><span class="s1">] --&gt; b[</span><span class="si">{}</span><span class="s1">:</span><span class="si">{}</span><span class="s1">] </span><span class="si">{!r:&gt;8}</span><span class="s1"> --&gt; </span><span class="si">{!r}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="n">tag</span><span class="p">,</span> <span class="n">i1</span><span class="p">,</span> <span class="n">i2</span><span class="p">,</span> <span class="n">j1</span><span class="p">,</span> <span class="n">j2</span><span class="p">,</span> <span class="n">a</span><span class="p">[</span><span class="n">i1</span><span class="p">:</span><span class="n">i2</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="n">j1</span><span class="p">:</span><span class="n">j2</span><span class="p">]))</span>
+<span class="go">delete    a[0:1] --&gt; b[0:0]      &#39;q&#39; --&gt; &#39;&#39;</span>
+<span class="go">equal     a[1:3] --&gt; b[0:2]     &#39;ab&#39; --&gt; &#39;ab&#39;</span>
+<span class="go">replace   a[3:4] --&gt; b[2:3]      &#39;x&#39; --&gt; &#39;y&#39;</span>
+<span class="go">equal     a[4:6] --&gt; b[3:5]     &#39;cd&#39; --&gt; &#39;cd&#39;</span>
+<span class="go">insert    a[6:6] --&gt; b[5:6]       &#39;&#39; --&gt; &#39;f&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="difflib.SequenceMatcher.get_grouped_opcodes">
+<span class="sig-name descname"><span class="pre">get_grouped_opcodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#difflib.SequenceMatcher.get_grouped_opcodes" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">最大 <em>n</em> 行までのコンテキストを含むグループを生成するような、 <a class="reference internal" href="../glossary.html#term-generator"><span class="xref std std-term">ジェネレータ</span></a> を返します。</p>
+<p class="translated">このメソッドは、 <a class="reference internal" href="#difflib.SequenceMatcher.get_opcodes" title="difflib.SequenceMatcher.get_opcodes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_opcodes()</span></code></a> で返されるグループの中から、似たような差異のかたまりに分け、間に挟まっている変更の無い部分を省きます。</p>
+<p class="translated">グループは <a class="reference internal" href="#difflib.SequenceMatcher.get_opcodes" title="difflib.SequenceMatcher.get_opcodes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_opcodes()</span></code></a> と同じ書式で返されます。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="difflib.SequenceMatcher.ratio">
+<span class="sig-name descname"><span class="pre">ratio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#difflib.SequenceMatcher.ratio" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">[0, 1] の範囲の浮動小数点数で、シーケンスの類似度を測る値を返します。</p>
+<p class="translated">T が2つのシーケンスの要素数の総計だと仮定し、M をマッチした数とすると、この値は 2.0*M / T であらわされます。もしシーケンスがまったく同じ場合、値は <code class="docutils literal notranslate"><span class="pre">1.0</span></code> となり、まったく異なる場合には <code class="docutils literal notranslate"><span class="pre">0.0</span></code> となります。</p>
+<p class="translated">このメソッドは <a class="reference internal" href="#difflib.SequenceMatcher.get_matching_blocks" title="difflib.SequenceMatcher.get_matching_blocks"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_matching_blocks()</span></code></a> または <a class="reference internal" href="#difflib.SequenceMatcher.get_opcodes" title="difflib.SequenceMatcher.get_opcodes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_opcodes()</span></code></a> がまだ呼び出されていない場合には非常にコストが高いです。この場合、上限を素早く計算するために、 <a class="reference internal" href="#difflib.SequenceMatcher.quick_ratio" title="difflib.SequenceMatcher.quick_ratio"><code class="xref py py-meth docutils literal notranslate"><span class="pre">quick_ratio()</span></code></a> もしくは <a class="reference internal" href="#difflib.SequenceMatcher.real_quick_ratio" title="difflib.SequenceMatcher.real_quick_ratio"><code class="xref py py-meth docutils literal notranslate"><span class="pre">real_quick_ratio()</span></code></a> を最初に試してみる方がいいかもしれません。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated">注意: <a class="reference internal" href="#difflib.SequenceMatcher.ratio" title="difflib.SequenceMatcher.ratio"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ratio()</span></code></a> の呼び出しの結果は引数の順序に依存します。例えば次の通りです:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SequenceMatcher</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;tide&#39;</span><span class="p">,</span> <span class="s1">&#39;diet&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">ratio</span><span class="p">()</span>
+<span class="go">0.25</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">SequenceMatcher</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;diet&#39;</span><span class="p">,</span> <span class="s1">&#39;tide&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">ratio</span><span class="p">()</span>
+<span class="go">0.5</span>
+</pre></div>
+</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="difflib.SequenceMatcher.quick_ratio">
+<span class="sig-name descname"><span class="pre">quick_ratio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#difflib.SequenceMatcher.quick_ratio" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#difflib.SequenceMatcher.ratio" title="difflib.SequenceMatcher.ratio"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ratio()</span></code></a> の上界を、より高速に計算します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="difflib.SequenceMatcher.real_quick_ratio">
+<span class="sig-name descname"><span class="pre">real_quick_ratio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#difflib.SequenceMatcher.real_quick_ratio" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#difflib.SequenceMatcher.ratio" title="difflib.SequenceMatcher.ratio"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ratio()</span></code></a> の上界を、非常に高速に計算します。</p>
+</dd></dl>
+
+</dd></dl>
+
+<p class="untranslated">The three methods that return the ratio of matching to total characters can give
+different results due to differing levels of approximation, although
+<a class="reference internal" href="#difflib.SequenceMatcher.quick_ratio" title="difflib.SequenceMatcher.quick_ratio"><code class="xref py py-meth docutils literal notranslate"><span class="pre">quick_ratio()</span></code></a> and <a class="reference internal" href="#difflib.SequenceMatcher.real_quick_ratio" title="difflib.SequenceMatcher.real_quick_ratio"><code class="xref py py-meth docutils literal notranslate"><span class="pre">real_quick_ratio()</span></code></a>
+are always at least as large as <a class="reference internal" href="#difflib.SequenceMatcher.ratio" title="difflib.SequenceMatcher.ratio"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ratio()</span></code></a>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">SequenceMatcher</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;abcd&quot;</span><span class="p">,</span> <span class="s2">&quot;bcde&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">ratio</span><span class="p">()</span>
+<span class="go">0.75</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">quick_ratio</span><span class="p">()</span>
+<span class="go">0.75</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">real_quick_ratio</span><span class="p">()</span>
+<span class="go">1.0</span>
+</pre></div>
+</div>
+</section>
+<section id="sequencematcher-examples">
+<span id="id1"></span><h2 class="untranslated">SequenceMatcher examples<a class="headerlink" href="#sequencematcher-examples" title="Link to this heading">¶</a></h2>
+<p class="translated">この例は2つの文字列を比較します。空白を &quot;junk&quot; とします:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">SequenceMatcher</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">==</span> <span class="s2">&quot; &quot;</span><span class="p">,</span>
+<span class="gp">... </span>                    <span class="s2">&quot;private Thread currentThread;&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                    <span class="s2">&quot;private volatile Thread currentThread;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="untranslated"><a class="reference internal" href="#difflib.SequenceMatcher.ratio" title="difflib.SequenceMatcher.ratio"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ratio()</span></code></a> returns a float in [0, 1], measuring the similarity of the
+sequences.  As a rule of thumb, a <code class="xref py py-meth docutils literal notranslate"><span class="pre">ratio()</span></code> value over 0.6 means the
+sequences are close matches:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">ratio</span><span class="p">(),</span> <span class="mi">3</span><span class="p">))</span>
+<span class="go">0.866</span>
+</pre></div>
+</div>
+<p class="untranslated">If you're only interested in where the sequences match,
+<a class="reference internal" href="#difflib.SequenceMatcher.get_matching_blocks" title="difflib.SequenceMatcher.get_matching_blocks"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_matching_blocks()</span></code></a> is handy:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">get_matching_blocks</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;a[</span><span class="si">%d</span><span class="s2">] and b[</span><span class="si">%d</span><span class="s2">] match for </span><span class="si">%d</span><span class="s2"> elements&quot;</span> <span class="o">%</span> <span class="n">block</span><span class="p">)</span>
+<span class="go">a[0] and b[0] match for 8 elements</span>
+<span class="go">a[8] and b[17] match for 21 elements</span>
+<span class="go">a[29] and b[38] match for 0 elements</span>
+</pre></div>
+</div>
+<p class="untranslated">Note that the last tuple returned by <a class="reference internal" href="#difflib.SequenceMatcher.get_matching_blocks" title="difflib.SequenceMatcher.get_matching_blocks"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_matching_blocks()</span></code></a>
+is always a dummy, <code class="docutils literal notranslate"><span class="pre">(len(a),</span> <span class="pre">len(b),</span> <span class="pre">0)</span></code>, and this is the only case in which the last
+tuple element (number of elements matched) is <code class="docutils literal notranslate"><span class="pre">0</span></code>.</p>
+<p class="untranslated">If you want to know how to change the first sequence into the second, use
+<a class="reference internal" href="#difflib.SequenceMatcher.get_opcodes" title="difflib.SequenceMatcher.get_opcodes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_opcodes()</span></code></a>:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">opcode</span> <span class="ow">in</span> <span class="n">s</span><span class="o">.</span><span class="n">get_opcodes</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%6s</span><span class="s2"> a[</span><span class="si">%d</span><span class="s2">:</span><span class="si">%d</span><span class="s2">] b[</span><span class="si">%d</span><span class="s2">:</span><span class="si">%d</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="n">opcode</span><span class="p">)</span>
+<span class="go"> equal a[0:8] b[0:8]</span>
+<span class="go">insert a[8:8] b[8:17]</span>
+<span class="go"> equal a[8:29] b[17:38]</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<ul class="simple">
+<li><p class="translated"><a class="reference internal" href="#difflib.SequenceMatcher" title="difflib.SequenceMatcher"><code class="xref py py-class docutils literal notranslate"><span class="pre">SequenceMatcher</span></code></a> を使った、シンプルで使えるコードを知るには、このモジュールの関数 <a class="reference internal" href="#difflib.get_close_matches" title="difflib.get_close_matches"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_close_matches()</span></code></a> を参照してください。</p></li>
+<li><p class="untranslated"><a class="reference external" href="https://code.activestate.com/recipes/576729-simple-version-control/">Simple version control recipe</a> for a small application
+built with <a class="reference internal" href="#difflib.SequenceMatcher" title="difflib.SequenceMatcher"><code class="xref py py-class docutils literal notranslate"><span class="pre">SequenceMatcher</span></code></a>.</p></li>
+</ul>
+</div>
+</section>
+<section id="differ-objects">
+<span id="id2"></span><h2 class="untranslated">Differ objects<a class="headerlink" href="#differ-objects" title="Link to this heading">¶</a></h2>
+<p class="translated"><a class="reference internal" href="#difflib.Differ" title="difflib.Differ"><code class="xref py py-class docutils literal notranslate"><span class="pre">Differ</span></code></a> オブジェクトによって生成された差分が <strong>最小</strong> であるなどとは言いません。むしろ、最小の差分はしばしば直観に反しています。その理由は、どこでもできるとなれば一致を見いだしてしまうからで、ときには思いがけなく100ページも離れたマッチになってしまうのです。一致点を互いに隣接したマッチに制限することで、場合によって長めの差分を出力するというコストを掛けることにはなっても、ある種の局所性を保つことができるのです。</p>
+<p class="translated"><a class="reference internal" href="#difflib.Differ" title="difflib.Differ"><code class="xref py py-class docutils literal notranslate"><span class="pre">Differ</span></code></a> は、以下のようなコンストラクタを持ちます:</p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">difflib.</span></span><span class="sig-name descname"><span class="pre">Differ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">linejunk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">charjunk</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p class="translated">オプションのキーワードパラメータ <em>linejunk</em> と <em>charjunk</em> は、フィルタ関数を渡します (使わないときは <code class="docutils literal notranslate"><span class="pre">None</span></code>):</p>
+<p class="translated"><em>linejunk</em>: ひとつの文字列引数を受け取る関数です。文字列が junk のときに真を返します。デフォルトでは、<code class="docutils literal notranslate"><span class="pre">None</span></code> であり、どんな行であっても junk とは見なされません。</p>
+<p class="translated"><em>charjunk</em>: この関数は文字(長さ1の文字列)を引数として受け取り、文字が junk であるときに真を返します。デフォルトは <code class="docutils literal notranslate"><span class="pre">None</span></code> であり、どんな文字も junk とは見なされません。</p>
+<p class="translated">これらの junk フィルター関数により、差分を発見するマッチングが高速化し、差分の行や文字が無視されることがなくなります。説明については、 <a class="reference internal" href="#difflib.SequenceMatcher.find_longest_match" title="difflib.SequenceMatcher.find_longest_match"><code class="xref py py-meth docutils literal notranslate"><span class="pre">find_longest_match()</span></code></a> メソッドの <em>isjunk</em> 引数の説明をご覧ください。</p>
+<p class="translated"><a class="reference internal" href="#difflib.Differ" title="difflib.Differ"><code class="xref py py-class docutils literal notranslate"><span class="pre">Differ</span></code></a> オブジェクトは、以下の1つのメソッドを通して利用されます。（差分を生成します）:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="difflib.Differ.compare">
+<span class="sig-name descname"><span class="pre">compare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#difflib.Differ.compare" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">文字列からなる2つのシーケンスを比較し、差分（を表す文字列からなるシーケンス）を生成します。</p>
+<p class="translated">各シーケンスの要素は、改行で終わる独立した単一行からなる文字列でなければなりません。そのようなシーケンスは、ファイル風オブジェクトの <a class="reference internal" href="io.html#io.IOBase.readlines" title="io.IOBase.readlines"><code class="xref py py-meth docutils literal notranslate"><span class="pre">readlines()</span></code></a> メソッドによって得ることができます。（得られる）差分は改行文字で終了する文字列のシーケンスとして得られ、ファイル風オブジェクトの <a class="reference internal" href="io.html#io.IOBase.writelines" title="io.IOBase.writelines"><code class="xref py py-meth docutils literal notranslate"><span class="pre">writelines()</span></code></a> メソッドによって出力できる形になっています。</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="differ-example">
+<span id="differ-examples"></span><h2 class="untranslated">Differ example<a class="headerlink" href="#differ-example" title="Link to this heading">¶</a></h2>
+<p class="untranslated">This example compares two texts. First we set up the texts, sequences of
+individual single-line strings ending with newlines (such sequences can also be
+obtained from the <a class="reference internal" href="io.html#io.IOBase.readlines" title="io.IOBase.readlines"><code class="xref py py-meth docutils literal notranslate"><span class="pre">readlines()</span></code></a> method of file-like objects):</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">text1</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;  1. Beautiful is better than ugly.</span>
+<span class="gp">... </span><span class="s1">  2. Explicit is better than implicit.</span>
+<span class="gp">... </span><span class="s1">  3. Simple is better than complex.</span>
+<span class="gp">... </span><span class="s1">  4. Complex is better than complicated.</span>
+<span class="gp">... </span><span class="s1">&#39;&#39;&#39;</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">len</span><span class="p">(</span><span class="n">text1</span><span class="p">)</span>
+<span class="go">4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">text1</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="go">&#39;\n&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">text2</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;  1. Beautiful is better than ugly.</span>
+<span class="gp">... </span><span class="s1">  3.   Simple is better than complex.</span>
+<span class="gp">... </span><span class="s1">  4. Complicated is better than complex.</span>
+<span class="gp">... </span><span class="s1">  5. Flat is better than nested.</span>
+<span class="gp">... </span><span class="s1">&#39;&#39;&#39;</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(</span><span class="n">keepends</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="translated">次に Differ オブジェクトをインスタンス化します:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="n">Differ</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="translated">注意:  <a class="reference internal" href="#difflib.Differ" title="difflib.Differ"><code class="xref py py-class docutils literal notranslate"><span class="pre">Differ</span></code></a> オブジェクトをインスタンス化するとき、行 junk と文字 junk をフィルタリングする関数を渡すことができます。詳細は <a class="reference internal" href="#difflib.Differ" title="difflib.Differ"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Differ()</span></code></a> コンストラクタを参照してください。</p>
+<p class="translated">最後に、2つを比較します:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">compare</span><span class="p">(</span><span class="n">text1</span><span class="p">,</span> <span class="n">text2</span><span class="p">))</span>
+</pre></div>
+</div>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">result</span></code> は文字列のリストなので、pretty-printしてみましょう:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">pprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="go">[&#39;    1. Beautiful is better than ugly.\n&#39;,</span>
+<span class="go"> &#39;-   2. Explicit is better than implicit.\n&#39;,</span>
+<span class="go"> &#39;-   3. Simple is better than complex.\n&#39;,</span>
+<span class="go"> &#39;+   3.   Simple is better than complex.\n&#39;,</span>
+<span class="go"> &#39;?     ++\n&#39;,</span>
+<span class="go"> &#39;-   4. Complex is better than complicated.\n&#39;,</span>
+<span class="go"> &#39;?            ^                     ---- ^\n&#39;,</span>
+<span class="go"> &#39;+   4. Complicated is better than complex.\n&#39;,</span>
+<span class="go"> &#39;?           ++++ ^                      ^\n&#39;,</span>
+<span class="go"> &#39;+   5. Flat is better than nested.\n&#39;]</span>
+</pre></div>
+</div>
+<p class="translated">これは、複数行の文字列として、次のように出力されます:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="go">    1. Beautiful is better than ugly.</span>
+<span class="go">-   2. Explicit is better than implicit.</span>
+<span class="go">-   3. Simple is better than complex.</span>
+<span class="go">+   3.   Simple is better than complex.</span>
+<span class="go">?     ++</span>
+<span class="go">-   4. Complex is better than complicated.</span>
+<span class="go">?            ^                     ---- ^</span>
+<span class="go">+   4. Complicated is better than complex.</span>
+<span class="go">?           ++++ ^                      ^</span>
+<span class="go">+   5. Flat is better than nested.</span>
+</pre></div>
+</div>
+</section>
+<section id="a-command-line-interface-to-difflib">
+<span id="difflib-interface"></span><h2 class="translated">difflib のコマンドラインインターフェース<a class="headerlink" href="#a-command-line-interface-to-difflib" title="Link to this heading">¶</a></h2>
+<p class="untranslated">This example shows how to use difflib to create a <code class="docutils literal notranslate"><span class="pre">diff</span></code>-like utility.</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; Command-line interface to difflib.py providing diffs in four formats:</span>
+
+<span class="sd">* ndiff:    lists every line and highlights interline changes.</span>
+<span class="sd">* context:  highlights clusters of changes in a before/after format.</span>
+<span class="sd">* unified:  highlights clusters of changes in an inline format.</span>
+<span class="sd">* html:     generates side by side comparison with change highlights.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span><span class="o">,</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">difflib</span><span class="o">,</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dt</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">file_mtime</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">st_mtime</span><span class="p">,</span>
+                                  <span class="n">dt</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="n">astimezone</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Produce a context format diff (default)&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-u&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Produce a unified format diff&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-m&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Produce HTML side by side diff &#39;</span>
+                             <span class="s1">&#39;(can use -c and -l in conjunction)&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-n&#39;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Produce a ndiff format diff&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-l&#39;</span><span class="p">,</span> <span class="s1">&#39;--lines&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Set number of context lines (default 3)&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;fromfile&#39;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;tofile&#39;</span><span class="p">)</span>
+    <span class="n">options</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+    <span class="n">n</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">lines</span>
+    <span class="n">fromfile</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">fromfile</span>
+    <span class="n">tofile</span> <span class="o">=</span> <span class="n">options</span><span class="o">.</span><span class="n">tofile</span>
+
+    <span class="n">fromdate</span> <span class="o">=</span> <span class="n">file_mtime</span><span class="p">(</span><span class="n">fromfile</span><span class="p">)</span>
+    <span class="n">todate</span> <span class="o">=</span> <span class="n">file_mtime</span><span class="p">(</span><span class="n">tofile</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fromfile</span><span class="p">)</span> <span class="k">as</span> <span class="n">ff</span><span class="p">:</span>
+        <span class="n">fromlines</span> <span class="o">=</span> <span class="n">ff</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">tofile</span><span class="p">)</span> <span class="k">as</span> <span class="n">tf</span><span class="p">:</span>
+        <span class="n">tolines</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">u</span><span class="p">:</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">difflib</span><span class="o">.</span><span class="n">unified_diff</span><span class="p">(</span><span class="n">fromlines</span><span class="p">,</span> <span class="n">tolines</span><span class="p">,</span> <span class="n">fromfile</span><span class="p">,</span> <span class="n">tofile</span><span class="p">,</span> <span class="n">fromdate</span><span class="p">,</span> <span class="n">todate</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">options</span><span class="o">.</span><span class="n">n</span><span class="p">:</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">difflib</span><span class="o">.</span><span class="n">ndiff</span><span class="p">(</span><span class="n">fromlines</span><span class="p">,</span> <span class="n">tolines</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">options</span><span class="o">.</span><span class="n">m</span><span class="p">:</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">difflib</span><span class="o">.</span><span class="n">HtmlDiff</span><span class="p">()</span><span class="o">.</span><span class="n">make_file</span><span class="p">(</span><span class="n">fromlines</span><span class="p">,</span><span class="n">tolines</span><span class="p">,</span><span class="n">fromfile</span><span class="p">,</span><span class="n">tofile</span><span class="p">,</span><span class="n">context</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">c</span><span class="p">,</span><span class="n">numlines</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">difflib</span><span class="o">.</span><span class="n">context_diff</span><span class="p">(</span><span class="n">fromlines</span><span class="p">,</span> <span class="n">tolines</span><span class="p">,</span> <span class="n">fromfile</span><span class="p">,</span> <span class="n">tofile</span><span class="p">,</span> <span class="n">fromdate</span><span class="p">,</span> <span class="n">todate</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">diff</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="ndiff-example">
+<h2 class="untranslated">ndiff example<a class="headerlink" href="#ndiff-example" title="Link to this heading">¶</a></h2>
+<p class="untranslated">This example shows how to use <a class="reference internal" href="#difflib.ndiff" title="difflib.ndiff"><code class="xref py py-func docutils literal notranslate"><span class="pre">difflib.ndiff()</span></code></a>.</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;ndiff [-q] file1 file2</span>
+<span class="sd">    or</span>
+<span class="sd">ndiff (-r1 | -r2) &lt; ndiff_output &gt; file1_or_file2</span>
+
+<span class="sd">Print a human-friendly file difference report to stdout.  Both inter-</span>
+<span class="sd">and intra-line differences are noted.  In the second form, recreate file1</span>
+<span class="sd">(-r1) or file2 (-r2) on stdout, from an ndiff report on stdin.</span>
+
+<span class="sd">In the first form, if -q (&quot;quiet&quot;) is not specified, the first two lines</span>
+<span class="sd">of output are</span>
+
+<span class="sd">-: file1</span>
+<span class="sd">+: file2</span>
+
+<span class="sd">Each remaining line begins with a two-letter code:</span>
+
+<span class="sd">    &quot;- &quot;    line unique to file1</span>
+<span class="sd">    &quot;+ &quot;    line unique to file2</span>
+<span class="sd">    &quot;  &quot;    line common to both files</span>
+<span class="sd">    &quot;? &quot;    line not present in either input file</span>
+
+<span class="sd">Lines beginning with &quot;? &quot; attempt to guide the eye to intraline</span>
+<span class="sd">differences, and were not present in either input file.  These lines can be</span>
+<span class="sd">confusing if the source files contain tab characters.</span>
+
+<span class="sd">The first file can be recovered by retaining only lines that begin with</span>
+<span class="sd">&quot;  &quot; or &quot;- &quot;, and deleting those 2-character prefixes; use ndiff with -r1.</span>
+
+<span class="sd">The second file can be recovered similarly, but by retaining only &quot;  &quot; and</span>
+<span class="sd">&quot;+ &quot; lines; use ndiff with -r2; or, on Unix, the second file can be</span>
+<span class="sd">recovered by piping the output through</span>
+
+<span class="sd">    sed -n &#39;/^[+ ] /s/^..//p&#39;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__version__</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">0</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">difflib</span><span class="o">,</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fail</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="o">.</span><span class="n">write</span>
+    <span class="n">out</span><span class="p">(</span><span class="n">msg</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">out</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">0</span>
+
+<span class="c1"># open a file &amp; return the file object; gripe and return 0 if it</span>
+<span class="c1"># couldn&#39;t be opened</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fopen</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">IOError</span> <span class="k">as</span> <span class="n">detail</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fail</span><span class="p">(</span><span class="s2">&quot;couldn&#39;t open &quot;</span> <span class="o">+</span> <span class="n">fname</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">detail</span><span class="p">))</span>
+
+<span class="c1"># open two files &amp; spray the diff to stdout; return false iff a problem</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fcompare</span><span class="p">(</span><span class="n">f1name</span><span class="p">,</span> <span class="n">f2name</span><span class="p">):</span>
+    <span class="n">f1</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">f1name</span><span class="p">)</span>
+    <span class="n">f2</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="n">f2name</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">f1</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">f2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="n">a</span> <span class="o">=</span> <span class="n">f1</span><span class="o">.</span><span class="n">readlines</span><span class="p">();</span> <span class="n">f1</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">f2</span><span class="o">.</span><span class="n">readlines</span><span class="p">();</span> <span class="n">f2</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">difflib</span><span class="o">.</span><span class="n">ndiff</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="mi">1</span>
+
+<span class="c1"># crack args (sys.argv[1:] is normal) &amp; compare;</span>
+<span class="c1"># return false iff a problem</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">getopt</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">opts</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">getopt</span><span class="o">.</span><span class="n">getopt</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="s2">&quot;qr:&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">getopt</span><span class="o">.</span><span class="n">error</span> <span class="k">as</span> <span class="n">detail</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fail</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">detail</span><span class="p">))</span>
+    <span class="n">noisy</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">qseen</span> <span class="o">=</span> <span class="n">rseen</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">opt</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">opts</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">opt</span> <span class="o">==</span> <span class="s2">&quot;-q&quot;</span><span class="p">:</span>
+            <span class="n">qseen</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">noisy</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">elif</span> <span class="n">opt</span> <span class="o">==</span> <span class="s2">&quot;-r&quot;</span><span class="p">:</span>
+            <span class="n">rseen</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">whichfile</span> <span class="o">=</span> <span class="n">val</span>
+    <span class="k">if</span> <span class="n">qseen</span> <span class="ow">and</span> <span class="n">rseen</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fail</span><span class="p">(</span><span class="s2">&quot;can&#39;t specify both -q and -r&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rseen</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">fail</span><span class="p">(</span><span class="s2">&quot;no args allowed with -r option&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">whichfile</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;2&quot;</span><span class="p">):</span>
+            <span class="n">restore</span><span class="p">(</span><span class="n">whichfile</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">fail</span><span class="p">(</span><span class="s2">&quot;-r value must be 1 or 2&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fail</span><span class="p">(</span><span class="s2">&quot;need 2 filename args&quot;</span><span class="p">)</span>
+    <span class="n">f1name</span><span class="p">,</span> <span class="n">f2name</span> <span class="o">=</span> <span class="n">args</span>
+    <span class="k">if</span> <span class="n">noisy</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;-:&#39;</span><span class="p">,</span> <span class="n">f1name</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+:&#39;</span><span class="p">,</span> <span class="n">f2name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fcompare</span><span class="p">(</span><span class="n">f1name</span><span class="p">,</span> <span class="n">f2name</span><span class="p">)</span>
+
+<span class="c1"># read ndiff output from stdin, and print file1 (which==&#39;1&#39;) or</span>
+<span class="c1"># file2 (which==&#39;2&#39;) to stdout</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">restore</span><span class="p">(</span><span class="n">which</span><span class="p">):</span>
+    <span class="n">restored</span> <span class="o">=</span> <span class="n">difflib</span><span class="o">.</span><span class="n">restore</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdin</span><span class="o">.</span><span class="n">readlines</span><span class="p">(),</span> <span class="n">which</span><span class="p">)</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">restored</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">difflib</span></code> --- 差分の計算の補助</a><ul>
+<li><a class="reference internal" href="#sequencematcher-objects">SequenceMatcher objects</a></li>
+<li><a class="reference internal" href="#sequencematcher-examples">SequenceMatcher examples</a></li>
+<li><a class="reference internal" href="#differ-objects">Differ objects</a></li>
+<li><a class="reference internal" href="#differ-example">Differ example</a></li>
+<li><a class="reference internal" href="#a-command-line-interface-to-difflib">difflib のコマンドラインインターフェース</a></li>
+<li><a class="reference internal" href="#ndiff-example">ndiff example</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="re.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">re</span></code> --- 正規表現操作</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="textwrap.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">textwrap</span></code> --- テキストの折り返しと詰め込み</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/difflib.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/difflib.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/difflib.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="textwrap.html" title="textwrap --- テキストの折り返しと詰め込み"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="re.html" title="re --- 正規表現操作"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="text.html" >テキスト処理サービス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">difflib</span></code> --- 差分の計算の補助</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

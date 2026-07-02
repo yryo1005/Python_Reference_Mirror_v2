@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="リストオブジェクト" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/c-api/list.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_c-api_list_b53e1172.png" />
+<meta property="og:image:alt" content="" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>リストオブジェクト &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="Dictionary Objects" href="dict.html" />
+    <link rel="prev" title="タプルオブジェクト (tuple object)" href="tuple.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/c-api/list.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="tuple.html"
+                          title="前の章へ">タプルオブジェクト (tuple object)</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="dict.html"
+                          title="次の章へ">Dictionary Objects</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "c-api/list.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/c-api/list.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/c-api/list.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="dict.html" title="Dictionary Objects"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="tuple.html" title="タプルオブジェクト (tuple object)"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API reference manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" accesskey="U">具象オブジェクト (concrete object) レイヤ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">リストオブジェクト</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="list-objects">
+<span id="listobjects"></span><h1 class="translated">リストオブジェクト<a class="headerlink" href="#list-objects" title="Link to this heading">¶</a></h1>
+<dl class="c type" id="index-0">
+<dt class="sig sig-object c" id="c.PyListObject">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyListObject</span></span></span><a class="headerlink" href="#c.PyListObject" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated">この <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyObject</span></code></a> のサブタイプは Python のリストオブジェクトを表現します。</p>
+</dd></dl>
+
+<dl class="c var">
+<dt class="sig sig-object c" id="c.PyList_Type">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><span class="n"><span class="pre">PyTypeObject</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyList_Type</span></span></span><a class="headerlink" href="#c.PyList_Type" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><p class="translated">この <a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyTypeObject</span></code></a> のインスタンスは Python のリスト型を表現します。これは Python レイヤにおける <a class="reference internal" href="../library/stdtypes.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> と同じオブジェクトです。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_Check">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyList_Check</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">p</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_Check" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="threadsafety threadsafety-atomic"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-atomic"><span class="std std-ref">Atomic</span></a>.</em><p class="translated"><em>p</em> がリストオブジェクトかリスト型のサブタイプのインスタンスである場合に真を返します。この関数は常に成功します。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_CheckExact">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyList_CheckExact</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">p</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_CheckExact" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="threadsafety threadsafety-atomic"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-atomic"><span class="std std-ref">Atomic</span></a>.</em><p class="translated"><em>p</em> がリストオブジェクトだがリスト型のサブタイプのインスタンスでない場合に真を返します。この関数は常に成功します。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_New">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">PyList_New</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="intro.html#c.Py_ssize_t" title="Py_ssize_t"><span class="n"><span class="pre">Py_ssize_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">len</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_New" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="refcount return_new_ref">戻り値: 新しい参照。</em><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-atomic"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-atomic"><span class="std std-ref">Atomic</span></a>.</em><p class="translated">サイズが <em>len</em> 新たなリストオブジェクトを返します。
+失敗すると <code class="docutils literal notranslate"><span class="pre">NULL</span></code> を返します。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">If <em>len</em> is greater than zero, the returned list object's items are
+set to <code class="docutils literal notranslate"><span class="pre">NULL</span></code>. Thus you cannot use abstract API functions such as
+<a class="reference internal" href="sequence.html#c.PySequence_SetItem" title="PySequence_SetItem"><code class="xref c c-func docutils literal notranslate"><span class="pre">PySequence_SetItem()</span></code></a> or expose the object to Python code before
+setting all items to a real object with <a class="reference internal" href="#c.PyList_SetItem" title="PyList_SetItem"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyList_SetItem()</span></code></a> or
+<a class="reference internal" href="#c.PyList_SET_ITEM" title="PyList_SET_ITEM"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyList_SET_ITEM()</span></code></a>. The following APIs are safe APIs before
+the list is fully initialized: <code class="xref c c-func docutils literal notranslate"><span class="pre">PyList_SetItem()</span></code> and <code class="xref c c-func docutils literal notranslate"><span class="pre">PyList_SET_ITEM()</span></code>.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_Size">
+<a class="reference internal" href="intro.html#c.Py_ssize_t" title="Py_ssize_t"><span class="n"><span class="pre">Py_ssize_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyList_Size</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_Size" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-atomic"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-atomic"><span class="std std-ref">Atomic</span></a>.</em><p class="translated" id="index-1">リストオブジェクト <em>list</em> の長さを返します; リストオブジェクトにおける <code class="docutils literal notranslate"><span class="pre">len(list)</span></code> と同じです。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_GET_SIZE">
+<a class="reference internal" href="intro.html#c.Py_ssize_t" title="Py_ssize_t"><span class="n"><span class="pre">Py_ssize_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyList_GET_SIZE</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_GET_SIZE" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="threadsafety threadsafety-atomic"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-atomic"><span class="std std-ref">Atomic</span></a>.</em><p class="translated"><a class="reference internal" href="#c.PyList_Size" title="PyList_Size"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyList_Size()</span></code></a> に似ていますが、エラーチェックを行いません。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_GetItemRef">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">PyList_GetItemRef</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">list</span></span>, <a class="reference internal" href="intro.html#c.Py_ssize_t" title="Py_ssize_t"><span class="n"><span class="pre">Py_ssize_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_GetItemRef" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="refcount return_new_ref">戻り値: 新しい参照。</em><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a> (バージョン 3.13 より).</em><em class="threadsafety threadsafety-atomic"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-atomic"><span class="std std-ref">Atomic</span></a>.</em><p class="untranslated">Return the object at position <em>index</em> in the list pointed to by <em>list</em>.  The
+position must be non-negative; indexing from the end of the list is not
+supported.  If <em>index</em> is out of bounds (<code class="code docutils literal notranslate"><span class="pre">&lt;0</span> <span class="pre">or</span> <span class="pre">&gt;=len(list)</span></code>),
+return <code class="docutils literal notranslate"><span class="pre">NULL</span></code> and set an <a class="reference internal" href="../library/exceptions.html#IndexError" title="IndexError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">IndexError</span></code></a> exception.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_GetItem">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">PyList_GetItem</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">list</span></span>, <a class="reference internal" href="intro.html#c.Py_ssize_t" title="Py_ssize_t"><span class="n"><span class="pre">Py_ssize_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_GetItem" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="refcount return_borrowed_ref">戻り値: 借用参照。</em><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-compatible"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-compatible"><span class="std std-ref">Safe to call from multiple threads with external synchronization only</span></a>.</em><p class="untranslated">Like <a class="reference internal" href="#c.PyList_GetItemRef" title="PyList_GetItemRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyList_GetItemRef()</span></code></a>, but returns a
+<a class="reference internal" href="../glossary.html#term-borrowed-reference"><span class="xref std std-term">borrowed reference</span></a> instead of a <a class="reference internal" href="../glossary.html#term-strong-reference"><span class="xref std std-term">strong reference</span></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">In the <a class="reference internal" href="../glossary.html#term-free-threaded-build"><span class="xref std std-term">free-threaded build</span></a>, the returned
+<a class="reference internal" href="../glossary.html#term-borrowed-reference"><span class="xref std std-term">borrowed reference</span></a> may become invalid if another thread modifies
+the list concurrently. Prefer <a class="reference internal" href="#c.PyList_GetItemRef" title="PyList_GetItemRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyList_GetItemRef()</span></code></a>, which returns
+a <a class="reference internal" href="../glossary.html#term-strong-reference"><span class="xref std std-term">strong reference</span></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_GET_ITEM">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">PyList_GET_ITEM</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">list</span></span>, <a class="reference internal" href="intro.html#c.Py_ssize_t" title="Py_ssize_t"><span class="n"><span class="pre">Py_ssize_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">i</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_GET_ITEM" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="refcount return_borrowed_ref">戻り値: 借用参照。</em><em class="threadsafety threadsafety-compatible"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-compatible"><span class="std std-ref">Safe to call from multiple threads with external synchronization only</span></a>.</em><p class="translated"><a class="reference internal" href="#c.PyList_GetItem" title="PyList_GetItem"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyList_GetItem()</span></code></a> に似ていますが、エラーチェックを行いません。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">In the <a class="reference internal" href="../glossary.html#term-free-threaded-build"><span class="xref std std-term">free-threaded build</span></a>, the returned
+<a class="reference internal" href="../glossary.html#term-borrowed-reference"><span class="xref std std-term">borrowed reference</span></a> may become invalid if another thread modifies
+the list concurrently. Prefer <a class="reference internal" href="#c.PyList_GetItemRef" title="PyList_GetItemRef"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyList_GetItemRef()</span></code></a>, which returns
+a <a class="reference internal" href="../glossary.html#term-strong-reference"><span class="xref std std-term">strong reference</span></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_SetItem">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyList_SetItem</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">list</span></span>, <a class="reference internal" href="intro.html#c.Py_ssize_t" title="Py_ssize_t"><span class="n"><span class="pre">Py_ssize_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">index</span></span>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">item</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_SetItem" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-atomic"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-atomic"><span class="std std-ref">Atomic</span></a>.</em><p class="translated">リストオブジェクト内の位置 <em>index</em> に、オブジェクト <em>item</em> を挿入します。
+成功した場合には <code class="docutils literal notranslate"><span class="pre">0</span></code> を返します。
+<em>index</em> が範囲を越えている場合、 <code class="docutils literal notranslate"><span class="pre">-1</span></code> を返して <a class="reference internal" href="../library/exceptions.html#IndexError" title="IndexError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">IndexError</span></code></a> をセットします。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated">この関数は <em>item</em> への参照を &quot;盗み取り&quot; ます。また、変更先のインデクスにすでに別の要素が入っている場合、その要素に対する参照を放棄します。</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_SET_ITEM">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyList_SET_ITEM</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">list</span></span>, <a class="reference internal" href="intro.html#c.Py_ssize_t" title="Py_ssize_t"><span class="n"><span class="pre">Py_ssize_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">i</span></span>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">o</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_SET_ITEM" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="threadsafety threadsafety-compatible"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-compatible"><span class="std std-ref">Safe to call from multiple threads with external synchronization only</span></a>.</em><p class="translated"><a class="reference internal" href="#c.PyList_SetItem" title="PyList_SetItem"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyList_SetItem()</span></code></a> をマクロによる実装で、エラーチェックを行いません。このマクロは、新たなリストのまだ要素を入れたことのない位置に要素を入れるときにのみ使います。</p>
+<p class="untranslated">Bounds checking is performed as an assertion if Python is built in
+<a class="reference internal" href="../using/configure.html#debug-build"><span class="std std-ref">debug mode</span></a> or <a class="reference internal" href="../using/configure.html#cmdoption-with-assertions"><code class="xref std std-option docutils literal notranslate"><span class="pre">with</span> <span class="pre">assertions</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated">このマクロは <em>item</em> への参照を &quot;盗み取り&quot; ます。また、 <a class="reference internal" href="#c.PyList_SetItem" title="PyList_SetItem"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyList_SetItem()</span></code></a> と違って、要素の置き換えが生じても置き換えられるオブジェクトへの参照を放棄 <em>しません</em> ; その結果、 <em>list</em> 中の位置 <em>i</em> で参照されていたオブジェクトがメモリリークを引き起こします。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">In the <a class="reference internal" href="../glossary.html#term-free-threaded-build"><span class="xref std std-term">free-threaded build</span></a>, this macro has no internal
+synchronization. It is normally only used to fill in new lists where no
+other thread has a reference to the list. If the list may be shared,
+use <a class="reference internal" href="#c.PyList_SetItem" title="PyList_SetItem"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyList_SetItem()</span></code></a> instead, which uses a <a class="reference internal" href="../glossary.html#term-per-object-lock"><span class="xref std std-term">per-object
+lock</span></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_Insert">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyList_Insert</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">list</span></span>, <a class="reference internal" href="intro.html#c.Py_ssize_t" title="Py_ssize_t"><span class="n"><span class="pre">Py_ssize_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">index</span></span>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">item</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_Insert" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-shared"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-shared"><span class="std std-ref">Safe for concurrent use on the same object</span></a>.</em><p class="translated">要素 <em>item</em> をリスト <em>list</em> のインデックス <em>index</em> の前に挿入します。成功すると <code class="docutils literal notranslate"><span class="pre">0</span></code> を返します。失敗すると <code class="docutils literal notranslate"><span class="pre">-1</span></code> を返し、例外をセットします。<code class="docutils literal notranslate"><span class="pre">list.insert(index,</span> <span class="pre">item)</span></code> に類似した機能です。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_Append">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyList_Append</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">list</span></span>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">item</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_Append" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-atomic"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-atomic"><span class="std std-ref">Atomic</span></a>.</em><p class="translated">オブジェクト <em>item</em> を <em>list</em> の末尾に追加します。成功すると <code class="docutils literal notranslate"><span class="pre">0</span></code> を返します; 失敗すると <code class="docutils literal notranslate"><span class="pre">-1</span></code> を返し、例外をセットします。<code class="docutils literal notranslate"><span class="pre">list.append(item)</span></code>  に類似した機能です。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_GetSlice">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">PyList_GetSlice</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">list</span></span>, <a class="reference internal" href="intro.html#c.Py_ssize_t" title="Py_ssize_t"><span class="n"><span class="pre">Py_ssize_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">low</span></span>, <a class="reference internal" href="intro.html#c.Py_ssize_t" title="Py_ssize_t"><span class="n"><span class="pre">Py_ssize_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">high</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_GetSlice" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="refcount return_new_ref">戻り値: 新しい参照。</em><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-atomic"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-atomic"><span class="std std-ref">Atomic</span></a>.</em><p class="translated"><em>list</em> 内の、<em>low</em> から <em>high</em> <em>までの</em> オブジェクトからなるリストを返します。
+失敗すると <code class="docutils literal notranslate"><span class="pre">NULL</span></code> を返し、例外をセットします。
+<code class="docutils literal notranslate"><span class="pre">list[low:high]</span></code> に類似した機能です。
+ただし、リストの末尾からのインデックスはサポートされていません。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_SetSlice">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyList_SetSlice</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">list</span></span>, <a class="reference internal" href="intro.html#c.Py_ssize_t" title="Py_ssize_t"><span class="n"><span class="pre">Py_ssize_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">low</span></span>, <a class="reference internal" href="intro.html#c.Py_ssize_t" title="Py_ssize_t"><span class="n"><span class="pre">Py_ssize_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">high</span></span>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">itemlist</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_SetSlice" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-shared"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-shared"><span class="std std-ref">Safe for concurrent use on the same object</span></a>.</em><p class="translated"><em>low</em> から <em>high</em> までの <em>list</em> のスライスを、 <em>itemlist</em> の内容にします。
+<code class="docutils literal notranslate"><span class="pre">list[low:high]</span> <span class="pre">=</span> <span class="pre">itemlist</span></code> と類似の機能です。
+<em>itemlist</em> は <code class="docutils literal notranslate"><span class="pre">NULL</span></code> でもよく、空リストの代入 (指定スライスの削除) になります。
+成功した場合には <code class="docutils literal notranslate"><span class="pre">0</span></code> を、失敗した場合には <code class="docutils literal notranslate"><span class="pre">-1</span></code> を返します。
+ただし、リストの末尾からのインデックスはサポートされていません。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">In the <a class="reference internal" href="../glossary.html#term-free-threaded-build"><span class="xref std std-term">free-threaded build</span></a>, when <em>itemlist</em> is a <a class="reference internal" href="../library/stdtypes.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>,
+both <em>list</em> and <em>itemlist</em> are locked for the duration of the operation.
+For other iterables (or <code class="docutils literal notranslate"><span class="pre">NULL</span></code>), only <em>list</em> is locked.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_Extend">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyList_Extend</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">list</span></span>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">iterable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_Extend" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="threadsafety threadsafety-shared"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-shared"><span class="std std-ref">Safe for concurrent use on the same object</span></a>.</em><p class="untranslated">Extend <em>list</em> with the contents of <em>iterable</em>.  This is the same as
+<code class="docutils literal notranslate"><span class="pre">PyList_SetSlice(list,</span> <span class="pre">PY_SSIZE_T_MAX,</span> <span class="pre">PY_SSIZE_T_MAX,</span> <span class="pre">iterable)</span></code>
+and analogous to <code class="docutils literal notranslate"><span class="pre">list.extend(iterable)</span></code> or <code class="docutils literal notranslate"><span class="pre">list</span> <span class="pre">+=</span> <span class="pre">iterable</span></code>.</p>
+<p class="untranslated">Raise an exception and return <code class="docutils literal notranslate"><span class="pre">-1</span></code> if <em>list</em> is not a <a class="reference internal" href="../library/stdtypes.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>
+object. Return 0 on success.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">In the <a class="reference internal" href="../glossary.html#term-free-threaded-build"><span class="xref std std-term">free-threaded build</span></a>, when <em>iterable</em> is a <a class="reference internal" href="../library/stdtypes.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>,
+<a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>, <a class="reference internal" href="../library/stdtypes.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>, or dict view, both <em>list</em> and <em>iterable</em>
+(or its underlying dict) are locked for the duration of the operation.
+For other iterables, only <em>list</em> is locked; <em>iterable</em> may be
+concurrently modified by another thread.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_Clear">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyList_Clear</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_Clear" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="threadsafety threadsafety-atomic"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-atomic"><span class="std std-ref">Atomic</span></a>.</em><p class="untranslated">Remove all items from <em>list</em>.  This is the same as
+<code class="docutils literal notranslate"><span class="pre">PyList_SetSlice(list,</span> <span class="pre">0,</span> <span class="pre">PY_SSIZE_T_MAX,</span> <span class="pre">NULL)</span></code> and analogous to
+<code class="docutils literal notranslate"><span class="pre">list.clear()</span></code> or <code class="docutils literal notranslate"><span class="pre">del</span> <span class="pre">list[:]</span></code>.</p>
+<p class="untranslated">Raise an exception and return <code class="docutils literal notranslate"><span class="pre">-1</span></code> if <em>list</em> is not a <a class="reference internal" href="../library/stdtypes.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>
+object.  Return 0 on success.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_Sort">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyList_Sort</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_Sort" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-shared"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-shared"><span class="std std-ref">Safe for concurrent use on the same object</span></a>.</em><p class="translated"><em>list</em> の内容をインプレースでソートします。成功した場合には <code class="docutils literal notranslate"><span class="pre">0</span></code> を、失敗した場合には <code class="docutils literal notranslate"><span class="pre">-1</span></code> を返します。<code class="docutils literal notranslate"><span class="pre">list.sort()</span></code> と同じです。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">In the <a class="reference internal" href="../glossary.html#term-free-threaded-build"><span class="xref std std-term">free-threaded build</span></a>, element comparison via
+<a class="reference internal" href="../reference/datamodel.html#object.__lt__" title="object.__lt__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__lt__()</span></code></a> can execute arbitrary Python code, during which
+the <a class="reference internal" href="../glossary.html#term-per-object-lock"><span class="xref std std-term">per-object lock</span></a> may be temporarily released. For built-in
+types (<a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="../library/functions.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference internal" href="../library/functions.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>), the lock is not
+released during comparison.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_Reverse">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyList_Reverse</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_Reverse" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-shared"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-shared"><span class="std std-ref">Safe for concurrent use on the same object</span></a>.</em><p class="translated"><em>list</em> の要素をインプレースで反転します。成功した場合には <code class="docutils literal notranslate"><span class="pre">0</span></code> を、失敗した場合には <code class="docutils literal notranslate"><span class="pre">-1</span></code> を返します。<code class="docutils literal notranslate"><span class="pre">list.reverse()</span></code> と同じです。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyList_AsTuple">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">PyList_AsTuple</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">list</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyList_AsTuple" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="refcount return_new_ref">戻り値: 新しい参照。</em><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-atomic"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-atomic"><span class="std std-ref">Atomic</span></a>.</em><p class="translated" id="index-2"><em>list</em> の内容が入った新たなタプルオブジェクトを返します; <code class="docutils literal notranslate"><span class="pre">tuple(list)</span></code> と同じです。</p>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="tuple.html"
+                          title="前の章へ">タプルオブジェクト (tuple object)</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="dict.html"
+                          title="次の章へ">Dictionary Objects</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "c-api/list.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/c-api/list.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/c-api/list.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="dict.html" title="Dictionary Objects"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="tuple.html" title="タプルオブジェクト (tuple object)"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API reference manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" >具象オブジェクト (concrete object) レイヤ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">リストオブジェクト</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

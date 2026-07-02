@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="xml.sax --- SAX2 バーサーのサポート" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/xml.sax.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/xml/sax/__init__.py The xml.sax package provides a number of modules which implement the Simple API for XML (SAX) interface for Python. The package itself provides the SAX exceptions an..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_xml.sax_d8556638.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/xml/sax/__init__.py The xml.sax package provides a number of modules which implement the Simple API for XML (SAX) interface for Python. The package itself provides the SAX exceptions an..." />
+<meta name="description" content="ソースコード: Lib/xml/sax/__init__.py The xml.sax package provides a number of modules which implement the Simple API for XML (SAX) interface for Python. The package itself provides the SAX exceptions an..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>xml.sax --- SAX2 バーサーのサポート &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="xml.sax.handler --- SAX ハンドラーの基底クラス" href="xml.sax.handler.html" />
+    <link rel="prev" title="xml.dom.pulldom --- 部分的な DOM ツリー構築のサポート" href="xml.dom.pulldom.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/xml.sax.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax</span></code> --- SAX2 バーサーのサポート</a><ul>
+<li><a class="reference internal" href="#saxexception-objects">SAXException オブジェクト</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="xml.dom.pulldom.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.dom.pulldom</span></code> --- 部分的な DOM ツリー構築のサポート</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="xml.sax.handler.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.handler</span></code> --- SAX ハンドラーの基底クラス</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/xml.sax.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/xml.sax.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/xml.sax.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="xml.sax.handler.html" title="xml.sax.handler --- SAX ハンドラーの基底クラス"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="xml.dom.pulldom.html" title="xml.dom.pulldom --- 部分的な DOM ツリー構築のサポート"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="markup.html" accesskey="U">構造化マークアップツール</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax</span></code> --- SAX2 バーサーのサポート</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-xml.sax">
+<span id="xml-sax-support-for-sax2-parsers"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax</span></code> --- SAX2 バーサーのサポート<a class="headerlink" href="#module-xml.sax" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/xml/sax/__init__.py">Lib/xml/sax/__init__.py</a></p>
+<hr class="docutils" />
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax</span></code> package provides a number of modules which implement the
+Simple API for XML (SAX) interface for Python.  The package itself provides the
+SAX exceptions and the convenience functions which will be most used by users of
+the SAX API.</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">If you need to parse untrusted or unauthenticated data, see
+<a class="reference internal" href="xml.html#xml-security"><span class="std std-ref">XML security</span></a>.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7.1 で変更: </span>SAXパーサーは、セキュリティーを向上させるために、デフォルトで一般的な外部エンティティーを処理しなくなりました。以前は、パーサーは、DTDおよびエンティティ用にファイルシステムからリモートファイルまたはロードされたローカルファイルをフェッチするためのネットワーク接続を作成していました。この機能は parser オブジェクトと(実) 引数 <a class="reference internal" href="xml.sax.handler.html#xml.sax.handler.feature_external_ges" title="xml.sax.handler.feature_external_ges"><code class="xref py py-data docutils literal notranslate"><span class="pre">feature_external_ges</span></code></a> の <a class="reference internal" href="xml.sax.reader.html#xml.sax.xmlreader.XMLReader.setFeature" title="xml.sax.xmlreader.XMLReader.setFeature"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setFeature()</span></code></a> メソッドで再度有効にすることができます。</p>
+</div>
+<p class="translated">その関数群は以下の通りです:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="xml.sax.make_parser">
+<span class="sig-prename descclassname"><span class="pre">xml.sax.</span></span><span class="sig-name descname"><span class="pre">make_parser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parser_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.make_parser" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">SAX <a class="reference internal" href="xml.sax.reader.html#xml.sax.xmlreader.XMLReader" title="xml.sax.xmlreader.XMLReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLReader</span></code></a> オブジェクトを生成し、返します。最初に見つかったパーサーが使用されます。<em>parser_list</em> を与える場合、それは <code class="xref py py-func docutils literal notranslate"><span class="pre">create_parser()</span></code> という名前の関数をもつモジュール名のイテラブルでなければなりません。
+<em>parser_list</em> に列挙されているモジュールは、パーサーのデフォルトリストにあるモジュールよりも先に使われます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.8 で変更: </span><em>parser_list</em> 引数はリストだけでなく、イテラブルでもよくなりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xml.sax.parse">
+<span class="sig-prename descclassname"><span class="pre">xml.sax.</span></span><span class="sig-name descname"><span class="pre">parse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename_or_stream</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_handler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">handler.ErrorHandler()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.parse" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">SAX パーサを生成し、そのパーサをドキュメントの解析に使用します。<em>filename_or_stream</em> として与えられるドキュメントは、ファイル名でもファイルオブジェクトでもかまいません。 <em>handler</em> 引数は SAX <a class="reference internal" href="xml.sax.handler.html#xml.sax.handler.ContentHandler" title="xml.sax.handler.ContentHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContentHandler</span></code></a> のインスタントである必要があります。<em>error_handler</em> が与えられる場合は、 SAX <a class="reference internal" href="xml.sax.handler.html#xml.sax.handler.ErrorHandler" title="xml.sax.handler.ErrorHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorHandler</span></code></a>  のインスタンスである必要があります。この引数を省略した場合、全ての例外に対して <a class="reference internal" href="#xml.sax.SAXParseException" title="xml.sax.SAXParseException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SAXParseException</span></code></a> が発生します。 戻り値はありません。すべての操作は渡される <em>handler</em> によって行われなければなりません。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="xml.sax.parseString">
+<span class="sig-prename descclassname"><span class="pre">xml.sax.</span></span><span class="sig-name descname"><span class="pre">parseString</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_handler</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">handler.ErrorHandler()</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.parseString" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#xml.sax.parse" title="xml.sax.parse"><code class="xref py py-func docutils literal notranslate"><span class="pre">parse()</span></code></a> と同様ですが、こちらは引数で受け取ったバッファ <em>string</em> をパースします。
+<em>string</em> は <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> インスタンスか <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like object</span></a> でなければなりません。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span><a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> インスタンスがサポートされました。</p>
+</div>
+</dd></dl>
+
+<p class="translated">典型的な SAX アプリケーションでは3種類のオブジェクト(リーダ、ハンドラ、入力元)が用いられます。ここで言うリーダとはパーサを指しています。つまり、入力元からバイト列または文字列を読み込み、一連のイベントを発生させるコード片のことです。発生したイベントはハンドラ・オブジェクトに割り振られます。言い換えると、リーダがハンドラのメソッドを呼び出すわけです。つまり、 SAX アプリケーションは、リーダ・オブジェクトを作成し、入力元のオブジェクトを作成するか開き、ハンドラ・オブジェクトを作成し、これら3つのオブジェクトを連携させる必要があります。準備の最終段階では、リーダが呼び出され、入力をパースします。パース中には、入力データからの構造イベントや構文イベントに基づいて、ハンドラ・オブジェクトのメソッドが呼び出されます。</p>
+<p class="untranslated">For these objects, only the interfaces are relevant; they are normally not
+instantiated by the application itself.  Since Python does not have an explicit
+notion of interface, they are formally introduced as classes, but applications
+may use implementations which do not inherit from the provided classes.  The
+<a class="reference internal" href="xml.sax.reader.html#xml.sax.xmlreader.InputSource" title="xml.sax.xmlreader.InputSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">InputSource</span></code></a>, <a class="reference internal" href="xml.sax.reader.html#xml.sax.xmlreader.Locator" title="xml.sax.xmlreader.Locator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Locator</span></code></a>,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">Attributes</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">AttributesNS</span></code>,
+and <a class="reference internal" href="xml.sax.reader.html#xml.sax.xmlreader.XMLReader" title="xml.sax.xmlreader.XMLReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLReader</span></code></a> interfaces are defined in the
+module <a class="reference internal" href="xml.sax.reader.html#module-xml.sax.xmlreader" title="xml.sax.xmlreader: Interface which SAX-compliant XML parsers must implement."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.xmlreader</span></code></a>.  The handler interfaces are defined in
+<a class="reference internal" href="xml.sax.handler.html#module-xml.sax.handler" title="xml.sax.handler: Base classes for SAX event handlers."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.handler</span></code></a>.  For convenience,
+<code class="xref py py-class docutils literal notranslate"><span class="pre">InputSource</span></code> (which is often
+instantiated directly) and the handler classes are also available from
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax</span></code>.  These interfaces are described below.</p>
+<p class="untranslated">In addition to these classes, <code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax</span></code> provides the following exception
+classes.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="xml.sax.SAXException">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">xml.sax.</span></span><span class="sig-name descname"><span class="pre">SAXException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.SAXException" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">XML エラーと警告をカプセル化します。このクラスには XML パーサとアプリケーションで発生するエラーおよび警告の基本的な情報を持たせることができます。また機能追加や地域化のためにサブクラス化することも可能です。なお <a class="reference internal" href="xml.sax.handler.html#xml.sax.handler.ErrorHandler" title="xml.sax.handler.ErrorHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorHandler</span></code></a> で定義されているハンドラがこの例外のインスタンスを受け取ることに注意してください。実際に例外を発生させることは必須でなく、情報のコンテナとして利用されることもあるからです。</p>
+<p class="translated">インスタンスを作成する際 <em>msg</em> はエラー内容を示す可読データにしてください。オプションの <em>exception</em> 引数は <code class="docutils literal notranslate"><span class="pre">None</span></code> にするか、パース用コードで捕捉されて情報として渡される例外にしてください。</p>
+<p class="translated">このクラスはSAX 例外の基底クラスになります。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="xml.sax.SAXParseException">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">xml.sax.</span></span><span class="sig-name descname"><span class="pre">SAXParseException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">locator</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.SAXParseException" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">パースエラー時に発生する <a class="reference internal" href="#xml.sax.SAXException" title="xml.sax.SAXException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SAXException</span></code></a> のサブクラスです。パースエラーに関する情報として、このクラスのインスタンスが SAX <a class="reference internal" href="xml.sax.handler.html#xml.sax.handler.ErrorHandler" title="xml.sax.handler.ErrorHandler"><code class="xref py py-class docutils literal notranslate"><span class="pre">ErrorHandler</span></code></a> インターフェースのメソッドに渡されます。このクラスは <a class="reference internal" href="#xml.sax.SAXException" title="xml.sax.SAXException"><code class="xref py py-class docutils literal notranslate"><span class="pre">SAXException</span></code></a> 同様 SAX <a class="reference internal" href="xml.sax.reader.html#xml.sax.xmlreader.Locator" title="xml.sax.xmlreader.Locator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Locator</span></code></a> インターフェースもサポートしています。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="xml.sax.SAXNotRecognizedException">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">xml.sax.</span></span><span class="sig-name descname"><span class="pre">SAXNotRecognizedException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.SAXNotRecognizedException" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">SAX <a class="reference internal" href="xml.sax.reader.html#xml.sax.xmlreader.XMLReader" title="xml.sax.xmlreader.XMLReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLReader</span></code></a> が認識できない機能やプロパティに遭遇したとき発生させる <a class="reference internal" href="#xml.sax.SAXException" title="xml.sax.SAXException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SAXException</span></code></a> のサブクラスです。 SAX アプリケーションや拡張モジュールにおいて同様の目的にこのクラスを利用することもできます。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="xml.sax.SAXNotSupportedException">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">xml.sax.</span></span><span class="sig-name descname"><span class="pre">SAXNotSupportedException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.SAXNotSupportedException" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">SAX <a class="reference internal" href="xml.sax.reader.html#xml.sax.xmlreader.XMLReader" title="xml.sax.xmlreader.XMLReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">XMLReader</span></code></a> が要求された機能をサポートしていないとき発生させる <a class="reference internal" href="#xml.sax.SAXException" title="xml.sax.SAXException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SAXException</span></code></a> のサブクラスです。 SAX アプリケーションや拡張モジュールにおいて同様の目的にこのクラスを利用することもできます。</p>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<dl class="simple">
+<dt class="translated"><a class="reference external" href="http://www.saxproject.org/">SAX: The Simple API for XML</a></dt><dd><p class="translated">SAX API 定義に関し中心となっているサイトです。Java による実装とオンライン・ドキュメントが提供されています。実装と SAX API の歴史に関する情報のリンクも掲載されています。</p>
+</dd>
+<dt class="translated"><a class="reference internal" href="xml.sax.handler.html#module-xml.sax.handler" title="xml.sax.handler: Base classes for SAX event handlers."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.handler</span></code></a> モジュール</dt><dd><p class="translated">アプリケーションが提供するオブジェクトのインターフェース定義。</p>
+</dd>
+<dt class="translated"><a class="reference internal" href="xml.sax.utils.html#module-xml.sax.saxutils" title="xml.sax.saxutils: Convenience functions and classes for use with SAX."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.saxutils</span></code></a> モジュール</dt><dd><p class="translated">SAX アプリケーション向けの有用な関数群。</p>
+</dd>
+<dt class="translated"><a class="reference internal" href="xml.sax.reader.html#module-xml.sax.xmlreader" title="xml.sax.xmlreader: Interface which SAX-compliant XML parsers must implement."><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.xmlreader</span></code></a> モジュール</dt><dd><p class="translated">パーサが提供するオブジェクトのインターフェース定義。</p>
+</dd>
+</dl>
+</div>
+<section id="saxexception-objects">
+<span id="sax-exception-objects"></span><h2 class="translated">SAXException オブジェクト<a class="headerlink" href="#saxexception-objects" title="Link to this heading">¶</a></h2>
+<p class="translated"><a class="reference internal" href="#xml.sax.SAXException" title="xml.sax.SAXException"><code class="xref py py-class docutils literal notranslate"><span class="pre">SAXException</span></code></a> 例外クラスは以下のメソッドをサポートしています:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.SAXException.getMessage">
+<span class="sig-prename descclassname"><span class="pre">SAXException.</span></span><span class="sig-name descname"><span class="pre">getMessage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.SAXException.getMessage" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">エラー状態を示す可読メッセージを返します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="xml.sax.SAXException.getException">
+<span class="sig-prename descclassname"><span class="pre">SAXException.</span></span><span class="sig-name descname"><span class="pre">getException</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#xml.sax.SAXException.getException" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">カプセル化した例外オブジェクトまたは <code class="docutils literal notranslate"><span class="pre">None</span></code> を返します。</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax</span></code> --- SAX2 バーサーのサポート</a><ul>
+<li><a class="reference internal" href="#saxexception-objects">SAXException オブジェクト</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="xml.dom.pulldom.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.dom.pulldom</span></code> --- 部分的な DOM ツリー構築のサポート</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="xml.sax.handler.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax.handler</span></code> --- SAX ハンドラーの基底クラス</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/xml.sax.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/xml.sax.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/xml.sax.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="xml.sax.handler.html" title="xml.sax.handler --- SAX ハンドラーの基底クラス"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="xml.dom.pulldom.html" title="xml.dom.pulldom --- 部分的な DOM ツリー構築のサポート"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="markup.html" >構造化マークアップツール</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">xml.sax</span></code> --- SAX2 バーサーのサポート</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

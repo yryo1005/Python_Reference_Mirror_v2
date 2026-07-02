@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="winsound --- Windows 用の音声再生インターフェース" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/winsound.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="The winsound module provides access to the basic sound-playing machinery provided by Windows platforms. It includes functions and several constants. Availability: Windows." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_winsound_9e2f4158.png" />
+<meta property="og:image:alt" content="The winsound module provides access to the basic sound-playing machinery provided by Windows platforms. It includes functions and several constants. Availability: Windows." />
+<meta name="description" content="The winsound module provides access to the basic sound-playing machinery provided by Windows platforms. It includes functions and several constants. Availability: Windows." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>winsound --- Windows 用の音声再生インターフェース &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="Unix-specific services" href="unix.html" />
+    <link rel="prev" title="winreg --- Windows レジストリへのアクセス" href="winreg.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/winsound.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="winreg.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">winreg</span></code> --- Windows レジストリへのアクセス</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="unix.html"
+                          title="次の章へ">Unix-specific services</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/winsound.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/winsound.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/winsound.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="unix.html" title="Unix-specific services"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="winreg.html" title="winreg --- Windows レジストリへのアクセス"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="windows.html" accesskey="U">MS Windows 固有のサービス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">winsound</span></code> --- Windows 用の音声再生インターフェース</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-winsound">
+<span id="winsound-sound-playing-interface-for-windows"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">winsound</span></code> --- Windows 用の音声再生インターフェース<a class="headerlink" href="#module-winsound" title="Link to this heading">¶</a></h1>
+<hr class="docutils" />
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">winsound</span></code> module provides access to the basic sound-playing machinery
+provided by Windows platforms.  It includes functions and several constants.</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: Windows.</p>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="winsound.Beep">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">Beep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winsound.Beep" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">PC のスピーカを鳴らします。引数 <em>frequency</em> は鳴らす音の周波数の指定で、単位は Hz です。値は 37 から 32,767 でなくてはなりません。引数 <em>duration</em> は音を何ミリ秒鳴らすかの指定です。システムがスピーカを鳴らすことができない場合、例外 <a class="reference internal" href="exceptions.html#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> が送出されます。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winsound.PlaySound">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">PlaySound</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sound</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winsound.PlaySound" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">プラットフォームの API から関数 <code class="xref c c-func docutils literal notranslate"><span class="pre">PlaySound()</span></code> を呼び出します。引数 <em>sound</em> はファイル名、システム音エイリアス、音声データの <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like オブジェクト</span></a>、または <code class="docutils literal notranslate"><span class="pre">None</span></code> をとり得ます。 <em>sound</em> の解釈は <em>flags</em> の値に依存します。この値は以下に述べる定数をビット単位OR して組み合わせたものになります。 <em>sound</em> 引数が <code class="docutils literal notranslate"><span class="pre">None</span></code> だった場合、現在再生中のWave形式サウンドの再生を停止します。システムのエラーが発生した場合、例外 <a class="reference internal" href="exceptions.html#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> が送出されます。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="winsound.MessageBeep">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">MessageBeep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">MB_OK</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#winsound.MessageBeep" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">根底にある <code class="xref c c-func docutils literal notranslate"><span class="pre">MessageBeep()</span></code> 関数をプラットフォームの API から呼び出します。この関数は音声をレジストリの指定に従って再生します。 <em>type</em> 引数はどの音声を再生するかを指定します; とり得る値は <code class="docutils literal notranslate"><span class="pre">-1</span></code>, <code class="docutils literal notranslate"><span class="pre">MB_ICONASTERISK</span></code>, <code class="docutils literal notranslate"><span class="pre">MB_ICONEXCLAMATION</span></code>, <code class="docutils literal notranslate"><span class="pre">MB_ICONHAND</span></code>, <code class="docutils literal notranslate"><span class="pre">MB_ICONQUESTION</span></code>,および <code class="docutils literal notranslate"><span class="pre">MB_OK</span></code> で、全て以下に記述されています。値 <code class="docutils literal notranslate"><span class="pre">-1</span></code> は &quot;単純なビープ音&quot; を再生します; この値は他の場合で音声を再生することができなかった際の最終的な代替音です。システムがエラーを示したら、<a class="reference internal" href="exceptions.html#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> が送出されます。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.SND_FILENAME">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">SND_FILENAME</span></span><a class="headerlink" href="#winsound.SND_FILENAME" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>sound</em> パラメタが WAV ファイル名であることを示します。 <a class="reference internal" href="#winsound.SND_ALIAS" title="winsound.SND_ALIAS"><code class="xref py py-const docutils literal notranslate"><span class="pre">SND_ALIAS</span></code></a> と同時に使ってはいけません。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.SND_ALIAS">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">SND_ALIAS</span></span><a class="headerlink" href="#winsound.SND_ALIAS" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">引数 <em>sound</em> はレジストリにある音声データに関連付けられた名前であることを示します。指定した名前がレジストリ上にない場合、定数 <a class="reference internal" href="#winsound.SND_NODEFAULT" title="winsound.SND_NODEFAULT"><code class="xref py py-const docutils literal notranslate"><span class="pre">SND_NODEFAULT</span></code></a> が同時に指定されていない限り、システム標準の音声データが再生されます。標準の音声データが登録されていない場合、例外 <a class="reference internal" href="exceptions.html#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> が送出されます。 <a class="reference internal" href="#winsound.SND_FILENAME" title="winsound.SND_FILENAME"><code class="xref py py-const docutils literal notranslate"><span class="pre">SND_FILENAME</span></code></a> と同時に使ってはいけません。</p>
+<p class="translated">全ての Win32 システムは少なくとも以下の名前をサポートします; ほとんどのシステムでは他に多数あります:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p class="translated"><a class="reference internal" href="#winsound.PlaySound" title="winsound.PlaySound"><code class="xref py py-func docutils literal notranslate"><span class="pre">PlaySound()</span></code></a> <em>name</em></p></th>
+<th class="head"><p class="translated">対応するコントロールパネルでの音声名</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">'SystemAsterisk'</span></code></p></td>
+<td><p class="translated">Asterisk</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">'SystemExclamation'</span></code></p></td>
+<td><p class="translated">Exclamation</p></td>
+</tr>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">'SystemExit'</span></code></p></td>
+<td><p class="translated">Exit Windows</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">'SystemHand'</span></code></p></td>
+<td><p class="translated">Critical Stop</p></td>
+</tr>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">'SystemQuestion'</span></code></p></td>
+<td><p class="translated">Question</p></td>
+</tr>
+</tbody>
+</table>
+<p class="translated">例えば:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">winsound</span>
+<span class="c1"># Play Windows exit sound.</span>
+<span class="n">winsound</span><span class="o">.</span><span class="n">PlaySound</span><span class="p">(</span><span class="s2">&quot;SystemExit&quot;</span><span class="p">,</span> <span class="n">winsound</span><span class="o">.</span><span class="n">SND_ALIAS</span><span class="p">)</span>
+
+<span class="c1"># Probably play Windows default sound, if any is registered (because</span>
+<span class="c1"># &quot;*&quot; probably isn&#39;t the registered name of any sound).</span>
+<span class="n">winsound</span><span class="o">.</span><span class="n">PlaySound</span><span class="p">(</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">winsound</span><span class="o">.</span><span class="n">SND_ALIAS</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.SND_LOOP">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">SND_LOOP</span></span><a class="headerlink" href="#winsound.SND_LOOP" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">音声データを繰り返し再生します。システムがブロックしないようにするため、 <a class="reference internal" href="#winsound.SND_ASYNC" title="winsound.SND_ASYNC"><code class="xref py py-const docutils literal notranslate"><span class="pre">SND_ASYNC</span></code></a> フラグを同時に使わなくてはなりません。 <a class="reference internal" href="#winsound.SND_MEMORY" title="winsound.SND_MEMORY"><code class="xref py py-const docutils literal notranslate"><span class="pre">SND_MEMORY</span></code></a> と同時に使うことはできません。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.SND_MEMORY">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">SND_MEMORY</span></span><a class="headerlink" href="#winsound.SND_MEMORY" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#winsound.PlaySound" title="winsound.PlaySound"><code class="xref py py-func docutils literal notranslate"><span class="pre">PlaySound()</span></code></a> の引数 <em>sound</em> が <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like オブジェクト</span></a> の形式をとった WAV ファイルのメモリ上のイメージであることを示します。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated">このモジュールはメモリ上のイメージを非同期に再生する機能をサポートしていません。従って、このフラグと <a class="reference internal" href="#winsound.SND_ASYNC" title="winsound.SND_ASYNC"><code class="xref py py-const docutils literal notranslate"><span class="pre">SND_ASYNC</span></code></a> を組み合わせると例外 <a class="reference internal" href="exceptions.html#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> が送出されます。</p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.SND_PURGE">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">SND_PURGE</span></span><a class="headerlink" href="#winsound.SND_PURGE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">指定した音声の全てのインスタンスについて再生処理を停止します。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated">このフラグは現代のWindowsプラットフォームではサポートされていません。</p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.SND_ASYNC">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">SND_ASYNC</span></span><a class="headerlink" href="#winsound.SND_ASYNC" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">音声を非同期に再生するようにして、関数呼び出しを即座に返します。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.SND_NODEFAULT">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">SND_NODEFAULT</span></span><a class="headerlink" href="#winsound.SND_NODEFAULT" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">指定した音声が見つからなかった場合にシステム標準の音声を鳴らさないようにします。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.SND_NOSTOP">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">SND_NOSTOP</span></span><a class="headerlink" href="#winsound.SND_NOSTOP" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">現在鳴っている音声を中断させないようにします。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.SND_NOWAIT">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">SND_NOWAIT</span></span><a class="headerlink" href="#winsound.SND_NOWAIT" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">サウンドドライバがビジー状態にある場合、関数がすぐ返るようにします。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated">このフラグは現代のWindowsプラットフォームではサポートされていません。</p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.SND_APPLICATION">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">SND_APPLICATION</span></span><a class="headerlink" href="#winsound.SND_APPLICATION" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The <em>sound</em> parameter is an application-specific alias in the registry.
+This flag can be combined with the <a class="reference internal" href="#winsound.SND_ALIAS" title="winsound.SND_ALIAS"><code class="xref py py-const docutils literal notranslate"><span class="pre">SND_ALIAS</span></code></a> flag
+to specify an application-defined sound alias.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.SND_SENTRY">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">SND_SENTRY</span></span><a class="headerlink" href="#winsound.SND_SENTRY" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Triggers a SoundSentry event when the sound is played.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.SND_SYNC">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">SND_SYNC</span></span><a class="headerlink" href="#winsound.SND_SYNC" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The sound is played synchronously.  This is the default behavior.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.SND_SYSTEM">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">SND_SYSTEM</span></span><a class="headerlink" href="#winsound.SND_SYSTEM" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Assign the sound to the audio session for system notification sounds.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.MB_ICONASTERISK">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">MB_ICONASTERISK</span></span><a class="headerlink" href="#winsound.MB_ICONASTERISK" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">音声 <code class="docutils literal notranslate"><span class="pre">SystemDefault</span></code> を再生します。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.MB_ICONEXCLAMATION">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">MB_ICONEXCLAMATION</span></span><a class="headerlink" href="#winsound.MB_ICONEXCLAMATION" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">音声 <code class="docutils literal notranslate"><span class="pre">SystemExclamation</span></code> を再生します。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.MB_ICONHAND">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">MB_ICONHAND</span></span><a class="headerlink" href="#winsound.MB_ICONHAND" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">音声 <code class="docutils literal notranslate"><span class="pre">SystemHand</span></code> を再生します。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.MB_ICONQUESTION">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">MB_ICONQUESTION</span></span><a class="headerlink" href="#winsound.MB_ICONQUESTION" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">音声 <code class="docutils literal notranslate"><span class="pre">SystemQuestion</span></code> を再生します。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.MB_OK">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">MB_OK</span></span><a class="headerlink" href="#winsound.MB_OK" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">音声 <code class="docutils literal notranslate"><span class="pre">SystemDefault</span></code> を再生します。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.MB_ICONERROR">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">MB_ICONERROR</span></span><a class="headerlink" href="#winsound.MB_ICONERROR" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">音声 <code class="docutils literal notranslate"><span class="pre">SystemHand</span></code> を再生します。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.MB_ICONINFORMATION">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">MB_ICONINFORMATION</span></span><a class="headerlink" href="#winsound.MB_ICONINFORMATION" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">音声 <code class="docutils literal notranslate"><span class="pre">SystemDefault</span></code> を再生します。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.MB_ICONSTOP">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">MB_ICONSTOP</span></span><a class="headerlink" href="#winsound.MB_ICONSTOP" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">音声 <code class="docutils literal notranslate"><span class="pre">SystemHand</span></code> を再生します。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="winsound.MB_ICONWARNING">
+<span class="sig-prename descclassname"><span class="pre">winsound.</span></span><span class="sig-name descname"><span class="pre">MB_ICONWARNING</span></span><a class="headerlink" href="#winsound.MB_ICONWARNING" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">音声 <code class="docutils literal notranslate"><span class="pre">SystemExclamation</span></code> を再生します。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="winreg.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">winreg</span></code> --- Windows レジストリへのアクセス</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="unix.html"
+                          title="次の章へ">Unix-specific services</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/winsound.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/winsound.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/winsound.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="unix.html" title="Unix-specific services"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="winreg.html" title="winreg --- Windows レジストリへのアクセス"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="windows.html" >MS Windows 固有のサービス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">winsound</span></code> --- Windows 用の音声再生インターフェース</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

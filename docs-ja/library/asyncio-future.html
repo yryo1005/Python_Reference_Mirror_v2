@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Future" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/asyncio-future.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/asyncio/futures.py, Lib/asyncio/base_futures.py Future オブジェクトは 低水準のコールバックベースのコード と高水準の async/await コードとの間を橋渡しします。 Future の関数: Future オブジェクト: この例は Future オブジェクトを生成し、Future に結果を設定するための非同期..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_asyncio-future_a74bf4be.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/asyncio/futures.py, Lib/asyncio/base_futures.py Future オブジェクトは 低水準のコールバックベースのコード と高水準の async/await コードとの間を橋渡しします。 Future の関数: Future オブジェクト: この例は Future オブジェクトを生成し、Future に結果を設定するための非同期..." />
+<meta name="description" content="ソースコード: Lib/asyncio/futures.py, Lib/asyncio/base_futures.py Future オブジェクトは 低水準のコールバックベースのコード と高水準の async/await コードとの間を橋渡しします。 Future の関数: Future オブジェクト: この例は Future オブジェクトを生成し、Future に結果を設定するための非同期..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>Future &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="トランスポートとプロトコル" href="asyncio-protocol.html" />
+    <link rel="prev" title="Event loop" href="asyncio-eventloop.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/asyncio-future.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Future</a><ul>
+<li><a class="reference internal" href="#future-functions">Future の関数</a></li>
+<li><a class="reference internal" href="#future-object">Future オブジェクト</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="asyncio-eventloop.html"
+                          title="前の章へ">Event loop</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="asyncio-protocol.html"
+                          title="次の章へ">トランスポートとプロトコル</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/asyncio-future.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/asyncio-future.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/asyncio-future.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="asyncio-protocol.html" title="トランスポートとプロトコル"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="asyncio-eventloop.html" title="Event loop"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" >ネットワーク通信とプロセス間通信</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">asyncio</span></code> --- 非同期 I/O</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Future</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="futures">
+<span id="asyncio-futures"></span><h1 class="translated">Future<a class="headerlink" href="#futures" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/asyncio/futures.py">Lib/asyncio/futures.py</a>, <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/asyncio/base_futures.py">Lib/asyncio/base_futures.py</a></p>
+<hr class="docutils" />
+<p class="translated"><em>Future</em> オブジェクトは <strong>低水準のコールバックベースのコード</strong> と高水準の async/await コードとの間を橋渡しします。</p>
+<section id="future-functions">
+<h2 class="translated">Future の関数<a class="headerlink" href="#future-functions" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="asyncio.isfuture">
+<span class="sig-prename descclassname"><span class="pre">asyncio.</span></span><span class="sig-name descname"><span class="pre">isfuture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.isfuture" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">オブジェクト <em>obj</em> が下記のいずれかであれば <code class="docutils literal notranslate"><span class="pre">True</span></code> を返します:</p>
+<ul class="simple">
+<li><p class="translated"><a class="reference internal" href="#asyncio.Future" title="asyncio.Future"><code class="xref py py-class docutils literal notranslate"><span class="pre">asyncio.Future</span></code></a> クラスのインスタンス</p></li>
+<li><p class="translated"><a class="reference internal" href="asyncio-task.html#asyncio.Task" title="asyncio.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">asyncio.Task</span></code></a> クラスのインスタンス</p></li>
+<li><p class="translated"><code class="docutils literal notranslate"><span class="pre">_asyncio_future_blocking</span></code> 属性を持った Future 的なオブジェクト</p></li>
+</ul>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.5.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="asyncio.ensure_future">
+<span class="sig-prename descclassname"><span class="pre">asyncio.</span></span><span class="sig-name descname"><span class="pre">ensure_future</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">loop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.ensure_future" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">下記のいずれかを返します:</p>
+<ul class="simple">
+<li><p class="translated"><em>obj</em> が <a class="reference internal" href="#asyncio.Future" title="asyncio.Future"><code class="xref py py-class docutils literal notranslate"><span class="pre">Future</span></code></a> オブジェクト、 <a class="reference internal" href="asyncio-task.html#asyncio.Task" title="asyncio.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code></a> オブジェクト、または Future 的なオブジェクト (<a class="reference internal" href="#asyncio.isfuture" title="asyncio.isfuture"><code class="xref py py-func docutils literal notranslate"><span class="pre">isfuture()</span></code></a> 関数を使って検査します) である場合には <em>obj</em> そのもの</p></li>
+<li><p class="translated">引数 <em>obj</em> がコルーチンである (<a class="reference internal" href="asyncio-task.html#asyncio.iscoroutine" title="asyncio.iscoroutine"><code class="xref py py-func docutils literal notranslate"><span class="pre">iscoroutine()</span></code></a> 関数を使って検査します) 場合には <em>obj</em> をラップした <a class="reference internal" href="asyncio-task.html#asyncio.Task" title="asyncio.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code></a> オブジェクト; この場合コルーチンは <code class="docutils literal notranslate"><span class="pre">ensure_future()</span></code> によりスケジュールされます。</p></li>
+<li><p class="translated">引数 <em>obj</em> が awaitable である (<a class="reference internal" href="inspect.html#inspect.isawaitable" title="inspect.isawaitable"><code class="xref py py-func docutils literal notranslate"><span class="pre">inspect.isawaitable()</span></code></a> 関数を使って検査します) 場合には <em>obj</em> を await する <a class="reference internal" href="asyncio-task.html#asyncio.Task" title="asyncio.Task"><code class="xref py py-class docutils literal notranslate"><span class="pre">Task</span></code></a> オブジェクト</p></li>
+</ul>
+<p class="translated">引数 <em>obj</em> が上記のいずれにもあてはまらない場合は <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> 例外を送出します。</p>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p class="untranslated">Save a reference to the result of this function, to avoid
+a task disappearing mid-execution.</p>
+<p class="untranslated">See also the <a class="reference internal" href="asyncio-task.html#asyncio.create_task" title="asyncio.create_task"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_task()</span></code></a> function which is the
+preferred way for creating new tasks or use <a class="reference internal" href="asyncio-task.html#asyncio.TaskGroup" title="asyncio.TaskGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">asyncio.TaskGroup</span></code></a>
+which keeps reference to the task internally.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5.1 で変更: </span>この関数はどんな <a class="reference internal" href="../glossary.html#term-awaitable"><span class="xref std std-term">awaitable</span></a> なオブジェクトでも受け入れるようになりました。</p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">バージョン 3.10 で非推奨: </span>Deprecation warning is emitted if <em>obj</em> is not a Future-like object
+and <em>loop</em> is not specified and there is no running event loop.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="asyncio.wrap_future">
+<span class="sig-prename descclassname"><span class="pre">asyncio.</span></span><span class="sig-name descname"><span class="pre">wrap_future</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">future</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">loop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.wrap_future" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="concurrent.futures.html#concurrent.futures.Future" title="concurrent.futures.Future"><code class="xref py py-class docutils literal notranslate"><span class="pre">concurrent.futures.Future</span></code></a> オブジェクトを <a class="reference internal" href="#asyncio.Future" title="asyncio.Future"><code class="xref py py-class docutils literal notranslate"><span class="pre">asyncio.Future</span></code></a> オブジェクトでラップします。</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">バージョン 3.10 で非推奨: </span>Deprecation warning is emitted if <em>future</em> is not a Future-like object
+and <em>loop</em> is not specified and there is no running event loop.</p>
+</div>
+</dd></dl>
+
+</section>
+<section id="future-object">
+<span id="asyncio-future-obj"></span><h2 class="translated">Future オブジェクト<a class="headerlink" href="#future-object" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="asyncio.Future">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">asyncio.</span></span><span class="sig-name descname"><span class="pre">Future</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">loop</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Future は非同期処理の最終結果を表すクラスです。スレッドセーフではありません。</p>
+<p class="untranslated">Future is an <a class="reference internal" href="../glossary.html#term-awaitable"><span class="xref std std-term">awaitable</span></a> object.  Coroutines can await on
+Future objects until they either have a result or an exception
+set, or until they are cancelled. A Future can be awaited multiple
+times and the result is same.</p>
+<p class="translated">典型的には、 Future は低水準のコールバックベースのコード (たとえば asyncio の <a class="reference internal" href="asyncio-protocol.html#asyncio-transports-protocols"><span class="std std-ref">transports</span></a> を使って実装されたプロトコル) が高水準の async/await と相互運用することを可能にするために利用されます。</p>
+<p class="translated">経験則は Future オブジェクトをユーザー向けの API であらわに利用しないことです。推奨される Future オブジェクトの生成方法は <a class="reference internal" href="asyncio-eventloop.html#asyncio.loop.create_future" title="asyncio.loop.create_future"><code class="xref py py-meth docutils literal notranslate"><span class="pre">loop.create_future()</span></code></a> を呼び出すことです。これによりイベントループの代替実装は、自身に最適化された Future オブジェクトの実装を合わせて提供することができます。</p>
+<p class="untranslated">Futures are <a class="reference internal" href="typing.html#generics"><span class="std std-ref">generic</span></a> over the type of their results.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7 で変更: </span><a class="reference internal" href="contextvars.html#module-contextvars" title="contextvars: Context Variables"><code class="xref py py-mod docutils literal notranslate"><span class="pre">contextvars</span></code></a> モジュールのサポートを追加。</p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">バージョン 3.10 で非推奨: </span>Deprecation warning is emitted if <em>loop</em> is not specified
+and there is no running event loop.</p>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="asyncio.Future.result">
+<span class="sig-name descname"><span class="pre">result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.result" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Future の結果を返します。</p>
+<p class="translated">Future が <em>完了</em> していて、 <a class="reference internal" href="#asyncio.Future.set_result" title="asyncio.Future.set_result"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_result()</span></code></a> メソッドにより設定された結果を持っている場合は結果の値を返します。</p>
+<p class="translated">Future が <em>完了</em> していて、 <a class="reference internal" href="#asyncio.Future.set_exception" title="asyncio.Future.set_exception"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_exception()</span></code></a> メソッドにより設定された例外を持っている場合はその例外を送出します。</p>
+<p class="translated">Future が <em>キャンセルされた</em> 場合、このメソッドは <a class="reference internal" href="asyncio-exceptions.html#asyncio.CancelledError" title="asyncio.CancelledError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">CancelledError</span></code></a> 例外を送出します。</p>
+<p class="untranslated">If the Future's result isn't yet available, this method raises
+an <a class="reference internal" href="asyncio-exceptions.html#asyncio.InvalidStateError" title="asyncio.InvalidStateError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">InvalidStateError</span></code></a> exception.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="asyncio.Future.set_result">
+<span class="sig-name descname"><span class="pre">set_result</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.set_result" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Future を <em>完了</em> とマークし、結果を設定します。</p>
+<p class="untranslated">Raises an <a class="reference internal" href="asyncio-exceptions.html#asyncio.InvalidStateError" title="asyncio.InvalidStateError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">InvalidStateError</span></code></a> error if the Future is
+already <em>done</em>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="asyncio.Future.set_exception">
+<span class="sig-name descname"><span class="pre">set_exception</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exception</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.set_exception" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Future を <em>完了</em> とマークし、例外を設定します。</p>
+<p class="untranslated">Raises an <a class="reference internal" href="asyncio-exceptions.html#asyncio.InvalidStateError" title="asyncio.InvalidStateError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">InvalidStateError</span></code></a> error if the Future is
+already <em>done</em>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="asyncio.Future.done">
+<span class="sig-name descname"><span class="pre">done</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.done" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Future が <em>完了</em> しているなら <code class="docutils literal notranslate"><span class="pre">True</span></code> を返します。</p>
+<p class="translated">Future は <em>キャンセルされた</em> か、または <a class="reference internal" href="#asyncio.Future.set_result" title="asyncio.Future.set_result"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_result()</span></code></a> メソッドや <a class="reference internal" href="#asyncio.Future.set_exception" title="asyncio.Future.set_exception"><code class="xref py py-meth docutils literal notranslate"><span class="pre">set_exception()</span></code></a> メソッドの呼び出しにより結果や例外が設定された場合に <em>完了</em> とみなされます。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="asyncio.Future.cancelled">
+<span class="sig-name descname"><span class="pre">cancelled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.cancelled" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Future が <em>キャンセルされた</em> 場合に <code class="docutils literal notranslate"><span class="pre">True</span></code> を返します。</p>
+<p class="translated">通常の場合、このメソッドは Future に処理結果や例外を設定する前に Future が <em>キャンセルされていない</em> ことを確認するために使用されます:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="ow">not</span> <span class="n">fut</span><span class="o">.</span><span class="n">cancelled</span><span class="p">():</span>
+    <span class="n">fut</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="asyncio.Future.add_done_callback">
+<span class="sig-name descname"><span class="pre">add_done_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.add_done_callback" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Future が <em>完了</em> したときに実行されるコールバックを追加します。</p>
+<p class="translated"><em>callback</em> は Future オブジェクトだけを引数にとって呼び出されます。</p>
+<p class="translated">このメソッドが呼び出される時点ですでに Future が <em>完了</em> している場合、コールバックは <a class="reference internal" href="asyncio-eventloop.html#asyncio.loop.call_soon" title="asyncio.loop.call_soon"><code class="xref py py-meth docutils literal notranslate"><span class="pre">loop.call_soon()</span></code></a> メソッドによりスケジュールされます。</p>
+<p class="translated">オプションのキーワード引数 <em>context</em> を使って、コールバック*callback* を実行する際のコンテキスト <a class="reference internal" href="contextvars.html#contextvars.Context" title="contextvars.Context"><code class="xref py py-class docutils literal notranslate"><span class="pre">contextvars.Context</span></code></a> を設定することができます。コンテキスト <em>context</em> が指定されない場合は現在のコンテキストが使われます。</p>
+<p class="translated">コールバックにパラメータを渡すには、次の例のように <a class="reference internal" href="functools.html#functools.partial" title="functools.partial"><code class="xref py py-func docutils literal notranslate"><span class="pre">functools.partial()</span></code></a> を使うことができます:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Call &#39;print(&quot;Future:&quot;, fut)&#39; when &quot;fut&quot; is done.</span>
+<span class="n">fut</span><span class="o">.</span><span class="n">add_done_callback</span><span class="p">(</span>
+    <span class="n">functools</span><span class="o">.</span><span class="n">partial</span><span class="p">(</span><span class="nb">print</span><span class="p">,</span> <span class="s2">&quot;Future:&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7 で変更: </span>キーワード引数 <em>context</em> が追加されました。詳細は <span class="target" id="index-2"></span><a class="pep reference external" href="https://peps.python.org/pep-0567/"><strong>PEP 567</strong></a> を参照してください。</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="asyncio.Future.remove_done_callback">
+<span class="sig-name descname"><span class="pre">remove_done_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.remove_done_callback" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">コールバックリストから <em>callback</em> を削除します。</p>
+<p class="translated">削除されたコールバックの数を返します。コールバックが複数回追加されていない限り、通常は1が返ります。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="asyncio.Future.cancel">
+<span class="sig-name descname"><span class="pre">cancel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.cancel" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Future をキャンセルし、コールバックをスケジュールします。</p>
+<p class="translated">Future がすでに <em>完了</em> または <em>キャンセル</em> された場合、 <code class="docutils literal notranslate"><span class="pre">False</span></code> を返します。そうでない場合 Future の状態を <em>キャンセル</em> に変更した上でコールバックをスケジュールし、 <code class="docutils literal notranslate"><span class="pre">True</span></code> を返します。</p>
+<p class="untranslated">The optional string argument <em>msg</em> is passed as the argument to the
+<a class="reference internal" href="asyncio-exceptions.html#asyncio.CancelledError" title="asyncio.CancelledError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">CancelledError</span></code></a> exception raised when a cancelled Future
+is awaited.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.9 で変更: </span>Added the <em>msg</em> parameter.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="asyncio.Future.exception">
+<span class="sig-name descname"><span class="pre">exception</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.exception" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">この Future オブジェクトに設定された例外を返します。</p>
+<p class="translated">例外 (または例外が設定されていないときは <code class="docutils literal notranslate"><span class="pre">None</span></code>) は Future が <em>完了</em> している場合のみ返されます。</p>
+<p class="translated">Future が <em>キャンセルされた</em> 場合、このメソッドは <a class="reference internal" href="asyncio-exceptions.html#asyncio.CancelledError" title="asyncio.CancelledError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">CancelledError</span></code></a> 例外を送出します。</p>
+<p class="translated">Future が <em>未完了</em> の場合、このメソッドは <a class="reference internal" href="asyncio-exceptions.html#asyncio.InvalidStateError" title="asyncio.InvalidStateError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">InvalidStateError</span></code></a> 例外を送出します。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="asyncio.Future.get_loop">
+<span class="sig-name descname"><span class="pre">get_loop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#asyncio.Future.get_loop" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Future オブジェクトが束縛されているイベントループを返します。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.7.</span></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<p class="translated" id="asyncio-example-future">この例は Future オブジェクトを生成し、Future に結果を設定するための非同期タスクを生成してスケジュールし、そして Future に結果が設定されるまで待機します:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">set_after</span><span class="p">(</span><span class="n">fut</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="c1"># Sleep for *delay* seconds.</span>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+
+    <span class="c1"># Set *value* as a result of *fut* Future.</span>
+    <span class="n">fut</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># Get the current event loop.</span>
+    <span class="n">loop</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">()</span>
+
+    <span class="c1"># Create a new Future object.</span>
+    <span class="n">fut</span> <span class="o">=</span> <span class="n">loop</span><span class="o">.</span><span class="n">create_future</span><span class="p">()</span>
+
+    <span class="c1"># Run &quot;set_after()&quot; coroutine in a parallel Task.</span>
+    <span class="c1"># We are using the low-level &quot;loop.create_task()&quot; API here because</span>
+    <span class="c1"># we already have a reference to the event loop at hand.</span>
+    <span class="c1"># Otherwise we could have just used &quot;asyncio.create_task()&quot;.</span>
+    <span class="n">loop</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span>
+        <span class="n">set_after</span><span class="p">(</span><span class="n">fut</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;... world&#39;</span><span class="p">))</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;hello ...&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Wait until *fut* has a result (1 second) and print it.</span>
+    <span class="nb">print</span><span class="p">(</span><span class="k">await</span> <span class="n">fut</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">重要</p>
+<p class="translated">Future オブジェクトは <a class="reference internal" href="concurrent.futures.html#concurrent.futures.Future" title="concurrent.futures.Future"><code class="xref py py-class docutils literal notranslate"><span class="pre">concurrent.futures.Future</span></code></a> を模倣してデザインされました。両者の重要な違いは以下の通りです:</p>
+<ul class="simple">
+<li><p class="translated">asyncio の Futures と異なり、 <a class="reference internal" href="concurrent.futures.html#concurrent.futures.Future" title="concurrent.futures.Future"><code class="xref py py-class docutils literal notranslate"><span class="pre">concurrent.futures.Future</span></code></a> インスタンスは待ち受けできません。</p></li>
+<li><p class="translated"><a class="reference internal" href="#asyncio.Future.result" title="asyncio.Future.result"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asyncio.Future.result()</span></code></a> と <a class="reference internal" href="#asyncio.Future.exception" title="asyncio.Future.exception"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asyncio.Future.exception()</span></code></a>  は <em>timeout</em> 引数を取りません。</p></li>
+<li><p class="translated"><a class="reference internal" href="#asyncio.Future.result" title="asyncio.Future.result"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asyncio.Future.result()</span></code></a> と <a class="reference internal" href="#asyncio.Future.exception" title="asyncio.Future.exception"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asyncio.Future.exception()</span></code></a> は Future が <em>未完了</em> の場合に <a class="reference internal" href="asyncio-exceptions.html#asyncio.InvalidStateError" title="asyncio.InvalidStateError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">InvalidStateError</span></code></a> 例外を送出します。</p></li>
+<li><p class="translated"><a class="reference internal" href="#asyncio.Future.add_done_callback" title="asyncio.Future.add_done_callback"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asyncio.Future.add_done_callback()</span></code></a> メソッドによって登録されたコールバックは、即座に呼び出されません。代わりにコールバックは <a class="reference internal" href="asyncio-eventloop.html#asyncio.loop.call_soon" title="asyncio.loop.call_soon"><code class="xref py py-meth docutils literal notranslate"><span class="pre">loop.call_soon()</span></code></a> によりスケジュールされます。</p></li>
+<li><p class="translated">asyncio の Future は <a class="reference internal" href="concurrent.futures.html#concurrent.futures.wait" title="concurrent.futures.wait"><code class="xref py py-func docutils literal notranslate"><span class="pre">concurrent.futures.wait()</span></code></a> および <a class="reference internal" href="concurrent.futures.html#concurrent.futures.as_completed" title="concurrent.futures.as_completed"><code class="xref py py-func docutils literal notranslate"><span class="pre">concurrent.futures.as_completed()</span></code></a> との互換性がありません。</p></li>
+<li><p class="untranslated"><a class="reference internal" href="#asyncio.Future.cancel" title="asyncio.Future.cancel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">asyncio.Future.cancel()</span></code></a> accepts an optional <code class="docutils literal notranslate"><span class="pre">msg</span></code> argument,
+but <a class="reference internal" href="concurrent.futures.html#concurrent.futures.Future.cancel" title="concurrent.futures.Future.cancel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">concurrent.futures.Future.cancel()</span></code></a> does not.</p></li>
+</ul>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Future</a><ul>
+<li><a class="reference internal" href="#future-functions">Future の関数</a></li>
+<li><a class="reference internal" href="#future-object">Future オブジェクト</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="asyncio-eventloop.html"
+                          title="前の章へ">Event loop</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="asyncio-protocol.html"
+                          title="次の章へ">トランスポートとプロトコル</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/asyncio-future.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/asyncio-future.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/asyncio-future.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="asyncio-protocol.html" title="トランスポートとプロトコル"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="asyncio-eventloop.html" title="Event loop"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="ipc.html" >ネットワーク通信とプロセス間通信</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="asyncio.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">asyncio</span></code> --- 非同期 I/O</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Future</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

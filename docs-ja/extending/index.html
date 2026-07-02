@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Python インタプリタの拡張と埋め込み" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/extending/index.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="This document describes how to write modules in C or C++ to extend the Python interpreter with new modules. Those modules can not only define new functions but also new object types and their metho..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_extending_index_4edad5d1.png" />
+<meta property="og:image:alt" content="This document describes how to write modules in C or C++ to extend the Python interpreter with new modules. Those modules can not only define new functions but also new object types and their metho..." />
+<meta name="description" content="This document describes how to write modules in C or C++ to extend the Python interpreter with new modules. Those modules can not only define new functions but also new object types and their metho..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>Python インタプリタの拡張と埋め込み &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="1. Extending Python with C or C++" href="extending.html" />
+    <link rel="prev" title="セキュリティで考慮すべき点" href="../library/security_warnings.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/extending/index.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Python インタプリタの拡張と埋め込み</a><ul>
+<li><a class="reference internal" href="#recommended-third-party-tools">おすすめのサードパーティツール</a></li>
+<li><a class="reference internal" href="#creating-extensions-without-third-party-tools">Creating extensions without third party tools</a></li>
+<li><a class="reference internal" href="#embedding-the-cpython-runtime-in-a-larger-application">大規模なアプリケーションへの Python ランタイムの埋め込み</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../library/security_warnings.html"
+                          title="前の章へ">セキュリティで考慮すべき点</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="extending.html"
+                          title="次の章へ"><span class="section-number">1. </span>Extending Python with C or C++</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "extending/index.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/extending/index.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/extending/index.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="extending.html" title="1. Extending Python with C or C++"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="../library/security_warnings.html" title="セキュリティで考慮すべき点"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+        <li class="nav-item nav-item-this"><a href="">Python インタプリタの拡張と埋め込み</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="extending-and-embedding-the-python-interpreter">
+<span id="extending-index"></span><h1 class="translated">Python インタプリタの拡張と埋め込み<a class="headerlink" href="#extending-and-embedding-the-python-interpreter" title="Link to this heading">¶</a></h1>
+<p class="untranslated">This document describes how to write modules in C or C++ to extend the Python
+interpreter with new modules.  Those modules can not only define new functions
+but also new object types and their methods.  The document also describes how
+to embed the Python interpreter in another application, for use as an extension
+language.  Finally, it shows how to compile and link extension modules so that
+they can be loaded dynamically (at run time) into the interpreter, if the
+underlying operating system supports this feature.</p>
+<p class="untranslated">This document assumes basic knowledge about Python.  For an informal
+introduction to the language, see <a class="reference internal" href="../tutorial/index.html#tutorial-index"><span class="std std-ref">Python チュートリアル</span></a>.  <a class="reference internal" href="../reference/index.html#reference-index"><span class="std std-ref">Python 言語リファレンス</span></a>
+gives a more formal definition of the language.  <a class="reference internal" href="../library/index.html#library-index"><span class="std std-ref">Python 標準ライブラリ</span></a> documents
+the existing object types, functions and modules (both built-in and written in
+Python) that give the language its wide application range.</p>
+<p class="translated">Python/C API 全体の詳しい説明は、別のドキュメントである、 <a class="reference internal" href="../c-api/index.html#c-api-index"><span class="std std-ref">Python/C API reference manual</span></a> を参照してください。</p>
+<section id="recommended-third-party-tools">
+<h2 class="translated">おすすめのサードパーティツール<a class="headerlink" href="#recommended-third-party-tools" title="Link to this heading">¶</a></h2>
+<p class="untranslated">This guide only covers the basic tools for creating extensions provided
+as part of this version of CPython. Some <a class="reference internal" href="../c-api/intro.html#c-api-tools"><span class="std std-ref">third party tools</span></a> offer both simpler and more sophisticated approaches to creating
+C and C++ extensions for Python.</p>
+</section>
+<section id="creating-extensions-without-third-party-tools">
+<h2 class="untranslated">Creating extensions without third party tools<a class="headerlink" href="#creating-extensions-without-third-party-tools" title="Link to this heading">¶</a></h2>
+<p class="translated">ガイドのこの節ではサードパーティツールの補助無しに C および C++ 拡張を作成する方法を説明します。
+これは自分自身の C 拡張を作成するおすすめの方法というよりも、主にそれらのツールを作成する人向けのものです。</p>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p class="untranslated"><span class="target" id="index-0"></span><a class="pep reference external" href="https://peps.python.org/pep-0489/"><strong>PEP 489</strong></a> -- Multi-phase extension module initialization</p>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="extending.html">1. Extending Python with C or C++</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#a-simple-example">1.1. A Simple Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#intermezzo-errors-and-exceptions">1.2. Intermezzo: Errors and Exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#back-to-the-example">1.3. Back to the Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#the-module-s-method-table-and-initialization-function">1.4. The Module's Method Table and Initialization Function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#compilation-and-linkage">1.5. Compilation and Linkage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#calling-python-functions-from-c">1.6. C から Python 関数を呼び出す</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#extracting-parameters-in-extension-functions">1.7. 拡張モジュール関数でのパラメタ展開</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#keyword-parameters-for-extension-functions">1.8. 拡張モジュール関数のキーワードパラメタ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#building-arbitrary-values">1.9. 任意の値を構築する</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#reference-counts">1.10. 参照カウント法</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#writing-extensions-in-c">1.11. C++での拡張モジュール作成</a></li>
+<li class="toctree-l2"><a class="reference internal" href="extending.html#providing-a-c-api-for-an-extension-module">1.12. 拡張モジュールに C API を提供する</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="newtypes_tutorial.html">2. 拡張の型の定義: チュートリアル</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="newtypes_tutorial.html#the-basics">2.1. 基本的なこと</a></li>
+<li class="toctree-l2"><a class="reference internal" href="newtypes_tutorial.html#adding-data-and-methods-to-the-basic-example">2.2. 基本のサンプルにデータとメソッドを追加する</a></li>
+<li class="toctree-l2"><a class="reference internal" href="newtypes_tutorial.html#providing-finer-control-over-data-attributes">2.3. データ属性をこまかく制御する</a></li>
+<li class="toctree-l2"><a class="reference internal" href="newtypes_tutorial.html#supporting-cyclic-garbage-collection">2.4. 循環ガベージコレクションをサポートする</a></li>
+<li class="toctree-l2"><a class="reference internal" href="newtypes_tutorial.html#subclassing-other-types">2.5. 他の型のサブクラスを作る</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="newtypes.html">3. 拡張の型の定義: 雑多なトピック</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="newtypes.html#finalization-and-de-allocation">3.1. ファイナライズとメモリ解放</a></li>
+<li class="toctree-l2"><a class="reference internal" href="newtypes.html#object-presentation">3.2. オブジェクト表現</a></li>
+<li class="toctree-l2"><a class="reference internal" href="newtypes.html#attribute-management">3.3. 属性を管理する</a></li>
+<li class="toctree-l2"><a class="reference internal" href="newtypes.html#object-comparison">3.4. オブジェクトの比較</a></li>
+<li class="toctree-l2"><a class="reference internal" href="newtypes.html#abstract-protocol-support">3.5. 抽象的なプロトコルのサポート</a></li>
+<li class="toctree-l2"><a class="reference internal" href="newtypes.html#weak-reference-support">3.6. 弱参照(Weak Reference)のサポート</a></li>
+<li class="toctree-l2"><a class="reference internal" href="newtypes.html#more-suggestions">3.7. その他いろいろ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">4. C および C++ 拡張のビルド</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="building.html#building-c-and-c-extensions-with-setuptools">4.1. setuptools による C および C++ 拡張のビルド</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="windows.html">5. Windows 上での C および C++ 拡張モジュールのビルド</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="windows.html#a-cookbook-approach">5.1. 型どおりのアプローチ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="windows.html#differences-between-unix-and-windows">5.2. Unix と Windows の相違点</a></li>
+<li class="toctree-l2"><a class="reference internal" href="windows.html#using-dlls-in-practice">5.3. DLL 使用の実際</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="embedding-the-cpython-runtime-in-a-larger-application">
+<h2 class="translated">大規模なアプリケーションへの Python ランタイムの埋め込み<a class="headerlink" href="#embedding-the-cpython-runtime-in-a-larger-application" title="Link to this heading">¶</a></h2>
+<p class="translated">Python インタープリタの中でメインアプリケーションとして実行される拡張を作るのではなく、 CPython をより大きなアプリケーションの中に埋め込む方が望ましいことがあります。
+この節ではその上手い埋め込みに関わる詳細について説明します。</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="embedding.html">1. 他のアプリケーションへの Python の埋め込み</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#very-high-level-embedding">1.1. 高水準の埋め込み</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#beyond-very-high-level-embedding-an-overview">1.2. 超高水準の埋め込みから踏み出す: 概要</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#pure-embedding">1.3. 純粋な埋め込み</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#extending-embedded-python">1.4. 埋め込まれた Python の拡張</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#embedding-python-in-c">1.5. C++による Python の埋め込み</a></li>
+<li class="toctree-l2"><a class="reference internal" href="embedding.html#compiling-and-linking-under-unix-like-systems">1.6. Unix 系システムにおけるコンパイルとリンク</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Python インタプリタの拡張と埋め込み</a><ul>
+<li><a class="reference internal" href="#recommended-third-party-tools">おすすめのサードパーティツール</a></li>
+<li><a class="reference internal" href="#creating-extensions-without-third-party-tools">Creating extensions without third party tools</a></li>
+<li><a class="reference internal" href="#embedding-the-cpython-runtime-in-a-larger-application">大規模なアプリケーションへの Python ランタイムの埋め込み</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="../library/security_warnings.html"
+                          title="前の章へ">セキュリティで考慮すべき点</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="extending.html"
+                          title="次の章へ"><span class="section-number">1. </span>Extending Python with C or C++</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "extending/index.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/extending/index.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/extending/index.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="extending.html" title="1. Extending Python with C or C++"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="../library/security_warnings.html" title="セキュリティで考慮すべき点"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+        <li class="nav-item nav-item-this"><a href="">Python インタプリタの拡張と埋め込み</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

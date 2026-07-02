@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Set オブジェクト" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/c-api/set.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="このセクションでは set と frozenset の公開 API について詳しく述べます。以降で説明していない機能は、抽象オブジェクトプロトコル ( PyObject_CallMethod(), PyObject_RichCompareBool(), PyObject_Hash(), PyObject_Repr(), PyObject_IsTrue(), PyObject_Print(),..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_c-api_set_eb87795f.png" />
+<meta property="og:image:alt" content="このセクションでは set と frozenset の公開 API について詳しく述べます。以降で説明していない機能は、抽象オブジェクトプロトコル ( PyObject_CallMethod(), PyObject_RichCompareBool(), PyObject_Hash(), PyObject_Repr(), PyObject_IsTrue(), PyObject_Print(),..." />
+<meta name="description" content="このセクションでは set と frozenset の公開 API について詳しく述べます。以降で説明していない機能は、抽象オブジェクトプロトコル ( PyObject_CallMethod(), PyObject_RichCompareBool(), PyObject_Hash(), PyObject_Repr(), PyObject_IsTrue(), PyObject_Print(),..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>Set オブジェクト &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="Function オブジェクト" href="function.html" />
+    <link rel="prev" title="Dictionary Objects" href="dict.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/c-api/set.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Set オブジェクト</a><ul>
+<li><a class="reference internal" href="#deprecated-api">Deprecated API</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="dict.html"
+                          title="前の章へ">Dictionary Objects</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="function.html"
+                          title="次の章へ">Function オブジェクト</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "c-api/set.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/c-api/set.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/c-api/set.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="function.html" title="Function オブジェクト"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="dict.html" title="Dictionary Objects"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API reference manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" accesskey="U">具象オブジェクト (concrete object) レイヤ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Set オブジェクト</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="set-objects">
+<span id="setobjects"></span><h1 class="translated">Set オブジェクト<a class="headerlink" href="#set-objects" title="Link to this heading">¶</a></h1>
+<p class="translated" id="index-0">このセクションでは <a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> と <a class="reference internal" href="../library/stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a> の公開 API について詳しく述べます。以降で説明していない機能は、抽象オブジェクトプロトコル (<a class="reference internal" href="call.html#c.PyObject_CallMethod" title="PyObject_CallMethod"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_CallMethod()</span></code></a>, <a class="reference internal" href="object.html#c.PyObject_RichCompareBool" title="PyObject_RichCompareBool"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_RichCompareBool()</span></code></a>, <a class="reference internal" href="object.html#c.PyObject_Hash" title="PyObject_Hash"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Hash()</span></code></a>, <a class="reference internal" href="object.html#c.PyObject_Repr" title="PyObject_Repr"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Repr()</span></code></a>, <a class="reference internal" href="object.html#c.PyObject_IsTrue" title="PyObject_IsTrue"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_IsTrue()</span></code></a>, <a class="reference internal" href="object.html#c.PyObject_Print" title="PyObject_Print"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_Print()</span></code></a>, <a class="reference internal" href="object.html#c.PyObject_GetIter" title="PyObject_GetIter"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyObject_GetIter()</span></code></a> を含む) か抽象数値プロトコル (<a class="reference internal" href="number.html#c.PyNumber_And" title="PyNumber_And"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyNumber_And()</span></code></a>, <a class="reference internal" href="number.html#c.PyNumber_Subtract" title="PyNumber_Subtract"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyNumber_Subtract()</span></code></a>, <a class="reference internal" href="number.html#c.PyNumber_Or" title="PyNumber_Or"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyNumber_Or()</span></code></a>, <a class="reference internal" href="number.html#c.PyNumber_Xor" title="PyNumber_Xor"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyNumber_Xor()</span></code></a>, <a class="reference internal" href="number.html#c.PyNumber_InPlaceAnd" title="PyNumber_InPlaceAnd"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyNumber_InPlaceAnd()</span></code></a>, <a class="reference internal" href="number.html#c.PyNumber_InPlaceSubtract" title="PyNumber_InPlaceSubtract"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyNumber_InPlaceSubtract()</span></code></a>, <a class="reference internal" href="number.html#c.PyNumber_InPlaceOr" title="PyNumber_InPlaceOr"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyNumber_InPlaceOr()</span></code></a>, <a class="reference internal" href="number.html#c.PyNumber_InPlaceXor" title="PyNumber_InPlaceXor"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyNumber_InPlaceXor()</span></code></a> を含む) を使って利用できます。</p>
+<dl class="c type">
+<dt class="sig sig-object c" id="c.PySetObject">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PySetObject</span></span></span><a class="headerlink" href="#c.PySetObject" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated">この <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyObject</span></code></a> を継承した型は、 <a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> と <a class="reference internal" href="../library/stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a> 両方の内部データを保存するのに用いられます。 <a class="reference internal" href="dict.html#c.PyDictObject" title="PyDictObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyDictObject</span></code></a> と同じように、小さい集合(set)に対しては(タプルのように)固定サイズであり、そうでない集合に対しては(リストと同じように)可変長のメモリブロックを用います。この構造体のどのフィールドも、公開されていると考えるべきではなく、変更される可能性があります。すべてのアクセスは、構造体の中の値を直接操作するのではなく、ドキュメントされた API を用いて行うべきです。</p>
+</dd></dl>
+
+<dl class="c var">
+<dt class="sig sig-object c" id="c.PySet_Type">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><span class="n"><span class="pre">PyTypeObject</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PySet_Type</span></span></span><a class="headerlink" href="#c.PySet_Type" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><p class="translated">この <a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyTypeObject</span></code></a> のインスタンスは、Python の <a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> 型を表します。</p>
+</dd></dl>
+
+<dl class="c var">
+<dt class="sig sig-object c" id="c.PyFrozenSet_Type">
+<a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><span class="n"><span class="pre">PyTypeObject</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyFrozenSet_Type</span></span></span><a class="headerlink" href="#c.PyFrozenSet_Type" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><p class="translated">この <a class="reference internal" href="type.html#c.PyTypeObject" title="PyTypeObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PyTypeObject</span></code></a> のインスタンスは、Python の <a class="reference internal" href="../library/stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a> 型を表します。</p>
+</dd></dl>
+
+<p class="translated">以降の型チェックマクロはすべての Python オブジェクトに対するポインタに対して動作します。同様に、コンストラクタはすべてのイテレート可能な Python オブジェクトに対して動作します。</p>
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PySet_Check">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PySet_Check</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">p</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PySet_Check" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated"><em>p</em> が <a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> かそのサブタイプのオブジェクトであるときに true を返します。この関数は常に成功します。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyFrozenSet_Check">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyFrozenSet_Check</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">p</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyFrozenSet_Check" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated"><em>p</em> が <a class="reference internal" href="../library/stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a> かそのサブタイプのオブジェクトであるときに true を返します。この関数は常に成功します。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyAnySet_Check">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyAnySet_Check</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">p</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyAnySet_Check" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated"><em>p</em> が <a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> か <a class="reference internal" href="../library/stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a> 、あるいはそのサブタイプのオブジェクトであれば、true を返します。この関数は常に成功します。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PySet_CheckExact">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PySet_CheckExact</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">p</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PySet_CheckExact" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated"><em>p</em> が <a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> オブジェクトだがサブタイプのインスタンスでない場合に真を返します。この関数は常に成功します。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyAnySet_CheckExact">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyAnySet_CheckExact</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">p</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyAnySet_CheckExact" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated"><em>p</em> が <a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> か <a class="reference internal" href="../library/stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a> のどちらかのオブジェクトであるときに true を返します。サブタイプのオブジェクトは含みません。この関数は常に成功します。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyFrozenSet_CheckExact">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PyFrozenSet_CheckExact</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">p</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyFrozenSet_CheckExact" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="translated"><em>p</em> が <a class="reference internal" href="../library/stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a> オブジェクトだがサブタイプのインスタンスでない場合に真を返します。この関数は常に成功します。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PySet_New">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">PySet_New</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">iterable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PySet_New" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="refcount return_new_ref">戻り値: 新しい参照。</em><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-shared"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-shared"><span class="std std-ref">Safe for concurrent use on the same object</span></a>.</em><p class="translated"><em>iterable</em> が返すオブジェクトを含む新しい <a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> を返します。
+<em>iterable</em> が <code class="docutils literal notranslate"><span class="pre">NULL</span></code> のときは、空の set を返します。
+成功したら新しい set を、失敗したら <code class="docutils literal notranslate"><span class="pre">NULL</span></code> を返します。
+<em>iterable</em> がイテレート可能でない場合は、 <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> を送出します。
+このコンストラクタは set をコピーするときにも使えます (<code class="docutils literal notranslate"><span class="pre">c=set(s)</span></code>)。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">The operation is atomic on <a class="reference internal" href="../glossary.html#term-free-threaded-build"><span class="xref std std-term">free threading</span></a>
+when <em>iterable</em> is a <a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>, <a class="reference internal" href="../library/stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a> or <a class="reference internal" href="../library/stdtypes.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PyFrozenSet_New">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">PyFrozenSet_New</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">iterable</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PyFrozenSet_New" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="refcount return_new_ref">戻り値: 新しい参照。</em><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-shared"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-shared"><span class="std std-ref">Safe for concurrent use on the same object</span></a>.</em><p class="translated"><em>iterable</em> が返すオブジェクトを含む新しい <a class="reference internal" href="../library/stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a> を返します。
+<em>iterable</em> が <code class="docutils literal notranslate"><span class="pre">NULL</span></code> のときは、空の frozenset を返します。
+成功時には新しい set を、失敗時には <code class="docutils literal notranslate"><span class="pre">NULL</span></code> を返します。
+<em>iterable</em> がイテレート可能でない場合は、 <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> を送出します。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">The operation is atomic on <a class="reference internal" href="../glossary.html#term-free-threaded-build"><span class="xref std std-term">free threading</span></a>
+when <em>iterable</em> is a <a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>, <a class="reference internal" href="../library/stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a> or <a class="reference internal" href="../library/stdtypes.html#dict" title="dict"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<p class="translated">以降の関数やマクロは、 <a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> と <a class="reference internal" href="../library/stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a> とそのサブタイプのインスタンスに対して利用できます。</p>
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PySet_Size">
+<a class="reference internal" href="intro.html#c.Py_ssize_t" title="Py_ssize_t"><span class="n"><span class="pre">Py_ssize_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PySet_Size</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">anyset</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PySet_Size" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-atomic"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-atomic"><span class="std std-ref">Atomic</span></a>.</em><p class="untranslated" id="index-1">Return the length of a <a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> or <a class="reference internal" href="../library/stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a> object. Equivalent to
+<code class="docutils literal notranslate"><span class="pre">len(anyset)</span></code>.  Raises a <a class="reference internal" href="../library/exceptions.html#SystemError" title="SystemError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SystemError</span></code></a> if <em>anyset</em> is not a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code>, or an instance of a subtype.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PySet_GET_SIZE">
+<a class="reference internal" href="intro.html#c.Py_ssize_t" title="Py_ssize_t"><span class="n"><span class="pre">Py_ssize_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PySet_GET_SIZE</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">anyset</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PySet_GET_SIZE" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="threadsafety threadsafety-atomic"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-atomic"><span class="std std-ref">Atomic</span></a>.</em><p class="translated">エラーチェックを行わない、 <a class="reference internal" href="#c.PySet_Size" title="PySet_Size"><code class="xref c c-func docutils literal notranslate"><span class="pre">PySet_Size()</span></code></a> のマクロ形式。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PySet_Contains">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PySet_Contains</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">anyset</span></span>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">key</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PySet_Contains" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-shared"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-shared"><span class="std std-ref">Safe for concurrent use on the same object</span></a>.</em><p class="untranslated">Return <code class="docutils literal notranslate"><span class="pre">1</span></code> if found, <code class="docutils literal notranslate"><span class="pre">0</span></code> if not found, and <code class="docutils literal notranslate"><span class="pre">-1</span></code> if an error is encountered.  Unlike
+the Python <a class="reference internal" href="../reference/datamodel.html#object.__contains__" title="object.__contains__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__contains__()</span></code></a> method, this function does not automatically
+convert unhashable sets into temporary frozensets.  Raise a <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> if
+the <em>key</em> is unhashable. Raise <a class="reference internal" href="../library/exceptions.html#SystemError" title="SystemError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SystemError</span></code></a> if <em>anyset</em> is not a
+<a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a>, <a class="reference internal" href="../library/stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a>, or an instance of a subtype.</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">The operation is atomic on <a class="reference internal" href="../glossary.html#term-free-threaded-build"><span class="xref std std-term">free threading</span></a>
+when <em>key</em> is <a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="../library/functions.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference internal" href="../library/functions.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference internal" href="../library/functions.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a> or <a class="reference internal" href="../library/stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PySet_Add">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PySet_Add</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">set</span></span>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">key</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PySet_Add" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-shared"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-shared"><span class="std std-ref">Safe for concurrent use on the same object</span></a>.</em><p class="translated"><a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> のインスタンスに <em>key</em> を追加します。
+<a class="reference internal" href="../library/stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a> に対しても動作します (<a class="reference internal" href="tuple.html#c.PyTuple_SetItem" title="PyTuple_SetItem"><code class="xref c c-func docutils literal notranslate"><span class="pre">PyTuple_SetItem()</span></code></a> のように、他のコードに見える前の新しい frozenset の値を埋めるために使用できます)。
+成功したら <code class="docutils literal notranslate"><span class="pre">0</span></code> を、失敗したら <code class="docutils literal notranslate"><span class="pre">-1</span></code> を返します。
+<em>key</em> がハッシュ可能でない場合は、 <a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> を送出します。
+<em>set</em> を大きくする余裕がない場合は、 <a class="reference internal" href="../library/exceptions.html#MemoryError" title="MemoryError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">MemoryError</span></code></a> を送出します。
+<em>set</em> が <code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code> かそのサブタイプのインスタンスでない場合は、 <a class="reference internal" href="../library/exceptions.html#SystemError" title="SystemError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SystemError</span></code></a> を送出します。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">The operation is atomic on <a class="reference internal" href="../glossary.html#term-free-threaded-build"><span class="xref std std-term">free threading</span></a>
+when <em>key</em> is <a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="../library/functions.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference internal" href="../library/functions.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference internal" href="../library/functions.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a> or <a class="reference internal" href="../library/stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<p class="translated">以降の関数は、 <a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> とそのサブタイプに対して利用可能です。 <a class="reference internal" href="../library/stdtypes.html#frozenset" title="frozenset"><code class="xref py py-class docutils literal notranslate"><span class="pre">frozenset</span></code></a> とそのサブタイプには利用できません。</p>
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PySet_Discard">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PySet_Discard</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">set</span></span>, <a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">key</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PySet_Discard" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-shared"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-shared"><span class="std std-ref">Safe for concurrent use on the same object</span></a>.</em><p class="untranslated">Return <code class="docutils literal notranslate"><span class="pre">1</span></code> if found and removed, <code class="docutils literal notranslate"><span class="pre">0</span></code> if not found (no action taken), and <code class="docutils literal notranslate"><span class="pre">-1</span></code> if an
+error is encountered.  Does not raise <a class="reference internal" href="../library/exceptions.html#KeyError" title="KeyError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyError</span></code></a> for missing keys.  Raise a
+<a class="reference internal" href="../library/exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> if the <em>key</em> is unhashable.  Unlike the Python <a class="reference internal" href="../library/stdtypes.html#set.discard" title="set.discard"><code class="xref py py-meth docutils literal notranslate"><span class="pre">discard()</span></code></a>
+method, this function does not automatically convert unhashable sets into
+temporary frozensets. Raise <a class="reference internal" href="../library/exceptions.html#SystemError" title="SystemError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SystemError</span></code></a> if <em>set</em> is not an
+instance of <a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> or its subtype.</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">The operation is atomic on <a class="reference internal" href="../glossary.html#term-free-threaded-build"><span class="xref std std-term">free threading</span></a>
+when <em>key</em> is <a class="reference internal" href="../library/stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference internal" href="../library/functions.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference internal" href="../library/functions.html#float" title="float"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a>, <a class="reference internal" href="../library/functions.html#bool" title="bool"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a> or <a class="reference internal" href="../library/stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PySet_Pop">
+<a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">PySet_Pop</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">set</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PySet_Pop" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="refcount return_new_ref">戻り値: 新しい参照。</em><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-atomic"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-atomic"><span class="std std-ref">Atomic</span></a>.</em><p class="translated"><em>set</em> の中の要素のどれかに対する新しい参照を返し、そのオブジェクトを <em>set</em> から削除します。
+失敗したら <code class="docutils literal notranslate"><span class="pre">NULL</span></code> を返します。
+set が空の場合には <a class="reference internal" href="../library/exceptions.html#KeyError" title="KeyError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyError</span></code></a> を送出します。
+<em>set</em> が <a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> とそのサブタイプのインスタンスでない場合は、 <a class="reference internal" href="../library/exceptions.html#SystemError" title="SystemError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SystemError</span></code></a> を送出します。</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.PySet_Clear">
+<span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">PySet_Clear</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="structures.html#c.PyObject" title="PyObject"><span class="n"><span class="pre">PyObject</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">set</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.PySet_Clear" title="Link to this definition">¶</a><br /></dt>
+<dd><em class="stableabi"> 次に属します: <a class="reference internal" href="stable.html#stable"><span class="std std-ref">Stable ABI</span></a>.</em><em class="threadsafety threadsafety-atomic"> Thread safety: <a class="reference internal" href="../library/threadsafety.html#threadsafety-level-atomic"><span class="std std-ref">Atomic</span></a>.</em><p class="untranslated">Empty an existing set of all elements. Return <code class="docutils literal notranslate"><span class="pre">0</span></code> on
+success. Return <code class="docutils literal notranslate"><span class="pre">-1</span></code> and raise <a class="reference internal" href="../library/exceptions.html#SystemError" title="SystemError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SystemError</span></code></a> if <em>set</em> is not an instance of
+<a class="reference internal" href="../library/stdtypes.html#set" title="set"><code class="xref py py-class docutils literal notranslate"><span class="pre">set</span></code></a> or its subtype.</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">In the <a class="reference internal" href="../glossary.html#term-free-threaded-build"><span class="xref std std-term">free-threaded build</span></a>, the set is emptied before its entries
+are cleared, so other threads will observe an empty set rather than
+intermediate states.</p>
+</div>
+</dd></dl>
+
+<section id="deprecated-api">
+<h2 class="untranslated">Deprecated API<a class="headerlink" href="#deprecated-api" title="Link to this heading">¶</a></h2>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.PySet_MINSIZE">
+<span class="sig-name descname"><span class="n"><span class="pre">PySet_MINSIZE</span></span></span><a class="headerlink" href="#c.PySet_MINSIZE" title="Link to this definition">¶</a><br /></dt>
+<dd><p class="untranslated">A <a class="reference internal" href="../glossary.html#term-soft-deprecated"><span class="xref std std-term">soft deprecated</span></a> constant representing the size of an internal
+preallocated table inside <a class="reference internal" href="#c.PySetObject" title="PySetObject"><code class="xref c c-type docutils literal notranslate"><span class="pre">PySetObject</span></code></a> instances.</p>
+<p class="untranslated">This is documented solely for completeness, as there are no guarantees
+that a given version of CPython uses preallocated tables with a fixed
+size.
+In code that does not deal with unstable set internals,
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">PySet_MINSIZE</span></code> can be replaced with a small constant like <code class="docutils literal notranslate"><span class="pre">8</span></code>.</p>
+<p class="untranslated">If looking for the size of a set, use <a class="reference internal" href="#c.PySet_Size" title="PySet_Size"><code class="xref c c-func docutils literal notranslate"><span class="pre">PySet_Size()</span></code></a> instead.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Set オブジェクト</a><ul>
+<li><a class="reference internal" href="#deprecated-api">Deprecated API</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="dict.html"
+                          title="前の章へ">Dictionary Objects</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="function.html"
+                          title="次の章へ">Function オブジェクト</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "c-api/set.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/c-api/set.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/c-api/set.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="function.html" title="Function オブジェクト"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="dict.html" title="Dictionary Objects"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python/C API reference manual</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concrete.html" >具象オブジェクト (concrete object) レイヤ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Set オブジェクト</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="binascii --- バイナリ と ASCII 間の変換" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/binascii.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="The binascii module contains a number of methods to convert between binary and various ASCII-encoded binary representations. Normally, you will not use these functions directly but use wrapper modu..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_binascii_8b98f192.png" />
+<meta property="og:image:alt" content="The binascii module contains a number of methods to convert between binary and various ASCII-encoded binary representations. Normally, you will not use these functions directly but use wrapper modu..." />
+<meta name="description" content="The binascii module contains a number of methods to convert between binary and various ASCII-encoded binary representations. Normally, you will not use these functions directly but use wrapper modu..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>binascii --- バイナリ と ASCII 間の変換 &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="quopri --- MIME quoted-printable データのエンコードとデコード" href="quopri.html" />
+    <link rel="prev" title="base64 --- Base16, Base32, Base64, Base85 データのエンコード" href="base64.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/binascii.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="base64.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base64</span></code> --- Base16, Base32, Base64, Base85 データのエンコード</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="quopri.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">quopri</span></code> --- MIME quoted-printable データのエンコードとデコード</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/binascii.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/binascii.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/binascii.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="quopri.html" title="quopri --- MIME quoted-printable データのエンコードとデコード"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="base64.html" title="base64 --- Base16, Base32, Base64, Base85 データのエンコード"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" accesskey="U">インターネット上のデータの操作</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">binascii</span></code> --- バイナリ と ASCII 間の変換</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-binascii">
+<span id="binascii-convert-between-binary-and-ascii"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">binascii</span></code> --- バイナリ と ASCII 間の変換<a class="headerlink" href="#module-binascii" title="Link to this heading">¶</a></h1>
+<hr class="docutils" id="index-0" />
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">binascii</span></code> module contains a number of methods to convert between
+binary and various ASCII-encoded binary representations. Normally, you will not
+use these functions directly but use wrapper modules like
+<a class="reference internal" href="base64.html#module-base64" title="base64: RFC 4648: Base16, Base32, Base64 Data Encodings; Base85 and Ascii85"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base64</span></code></a> instead. The <code class="xref py py-mod docutils literal notranslate"><span class="pre">binascii</span></code> module contains
+low-level functions written in C for greater speed that are used by the
+higher-level modules.</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">a2b_*</span></code> 関数は ASCII 文字だけを含むユニコード文字列を受け取ります。他の関数は (<a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> や <a class="reference internal" href="stdtypes.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytearray</span></code></a> またはバッファープロトコルをサポートするその他のオブジェクトのような) <a class="reference internal" href="../glossary.html#term-bytes-like-object"><span class="xref std std-term">bytes-like オブジェクト</span></a> だけを受け取ります。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span><code class="docutils literal notranslate"><span class="pre">a2b_*</span></code> 関数は ASCII のみのユニコード文字列を受け取るようになりました。</p>
+</div>
+</div>
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">binascii</span></code> module defines the following functions:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="binascii.a2b_uu">
+<span class="sig-prename descclassname"><span class="pre">binascii.</span></span><span class="sig-name descname"><span class="pre">a2b_uu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.a2b_uu" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">uuencode された 1 行のデータをバイナリに変換し、変換後のバイナリデータを返します。最後の行を除いて、通常 1 行には (バイナリデータで) 45 バイトが含まれます。入力データの先頭には空白文字が連続していてもかまいません。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="binascii.b2a_uu">
+<span class="sig-prename descclassname"><span class="pre">binascii.</span></span><span class="sig-name descname"><span class="pre">b2a_uu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">backtick</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.b2a_uu" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Convert binary data to a line of ASCII characters, the return value is the
+converted line, including a newline char. The length of <em>data</em> should be at most
+45. If <em>backtick</em> is true, zeros are represented by <code class="docutils literal notranslate"><span class="pre">'`'</span></code> instead of spaces.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7 で変更: </span><em>backtick</em> パラメータを追加しました.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="binascii.a2b_base64">
+<span class="sig-prename descclassname"><span class="pre">binascii.</span></span><span class="sig-name descname"><span class="pre">a2b_base64</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.a2b_base64" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">base64 でエンコードされたデータのブロックをバイナリに変換し、変換後のバイナリデータを返します。一度に 1 行以上のデータを与えてもかまいません。</p>
+<p class="untranslated">If <em>strict_mode</em> is true, only valid base64 data will be converted. Invalid base64
+data will raise <a class="reference internal" href="#binascii.Error" title="binascii.Error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">binascii.Error</span></code></a>.</p>
+<p class="untranslated">Valid base64:</p>
+<ul class="simple">
+<li><p class="untranslated">Conforms to <span class="target" id="index-1"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc3548.html"><strong>RFC 3548</strong></a>.</p></li>
+<li><p class="untranslated">Contains only characters from the base64 alphabet.</p></li>
+<li><p class="untranslated">Contains no excess data after padding (including excess padding, newlines, etc.).</p></li>
+<li><p class="untranslated">Does not start with a padding.</p></li>
+</ul>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.11 で変更: </span>Added the <em>strict_mode</em> parameter.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="binascii.b2a_base64">
+<span class="sig-prename descclassname"><span class="pre">binascii.</span></span><span class="sig-name descname"><span class="pre">b2a_base64</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">newline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.b2a_base64" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Convert binary data to a line of ASCII characters in base64 coding. The return
+value is the converted line, including a newline char if <em>newline</em> is
+true.  The output of this function conforms to <span class="target" id="index-2"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc3548.html"><strong>RFC 3548</strong></a>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span>パラメータに <em>newline</em> を追加しました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="binascii.a2b_qp">
+<span class="sig-prename descclassname"><span class="pre">binascii.</span></span><span class="sig-name descname"><span class="pre">a2b_qp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.a2b_qp" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">quoted-printable 形式のデータをバイナリに変換し、バイナリデータを返します。一度に 1 行以上のデータを渡すことができます。オプション引数 <em>header</em> が与えられており、かつその値が真であれば、アンダースコアは空白文字にデコードされます。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="binascii.b2a_qp">
+<span class="sig-prename descclassname"><span class="pre">binascii.</span></span><span class="sig-name descname"><span class="pre">b2a_qp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quotetabs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">istext</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">header</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.b2a_qp" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">バイナリデータを quoted-printable 形式でエンコードして 1 行から複数行の ASCII 文字列に変換します。変換後の文字列を返します。オプション引数 <em>quptetabs</em> が存在し、かつその値が真であれば、全てのタブおよび空白文字もエンコードされます。オプション引数 <em>istext</em> が存在し、かつその値が真であれば、改行はエンコードされませんが、行末の空白文字はエンコードされます。オプション引数 <em>header</em> が存在し、かつその値が真である場合、空白文字は <span class="target" id="index-5"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc1522.html"><strong>RFC 1522</strong></a> にしたがってアンダースコアにエンコードされます。オプション引数 <em>header</em> が存在し、かつその値が偽である場合、改行文字も同様にエンコードされます。そうでない場合、復帰 (linefeed) 文字の変換によってバイナリデータストリームが破損してしまうかもしれません。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="binascii.crc_hqx">
+<span class="sig-prename descclassname"><span class="pre">binascii.</span></span><span class="sig-name descname"><span class="pre">crc_hqx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.crc_hqx" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>value</em> を CRC の初期値として <em>data</em> の 16 ビット CRC 値を計算し、その結果を返します。
+この関数は、よく 0x1021 と表現される CRC-CCITT 多項式 <em>x</em><sup>16</sup> + <em>x</em><sup>12</sup> + <em>x</em><sup>5</sup> + 1 を使います。
+この CRC は binhex4 形式で使われています。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="binascii.crc32">
+<span class="sig-prename descclassname"><span class="pre">binascii.</span></span><span class="sig-name descname"><span class="pre">crc32</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#binascii.crc32" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">符号無し 32 ビットチェックサムである CRC-32 を <em>data</em> に対して計算します。 crc の初期値は <em>value</em> です。デフォルトの CRC の初期値はゼロです。このアルゴリズムは ZIP ファイルのチェックサムと同じです。このアルゴリズムはチェックサムアルゴリズムとして設計されたもので、一般的なハッシュアルゴリズムには向きません。以下のようにして使います:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">binascii</span><span class="o">.</span><span class="n">crc32</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;hello world&quot;</span><span class="p">))</span>
+<span class="c1"># Or, in two pieces:</span>
+<span class="n">crc</span> <span class="o">=</span> <span class="n">binascii</span><span class="o">.</span><span class="n">crc32</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
+<span class="n">crc</span> <span class="o">=</span> <span class="n">binascii</span><span class="o">.</span><span class="n">crc32</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot; world&quot;</span><span class="p">,</span> <span class="n">crc</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;crc32 = </span><span class="si">{:#010x}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">crc</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.0 で変更: </span>The result is always unsigned.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="binascii.b2a_hex">
+<span class="sig-prename descclassname"><span class="pre">binascii.</span></span><span class="sig-name descname"><span class="pre">b2a_hex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">bytes_per_sep=1</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#binascii.b2a_hex" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="binascii.hexlify">
+<span class="sig-prename descclassname"><span class="pre">binascii.</span></span><span class="sig-name descname"><span class="pre">hexlify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">bytes_per_sep=1</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#binascii.hexlify" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">バイナリ <em>data</em> の16進表現を返します。<em>data</em> の各バイトは、対応する2桁の16進表現に変換されます。したがって、返されるバイトオブジェクトは <em>data</em> の2倍の長さになります。</p>
+<p class="untranslated">Similar functionality (but returning a text string) is also conveniently
+accessible using the <a class="reference internal" href="stdtypes.html#bytes.hex" title="bytes.hex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">bytes.hex()</span></code></a> method.</p>
+<p class="untranslated">If <em>sep</em> is specified, it must be a single character str or bytes object.
+It will be inserted in the output after every <em>bytes_per_sep</em> input bytes.
+Separator placement is counted from the right end of the output by default,
+if you wish to count from the left, supply a negative <em>bytes_per_sep</em> value.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span><span class="w"> </span><span class="nn">binascii</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">binascii</span><span class="o">.</span><span class="n">b2a_hex</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xb9\x01\xef</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="go">b&#39;b901ef&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">binascii</span><span class="o">.</span><span class="n">hexlify</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xb9\x01\xef</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="go">b&#39;b9-01-ef&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">binascii</span><span class="o">.</span><span class="n">b2a_hex</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xb9\x01\xef</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">b&#39;b9_01ef&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">binascii</span><span class="o">.</span><span class="n">b2a_hex</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xb9\x01\xef</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">b&#39;b901 ef&#39;</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.8 で変更: </span>引数 <em>sep</em> と <em>bytes_per_sep</em> が追加されました.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="binascii.a2b_hex">
+<span class="sig-prename descclassname"><span class="pre">binascii.</span></span><span class="sig-name descname"><span class="pre">a2b_hex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hexstr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.a2b_hex" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="binascii.unhexlify">
+<span class="sig-prename descclassname"><span class="pre">binascii.</span></span><span class="sig-name descname"><span class="pre">unhexlify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hexstr</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#binascii.unhexlify" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">16進数表記の文字列 <em>hexstr</em> の表すバイナリデータを返します。この関数は <a class="reference internal" href="#binascii.b2a_hex" title="binascii.b2a_hex"><code class="xref py py-func docutils literal notranslate"><span class="pre">b2a_hex()</span></code></a> の逆です。 <em>hexstr</em> は 16進数字 (大文字でも小文字でも構いません) を偶数個含んでいなければなりません。そうでない場合、例外 <a class="reference internal" href="#binascii.Error" title="binascii.Error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Error</span></code></a> が送出されます。</p>
+<p class="untranslated">Similar functionality (but more liberal towards whitespace) is also accessible
+using the <a class="reference internal" href="stdtypes.html#bytes.fromhex" title="bytes.fromhex"><code class="xref py py-meth docutils literal notranslate"><span class="pre">bytes.fromhex()</span></code></a> class method.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="binascii.Error">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">binascii.</span></span><span class="sig-name descname"><span class="pre">Error</span></span><a class="headerlink" href="#binascii.Error" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">エラーが発生した際に送出される例外です。通常はプログラムのエラーです。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="binascii.Incomplete">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">binascii.</span></span><span class="sig-name descname"><span class="pre">Incomplete</span></span><a class="headerlink" href="#binascii.Incomplete" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">変換するデータが不完全な場合に送出される例外です。通常はプログラムのエラーではなく、多少追加読み込みを行って再度変換を試みることで対処できます。</p>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<dl class="simple">
+<dt class="translated"><a class="reference internal" href="base64.html#module-base64" title="base64: RFC 4648: Base16, Base32, Base64 Data Encodings; Base85 and Ascii85"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base64</span></code></a> モジュール</dt><dd><p class="translated">RFC 準拠の base64 形式の、底が 16、32、64、85 のエンコーディング。</p>
+</dd>
+<dt class="translated"><a class="reference internal" href="quopri.html#module-quopri" title="quopri: Encode and decode files using the MIME quoted-printable encoding."><code class="xref py py-mod docutils literal notranslate"><span class="pre">quopri</span></code></a> モジュール</dt><dd><p class="translated">MIME 電子メールメッセージで使われる quoted-printable エンコードのサポート。</p>
+</dd>
+</dl>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="base64.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base64</span></code> --- Base16, Base32, Base64, Base85 データのエンコード</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="quopri.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">quopri</span></code> --- MIME quoted-printable データのエンコードとデコード</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/binascii.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/binascii.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/binascii.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="quopri.html" title="quopri --- MIME quoted-printable データのエンコードとデコード"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="base64.html" title="base64 --- Base16, Base32, Base64, Base85 データのエンコード"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" >インターネット上のデータの操作</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">binascii</span></code> --- バイナリ と ASCII 間の変換</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

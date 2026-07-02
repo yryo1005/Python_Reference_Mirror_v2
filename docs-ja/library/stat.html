@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="stat --- stat() の結果を解釈する" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/stat.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/stat.py The stat module defines constants and functions for interpreting the results of os.stat(), os.fstat() and os.lstat()(if they exist). For complete details about the stat(), fstat..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_stat_c327c9c9.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/stat.py The stat module defines constants and functions for interpreting the results of os.stat(), os.fstat() and os.lstat()(if they exist). For complete details about the stat(), fstat..." />
+<meta name="description" content="ソースコード: Lib/stat.py The stat module defines constants and functions for interpreting the results of os.stat(), os.fstat() and os.lstat()(if they exist). For complete details about the stat(), fstat..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>stat --- stat() の結果を解釈する &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="filecmp --- ファイルとディレクトリの比較" href="filecmp.html" />
+    <link rel="prev" title="os.path --- 一般的なパス名操作" href="os.path.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/stat.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="os.path.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">os.path</span></code> --- 一般的なパス名操作</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="filecmp.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">filecmp</span></code> --- ファイルとディレクトリの比較</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/stat.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/stat.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/stat.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="filecmp.html" title="filecmp --- ファイルとディレクトリの比較"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="os.path.html" title="os.path --- 一般的なパス名操作"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="filesys.html" accesskey="U">ファイルとディレクトリへのアクセス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">stat</span></code> --- <code class="xref py py-func docutils literal notranslate"><span class="pre">stat()</span></code> の結果を解釈する</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-stat">
+<span id="stat-interpreting-stat-results"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">stat</span></code> --- <a class="reference internal" href="os.html#os.stat" title="os.stat"><code class="xref py py-func docutils literal notranslate"><span class="pre">stat()</span></code></a> の結果を解釈する<a class="headerlink" href="#module-stat" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/stat.py">Lib/stat.py</a></p>
+<hr class="docutils" />
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">stat</span></code> module defines constants and functions for interpreting the
+results of <a class="reference internal" href="os.html#os.stat" title="os.stat"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.stat()</span></code></a>, <a class="reference internal" href="os.html#os.fstat" title="os.fstat"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.fstat()</span></code></a> and <a class="reference internal" href="os.html#os.lstat" title="os.lstat"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.lstat()</span></code></a> (if they
+exist).  For complete details about the <code class="xref c c-func docutils literal notranslate"><span class="pre">stat()</span></code>, <code class="xref c c-func docutils literal notranslate"><span class="pre">fstat()</span></code> and
+<code class="xref c c-func docutils literal notranslate"><span class="pre">lstat()</span></code> calls, consult the documentation for your system.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.4 で変更: </span>stat モジュールは、C 実装に裏付けされるようになりました。</p>
+</div>
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">stat</span></code> module defines the following functions to test for specific file
+types:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="stat.S_ISDIR">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_ISDIR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stat.S_ISDIR" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルのモードがディレクトリの場合にゼロでない値を返します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stat.S_ISCHR">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_ISCHR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stat.S_ISCHR" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルのモードがキャラクタ型の特殊デバイスファイルの場合にゼロでない値を返します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stat.S_ISBLK">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_ISBLK</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stat.S_ISBLK" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルのモードがブロック型の特殊デバイスファイルの場合にゼロでない値を返します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stat.S_ISREG">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_ISREG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stat.S_ISREG" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルのモードが通常ファイルの場合にゼロでない値を返します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stat.S_ISFIFO">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_ISFIFO</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stat.S_ISFIFO" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルのモードが FIFO (名前つきパイプ) の場合にゼロでない値を返します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stat.S_ISLNK">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_ISLNK</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stat.S_ISLNK" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルのモードがシンボリックリンクの場合にゼロでない値を返します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stat.S_ISSOCK">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_ISSOCK</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stat.S_ISSOCK" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルのモードがソケットの場合にゼロでない値を返します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stat.S_ISDOOR">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_ISDOOR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stat.S_ISDOOR" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルのモードがドアの場合にゼロでない値を返します。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stat.S_ISPORT">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_ISPORT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stat.S_ISPORT" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルのモードがイベントポートの場合にゼロでない値を返します。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stat.S_ISWHT">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_ISWHT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stat.S_ISWHT" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルのモードがホワイトアウトの場合にゼロでない値を返します。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<p class="translated">より一般的なファイルのモードを操作するための二つの関数が定義されています:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="stat.S_IMODE">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IMODE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stat.S_IMODE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="os.html#os.chmod" title="os.chmod"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.chmod()</span></code></a> で設定することのできる一部のファイルモード --- すなわち、ファイルの許可ビット (permission bits) に加え、 (サポートされているシステムでは) スティッキービット (sticky bit)、実行グループ ID 設定 (set-group-id) および実行ユーザ ID 設定 (set-user-id) ビット --- を返します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="stat.S_IFMT">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IFMT</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stat.S_IFMT" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return the portion of the file's mode that describes the file type (used by the
+<code class="xref py py-func docutils literal notranslate"><span class="pre">S_IS*()</span></code> functions above).</p>
+</dd></dl>
+
+<p class="untranslated">Normally, you would use the <code class="xref py py-func docutils literal notranslate"><span class="pre">os.path.is*()</span></code> functions for testing the type
+of a file; the functions here are useful when you are doing multiple tests of
+the same file and wish to avoid the overhead of the <code class="xref c c-func docutils literal notranslate"><span class="pre">stat()</span></code> system call
+for each test.  These are also useful when checking for information about a file
+that isn't handled by <a class="reference internal" href="os.path.html#module-os.path" title="os.path: Operations on pathnames."><code class="xref py py-mod docutils literal notranslate"><span class="pre">os.path</span></code></a>, like the tests for block and character
+devices.</p>
+<p class="translated">以下はプログラム例です:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stat</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">walktree</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">callback</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&#39;&#39;&#39;recursively descend the directory tree rooted at top,</span>
+<span class="sd">       calling the callback function for each regular file&#39;&#39;&#39;</span>
+
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">top</span><span class="p">):</span>
+        <span class="n">pathname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">lstat</span><span class="p">(</span><span class="n">pathname</span><span class="p">)</span><span class="o">.</span><span class="n">st_mode</span>
+        <span class="k">if</span> <span class="n">S_ISDIR</span><span class="p">(</span><span class="n">mode</span><span class="p">):</span>
+            <span class="c1"># It&#39;s a directory, recurse into it</span>
+            <span class="n">walktree</span><span class="p">(</span><span class="n">pathname</span><span class="p">,</span> <span class="n">callback</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">S_ISREG</span><span class="p">(</span><span class="n">mode</span><span class="p">):</span>
+            <span class="c1"># It&#39;s a file, call the callback function</span>
+            <span class="n">callback</span><span class="p">(</span><span class="n">pathname</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Unknown file type, print a message</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Skipping </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">pathname</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">visitfile</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;visiting&#39;</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">walktree</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">visitfile</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="translated">ファイルのモードを人間が可読な文字列に変換するために、追加のユーティリティ関数が提供されています。</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="stat.filemode">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">filemode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#stat.filemode" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルのモードを '-rwxrwxrwx' 形式の文字列に変換します。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.3.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.4 で変更: </span>この関数は、<a class="reference internal" href="#stat.S_IFDOOR" title="stat.S_IFDOOR"><code class="xref py py-data docutils literal notranslate"><span class="pre">S_IFDOOR</span></code></a> 、 <a class="reference internal" href="#stat.S_IFPORT" title="stat.S_IFPORT"><code class="xref py py-data docutils literal notranslate"><span class="pre">S_IFPORT</span></code></a> 、 <a class="reference internal" href="#stat.S_IFWHT" title="stat.S_IFWHT"><code class="xref py py-data docutils literal notranslate"><span class="pre">S_IFWHT</span></code></a> をサポートしています。</p>
+</div>
+</dd></dl>
+
+<p class="translated">以下の全ての変数は、 <a class="reference internal" href="os.html#os.stat" title="os.stat"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.stat()</span></code></a> 、 <a class="reference internal" href="os.html#os.fstat" title="os.fstat"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.fstat()</span></code></a> 、または <a class="reference internal" href="os.html#os.lstat" title="os.lstat"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.lstat()</span></code></a> が返す 10 要素のタプルにおけるインデクスを単にシンボル定数化したものです。</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.ST_MODE">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">ST_MODE</span></span><a class="headerlink" href="#stat.ST_MODE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Iノードの保護モード。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.ST_INO">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">ST_INO</span></span><a class="headerlink" href="#stat.ST_INO" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Iノード番号。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.ST_DEV">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">ST_DEV</span></span><a class="headerlink" href="#stat.ST_DEV" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Iノードが存在するデバイス。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.ST_NLINK">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">ST_NLINK</span></span><a class="headerlink" href="#stat.ST_NLINK" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">該当する Iノードへのリンク数。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.ST_UID">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">ST_UID</span></span><a class="headerlink" href="#stat.ST_UID" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルの所持者のユーザ ID。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.ST_GID">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">ST_GID</span></span><a class="headerlink" href="#stat.ST_GID" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルの所持者のグループ ID。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.ST_SIZE">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">ST_SIZE</span></span><a class="headerlink" href="#stat.ST_SIZE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">通常ファイルではバイトサイズ; いくつかの特殊ファイルでは処理待ちのデータ量。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.ST_ATIME">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">ST_ATIME</span></span><a class="headerlink" href="#stat.ST_ATIME" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">最後にアクセスした時刻。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.ST_MTIME">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">ST_MTIME</span></span><a class="headerlink" href="#stat.ST_MTIME" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">最後に変更された時刻。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.ST_CTIME">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">ST_CTIME</span></span><a class="headerlink" href="#stat.ST_CTIME" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">オペレーティングシステムから返される&quot;ctime&quot;。あるOS(Unixなど)では最後にメタデータが更新された時間となり、別のOS(Windowsなど)では作成時間となります(詳細については各プラットフォームのドキュメントを参照してください)。</p>
+</dd></dl>
+
+<p class="translated">&quot;ファイルサイズ&quot; の解釈はファイルの型によって異なります。通常のファイルの場合、サイズはファイルの大きさをバイトで表したものです。ほとんどの Unix 系 (特に Linux) における FIFO やソケットの場合、&quot;サイズ&quot; は <a class="reference internal" href="os.html#os.stat" title="os.stat"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.stat()</span></code></a> 、 <a class="reference internal" href="os.html#os.fstat" title="os.fstat"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.fstat()</span></code></a> 、あるいは <a class="reference internal" href="os.html#os.lstat" title="os.lstat"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.lstat()</span></code></a> を呼び出した時点で読み出し待ちであったデータのバイト数になります; この値は時に有用で、特に上記の特殊なファイルを非ブロックモードで開いた後にポーリングを行いたいといった場合に便利です。他のキャラクタ型およびブロック型デバイスにおけるサイズフィールドの意味はさらに異なっていて、背後のシステムコールの実装によります。</p>
+<p class="translated">以下の変数は、 <a class="reference internal" href="#stat.ST_MODE" title="stat.ST_MODE"><code class="xref py py-data docutils literal notranslate"><span class="pre">ST_MODE</span></code></a> フィールドで使用されるフラグを定義しています。</p>
+<p class="translated">最初に挙げる、以下のフラグを使うよりは、上記の関数を使うほうがポータブルです:</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IFSOCK">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IFSOCK</span></span><a class="headerlink" href="#stat.S_IFSOCK" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ソケット。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IFLNK">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IFLNK</span></span><a class="headerlink" href="#stat.S_IFLNK" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">シンボリックリンク。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IFREG">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IFREG</span></span><a class="headerlink" href="#stat.S_IFREG" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">通常のファイル。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IFBLK">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IFBLK</span></span><a class="headerlink" href="#stat.S_IFBLK" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ブロックデバイス。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IFDIR">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IFDIR</span></span><a class="headerlink" href="#stat.S_IFDIR" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ディレクトリ。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IFCHR">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IFCHR</span></span><a class="headerlink" href="#stat.S_IFCHR" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">キャラクターデバイス。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IFIFO">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IFIFO</span></span><a class="headerlink" href="#stat.S_IFIFO" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">FIFO。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IFDOOR">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IFDOOR</span></span><a class="headerlink" href="#stat.S_IFDOOR" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ドア。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IFPORT">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IFPORT</span></span><a class="headerlink" href="#stat.S_IFPORT" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">イベントポート。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IFWHT">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IFWHT</span></span><a class="headerlink" href="#stat.S_IFWHT" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ホワイトアウト。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated"><a class="reference internal" href="#stat.S_IFDOOR" title="stat.S_IFDOOR"><code class="xref py py-data docutils literal notranslate"><span class="pre">S_IFDOOR</span></code></a> 、 <a class="reference internal" href="#stat.S_IFPORT" title="stat.S_IFPORT"><code class="xref py py-data docutils literal notranslate"><span class="pre">S_IFPORT</span></code></a> 、または <a class="reference internal" href="#stat.S_IFWHT" title="stat.S_IFWHT"><code class="xref py py-data docutils literal notranslate"><span class="pre">S_IFWHT</span></code></a> は、プラットフォームがこれらのファイルタイプをサポートしていない場合、0 として定義されます。</p>
+</div>
+<p class="translated">以下のフラグは、 <a class="reference internal" href="os.html#os.chmod" title="os.chmod"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.chmod()</span></code></a> の <em>mode</em> 引数に使うこともできます:</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_ISUID">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_ISUID</span></span><a class="headerlink" href="#stat.S_ISUID" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">UID ビットを設定する。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_ISGID">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_ISGID</span></span><a class="headerlink" href="#stat.S_ISGID" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">グループIDビットを設定する。このビットには幾つかの特殊ケースがあります。ディレクトリに対して設定されていた場合、 BSD のセマンティクスが利用される事を示しています。すなわち、そこに作成されるファイルは、作成したプロセスの有効グループID (effective group ID) ではなくそのディレクトリのグループIDを継承し、そこに作成されるディレクトリにも <a class="reference internal" href="#stat.S_ISGID" title="stat.S_ISGID"><code class="xref py py-data docutils literal notranslate"><span class="pre">S_ISGID</span></code></a> ビットが設定されます。グループ実行ビット (<a class="reference internal" href="#stat.S_IXGRP" title="stat.S_IXGRP"><code class="xref py py-data docutils literal notranslate"><span class="pre">S_IXGRP</span></code></a>) が設定されていないファイルに対してこのビットが設定されていた場合、強制ファイル/レコードロックを意味します (<a class="reference internal" href="#stat.S_ENFMT" title="stat.S_ENFMT"><code class="xref py py-data docutils literal notranslate"><span class="pre">S_ENFMT</span></code></a> も参照してください)。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_ISVTX">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_ISVTX</span></span><a class="headerlink" href="#stat.S_ISVTX" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">スティッキービット。このビットがディレクトリに対して設定されているとき、そのディレクトリ内のファイルは、そのファイルのオーナー、あるいはそのディレクトリのオーナーか特権プロセスのみが、リネームや削除をすることが出来ることを意味しています。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IRWXU">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IRWXU</span></span><a class="headerlink" href="#stat.S_IRWXU" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルオーナーの権限に対するマスク。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IRUSR">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IRUSR</span></span><a class="headerlink" href="#stat.S_IRUSR" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">オーナーがリード権限を持っている。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IWUSR">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IWUSR</span></span><a class="headerlink" href="#stat.S_IWUSR" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">オーナーがライト権限を持っている。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IXUSR">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IXUSR</span></span><a class="headerlink" href="#stat.S_IXUSR" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">オーナーが実行権限を持っている。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IRWXG">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IRWXG</span></span><a class="headerlink" href="#stat.S_IRWXG" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">グループの権限に対するマスク。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IRGRP">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IRGRP</span></span><a class="headerlink" href="#stat.S_IRGRP" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">グループがリード権限を持っている。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IWGRP">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IWGRP</span></span><a class="headerlink" href="#stat.S_IWGRP" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">グループがライト権限を持っている。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IXGRP">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IXGRP</span></span><a class="headerlink" href="#stat.S_IXGRP" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">グループが実行権限を持っている。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IRWXO">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IRWXO</span></span><a class="headerlink" href="#stat.S_IRWXO" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">その他 (グループ外) の権限に対するマスク。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IROTH">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IROTH</span></span><a class="headerlink" href="#stat.S_IROTH" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">その他はリード権限を持っている。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IWOTH">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IWOTH</span></span><a class="headerlink" href="#stat.S_IWOTH" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">その他はライト権限を持っている。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IXOTH">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IXOTH</span></span><a class="headerlink" href="#stat.S_IXOTH" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">その他は実行権限を持っている。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_ENFMT">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_ENFMT</span></span><a class="headerlink" href="#stat.S_ENFMT" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">System V ファイルロック強制。このフラグは <a class="reference internal" href="#stat.S_ISGID" title="stat.S_ISGID"><code class="xref py py-data docutils literal notranslate"><span class="pre">S_ISGID</span></code></a> と共有されています。グループ実行ビット (<a class="reference internal" href="#stat.S_IXGRP" title="stat.S_IXGRP"><code class="xref py py-data docutils literal notranslate"><span class="pre">S_IXGRP</span></code></a>) が設定されていないファイルでは、ファイル/レコードのロックが強制されます。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IREAD">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IREAD</span></span><a class="headerlink" href="#stat.S_IREAD" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#stat.S_IRUSR" title="stat.S_IRUSR"><code class="xref py py-data docutils literal notranslate"><span class="pre">S_IRUSR</span></code></a> の、 Unix V7 のシノニム。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IWRITE">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IWRITE</span></span><a class="headerlink" href="#stat.S_IWRITE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#stat.S_IWUSR" title="stat.S_IWUSR"><code class="xref py py-data docutils literal notranslate"><span class="pre">S_IWUSR</span></code></a> の、 Unix V7 のシノニム。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.S_IEXEC">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">S_IEXEC</span></span><a class="headerlink" href="#stat.S_IEXEC" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#stat.S_IXUSR" title="stat.S_IXUSR"><code class="xref py py-data docutils literal notranslate"><span class="pre">S_IXUSR</span></code></a> の、 Unix V7 のシノニム。</p>
+</dd></dl>
+
+<p class="translated">以下のフラグを <a class="reference internal" href="os.html#os.chflags" title="os.chflags"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.chflags()</span></code></a> の <em>flags</em> 引数として利用できます:</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.UF_SETTABLE">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">UF_SETTABLE</span></span><a class="headerlink" href="#stat.UF_SETTABLE" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">All user settable flags.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.UF_NODUMP">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">UF_NODUMP</span></span><a class="headerlink" href="#stat.UF_NODUMP" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルをダンプしない。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.UF_IMMUTABLE">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">UF_IMMUTABLE</span></span><a class="headerlink" href="#stat.UF_IMMUTABLE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルは変更されない。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.UF_APPEND">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">UF_APPEND</span></span><a class="headerlink" href="#stat.UF_APPEND" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルは追記しかされない。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.UF_OPAQUE">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">UF_OPAQUE</span></span><a class="headerlink" href="#stat.UF_OPAQUE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ユニオンファイルシステムのスタックを通したとき、このディレクトリは不透明です。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.UF_NOUNLINK">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">UF_NOUNLINK</span></span><a class="headerlink" href="#stat.UF_NOUNLINK" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルはリネームや削除されない。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.UF_COMPRESSED">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">UF_COMPRESSED</span></span><a class="headerlink" href="#stat.UF_COMPRESSED" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルは圧縮して保存される (macOS 10.6+)。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.UF_TRACKED">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">UF_TRACKED</span></span><a class="headerlink" href="#stat.UF_TRACKED" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Used for handling document IDs (macOS)</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.UF_DATAVAULT">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">UF_DATAVAULT</span></span><a class="headerlink" href="#stat.UF_DATAVAULT" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The file needs an entitlement for reading or writing (macOS 10.13+)</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.UF_HIDDEN">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">UF_HIDDEN</span></span><a class="headerlink" href="#stat.UF_HIDDEN" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルは GUI で表示されるべきでない (macOS 10.5+)。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.SF_SETTABLE">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">SF_SETTABLE</span></span><a class="headerlink" href="#stat.SF_SETTABLE" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">All super-user changeable flags</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.SF_SUPPORTED">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">SF_SUPPORTED</span></span><a class="headerlink" href="#stat.SF_SUPPORTED" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">All super-user supported flags</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: macOS</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.SF_SYNTHETIC">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">SF_SYNTHETIC</span></span><a class="headerlink" href="#stat.SF_SYNTHETIC" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">All super-user read-only synthetic flags</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: macOS</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.SF_ARCHIVED">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">SF_ARCHIVED</span></span><a class="headerlink" href="#stat.SF_ARCHIVED" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルはアーカイブされているかもしれません。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.SF_IMMUTABLE">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">SF_IMMUTABLE</span></span><a class="headerlink" href="#stat.SF_IMMUTABLE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルは変更されない。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.SF_APPEND">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">SF_APPEND</span></span><a class="headerlink" href="#stat.SF_APPEND" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルは追記しかされない。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.SF_RESTRICTED">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">SF_RESTRICTED</span></span><a class="headerlink" href="#stat.SF_RESTRICTED" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The file needs an entitlement to write to (macOS 10.13+)</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.SF_NOUNLINK">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">SF_NOUNLINK</span></span><a class="headerlink" href="#stat.SF_NOUNLINK" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルはリネームや削除されない。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.SF_SNAPSHOT">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">SF_SNAPSHOT</span></span><a class="headerlink" href="#stat.SF_SNAPSHOT" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このファイルはスナップショットファイルです。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.SF_FIRMLINK">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">SF_FIRMLINK</span></span><a class="headerlink" href="#stat.SF_FIRMLINK" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The file is a firmlink (macOS 10.15+)</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.SF_DATALESS">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">SF_DATALESS</span></span><a class="headerlink" href="#stat.SF_DATALESS" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The file is a dataless object (macOS 10.15+)</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+</dd></dl>
+
+<p class="translated">詳しい情報は *BSD か macOS システムの man page <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/chflags(2)">chflags(2)</a></em> を参照してください。</p>
+<p class="translated">Windows では、<a class="reference internal" href="os.html#os.stat" title="os.stat"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.stat()</span></code></a> が返す <code class="docutils literal notranslate"><span class="pre">st_file_attributes</span></code> メンバー内のビットを検証する際に、以下のファイル属性定数を使用できます。これらの定数の意味について詳しくは、<a class="reference external" href="https://msdn.microsoft.com/en-us/library/windows/desktop/gg258117.aspx">Windows API documentation</a> を参照してください。</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.FILE_ATTRIBUTE_ARCHIVE">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">FILE_ATTRIBUTE_ARCHIVE</span></span><a class="headerlink" href="#stat.FILE_ATTRIBUTE_ARCHIVE" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stat.FILE_ATTRIBUTE_COMPRESSED">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">FILE_ATTRIBUTE_COMPRESSED</span></span><a class="headerlink" href="#stat.FILE_ATTRIBUTE_COMPRESSED" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stat.FILE_ATTRIBUTE_DEVICE">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">FILE_ATTRIBUTE_DEVICE</span></span><a class="headerlink" href="#stat.FILE_ATTRIBUTE_DEVICE" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stat.FILE_ATTRIBUTE_DIRECTORY">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">FILE_ATTRIBUTE_DIRECTORY</span></span><a class="headerlink" href="#stat.FILE_ATTRIBUTE_DIRECTORY" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stat.FILE_ATTRIBUTE_ENCRYPTED">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">FILE_ATTRIBUTE_ENCRYPTED</span></span><a class="headerlink" href="#stat.FILE_ATTRIBUTE_ENCRYPTED" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stat.FILE_ATTRIBUTE_HIDDEN">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">FILE_ATTRIBUTE_HIDDEN</span></span><a class="headerlink" href="#stat.FILE_ATTRIBUTE_HIDDEN" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stat.FILE_ATTRIBUTE_INTEGRITY_STREAM">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">FILE_ATTRIBUTE_INTEGRITY_STREAM</span></span><a class="headerlink" href="#stat.FILE_ATTRIBUTE_INTEGRITY_STREAM" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stat.FILE_ATTRIBUTE_NORMAL">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">FILE_ATTRIBUTE_NORMAL</span></span><a class="headerlink" href="#stat.FILE_ATTRIBUTE_NORMAL" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stat.FILE_ATTRIBUTE_NOT_CONTENT_INDEXED">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">FILE_ATTRIBUTE_NOT_CONTENT_INDEXED</span></span><a class="headerlink" href="#stat.FILE_ATTRIBUTE_NOT_CONTENT_INDEXED" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stat.FILE_ATTRIBUTE_NO_SCRUB_DATA">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">FILE_ATTRIBUTE_NO_SCRUB_DATA</span></span><a class="headerlink" href="#stat.FILE_ATTRIBUTE_NO_SCRUB_DATA" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stat.FILE_ATTRIBUTE_OFFLINE">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">FILE_ATTRIBUTE_OFFLINE</span></span><a class="headerlink" href="#stat.FILE_ATTRIBUTE_OFFLINE" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stat.FILE_ATTRIBUTE_READONLY">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">FILE_ATTRIBUTE_READONLY</span></span><a class="headerlink" href="#stat.FILE_ATTRIBUTE_READONLY" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stat.FILE_ATTRIBUTE_REPARSE_POINT">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">FILE_ATTRIBUTE_REPARSE_POINT</span></span><a class="headerlink" href="#stat.FILE_ATTRIBUTE_REPARSE_POINT" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stat.FILE_ATTRIBUTE_SPARSE_FILE">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">FILE_ATTRIBUTE_SPARSE_FILE</span></span><a class="headerlink" href="#stat.FILE_ATTRIBUTE_SPARSE_FILE" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stat.FILE_ATTRIBUTE_SYSTEM">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">FILE_ATTRIBUTE_SYSTEM</span></span><a class="headerlink" href="#stat.FILE_ATTRIBUTE_SYSTEM" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stat.FILE_ATTRIBUTE_TEMPORARY">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">FILE_ATTRIBUTE_TEMPORARY</span></span><a class="headerlink" href="#stat.FILE_ATTRIBUTE_TEMPORARY" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stat.FILE_ATTRIBUTE_VIRTUAL">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">FILE_ATTRIBUTE_VIRTUAL</span></span><a class="headerlink" href="#stat.FILE_ATTRIBUTE_VIRTUAL" title="Link to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.5.</span></p>
+</div>
+</dd></dl>
+
+<p class="translated">Windows では、<a class="reference internal" href="os.html#os.lstat" title="os.lstat"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.lstat()</span></code></a> が返す <code class="docutils literal notranslate"><span class="pre">st_reparse_tag</span></code> メンバーとの比較に次の定数が 使えます。
+これらはよく知られている定数ですが、全てを網羅したリストではありません。</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="stat.IO_REPARSE_TAG_SYMLINK">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">IO_REPARSE_TAG_SYMLINK</span></span><a class="headerlink" href="#stat.IO_REPARSE_TAG_SYMLINK" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stat.IO_REPARSE_TAG_MOUNT_POINT">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">IO_REPARSE_TAG_MOUNT_POINT</span></span><a class="headerlink" href="#stat.IO_REPARSE_TAG_MOUNT_POINT" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="stat.IO_REPARSE_TAG_APPEXECLINK">
+<span class="sig-prename descclassname"><span class="pre">stat.</span></span><span class="sig-name descname"><span class="pre">IO_REPARSE_TAG_APPEXECLINK</span></span><a class="headerlink" href="#stat.IO_REPARSE_TAG_APPEXECLINK" title="Link to this definition">¶</a></dt>
+<dd><div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.8.</span></p>
+</div>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="os.path.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">os.path</span></code> --- 一般的なパス名操作</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="filecmp.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">filecmp</span></code> --- ファイルとディレクトリの比較</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/stat.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/stat.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/stat.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="filecmp.html" title="filecmp --- ファイルとディレクトリの比較"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="os.path.html" title="os.path --- 一般的なパス名操作"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="filesys.html" >ファイルとディレクトリへのアクセス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">stat</span></code> --- <code class="xref py py-func docutils literal notranslate"><span class="pre">stat()</span></code> の結果を解釈する</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

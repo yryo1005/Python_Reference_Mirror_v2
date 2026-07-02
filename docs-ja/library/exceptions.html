@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="組み込み例外" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/exceptions.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="Python において、すべての例外は BaseException から派生したクラスのインスタンスでなければなりません。特定のクラスを言及する except 節を伴う try 文において、その節はそのクラスから派生した例外クラスも処理しますが、そのクラスの派生 元 の例外クラスは処理しません。サブクラス化の関係にない 2 つの例外クラスは、それらが同じ名前だった場合でも等しくなりえません。..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_exceptions_ffb5ad6c.png" />
+<meta property="og:image:alt" content="Python において、すべての例外は BaseException から派生したクラスのインスタンスでなければなりません。特定のクラスを言及する except 節を伴う try 文において、その節はそのクラスから派生した例外クラスも処理しますが、そのクラスの派生 元 の例外クラスは処理しません。サブクラス化の関係にない 2 つの例外クラスは、それらが同じ名前だった場合でも等しくなりえません。..." />
+<meta name="description" content="Python において、すべての例外は BaseException から派生したクラスのインスタンスでなければなりません。特定のクラスを言及する except 節を伴う try 文において、その節はそのクラスから派生した例外クラスも処理しますが、そのクラスの派生 元 の例外クラスは処理しません。サブクラス化の関係にない 2 つの例外クラスは、それらが同じ名前だった場合でも等しくなりえません。..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>組み込み例外 &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="Thread Safety Guarantees" href="threadsafety.html" />
+    <link rel="prev" title="組み込み型" href="stdtypes.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/exceptions.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">組み込み例外</a><ul>
+<li><a class="reference internal" href="#exception-context">例外コンテキスト</a></li>
+<li><a class="reference internal" href="#inheriting-from-built-in-exceptions">組み込み例外から継承する</a></li>
+<li><a class="reference internal" href="#base-classes">基底クラス</a></li>
+<li><a class="reference internal" href="#concrete-exceptions">具象例外</a><ul>
+<li><a class="reference internal" href="#os-exceptions">OS 例外</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#warnings">警告</a></li>
+<li><a class="reference internal" href="#exception-groups">例外グループ</a></li>
+<li><a class="reference internal" href="#exception-hierarchy">例外のクラス階層</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="stdtypes.html"
+                          title="前の章へ">組み込み型</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="threadsafety.html"
+                          title="次の章へ">Thread Safety Guarantees</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/exceptions.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/exceptions.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/exceptions.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="threadsafety.html" title="Thread Safety Guarantees"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="stdtypes.html" title="組み込み型"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Python 標準ライブラリ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">組み込み例外</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="built-in-exceptions">
+<span id="bltin-exceptions"></span><h1 class="translated">組み込み例外<a class="headerlink" href="#built-in-exceptions" title="Link to this heading">¶</a></h1>
+<p class="translated" id="index-0">Python において、すべての例外は <a class="reference internal" href="#BaseException" title="BaseException"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseException</span></code></a> から派生したクラスのインスタンスでなければなりません。特定のクラスを言及する <a class="reference internal" href="../reference/compound_stmts.html#except"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">except</span></code></a> 節を伴う <a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">try</span></code></a> 文において、その節はそのクラスから派生した例外クラスも処理しますが、そのクラスの派生 <em>元</em> の例外クラスは処理しません。サブクラス化の関係にない 2 つの例外クラスは、それらが同じ名前だった場合でも等しくなりえません。</p>
+<p class="translated" id="index-1">この章で挙げる組み込み例外は、インタプリタや組み込み関数によって生成されます。特に注記しないかぎり、これらはエラーの詳しい原因を示す &quot;関連値 (associated value)&quot; を持ちます。この値は、複数の情報 (エラーコードや、そのコードを説明する文字列など) の文字列かタプルです。関連値は通常、例外クラスのコンストラクタに引数として渡されます。</p>
+<p class="translated">ユーザによるコードも組み込み例外を送出できます。これを使って、例外ハンドラをテストしたり、インタプリタが同じ例外を送出する状況と &quot;ちょうど同じような&quot; エラー条件であることを報告したりできます。しかし、ユーザのコードが適切でないエラーを送出するのを妨げる方法はないので注意してください。</p>
+<p class="translated">組み込み例外クラスは新たな例外を定義するためにサブクラス化することができます。新しい例外は、<a class="reference internal" href="#Exception" title="Exception"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Exception</span></code></a> クラスかそのサブクラスの一つから派生することをお勧めします。 <a class="reference internal" href="#BaseException" title="BaseException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">BaseException</span></code></a> からは派生しないで下さい。例外を定義する上での詳しい情報は、 Python チュートリアルの <a class="reference internal" href="../tutorial/errors.html#tut-userexceptions"><span class="std std-ref">ユーザー定義例外</span></a> の項目にあります。</p>
+<section id="exception-context">
+<h2 class="translated">例外コンテキスト<a class="headerlink" href="#exception-context" title="Link to this heading">¶</a></h2>
+<p class="translated" id="index-2">例外オブジェクトの3つの属性は、例外が送出された常用に関する情報を提供します:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="BaseException.__context__">
+<span class="sig-prename descclassname"><span class="pre">BaseException.</span></span><span class="sig-name descname"><span class="pre">__context__</span></span><a class="headerlink" href="#BaseException.__context__" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="BaseException.__cause__">
+<span class="sig-prename descclassname"><span class="pre">BaseException.</span></span><span class="sig-name descname"><span class="pre">__cause__</span></span><a class="headerlink" href="#BaseException.__cause__" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="BaseException.__suppress_context__">
+<span class="sig-prename descclassname"><span class="pre">BaseException.</span></span><span class="sig-name descname"><span class="pre">__suppress_context__</span></span><a class="headerlink" href="#BaseException.__suppress_context__" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">When raising a new exception while another exception
+is already being handled, the new exception's
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">__context__</span></code> attribute is automatically set to the handled
+exception.  An exception may be handled when an <a class="reference internal" href="../reference/compound_stmts.html#except"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">except</span></code></a> or
+<a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">finally</span></code></a> clause, or a <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> statement, is used.</p>
+<p class="untranslated">This implicit exception context can be
+supplemented with an explicit cause by using <code class="xref std std-keyword docutils literal notranslate"><span class="pre">from</span></code> with
+<a class="reference internal" href="../reference/simple_stmts.html#raise"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">raise</span></code></a>:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">raise</span> <span class="n">new_exc</span> <span class="kn">from</span><span class="w"> </span><span class="nn">original_exc</span>
+</pre></div>
+</div>
+<p class="translated"><a class="reference internal" href="../reference/simple_stmts.html#raise"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">from</span></code></a> に続く式は例外か <code class="docutils literal notranslate"><span class="pre">None</span></code> でなくてはなりません。
+式は送出される例外の <code class="xref py py-attr docutils literal notranslate"><span class="pre">__cause__</span></code> として設定されます。
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">__cause__</span></code> を設定することは、 <code class="xref py py-attr docutils literal notranslate"><span class="pre">__suppress_context__</span></code> 属性を暗黙的に <code class="docutils literal notranslate"><span class="pre">True</span></code> に設定することにもなるので、 <code class="docutils literal notranslate"><span class="pre">raise</span> <span class="pre">new_exc</span> <span class="pre">from</span> <span class="pre">None</span></code> を使うことで効率的に古い例外を新しいもので置き換えて表示する (例えば、 <a class="reference internal" href="#KeyError" title="KeyError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyError</span></code></a> を <a class="reference internal" href="#AttributeError" title="AttributeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">AttributeError</span></code></a> に置き換え)、古い例外はデバッグ時の調査で使えるよう <code class="xref py py-attr docutils literal notranslate"><span class="pre">__context__</span></code> に残すことができます。</p>
+<p class="translated">デフォルトの traceback 表示コードは、例外自体の traceback に加え、これらの連鎖された例外を表示します。<code class="xref py py-attr docutils literal notranslate"><span class="pre">__cause__</span></code> で明示的に連鎖させた例外は、存在するならば常に表示されます。<code class="xref py py-attr docutils literal notranslate"><span class="pre">__context__</span></code> で暗黙に連鎖させた例外は、<code class="xref py py-attr docutils literal notranslate"><span class="pre">__cause__</span></code> が <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a> かつ <code class="xref py py-attr docutils literal notranslate"><span class="pre">__suppress_context__</span></code> が false の場合にのみ表示されます。</p>
+<p class="translated">いずれにせよ、連鎖された例外に続いて、その例外自体は常に表示されます。そのため、traceback の最終行には、常に送出された最後の例外が表示されます。</p>
+</dd></dl>
+
+</section>
+<section id="inheriting-from-built-in-exceptions">
+<h2 class="translated">組み込み例外から継承する<a class="headerlink" href="#inheriting-from-built-in-exceptions" title="Link to this heading">¶</a></h2>
+<p class="untranslated">User code can create subclasses that inherit from an exception type.
+It's recommended to only subclass one exception type at a time to avoid
+any possible conflicts between how the bases handle the <code class="docutils literal notranslate"><span class="pre">args</span></code>
+attribute, as well as due to possible memory layout incompatibilities.</p>
+<div class="impl-detail compound">
+<p class="untranslated"><strong>CPython 実装の詳細:</strong> Most built-in exceptions are implemented in C for efficiency, see:
+<a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Objects/exceptions.c">Objects/exceptions.c</a>.  Some have custom memory layouts
+which makes it impossible to create a subclass that inherits from
+multiple exception types. The memory layout of a type is an implementation
+detail and might change between Python versions, leading to new
+conflicts in the future.  Therefore, it's recommended to avoid
+subclassing multiple exception types altogether.</p>
+</div>
+</section>
+<section id="base-classes">
+<h2 class="translated">基底クラス<a class="headerlink" href="#base-classes" title="Link to this heading">¶</a></h2>
+<p class="translated">以下の例外は、主に他の例外の基底クラスとして使われます。</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="BaseException">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BaseException</span></span><a class="headerlink" href="#BaseException" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">全ての組み込み例外の基底クラスです。ユーザ定義の例外に直接継承されることは意図されていません (継承には <a class="reference internal" href="#Exception" title="Exception"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Exception</span></code></a> を使ってください)。このクラスのインスタンスに <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-func docutils literal notranslate"><span class="pre">str()</span></code></a> が呼ばれた場合、インスタンスへの引数の表現か、引数が無い場合には空文字列が返されます。</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="BaseException.args">
+<span class="sig-name descname"><span class="pre">args</span></span><a class="headerlink" href="#BaseException.args" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">例外コンストラクタに与えられた引数のタプルです。組み込み例外は普通、エラーメッセージを与える一つの文字列だけを引数として呼ばれますが、中には (<a class="reference internal" href="#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> など) いくつかの引数を必要とし、このタプルの要素に特別な意味を込めるものもあります。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="BaseException.with_traceback">
+<span class="sig-name descname"><span class="pre">with_traceback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tb</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#BaseException.with_traceback" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">This method sets <em>tb</em> as the new traceback for the exception and returns
+the exception object.  It was more commonly used before the exception
+chaining features of <span class="target" id="index-3"></span><a class="pep reference external" href="https://peps.python.org/pep-3134/"><strong>PEP 3134</strong></a> became available.  The following example
+shows how we can convert an instance of <code class="docutils literal notranslate"><span class="pre">SomeException</span></code> into an
+instance of <code class="docutils literal notranslate"><span class="pre">OtherException</span></code> while preserving the traceback.  Once
+raised, the current frame is pushed onto the traceback of the
+<code class="docutils literal notranslate"><span class="pre">OtherException</span></code>, as would have happened to the traceback of the
+original <code class="docutils literal notranslate"><span class="pre">SomeException</span></code> had we allowed it to propagate to the caller.</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="o">...</span>
+<span class="k">except</span> <span class="n">SomeException</span><span class="p">:</span>
+    <span class="n">tb</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">exception</span><span class="p">()</span><span class="o">.</span><span class="n">__traceback__</span>
+    <span class="k">raise</span> <span class="n">OtherException</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">with_traceback</span><span class="p">(</span><span class="n">tb</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="BaseException.__traceback__">
+<span class="sig-name descname"><span class="pre">__traceback__</span></span><a class="headerlink" href="#BaseException.__traceback__" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">A writable field that holds the
+<a class="reference internal" href="../reference/datamodel.html#traceback-objects"><span class="std std-ref">traceback object</span></a> associated with this
+exception. See also: <a class="reference internal" href="../reference/simple_stmts.html#raise"><span class="std std-ref">raise 文</span></a>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="BaseException.add_note">
+<span class="sig-name descname"><span class="pre">add_note</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">note</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#BaseException.add_note" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">例外のノートとして文字列 <code class="docutils literal notranslate"><span class="pre">note</span></code> を追加します。ノートは標準のトレースバックで例外文字列の後に表示されます。<code class="docutils literal notranslate"><span class="pre">note</span></code> が文字列以外の場合 <a class="reference internal" href="#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> が送出されます。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.11.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="BaseException.__notes__">
+<span class="sig-name descname"><span class="pre">__notes__</span></span><a class="headerlink" href="#BaseException.__notes__" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#BaseException.add_note" title="BaseException.add_note"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_note()</span></code></a> で追加された例外のノートのリスト。この属性は <code class="xref py py-meth docutils literal notranslate"><span class="pre">add_note()</span></code> を呼び出すと生成されます。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.11.</span></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="Exception">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Exception</span></span><a class="headerlink" href="#Exception" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">システム終了以外の全ての組み込み例外はこのクラスから派生しています。全てのユーザ定義例外もこのクラスから派生させるべきです。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ArithmeticError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ArithmeticError</span></span><a class="headerlink" href="#ArithmeticError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">算術上の様々なエラーに対して送出される組み込み例外 <a class="reference internal" href="#OverflowError" title="OverflowError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OverflowError</span></code></a>, <a class="reference internal" href="#ZeroDivisionError" title="ZeroDivisionError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ZeroDivisionError</span></code></a>, <a class="reference internal" href="#FloatingPointError" title="FloatingPointError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">FloatingPointError</span></code></a> の基底クラスです。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="BufferError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BufferError</span></span><a class="headerlink" href="#BufferError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="../c-api/buffer.html#bufferobjects"><span class="std std-ref">バッファ</span></a> に関連する操作が行えなかったときに送出されます。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="LookupError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">LookupError</span></span><a class="headerlink" href="#LookupError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">マッピングまたはシーケンスで使われたキーやインデクスが無効な場合に送出される例外 <a class="reference internal" href="#IndexError" title="IndexError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">IndexError</span></code></a> および <a class="reference internal" href="#KeyError" title="KeyError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyError</span></code></a> の基底クラスです。 <a class="reference internal" href="codecs.html#codecs.lookup" title="codecs.lookup"><code class="xref py py-func docutils literal notranslate"><span class="pre">codecs.lookup()</span></code></a> によって直接送出されることもあります。</p>
+</dd></dl>
+
+</section>
+<section id="concrete-exceptions">
+<h2 class="translated">具象例外<a class="headerlink" href="#concrete-exceptions" title="Link to this heading">¶</a></h2>
+<p class="translated">以下の例外は、通常送出される例外です。</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="AssertionError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AssertionError</span></span><a class="headerlink" href="#AssertionError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated" id="index-4"><a class="reference internal" href="../reference/simple_stmts.html#assert"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">assert</span></code></a> 文が失敗した場合に送出されます。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="AttributeError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AttributeError</span></span><a class="headerlink" href="#AttributeError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">属性参照 (<a class="reference internal" href="../reference/expressions.html#attribute-references"><span class="std std-ref">属性参照</span></a> を参照) や代入が失敗した場合に送出されます (オブジェクトが属性の参照や属性の代入をまったくサポートしていない場合には <a class="reference internal" href="#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> が送出されます)。</p>
+<p class="untranslated">The optional <em>name</em> and <em>obj</em> keyword-only arguments
+set the corresponding attributes:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="AttributeError.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#AttributeError.name" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The name of the attribute that was attempted to be accessed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="AttributeError.obj">
+<span class="sig-name descname"><span class="pre">obj</span></span><a class="headerlink" href="#AttributeError.obj" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The object that was accessed for the named attribute.</p>
+</dd></dl>
+
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.10 で変更: </span><a class="reference internal" href="#AttributeError.name" title="AttributeError.name"><code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code></a> および <a class="reference internal" href="#AttributeError.obj" title="AttributeError.obj"><code class="xref py py-attr docutils literal notranslate"><span class="pre">obj</span></code></a> 属性が追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="EOFError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EOFError</span></span><a class="headerlink" href="#EOFError" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Raised when the <a class="reference internal" href="functions.html#input" title="input"><code class="xref py py-func docutils literal notranslate"><span class="pre">input()</span></code></a> function hits an end-of-file condition (EOF)
+without reading any data. (Note: the <a class="reference internal" href="io.html#io.TextIOBase.read" title="io.TextIOBase.read"><code class="xref py py-meth docutils literal notranslate"><span class="pre">io.TextIOBase.read()</span></code></a> and
+<a class="reference internal" href="io.html#io.IOBase.readline" title="io.IOBase.readline"><code class="xref py py-meth docutils literal notranslate"><span class="pre">io.IOBase.readline()</span></code></a> methods return an empty string when they hit EOF.)</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="FloatingPointError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FloatingPointError</span></span><a class="headerlink" href="#FloatingPointError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">現在は使われていません。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="GeneratorExit">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GeneratorExit</span></span><a class="headerlink" href="#GeneratorExit" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="../glossary.html#term-generator"><span class="xref std std-term">ジェネレータ</span></a> や <a class="reference internal" href="../glossary.html#term-coroutine"><span class="xref std std-term">コルーチン</span></a> が閉じられたときに送出されます。 <a class="reference internal" href="../reference/expressions.html#generator.close" title="generator.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">generator.close()</span></code></a> と <a class="reference internal" href="../reference/datamodel.html#coroutine.close" title="coroutine.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">coroutine.close()</span></code></a> を参照してください。この例外は厳密に言えばエラーではないので、 <a class="reference internal" href="#Exception" title="Exception"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Exception</span></code></a> ではなく <a class="reference internal" href="#BaseException" title="BaseException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">BaseException</span></code></a> を直接継承しています。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ImportError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ImportError</span></span><a class="headerlink" href="#ImportError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="../reference/simple_stmts.html#import"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">import</span></code></a> 文でモジュールをロードしようとして問題が発生すると送出されます。
+<code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">...</span> <span class="pre">import</span></code> の中の&quot;from list&quot; (訳注：<code class="docutils literal notranslate"><span class="pre">...</span></code> の部分)の名前が見つからないときにも送出されます。</p>
+<p class="translated">オブションのキーワード専用引数  <em>name</em> と <em>path</em> は、対応する属性に設定されます:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ImportError.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#ImportError.name" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">インポートを試みたモジュールの名前。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="ImportError.path">
+<span class="sig-name descname"><span class="pre">path</span></span><a class="headerlink" href="#ImportError.path" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">例外を引き起こしたファイルのパス。</p>
+</dd></dl>
+
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span><a class="reference internal" href="#ImportError.name" title="ImportError.name"><code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code></a> および <a class="reference internal" href="#ImportError.path" title="ImportError.path"><code class="xref py py-attr docutils literal notranslate"><span class="pre">path</span></code></a> 属性が追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ModuleNotFoundError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ModuleNotFoundError</span></span><a class="headerlink" href="#ModuleNotFoundError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#ImportError" title="ImportError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ImportError</span></code></a> のサブクラスで、<a class="reference internal" href="../reference/simple_stmts.html#import"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">import</span></code></a> 文でモジュールが見つからない場合に送出されます。また、 <a class="reference internal" href="sys.html#sys.modules" title="sys.modules"><code class="xref py py-data docutils literal notranslate"><span class="pre">sys.modules</span></code></a> に <code class="docutils literal notranslate"><span class="pre">None</span></code> が含まれる場合にも送出されます。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.6.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="IndexError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IndexError</span></span><a class="headerlink" href="#IndexError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">シーケンスの添字が範囲外の場合に送出されます。 (スライスのインデクスはシーケンスの範囲に収まるように暗黙のうちに調整されます; インデクスが整数でない場合、 <a class="reference internal" href="#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> が送出されます。)</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="KeyError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">KeyError</span></span><a class="headerlink" href="#KeyError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">マッピング (辞書) のキーが、既存のキーの集合内に見つからなかった場合に送出されます。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="KeyboardInterrupt">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">KeyboardInterrupt</span></span><a class="headerlink" href="#KeyboardInterrupt" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ユーザが割り込みキー (通常は <kbd class="kbd docutils literal notranslate">Control</kbd>-<kbd class="kbd docutils literal notranslate">C</kbd> または <kbd class="kbd docutils literal notranslate">Delete</kbd>) を押した場合に送出されます。実行中、割り込みは定期的に監視されます。<a class="reference internal" href="#Exception" title="Exception"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Exception</span></code></a> を捕捉するコードに誤って捕捉されてインタプリタの終了が阻害されないように、この例外は <a class="reference internal" href="#BaseException" title="BaseException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">BaseException</span></code></a> を継承しています。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">Catching a <code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyboardInterrupt</span></code> requires special consideration.
+Because it can be raised at unpredictable points, it may, in some
+circumstances, leave the running program in an inconsistent state. It is
+generally best to allow <code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyboardInterrupt</span></code> to end the program as
+quickly as possible or avoid raising it entirely. (See
+<a class="reference internal" href="signal.html#handlers-and-exceptions"><span class="std std-ref">Note on Signal Handlers and Exceptions</span></a>.)</p>
+</div>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="MemoryError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MemoryError</span></span><a class="headerlink" href="#MemoryError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ある操作中にメモリが不足したが、その状況は (オブジェクトをいくつか消去することで) まだ復旧可能かもしれない場合に送出されます。この例外の関連値は、メモリ不足になった (内部) 操作の種類を示す文字列です。下層のメモリ管理アーキテクチャ (C の <code class="xref c c-func docutils literal notranslate"><span class="pre">malloc()</span></code> 関数) のために、インタプリタが現状から完璧に復旧できるとはかぎらないので注意してください。それでも、プログラムの暴走が原因の場合に備えて実行スタックのトレースバックを出力できるように、例外が送出されます。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="NameError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NameError</span></span><a class="headerlink" href="#NameError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ローカルまたはグローバルの名前が見つからなかった場合に送出されます。これは非修飾の (訳注: <code class="docutils literal notranslate"><span class="pre">spam.egg</span></code> ではなく単に <code class="docutils literal notranslate"><span class="pre">egg</span></code> のような) 名前のみに適用されます。関連値は見つからなかった名前を含むエラーメッセージです。</p>
+<p class="untranslated">The optional <em>name</em> keyword-only argument sets the attribute:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="NameError.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#NameError.name" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The name of the variable that was attempted to be accessed.</p>
+</dd></dl>
+
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.10 で変更: </span><a class="reference internal" href="#NameError.name" title="NameError.name"><code class="xref py py-attr docutils literal notranslate"><span class="pre">name</span></code></a> 属性が追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="NotImplementedError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotImplementedError</span></span><a class="headerlink" href="#NotImplementedError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">この例外は <a class="reference internal" href="#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> から派生しています。ユーザ定義の基底クラスにおいて、抽象メソッドが派生クラスでオーバライドされることを要求する場合にこの例外を送出しなくてはなりません。またはクラスは実装中であり本来の実装を追加する必要があることを示します。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated">演算子やメソッドがサポートされていないことを示す目的でこの例外を使用するべきではありません。そのようなケースではオペレータやメソッドを未定義のままとするか、サブクラスの場合は <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-data docutils literal notranslate"><span class="pre">None</span></code></a> を設定してください。</p>
+</div>
+<div class="admonition caution">
+<p class="admonition-title">注意</p>
+<p class="untranslated"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NotImplementedError</span></code> and <code class="xref py py-data docutils literal notranslate"><span class="pre">NotImplemented</span></code> are not
+interchangeable. This exception should only be used as described
+above; see <a class="reference internal" href="constants.html#NotImplemented" title="NotImplemented"><code class="xref py py-data docutils literal notranslate"><span class="pre">NotImplemented</span></code></a> for details on correct usage of
+the built-in constant.</p>
+</div>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="OSError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">OSError</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#OSError" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">OSError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">errno</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strerror</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">winerror</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">filename2</span></span></em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="sig-paren">)</span></dt>
+<dd><p class="translated" id="index-5">この例外はシステム関数がシステム関連のエラーを返した場合に送出されます。例えば &quot;file not found&quot; や &quot;disk full&quot; のような I/O の失敗が発生したときです (引数の型が不正な場合や、他の偶発的なエラーは除きます)。</p>
+<p class="translated">コンストラクタの2番目の形式は下記の対応する属性を設定します。指定されなかった場合属性はデフォルトで <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a> です。後方互換性のために、引数が3つ渡された場合、<a class="reference internal" href="#BaseException.args" title="BaseException.args"><code class="xref py py-attr docutils literal notranslate"><span class="pre">args</span></code></a> 属性は最初の2つの要素のみからなるタプルを持ちます。</p>
+<p class="translated">コンストラクタは実際には、 <a class="reference internal" href="#os-exceptions">OS exceptions</a> で述べられている <a class="reference internal" href="#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> のサブクラスを返すことがよくあります。特定のサブクラスは最終的な <a class="reference internal" href="#OSError.errno" title="OSError.errno"><code class="xref py py-attr docutils literal notranslate"><span class="pre">errno</span></code></a> 値によります。この挙動は <code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code> を直接またはエイリアスで構築し、サブクラス化時に継承されなかった場合にのみ発生します。</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="OSError.errno">
+<span class="sig-name descname"><span class="pre">errno</span></span><a class="headerlink" href="#OSError.errno" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">C 変数 <code class="xref c c-data docutils literal notranslate"><span class="pre">errno</span></code> に由来する数値エラーコードです。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="OSError.winerror">
+<span class="sig-name descname"><span class="pre">winerror</span></span><a class="headerlink" href="#OSError.winerror" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Windows において、ネイティブ Windows エラーコードを与えます。そして <a class="reference internal" href="#OSError.errno" title="OSError.errno"><code class="xref py py-attr docutils literal notranslate"><span class="pre">errno</span></code></a> 属性は POSIX でいうネイティブエラーコードへのおよその翻訳です。</p>
+<p class="translated">Windows では、<em>winerror</em> コンストラクタ引数が整数の場合 <a class="reference internal" href="#OSError.errno" title="OSError.errno"><code class="xref py py-attr docutils literal notranslate"><span class="pre">errno</span></code></a> 属性は Windows エラーコードから決定され、<em>errno</em> 引数は無視されます。他のプラットフォームでは <em>winerror</em> 引数は無視され、 <a class="reference internal" href="#OSError.winerror" title="OSError.winerror"><code class="xref py py-attr docutils literal notranslate"><span class="pre">winerror</span></code></a> 属性は存在しません。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="OSError.strerror">
+<span class="sig-name descname"><span class="pre">strerror</span></span><a class="headerlink" href="#OSError.strerror" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The corresponding error message, as provided by
+the operating system.  It is formatted by the C
+functions <code class="xref c c-func docutils literal notranslate"><span class="pre">perror()</span></code> under POSIX, and <code class="xref c c-func docutils literal notranslate"><span class="pre">FormatMessage()</span></code>
+under Windows.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="OSError.filename">
+<span class="sig-name descname"><span class="pre">filename</span></span><a class="headerlink" href="#OSError.filename" title="Link to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="OSError.filename2">
+<span class="sig-name descname"><span class="pre">filename2</span></span><a class="headerlink" href="#OSError.filename2" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルシステムパスが1つ関与する例外 (例えば <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a> や <a class="reference internal" href="os.html#os.unlink" title="os.unlink"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.unlink()</span></code></a>) の場合、<a class="reference internal" href="#OSError.filename" title="OSError.filename"><code class="xref py py-attr docutils literal notranslate"><span class="pre">filename</span></code></a> は関数に渡されたファイル名です。
+ファイルシステムパスが2つ関与する関数 (例えば <a class="reference internal" href="os.html#os.rename" title="os.rename"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.rename()</span></code></a>) の場合、<a class="reference internal" href="#OSError.filename2" title="OSError.filename2"><code class="xref py py-attr docutils literal notranslate"><span class="pre">filename2</span></code></a> は関数に渡された2つ目のファイル名です。</p>
+</dd></dl>
+
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span><a class="reference internal" href="#EnvironmentError" title="EnvironmentError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">EnvironmentError</span></code></a>, <a class="reference internal" href="#IOError" title="IOError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">IOError</span></code></a>, <a class="reference internal" href="#WindowsError" title="WindowsError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">WindowsError</span></code></a>,
+<a class="reference internal" href="socket.html#socket.error" title="socket.error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">socket.error</span></code></a>, <a class="reference internal" href="select.html#select.error" title="select.error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">select.error</span></code></a> and
+<code class="xref py py-exc docutils literal notranslate"><span class="pre">mmap.error</span></code> have been merged into <a class="reference internal" href="#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a>, and the
+constructor may return a subclass.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.4 で変更: </span><a class="reference internal" href="#OSError.filename" title="OSError.filename"><code class="xref py py-attr docutils literal notranslate"><span class="pre">filename</span></code></a> 属性が <a class="reference internal" href="../glossary.html#term-filesystem-encoding-and-error-handler"><span class="xref std std-term">filesystem encoding and error handler</span></a> のエンコーディングでエンコードやデコードされた名前から、関数に渡された元々のファイル名になりました。
+また、<em>filename2</em> コンストラクタ引数が追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="OverflowError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">OverflowError</span></span><a class="headerlink" href="#OverflowError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">算術演算の結果が表現できない大きな値になった場合に送出されます。これは整数では起こりません (むしろ <a class="reference internal" href="#MemoryError" title="MemoryError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">MemoryError</span></code></a> が送出されることになるでしょう)。しかし、歴史的な理由のため、要求された範囲の外の整数に対して OverflowError が送出されることがあります。C の浮動小数点演算の例外処理は標準化されていないので、ほとんどの浮動小数点演算もチェックされません。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="PythonFinalizationError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PythonFinalizationError</span></span><a class="headerlink" href="#PythonFinalizationError" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">This exception is derived from <a class="reference internal" href="#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a>.  It is raised when
+an operation is blocked during interpreter shutdown also known as
+<a class="reference internal" href="../glossary.html#term-interpreter-shutdown"><span class="xref std std-term">Python finalization</span></a>.</p>
+<p class="untranslated">Examples of operations which can be blocked with a
+<code class="xref py py-exc docutils literal notranslate"><span class="pre">PythonFinalizationError</span></code> during the Python finalization:</p>
+<ul class="simple">
+<li><p class="untranslated">Creating a new Python thread.</p></li>
+<li><p class="untranslated"><a class="reference internal" href="threading.html#threading.Thread.join" title="threading.Thread.join"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Joining</span></code></a> a running daemon thread.</p></li>
+<li><p class="untranslated"><a class="reference internal" href="os.html#os.fork" title="os.fork"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.fork()</span></code></a>.</p></li>
+</ul>
+<p class="translated"><a class="reference internal" href="sys.html#sys.is_finalizing" title="sys.is_finalizing"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.is_finalizing()</span></code></a> 関数も参照してください。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13: </span>以前は <a class="reference internal" href="#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> をそのまま送出していました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.14 で変更: </span><a class="reference internal" href="threading.html#threading.Thread.join" title="threading.Thread.join"><code class="xref py py-meth docutils literal notranslate"><span class="pre">threading.Thread.join()</span></code></a> can now raise this exception.</p>
+</div>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="RecursionError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RecursionError</span></span><a class="headerlink" href="#RecursionError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">この例外は <a class="reference internal" href="#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> を継承しています。インタープリタが最大再帰深度 (<a class="reference internal" href="sys.html#sys.getrecursionlimit" title="sys.getrecursionlimit"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.getrecursionlimit()</span></code></a> を参照) の超過を検出すると送出されます。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.5: </span>以前は <a class="reference internal" href="#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> をそのまま送出していました。</p>
+</div>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ReferenceError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ReferenceError</span></span><a class="headerlink" href="#ReferenceError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="weakref.html#weakref.proxy" title="weakref.proxy"><code class="xref py py-func docutils literal notranslate"><span class="pre">weakref.proxy()</span></code></a> によって生成された弱参照 (weak reference) プロキシを使って、ガーベジコレクションによって回収された後の参照対象オブジェクトの属性にアクセスした場合に送出されます。弱参照については <a class="reference internal" href="weakref.html#module-weakref" title="weakref: Support for weak references and weak dictionaries."><code class="xref py py-mod docutils literal notranslate"><span class="pre">weakref</span></code></a> モジュールを参照してください。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="RuntimeError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RuntimeError</span></span><a class="headerlink" href="#RuntimeError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">他のカテゴリに分類できないエラーが検出された場合に送出されます。関連値は、何が問題だったのかをより詳細に示す文字列です。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="StopIteration">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StopIteration</span></span><a class="headerlink" href="#StopIteration" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">組込み関数 <a class="reference internal" href="functions.html#next" title="next"><code class="xref py py-func docutils literal notranslate"><span class="pre">next()</span></code></a> と <a class="reference internal" href="../glossary.html#term-iterator"><span class="xref std std-term">iterator</span></a> の <a class="reference internal" href="stdtypes.html#iterator.__next__" title="iterator.__next__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__next__()</span></code></a> メソッドによって、そのイテレータが生成するアイテムがこれ以上ないことを伝えるために送出されます。</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="StopIteration.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#StopIteration.value" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">この例外オブジェクトには一つの属性 <code class="xref py py-attr docutils literal notranslate"><span class="pre">value</span></code> があり、例外を構成する際に引数として与えられ、デフォルトは <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a> です。</p>
+</dd></dl>
+
+<p class="translated"><a class="reference internal" href="../glossary.html#term-generator"><span class="xref std std-term">generator</span></a> や <a class="reference internal" href="../glossary.html#term-coroutine"><span class="xref std std-term">coroutine</span></a> 関数が返るとき、新しい <a class="reference internal" href="#StopIteration" title="StopIteration"><code class="xref py py-exc docutils literal notranslate"><span class="pre">StopIteration</span></code></a> インスタンスが送出されます。
+関数の返り値は例外のコンストラクタの <a class="reference internal" href="#StopIteration.value" title="StopIteration.value"><code class="xref py py-attr docutils literal notranslate"><span class="pre">value</span></code></a> 引数として使われます。</p>
+<p class="translated">ジェネレータのコードが直接的あるいは間接的に <a class="reference internal" href="#StopIteration" title="StopIteration"><code class="xref py py-exc docutils literal notranslate"><span class="pre">StopIteration</span></code></a> を送出する場合は、 <a class="reference internal" href="#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> に変換されます (<code class="xref py py-exc docutils literal notranslate"><span class="pre">StopIteration</span></code> は変換後の例外の原因として保持されます)。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span><code class="docutils literal notranslate"><span class="pre">value</span></code> 属性とジェネレータ関数が値を返すためにそれを使う機能が追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span><code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">__future__</span> <span class="pre">import</span> <span class="pre">generator_stop</span></code> による RuntimeError への変換が導入されました。 <span class="target" id="index-18"></span><a class="pep reference external" href="https://peps.python.org/pep-0479/"><strong>PEP 479</strong></a> を参照してください。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7 で変更: </span><span class="target" id="index-19"></span><a class="pep reference external" href="https://peps.python.org/pep-0479/"><strong>PEP 479</strong></a> が全てのコードでデフォルトで有効化されました: ジェネレータから送出された <a class="reference internal" href="#StopIteration" title="StopIteration"><code class="xref py py-exc docutils literal notranslate"><span class="pre">StopIteration</span></code></a> は <a class="reference internal" href="#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> に変換されます。</p>
+</div>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="StopAsyncIteration">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">StopAsyncIteration</span></span><a class="headerlink" href="#StopAsyncIteration" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">イテレーションを停止するために、 <a class="reference internal" href="../glossary.html#term-asynchronous-iterator"><span class="xref std std-term">asynchronous iterator</span></a> オブジェクトの <a class="reference internal" href="../reference/datamodel.html#object.__anext__" title="object.__anext__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__anext__()</span></code></a> メソッドによって返される必要があります。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.5.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="SyntaxError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SyntaxError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">details</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SyntaxError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">パーザが構文エラーに遭遇した場合に送出されます。この例外は <a class="reference internal" href="../reference/simple_stmts.html#import"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">import</span></code></a> 文、組み込み関数 <a class="reference internal" href="functions.html#compile" title="compile"><code class="xref py py-func docutils literal notranslate"><span class="pre">compile()</span></code></a>、<a class="reference internal" href="functions.html#exec" title="exec"><code class="xref py py-func docutils literal notranslate"><span class="pre">exec()</span></code></a> や <a class="reference internal" href="functions.html#eval" title="eval"><code class="xref py py-func docutils literal notranslate"><span class="pre">eval()</span></code></a> 、初期化スクリプトの読み込みや標準入力で (対話的な実行時にも) 起こる可能性があります。</p>
+<p class="translated">例外インスタンスの <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-func docutils literal notranslate"><span class="pre">str()</span></code></a> はエラーメッセージのみを返します。詳細はタプルで、個々の属性としても利用できます。</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SyntaxError.filename">
+<span class="sig-name descname"><span class="pre">filename</span></span><a class="headerlink" href="#SyntaxError.filename" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">構文エラーが発生したファイルの名前。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SyntaxError.lineno">
+<span class="sig-name descname"><span class="pre">lineno</span></span><a class="headerlink" href="#SyntaxError.lineno" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルのエラーが発生した行番号。1から数えはじめるため、ファイルの最初の行の <code class="docutils literal notranslate"><span class="pre">lineno</span></code> は1です。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SyntaxError.offset">
+<span class="sig-name descname"><span class="pre">offset</span></span><a class="headerlink" href="#SyntaxError.offset" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">行のエラーが発生した列番号。1から数えはじめるため、行の最初の文字の <code class="docutils literal notranslate"><span class="pre">offset</span></code> は1です。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SyntaxError.text">
+<span class="sig-name descname"><span class="pre">text</span></span><a class="headerlink" href="#SyntaxError.text" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">エラーを含むソースコードのテキスト。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SyntaxError.end_lineno">
+<span class="sig-name descname"><span class="pre">end_lineno</span></span><a class="headerlink" href="#SyntaxError.end_lineno" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイルのエラーが発生した最後の行番号。1から数えはじめるため、ファイルの最初の行の <code class="docutils literal notranslate"><span class="pre">lineno</span></code> は1です。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SyntaxError.end_offset">
+<span class="sig-name descname"><span class="pre">end_offset</span></span><a class="headerlink" href="#SyntaxError.end_offset" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">行のエラーが発生した最後の列番号。1から数えはじめるため、行の最初の文字の <code class="docutils literal notranslate"><span class="pre">offset</span></code> は1です。</p>
+</dd></dl>
+
+<p class="untranslated">For errors in f-string fields, the message is prefixed by &quot;f-string: &quot;
+and the offsets are offsets in a text constructed from the replacement
+expression.  For example, compiling f'Bad {a b} field' results in this
+args attribute: ('f-string: ...', ('', 1, 2, '(a b)n', 1, 5)).</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.10 で変更: </span><a class="reference internal" href="#SyntaxError.end_lineno" title="SyntaxError.end_lineno"><code class="xref py py-attr docutils literal notranslate"><span class="pre">end_lineno</span></code></a> および <a class="reference internal" href="#SyntaxError.end_offset" title="SyntaxError.end_offset"><code class="xref py py-attr docutils literal notranslate"><span class="pre">end_offset</span></code></a> 属性が追加されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="IndentationError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IndentationError</span></span><a class="headerlink" href="#IndentationError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">正しくないインデントに関する構文エラーの基底クラスです。これは <a class="reference internal" href="#SyntaxError" title="SyntaxError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SyntaxError</span></code></a> のサブクラスです。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="TabError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TabError</span></span><a class="headerlink" href="#TabError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">タブとスペースを一貫しない方法でインデントに使っているときに送出されます。これは <a class="reference internal" href="#IndentationError" title="IndentationError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">IndentationError</span></code></a> のサブクラスです。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="SystemError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SystemError</span></span><a class="headerlink" href="#SystemError" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Raised when the interpreter finds an internal error, but the situation does not
+look so serious to cause it to abandon all hope. The associated value is a
+string indicating what went wrong (in low-level terms). In <a class="reference internal" href="../glossary.html#term-CPython"><span class="xref std std-term">CPython</span></a>,
+this could be raised by incorrectly using Python's C API, such as returning
+a <code class="docutils literal notranslate"><span class="pre">NULL</span></code> value without an exception set.</p>
+<p class="untranslated">If you're confident that this exception wasn't your fault, or the fault of
+a package you're using, you should report this to the author or maintainer
+of your Python interpreter.
+Be sure to report the version of the Python interpreter (<code class="docutils literal notranslate"><span class="pre">sys.version</span></code>; it is
+also printed at the start of an interactive Python session), the exact error
+message (the exception's associated value) and if possible the source of the
+program that triggered the error.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="SystemExit">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SystemExit</span></span><a class="headerlink" href="#SystemExit" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">This exception is raised by the <a class="reference internal" href="sys.html#sys.exit" title="sys.exit"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.exit()</span></code></a> function.  It inherits from
+<a class="reference internal" href="#BaseException" title="BaseException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">BaseException</span></code></a> instead of <a class="reference internal" href="#Exception" title="Exception"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Exception</span></code></a> so that it is not accidentally
+caught by code that catches <code class="xref py py-exc docutils literal notranslate"><span class="pre">Exception</span></code>.  This allows the exception to
+properly propagate up and cause the interpreter to exit.  When it is not
+handled, the Python interpreter exits; no stack traceback is printed.  The
+constructor accepts the same optional argument passed to <code class="xref py py-func docutils literal notranslate"><span class="pre">sys.exit()</span></code>.
+If the value is an integer, it specifies the system exit status (passed to
+C's <code class="xref c c-func docutils literal notranslate"><span class="pre">exit()</span></code> function); if it is <code class="docutils literal notranslate"><span class="pre">None</span></code>, the exit status is zero; if
+it has another type (such as a string), the object's value is printed and
+the exit status is one.</p>
+<p class="translated"><a class="reference internal" href="sys.html#sys.exit" title="sys.exit"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.exit()</span></code></a> は、クリーンアップのための処理 (<a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">try</span></code></a> 文の <a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">finally</span></code></a> 節) が実行されるようにするため、またデバッガが制御不能になるリスクを冒さずにスクリプトを実行できるようにするために例外に変換されます。即座に終了することが真に強く必要であるとき (例えば、<a class="reference internal" href="os.html#os.fork" title="os.fork"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.fork()</span></code></a> を呼んだ後の子プロセス内) には <a class="reference internal" href="os.html#os._exit" title="os._exit"><code class="xref py py-func docutils literal notranslate"><span class="pre">os._exit()</span></code></a> 関数を使うことができます。</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SystemExit.code">
+<span class="sig-name descname"><span class="pre">code</span></span><a class="headerlink" href="#SystemExit.code" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">コンストラクタに渡された終了ステータス又はエラーメッセージ。(デフォルトは <code class="docutils literal notranslate"><span class="pre">None</span></code>)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="TypeError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TypeError</span></span><a class="headerlink" href="#TypeError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">組み込み演算または関数が適切でない型のオブジェクトに対して適用された際に送出されます。関連値は型の不整合に関して詳細を述べた文字列です。</p>
+<p class="translated">この例外は、そのオブジェクトで実行しようとした操作がサポートされておらず、その予定もない場合にユーザーコードから送出されるかもしれません。オブジェクトでその操作をサポートするつもりだが、まだ実装を提供していないのであれば、送出する適切な例外は <a class="reference internal" href="#NotImplementedError" title="NotImplementedError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NotImplementedError</span></code></a> です。</p>
+<p class="translated">誤った型の引数が渡された場合は (例えば、<a class="reference internal" href="functions.html#int" title="int"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> が期待されるのに、<a class="reference internal" href="stdtypes.html#list" title="list"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> が渡された) <a class="reference internal" href="#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> となるべきです。しかし、誤った値(例えば、期待する範囲外の数)が引数として渡された場合は、 <a class="reference internal" href="#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> となるべきです。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="UnboundLocalError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UnboundLocalError</span></span><a class="headerlink" href="#UnboundLocalError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">関数やメソッド内のローカルな変数に対して参照を行ったが、その変数には値が代入されていなかった場合に送出されます。 <a class="reference internal" href="#NameError" title="NameError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">NameError</span></code></a> のサブクラスです。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="UnicodeError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UnicodeError</span></span><a class="headerlink" href="#UnicodeError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Unicode に関するエンコードまたはデコードのエラーが発生した際に送出されます。 <a class="reference internal" href="#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> のサブクラスです。</p>
+<p class="translated"><a class="reference internal" href="#UnicodeError" title="UnicodeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">UnicodeError</span></code></a> はエンコードまたはデコードのエラーの説明を属性として持っています。例えば、 <code class="docutils literal notranslate"><span class="pre">err.object[err.start:err.end]</span></code> は、無効な入力のうちコーデックが処理に失敗した箇所を表します。</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="UnicodeError.encoding">
+<span class="sig-name descname"><span class="pre">encoding</span></span><a class="headerlink" href="#UnicodeError.encoding" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">エラーを送出したエンコーディングの名前です。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="UnicodeError.reason">
+<span class="sig-name descname"><span class="pre">reason</span></span><a class="headerlink" href="#UnicodeError.reason" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">そのコーデックエラーを説明する文字列です。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="UnicodeError.object">
+<span class="sig-name descname"><span class="pre">object</span></span><a class="headerlink" href="#UnicodeError.object" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">コーデックがエンコードまたはデコードしようとしたオブジェクトです。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="UnicodeError.start">
+<span class="sig-name descname"><span class="pre">start</span></span><a class="headerlink" href="#UnicodeError.start" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="functions.html#object" title="object"><code class="xref py py-attr docutils literal notranslate"><span class="pre">object</span></code></a> の最初の無効なデータのインデクスです。</p>
+<p class="untranslated">This value should not be negative as it is interpreted as an
+absolute offset but this constraint is not enforced at runtime.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="UnicodeError.end">
+<span class="sig-name descname"><span class="pre">end</span></span><a class="headerlink" href="#UnicodeError.end" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="functions.html#object" title="object"><code class="xref py py-attr docutils literal notranslate"><span class="pre">object</span></code></a> の最後の無効なデータの次のインデクスです。</p>
+<p class="untranslated">This value should not be negative as it is interpreted as an
+absolute offset but this constraint is not enforced at runtime.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="UnicodeEncodeError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UnicodeEncodeError</span></span><a class="headerlink" href="#UnicodeEncodeError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Unicode 関連のエラーがエンコード中に発生した際に送出されます。 <a class="reference internal" href="#UnicodeError" title="UnicodeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">UnicodeError</span></code></a> のサブクラスです。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="UnicodeDecodeError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UnicodeDecodeError</span></span><a class="headerlink" href="#UnicodeDecodeError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Unicode 関連のエラーがデコード中に発生した際に送出されます。 <a class="reference internal" href="#UnicodeError" title="UnicodeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">UnicodeError</span></code></a> のサブクラスです。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="UnicodeTranslateError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UnicodeTranslateError</span></span><a class="headerlink" href="#UnicodeTranslateError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Unicode 関連のエラーが変換中に発生した際に送出されます。 <a class="reference internal" href="#UnicodeError" title="UnicodeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">UnicodeError</span></code></a> のサブクラスです。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ValueError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ValueError</span></span><a class="headerlink" href="#ValueError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">演算子や関数が、正しい型だが適切でない値を持つ引数を受け取ったときや、 <a class="reference internal" href="#IndexError" title="IndexError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">IndexError</span></code></a> のようなより詳細な例外では記述できない状況で送出されます。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ZeroDivisionError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ZeroDivisionError</span></span><a class="headerlink" href="#ZeroDivisionError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">除算や剰余演算の第二引数が 0 であった場合に送出されます。関連値は文字列で、その演算における被演算子と演算子の型を示します。</p>
+</dd></dl>
+
+<p class="translated">以下の例外は、過去のバージョンとの後方互換性のために残されています; Python 3.3 より、これらは <a class="reference internal" href="#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> のエイリアスです。</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="EnvironmentError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EnvironmentError</span></span><a class="headerlink" href="#EnvironmentError" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="IOError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IOError</span></span><a class="headerlink" href="#IOError" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="WindowsError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">WindowsError</span></span><a class="headerlink" href="#WindowsError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Windows でのみ利用できます。</p>
+</dd></dl>
+
+<section id="os-exceptions">
+<h3 class="translated">OS 例外<a class="headerlink" href="#os-exceptions" title="Link to this heading">¶</a></h3>
+<p class="translated">以下の例外は <a class="reference internal" href="#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> のサブクラスで、システムエラーコードに依存して送出されます。</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="BlockingIOError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BlockingIOError</span></span><a class="headerlink" href="#BlockingIOError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ある操作が、ノンブロッキング操作に設定されたオブジェクト (例えばソケット) をブロックしそうになった場合に送出されます。<code class="xref c c-data docutils literal notranslate"><span class="pre">errno</span></code> <a class="reference internal" href="errno.html#errno.EAGAIN" title="errno.EAGAIN"><code class="xref py py-const docutils literal notranslate"><span class="pre">EAGAIN</span></code></a>, <a class="reference internal" href="errno.html#errno.EALREADY" title="errno.EALREADY"><code class="xref py py-const docutils literal notranslate"><span class="pre">EALREADY</span></code></a>, <a class="reference internal" href="errno.html#errno.EWOULDBLOCK" title="errno.EWOULDBLOCK"><code class="xref py py-const docutils literal notranslate"><span class="pre">EWOULDBLOCK</span></code></a> および <a class="reference internal" href="errno.html#errno.EINPROGRESS" title="errno.EINPROGRESS"><code class="xref py py-const docutils literal notranslate"><span class="pre">EINPROGRESS</span></code></a> に対応します。</p>
+<p class="translated"><a class="reference internal" href="#BlockingIOError" title="BlockingIOError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">BlockingIOError</span></code></a> は、 <a class="reference internal" href="#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> の属性に加えて一つの属性を持ちます:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="BlockingIOError.characters_written">
+<span class="sig-name descname"><span class="pre">characters_written</span></span><a class="headerlink" href="#BlockingIOError.characters_written" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">An integer containing the number of <strong>bytes</strong> written to the stream
+before it blocked. This attribute is available when using the
+buffered I/O classes from the <a class="reference internal" href="io.html#module-io" title="io: Core tools for working with streams."><code class="xref py py-mod docutils literal notranslate"><span class="pre">io</span></code></a> module.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ChildProcessError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ChildProcessError</span></span><a class="headerlink" href="#ChildProcessError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">子プロセスの操作が失敗した場合に送出されます。<code class="xref c c-data docutils literal notranslate"><span class="pre">errno</span></code> <a class="reference internal" href="errno.html#errno.ECHILD" title="errno.ECHILD"><code class="xref py py-const docutils literal notranslate"><span class="pre">ECHILD</span></code></a> に対応します。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ConnectionError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConnectionError</span></span><a class="headerlink" href="#ConnectionError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">コネクション関係の問題の基底クラス。</p>
+<p class="translated">サブクラスは <a class="reference internal" href="#BrokenPipeError" title="BrokenPipeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">BrokenPipeError</span></code></a>, <a class="reference internal" href="#ConnectionAbortedError" title="ConnectionAbortedError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ConnectionAbortedError</span></code></a>, <a class="reference internal" href="#ConnectionRefusedError" title="ConnectionRefusedError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ConnectionRefusedError</span></code></a>, <a class="reference internal" href="#ConnectionResetError" title="ConnectionResetError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ConnectionResetError</span></code></a> です。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="BrokenPipeError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BrokenPipeError</span></span><a class="headerlink" href="#BrokenPipeError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#ConnectionError" title="ConnectionError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ConnectionError</span></code></a> のサブクラスで、もう一方の端が閉じられたパイプに書き込こもうとするか、書き込みのためにシャットダウンされたソケットに書き込こもうとした場合に発生します。 <code class="xref c c-data docutils literal notranslate"><span class="pre">errno</span></code>  <a class="reference internal" href="errno.html#errno.EPIPE" title="errno.EPIPE"><code class="xref py py-const docutils literal notranslate"><span class="pre">EPIPE</span></code></a> と <a class="reference internal" href="errno.html#errno.ESHUTDOWN" title="errno.ESHUTDOWN"><code class="xref py py-const docutils literal notranslate"><span class="pre">ESHUTDOWN</span></code></a> に対応します。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ConnectionAbortedError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConnectionAbortedError</span></span><a class="headerlink" href="#ConnectionAbortedError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#ConnectionError" title="ConnectionError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ConnectionError</span></code></a> のサブクラスで、接続の試行が通信相手によって中断された場合に発生します。 <code class="xref c c-data docutils literal notranslate"><span class="pre">errno</span></code> <a class="reference internal" href="errno.html#errno.ECONNABORTED" title="errno.ECONNABORTED"><code class="xref py py-const docutils literal notranslate"><span class="pre">ECONNABORTED</span></code></a> に対応します。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ConnectionRefusedError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConnectionRefusedError</span></span><a class="headerlink" href="#ConnectionRefusedError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#ConnectionError" title="ConnectionError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ConnectionError</span></code></a> のサブクラスで、接続の試行が通信相手によって拒否された場合に発生します。 <code class="xref c c-data docutils literal notranslate"><span class="pre">errno</span></code> <a class="reference internal" href="errno.html#errno.ECONNREFUSED" title="errno.ECONNREFUSED"><code class="xref py py-const docutils literal notranslate"><span class="pre">ECONNREFUSED</span></code></a> に対応します。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ConnectionResetError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ConnectionResetError</span></span><a class="headerlink" href="#ConnectionResetError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#ConnectionError" title="ConnectionError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ConnectionError</span></code></a> のサブクラスで、接続が通信相手によってリセットされた場合に発生します。 <code class="xref c c-data docutils literal notranslate"><span class="pre">errno</span></code> <a class="reference internal" href="errno.html#errno.ECONNRESET" title="errno.ECONNRESET"><code class="xref py py-const docutils literal notranslate"><span class="pre">ECONNRESET</span></code></a> に対応します。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="FileExistsError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FileExistsError</span></span><a class="headerlink" href="#FileExistsError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">すでに存在するファイルやディレクトリを作成しようとした場合に送出されます。<code class="xref c c-data docutils literal notranslate"><span class="pre">errno</span></code> <a class="reference internal" href="errno.html#errno.EEXIST" title="errno.EEXIST"><code class="xref py py-const docutils literal notranslate"><span class="pre">EEXIST</span></code></a> に対応します。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="FileNotFoundError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FileNotFoundError</span></span><a class="headerlink" href="#FileNotFoundError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">要求されたファイルやディレクトリが存在しない場合に送出されます。<code class="xref c c-data docutils literal notranslate"><span class="pre">errno</span></code> <a class="reference internal" href="errno.html#errno.ENOENT" title="errno.ENOENT"><code class="xref py py-const docutils literal notranslate"><span class="pre">ENOENT</span></code></a> に対応します。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="InterruptedError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">InterruptedError</span></span><a class="headerlink" href="#InterruptedError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">システムコールが入力信号によって中断された場合に送出されます。<code class="xref c c-data docutils literal notranslate"><span class="pre">errno</span></code> <a class="reference internal" href="errno.html#errno.EINTR" title="errno.EINTR"><code class="xref py py-const docutils literal notranslate"><span class="pre">EINTR</span></code></a> に対応します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span>シグナルハンドラが例外を送出せず、システムコールが信号で中断された場合
+Python は <a class="reference internal" href="#InterruptedError" title="InterruptedError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">InterruptedError</span></code></a> を送出する代わりにシステムコールを再試行するようになりました (論拠については <span class="target" id="index-20"></span><a class="pep reference external" href="https://peps.python.org/pep-0475/"><strong>PEP 475</strong></a> を参照してください) 。</p>
+</div>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="IsADirectoryError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">IsADirectoryError</span></span><a class="headerlink" href="#IsADirectoryError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ディレクトリに (<a class="reference internal" href="os.html#os.remove" title="os.remove"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.remove()</span></code></a> などの) ファイル操作が要求された場合に送出されます。<code class="xref c c-data docutils literal notranslate"><span class="pre">errno</span></code> <a class="reference internal" href="errno.html#errno.EISDIR" title="errno.EISDIR"><code class="xref py py-const docutils literal notranslate"><span class="pre">EISDIR</span></code></a> に対応します。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="NotADirectoryError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">NotADirectoryError</span></span><a class="headerlink" href="#NotADirectoryError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ディレクトリへの操作(たとえば <a class="reference internal" href="os.html#os.listdir" title="os.listdir"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.listdir()</span></code></a>)をディレクトリ以外に対して要求された場合に送出されます。多くのPOSIXプラットフォームではディレクトリではないファイルをディレクトリとして開いたり移動するときにも発生する場合があります。<code class="xref c c-data docutils literal notranslate"><span class="pre">errno</span></code> <a class="reference internal" href="errno.html#errno.ENOTDIR" title="errno.ENOTDIR"><code class="xref py py-const docutils literal notranslate"><span class="pre">ENOTDIR</span></code></a> に対応します。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="PermissionError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PermissionError</span></span><a class="headerlink" href="#PermissionError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">十分なアクセス権、例えばファイルシステム権限のない操作が試みられた場合に送出されます。<code class="xref c c-data docutils literal notranslate"><span class="pre">errno</span></code> <a class="reference internal" href="errno.html#errno.EACCES" title="errno.EACCES"><code class="xref py py-const docutils literal notranslate"><span class="pre">EACCES</span></code></a>、<a class="reference internal" href="errno.html#errno.EPERM" title="errno.EPERM"><code class="xref py py-const docutils literal notranslate"><span class="pre">EPERM</span></code></a> および <a class="reference internal" href="errno.html#errno.ENOTCAPABLE" title="errno.ENOTCAPABLE"><code class="xref py py-const docutils literal notranslate"><span class="pre">ENOTCAPABLE</span></code></a> に対応します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.11.1 で変更: </span>WASIの <a class="reference internal" href="errno.html#errno.ENOTCAPABLE" title="errno.ENOTCAPABLE"><code class="xref py py-const docutils literal notranslate"><span class="pre">ENOTCAPABLE</span></code></a> は <a class="reference internal" href="#PermissionError" title="PermissionError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">PermissionError</span></code></a> にマップされました。</p>
+</div>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ProcessLookupError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ProcessLookupError</span></span><a class="headerlink" href="#ProcessLookupError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">与えられたプロセスが存在しない場合に送出されます。<code class="xref c c-data docutils literal notranslate"><span class="pre">errno</span></code> <a class="reference internal" href="errno.html#errno.ESRCH" title="errno.ESRCH"><code class="xref py py-const docutils literal notranslate"><span class="pre">ESRCH</span></code></a> に対応します。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="TimeoutError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TimeoutError</span></span><a class="headerlink" href="#TimeoutError" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">システム関数がシステムレベルでタイムアウトした場合に送出されます。<code class="xref c c-data docutils literal notranslate"><span class="pre">errno</span></code> <a class="reference internal" href="errno.html#errno.ETIMEDOUT" title="errno.ETIMEDOUT"><code class="xref py py-const docutils literal notranslate"><span class="pre">ETIMEDOUT</span></code></a> に対応します。</p>
+</dd></dl>
+
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.3: </span>上記のすべての <a class="reference internal" href="#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> サブクラスが追加されました。</p>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p class="translated"><span class="target" id="index-21"></span><a class="pep reference external" href="https://peps.python.org/pep-3151/"><strong>PEP 3151</strong></a> - OS および IO 例外階層の手直し</p>
+</div>
+</section>
+</section>
+<section id="warnings">
+<span id="warning-categories-as-exceptions"></span><h2 class="translated">警告<a class="headerlink" href="#warnings" title="Link to this heading">¶</a></h2>
+<p class="translated">次の例外は警告カテゴリとして使われます。詳細については <a class="reference internal" href="warnings.html#warning-categories"><span class="std std-ref">警告カテゴリ</span></a> のドキュメントを参照してください。</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="Warning">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Warning</span></span><a class="headerlink" href="#Warning" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">警告カテゴリの基底クラスです。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="UserWarning">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UserWarning</span></span><a class="headerlink" href="#UserWarning" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ユーザコードによって生成される警告の基底クラスです。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="DeprecationWarning">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DeprecationWarning</span></span><a class="headerlink" href="#DeprecationWarning" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">他の Python 開発者へ向けて警告を発するときの、廃止予定の機能についての警告の基底クラスです。</p>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">__main__</span></code> モジュールを除いて(<span class="target" id="index-22"></span><a class="pep reference external" href="https://peps.python.org/pep-0565/"><strong>PEP 565</strong></a>)、デフォルトの警告フィルターで無効化されています。<a class="reference internal" href="devmode.html#devmode"><span class="std std-ref">Python Development Mode</span></a> を有効にするとこの警告が表示されます。</p>
+<p class="untranslated">The deprecation policy is described in <span class="target" id="index-11"></span><a class="pep reference external" href="https://peps.python.org/pep-0387/"><strong>PEP 387</strong></a>.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="PendingDeprecationWarning">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PendingDeprecationWarning</span></span><a class="headerlink" href="#PendingDeprecationWarning" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">古くなって将来的に廃止される予定だが、今のところは廃止されていない機能についての警告の基底クラスです。</p>
+<p class="translated">近々起こる可能性のある機能廃止について警告を発することはまれなので、このクラスはめったに使われず、既に決まっている廃止については <a class="reference internal" href="#DeprecationWarning" title="DeprecationWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">DeprecationWarning</span></code></a> が望ましいです。</p>
+<p class="translated">デフォルトの警告フィルターで無効化されています。<a class="reference internal" href="devmode.html#devmode"><span class="std std-ref">Python Development Mode</span></a> を有効にするとこの警告が表示されます。</p>
+<p class="untranslated">The deprecation policy is described in <span class="target" id="index-12"></span><a class="pep reference external" href="https://peps.python.org/pep-0387/"><strong>PEP 387</strong></a>.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="SyntaxWarning">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SyntaxWarning</span></span><a class="headerlink" href="#SyntaxWarning" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">曖昧な構文に対する警告の基底クラスです。</p>
+<p class="untranslated">This warning is typically emitted when compiling Python source code, and usually won't be reported
+when running already compiled code.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="RuntimeWarning">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RuntimeWarning</span></span><a class="headerlink" href="#RuntimeWarning" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">あいまいなランタイム挙動に対する警告の基底クラスです。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="FutureWarning">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">FutureWarning</span></span><a class="headerlink" href="#FutureWarning" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Python で書かれたアプリケーションのエンドユーザーへ向けて警告を発するときの、廃止予定の機能についての警告の基底クラスです。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ImportWarning">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ImportWarning</span></span><a class="headerlink" href="#ImportWarning" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">モジュールインポートの誤りと思われるものに対する警告の基底クラスです。</p>
+<p class="translated">デフォルトの警告フィルターで無効化されています。<a class="reference internal" href="devmode.html#devmode"><span class="std std-ref">Python Development Mode</span></a> を有効にするとこの警告が表示されます。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="UnicodeWarning">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UnicodeWarning</span></span><a class="headerlink" href="#UnicodeWarning" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Unicode に関連した警告の基底クラスです。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="EncodingWarning">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EncodingWarning</span></span><a class="headerlink" href="#EncodingWarning" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">エンコーディングに関連した警告の基底クラスです。</p>
+<p class="translated">詳細は <a class="reference internal" href="io.html#io-encoding-warning"><span class="std std-ref">Opt-in EncodingWarning</span></a> を参照してください。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="BytesWarning">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BytesWarning</span></span><a class="headerlink" href="#BytesWarning" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> や <a class="reference internal" href="stdtypes.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytearray</span></code></a> に関連した警告の基底クラスです。</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="ResourceWarning">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ResourceWarning</span></span><a class="headerlink" href="#ResourceWarning" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">リソースの使用に関連した警告の基底クラスです。</p>
+<p class="translated">デフォルトの警告フィルターで無効化されています。<a class="reference internal" href="devmode.html#devmode"><span class="std std-ref">Python Development Mode</span></a> を有効にするとこの警告が表示されます。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+</dd></dl>
+
+</section>
+<section id="exception-groups">
+<span id="lib-exception-groups"></span><h2 class="translated">例外グループ<a class="headerlink" href="#exception-groups" title="Link to this heading">¶</a></h2>
+<p class="translated">以下は関係がない複数の例外を送出する必要があるときに使用します。例外グループは例外の階層構造の一部のため、他の例外と同様 <a class="reference internal" href="../reference/compound_stmts.html#except"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">except</span></code></a> で処理できます。また、<a class="reference internal" href="../reference/compound_stmts.html#except-star"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">except*</span></code></a> によって判別でき、例外グループに含まれている例外の型に基づいてサブグループにマッチします。</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="ExceptionGroup">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ExceptionGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ExceptionGroup" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="BaseExceptionGroup">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BaseExceptionGroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">excs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#BaseExceptionGroup" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">この2つの例外型は一連の例外 <code class="docutils literal notranslate"><span class="pre">excs</span></code> を包含します。<code class="docutils literal notranslate"><span class="pre">msg</span></code> 引数は文字列の必要があります。2つのクラスの異なる点は、<a class="reference internal" href="#BaseException" title="BaseException"><code class="xref py py-exc docutils literal notranslate"><span class="pre">BaseException</span></code></a> は <a class="reference internal" href="#BaseExceptionGroup" title="BaseExceptionGroup"><code class="xref py py-exc docutils literal notranslate"><span class="pre">BaseExceptionGroup</span></code></a> を拡張して任意の例外を含められますが、<a class="reference internal" href="#ExceptionGroup" title="ExceptionGroup"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ExceptionGroup</span></code></a> は <a class="reference internal" href="#Exception" title="Exception"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Exception</span></code></a> を拡張して <code class="xref py py-exc docutils literal notranslate"><span class="pre">Exception</span></code> のサブクラスのみを含められます。この設計により <code class="docutils literal notranslate"><span class="pre">except</span> <span class="pre">Exception</span></code> は <code class="xref py py-exc docutils literal notranslate"><span class="pre">ExceptionGroup</span></code> をキャッチしますが、<code class="xref py py-exc docutils literal notranslate"><span class="pre">BaseExceptionGroup</span></code> はキャッチしません。</p>
+<p class="translated"><a class="reference internal" href="#BaseExceptionGroup" title="BaseExceptionGroup"><code class="xref py py-exc docutils literal notranslate"><span class="pre">BaseExceptionGroup</span></code></a> のコンストラクターは含まれる例外がすべて <a class="reference internal" href="#Exception" title="Exception"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Exception</span></code></a> の場合は <code class="xref py py-exc docutils literal notranslate"><span class="pre">BaseExceptionGroup</span></code> ではなく <a class="reference internal" href="#ExceptionGroup" title="ExceptionGroup"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ExceptionGroup</span></code></a> を返すように自動的に選択されます。一方 <code class="xref py py-exc docutils literal notranslate"><span class="pre">ExceptionGroup</span></code> コンストラクタは、<code class="xref py py-exc docutils literal notranslate"><span class="pre">Exception</span></code> サブクラス以外の例外を含む場合は <a class="reference internal" href="#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> を送出します。</p>
+<p class="untranslated">Exception groups are <a class="reference internal" href="typing.html#generics"><span class="std std-ref">generic</span></a> over the type of their
+contained exceptions.</p>
+<div class="impl-detail compound">
+<p class="untranslated"><strong>CPython 実装の詳細:</strong> The <code class="docutils literal notranslate"><span class="pre">excs</span></code> parameter may be any sequence, but lists and tuples are
+specifically processed more efficiently here. For optimal performance,
+pass a tuple as <code class="docutils literal notranslate"><span class="pre">excs</span></code>.</p>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="BaseExceptionGroup.message">
+<span class="sig-name descname"><span class="pre">message</span></span><a class="headerlink" href="#BaseExceptionGroup.message" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">コンストラクタの <code class="docutils literal notranslate"><span class="pre">msg</span></code> 引数。この属性は読み込み専用です。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="BaseExceptionGroup.exceptions">
+<span class="sig-name descname"><span class="pre">exceptions</span></span><a class="headerlink" href="#BaseExceptionGroup.exceptions" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">コンストラクタに渡された一連の <code class="docutils literal notranslate"><span class="pre">excs</span></code> に含まれる例外のタプルです。この属性は読み込み専用です。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="BaseExceptionGroup.subgroup">
+<span class="sig-name descname"><span class="pre">subgroup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">condition</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#BaseExceptionGroup.subgroup" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">現在のグループで <em>条件</em> にマッチする礼儀のみを含む例外グループを返します。結果が空の場合は <code class="docutils literal notranslate"><span class="pre">None</span></code> を返します。</p>
+<p class="untranslated">The condition can be an exception type or tuple of exception types, in which
+case each exception is checked for a match using the same check that is used
+in an <code class="docutils literal notranslate"><span class="pre">except</span></code> clause.  The condition can also be a callable (other than
+a type object) that accepts an exception as its single argument and returns
+true for the exceptions that should be in the subgroup.</p>
+<p class="untranslated">The nesting structure of the current exception is preserved in the result,
+as are the values of its <a class="reference internal" href="#BaseExceptionGroup.message" title="BaseExceptionGroup.message"><code class="xref py py-attr docutils literal notranslate"><span class="pre">message</span></code></a>,
+<a class="reference internal" href="#BaseException.__traceback__" title="BaseException.__traceback__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__traceback__</span></code></a>, <a class="reference internal" href="#BaseException.__cause__" title="BaseException.__cause__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__cause__</span></code></a>,
+<a class="reference internal" href="#BaseException.__context__" title="BaseException.__context__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__context__</span></code></a> and
+<a class="reference internal" href="#BaseException.__notes__" title="BaseException.__notes__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__notes__</span></code></a> fields.
+Empty nested groups are omitted from the result.</p>
+<p class="untranslated">The condition is checked for all exceptions in the nested exception group,
+including the top-level and any nested exception groups. If the condition is
+true for such an exception group, it is included in the result in full.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13: </span><code class="docutils literal notranslate"><span class="pre">condition</span></code> can be any callable which is not a type object.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="BaseExceptionGroup.split">
+<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">condition</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#BaseExceptionGroup.split" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#BaseExceptionGroup.subgroup" title="BaseExceptionGroup.subgroup"><code class="xref py py-meth docutils literal notranslate"><span class="pre">subgroup()</span></code></a> と似てますが <code class="docutils literal notranslate"><span class="pre">(match,</span> <span class="pre">rest)</span></code> のペアを返します。<code class="docutils literal notranslate"><span class="pre">match</span></code> は <code class="docutils literal notranslate"><span class="pre">subgroup(condition)</span></code> で <code class="docutils literal notranslate"><span class="pre">rest</span></code> は残りのマッチしない部分です。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="BaseExceptionGroup.derive">
+<span class="sig-name descname"><span class="pre">derive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">excs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#BaseExceptionGroup.derive" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">同じ <a class="reference internal" href="#BaseExceptionGroup.message" title="BaseExceptionGroup.message"><code class="xref py py-attr docutils literal notranslate"><span class="pre">message</span></code></a> の例外グループを返しますが、<code class="docutils literal notranslate"><span class="pre">excs</span></code> の例外を含んでいます。</p>
+<p class="untranslated">This method is used by <a class="reference internal" href="#BaseExceptionGroup.subgroup" title="BaseExceptionGroup.subgroup"><code class="xref py py-meth docutils literal notranslate"><span class="pre">subgroup()</span></code></a> and <a class="reference internal" href="#BaseExceptionGroup.split" title="BaseExceptionGroup.split"><code class="xref py py-meth docutils literal notranslate"><span class="pre">split()</span></code></a>, which
+are used in various contexts to break up an exception group. A
+subclass needs to override it in order to make <code class="xref py py-meth docutils literal notranslate"><span class="pre">subgroup()</span></code>
+and <code class="xref py py-meth docutils literal notranslate"><span class="pre">split()</span></code> return instances of the subclass rather
+than <a class="reference internal" href="#ExceptionGroup" title="ExceptionGroup"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ExceptionGroup</span></code></a>.</p>
+<p class="translated"><a class="reference internal" href="#BaseExceptionGroup.subgroup" title="BaseExceptionGroup.subgroup"><code class="xref py py-meth docutils literal notranslate"><span class="pre">subgroup()</span></code></a> と <a class="reference internal" href="#BaseExceptionGroup.split" title="BaseExceptionGroup.split"><code class="xref py py-meth docutils literal notranslate"><span class="pre">split()</span></code></a> は <a class="reference internal" href="#BaseException.__traceback__" title="BaseException.__traceback__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__traceback__</span></code></a>、<a class="reference internal" href="#BaseException.__cause__" title="BaseException.__cause__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__cause__</span></code></a>、<a class="reference internal" href="#BaseException.__context__" title="BaseException.__context__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__context__</span></code></a> と <a class="reference internal" href="#BaseException.__notes__" title="BaseException.__notes__"><code class="xref py py-attr docutils literal notranslate"><span class="pre">__notes__</span></code></a> フィールドを元の例外グループから <a class="reference internal" href="#BaseExceptionGroup.derive" title="BaseExceptionGroup.derive"><code class="xref py py-meth docutils literal notranslate"><span class="pre">derive()</span></code></a> が返す例外グループにコピーするため、<code class="xref py py-meth docutils literal notranslate"><span class="pre">derive()</span></code> ではこれらのフィールドを更新する必要がありません。</p>
+<div class="untranslated highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span><span class="w"> </span><span class="nc">MyGroup</span><span class="p">(</span><span class="n">ExceptionGroup</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span><span class="w"> </span><span class="nf">derive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">excs</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">MyGroup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">,</span> <span class="n">excs</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span> <span class="o">=</span> <span class="n">MyGroup</span><span class="p">(</span><span class="s2">&quot;eg&quot;</span><span class="p">,</span> <span class="p">[</span><span class="ne">ValueError</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="ne">TypeError</span><span class="p">(</span><span class="mi">2</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">add_note</span><span class="p">(</span><span class="s2">&quot;a note&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">__context__</span> <span class="o">=</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;context&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">e</span><span class="o">.</span><span class="n">__cause__</span> <span class="o">=</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;cause&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>   <span class="k">raise</span> <span class="n">e</span>
+<span class="gp">... </span><span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">... </span>   <span class="n">exc</span> <span class="o">=</span> <span class="n">e</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">match</span><span class="p">,</span> <span class="n">rest</span> <span class="o">=</span> <span class="n">exc</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exc</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">__context__</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">__cause__</span><span class="p">,</span> <span class="n">exc</span><span class="o">.</span><span class="n">__notes__</span>
+<span class="go">(MyGroup(&#39;eg&#39;, [ValueError(1), TypeError(2)]), Exception(&#39;context&#39;), Exception(&#39;cause&#39;), [&#39;a note&#39;])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">match</span><span class="p">,</span> <span class="n">match</span><span class="o">.</span><span class="n">__context__</span><span class="p">,</span> <span class="n">match</span><span class="o">.</span><span class="n">__cause__</span><span class="p">,</span> <span class="n">match</span><span class="o">.</span><span class="n">__notes__</span>
+<span class="go">(MyGroup(&#39;eg&#39;, [ValueError(1)]), Exception(&#39;context&#39;), Exception(&#39;cause&#39;), [&#39;a note&#39;])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rest</span><span class="p">,</span> <span class="n">rest</span><span class="o">.</span><span class="n">__context__</span><span class="p">,</span> <span class="n">rest</span><span class="o">.</span><span class="n">__cause__</span><span class="p">,</span> <span class="n">rest</span><span class="o">.</span><span class="n">__notes__</span>
+<span class="go">(MyGroup(&#39;eg&#39;, [TypeError(2)]), Exception(&#39;context&#39;), Exception(&#39;cause&#39;), [&#39;a note&#39;])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">exc</span><span class="o">.</span><span class="n">__traceback__</span> <span class="ow">is</span> <span class="n">match</span><span class="o">.</span><span class="n">__traceback__</span> <span class="ow">is</span> <span class="n">rest</span><span class="o">.</span><span class="n">__traceback__</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p class="untranslated">Note that <code class="xref py py-exc docutils literal notranslate"><span class="pre">BaseExceptionGroup</span></code> defines <a class="reference internal" href="../reference/datamodel.html#object.__new__" title="object.__new__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__new__()</span></code></a>, so
+subclasses that need a different constructor signature need to
+override that rather than <a class="reference internal" href="../reference/datamodel.html#object.__init__" title="object.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a>. For example, the following
+defines an exception group subclass which accepts an exit_code and
+constructs the group's message from it.</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">Errors</span><span class="p">(</span><span class="n">ExceptionGroup</span><span class="p">):</span>
+   <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="n">exit_code</span><span class="p">):</span>
+      <span class="bp">self</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">Errors</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;exit code: </span><span class="si">{</span><span class="n">exit_code</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">errors</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">exit_code</span> <span class="o">=</span> <span class="n">exit_code</span>
+      <span class="k">return</span> <span class="bp">self</span>
+
+   <span class="k">def</span><span class="w"> </span><span class="nf">derive</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">excs</span><span class="p">):</span>
+      <span class="k">return</span> <span class="n">Errors</span><span class="p">(</span><span class="n">excs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">exit_code</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="untranslated">Like <a class="reference internal" href="#ExceptionGroup" title="ExceptionGroup"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ExceptionGroup</span></code></a>, any subclass of <code class="xref py py-exc docutils literal notranslate"><span class="pre">BaseExceptionGroup</span></code> which
+is also a subclass of <a class="reference internal" href="#Exception" title="Exception"><code class="xref py py-exc docutils literal notranslate"><span class="pre">Exception</span></code></a> can only wrap instances of
+<code class="xref py py-exc docutils literal notranslate"><span class="pre">Exception</span></code>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.11.</span></p>
+</div>
+</dd></dl>
+
+</section>
+<section id="exception-hierarchy">
+<h2 class="translated">例外のクラス階層<a class="headerlink" href="#exception-hierarchy" title="Link to this heading">¶</a></h2>
+<p class="translated">組み込み例外のクラス階層は以下のとおりです:</p>
+<div class="untranslated highlight-text notranslate"><div class="highlight"><pre><span></span>BaseException
+ ├── BaseExceptionGroup
+ ├── GeneratorExit
+ ├── KeyboardInterrupt
+ ├── SystemExit
+ └── Exception
+      ├── ArithmeticError
+      │    ├── FloatingPointError
+      │    ├── OverflowError
+      │    └── ZeroDivisionError
+      ├── AssertionError
+      ├── AttributeError
+      ├── BufferError
+      ├── EOFError
+      ├── ExceptionGroup [BaseExceptionGroup]
+      ├── ImportError
+      │    └── ModuleNotFoundError
+      ├── LookupError
+      │    ├── IndexError
+      │    └── KeyError
+      ├── MemoryError
+      ├── NameError
+      │    └── UnboundLocalError
+      ├── OSError
+      │    ├── BlockingIOError
+      │    ├── ChildProcessError
+      │    ├── ConnectionError
+      │    │    ├── BrokenPipeError
+      │    │    ├── ConnectionAbortedError
+      │    │    ├── ConnectionRefusedError
+      │    │    └── ConnectionResetError
+      │    ├── FileExistsError
+      │    ├── FileNotFoundError
+      │    ├── InterruptedError
+      │    ├── IsADirectoryError
+      │    ├── NotADirectoryError
+      │    ├── PermissionError
+      │    ├── ProcessLookupError
+      │    └── TimeoutError
+      ├── ReferenceError
+      ├── RuntimeError
+      │    ├── NotImplementedError
+      │    ├── PythonFinalizationError
+      │    └── RecursionError
+      ├── StopAsyncIteration
+      ├── StopIteration
+      ├── SyntaxError
+      │    └── IndentationError
+      │         └── TabError
+      ├── SystemError
+      ├── TypeError
+      ├── ValueError
+      │    └── UnicodeError
+      │         ├── UnicodeDecodeError
+      │         ├── UnicodeEncodeError
+      │         └── UnicodeTranslateError
+      └── Warning
+           ├── BytesWarning
+           ├── DeprecationWarning
+           ├── EncodingWarning
+           ├── FutureWarning
+           ├── ImportWarning
+           ├── PendingDeprecationWarning
+           ├── ResourceWarning
+           ├── RuntimeWarning
+           ├── SyntaxWarning
+           ├── UnicodeWarning
+           └── UserWarning
+</pre></div>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">組み込み例外</a><ul>
+<li><a class="reference internal" href="#exception-context">例外コンテキスト</a></li>
+<li><a class="reference internal" href="#inheriting-from-built-in-exceptions">組み込み例外から継承する</a></li>
+<li><a class="reference internal" href="#base-classes">基底クラス</a></li>
+<li><a class="reference internal" href="#concrete-exceptions">具象例外</a><ul>
+<li><a class="reference internal" href="#os-exceptions">OS 例外</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#warnings">警告</a></li>
+<li><a class="reference internal" href="#exception-groups">例外グループ</a></li>
+<li><a class="reference internal" href="#exception-hierarchy">例外のクラス階層</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="stdtypes.html"
+                          title="前の章へ">組み込み型</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="threadsafety.html"
+                          title="次の章へ">Thread Safety Guarantees</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/exceptions.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/exceptions.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/exceptions.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="threadsafety.html" title="Thread Safety Guarantees"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="stdtypes.html" title="組み込み型"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">組み込み例外</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

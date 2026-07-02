@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="_thread --- 低水準なスレッド API" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/_thread.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="このモジュールはマルチスレッド (別名 軽量プロセス( light-weight processes)または タスク( tasks)) に用いられる低水準プリミティブを提供します --- グローバルデータ空間を共有するマルチスレッドを制御します。同期のための単純なロック (別名 mutexes またはバイナリセマフォ ( binary semaphores))が提供されています。 threa..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library__thread_a9896205.png" />
+<meta property="og:image:alt" content="このモジュールはマルチスレッド (別名 軽量プロセス( light-weight processes)または タスク( tasks)) に用いられる低水準プリミティブを提供します --- グローバルデータ空間を共有するマルチスレッドを制御します。同期のための単純なロック (別名 mutexes またはバイナリセマフォ ( binary semaphores))が提供されています。 threa..." />
+<meta name="description" content="このモジュールはマルチスレッド (別名 軽量プロセス( light-weight processes)または タスク( tasks)) に用いられる低水準プリミティブを提供します --- グローバルデータ空間を共有するマルチスレッドを制御します。同期のための単純なロック (別名 mutexes またはバイナリセマフォ ( binary semaphores))が提供されています。 threa..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>_thread --- 低水準なスレッド API &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="ネットワーク通信とプロセス間通信" href="ipc.html" />
+    <link rel="prev" title="contextvars --- コンテキスト変数" href="contextvars.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/_thread.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="contextvars.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">contextvars</span></code> --- コンテキスト変数</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="ipc.html"
+                          title="次の章へ">ネットワーク通信とプロセス間通信</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/_thread.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/_thread.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/_thread.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="ipc.html" title="ネットワーク通信とプロセス間通信"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="contextvars.html" title="contextvars --- コンテキスト変数"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concurrency.html" accesskey="U">並行実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">_thread</span></code> --- 低水準なスレッド API</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-_thread">
+<span id="thread-low-level-threading-api"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">_thread</span></code> --- 低水準なスレッド API<a class="headerlink" href="#module-_thread" title="Link to this heading">¶</a></h1>
+<hr class="docutils" id="index-0" />
+<p class="translated">このモジュールはマルチスレッド (別名 <em class="dfn">軽量プロセス</em> (<em class="dfn">light-weight processes</em>)または <em class="dfn">タスク</em> (<em class="dfn">tasks</em>)) に用いられる低水準プリミティブを提供します --- グローバルデータ空間を共有するマルチスレッドを制御します。同期のための単純なロック (別名 <em class="dfn">mutexes</em> またはバイナリセマフォ (<em class="dfn">binary semaphores</em>))が提供されています。 <a class="reference internal" href="threading.html#module-threading" title="threading: Thread-based parallelism."><code class="xref py py-mod docutils literal notranslate"><span class="pre">threading</span></code></a> モジュールは、このモジュール上で、より使い易く高級なスレッディングの API を提供します。</p>
+<div class="versionchanged" id="index-1">
+<p><span class="versionmodified changed">バージョン 3.7 で変更: </span>このモジュールは以前はオプションでしたが、常に利用可能なモジュールとなりました。</p>
+</div>
+<p class="translated">このモジュールでは以下の定数および関数を定義しています:</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="thread.error">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">_thread.</span></span><span class="sig-name descname"><span class="pre">error</span></span><a class="headerlink" href="#thread.error" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">スレッド固有の例外です。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span>現在は組み込みの <a class="reference internal" href="exceptions.html#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> の別名です。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="thread.start_new_thread">
+<span class="sig-prename descclassname"><span class="pre">_thread.</span></span><span class="sig-name descname"><span class="pre">start_new_thread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">function</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#thread.start_new_thread" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">新しいスレッドを開始して、そのIDを返します。スレッドは引数リスト <em>args</em> (タプルでなければなりません)の関数 <em>function</em> を実行します。オプション引数 <em>kwargs</em> はキーワード引数の辞書を指定します。</p>
+<p class="translated">関数が戻るとき、スレッドは静かに終了します。</p>
+<p class="untranslated">When the function terminates with an unhandled exception,
+<a class="reference internal" href="sys.html#sys.unraisablehook" title="sys.unraisablehook"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.unraisablehook()</span></code></a> is called to handle the exception. The <em>object</em>
+attribute of the hook argument is <em>function</em>. By default, a stack trace is
+printed and then the thread exits (but other threads continue to run).</p>
+<p class="untranslated">When the function raises a <a class="reference internal" href="exceptions.html#SystemExit" title="SystemExit"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SystemExit</span></code></a> exception, it is silently
+ignored.</p>
+<p class="audit-hook untranslated">Raises an <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">auditing event</span></a> <code class="docutils literal notranslate"><span class="pre">_thread.start_new_thread</span></code> with arguments <code class="docutils literal notranslate"><span class="pre">function</span></code>, <code class="docutils literal notranslate"><span class="pre">args</span></code>, <code class="docutils literal notranslate"><span class="pre">kwargs</span></code>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.8 で変更: </span><a class="reference internal" href="sys.html#sys.unraisablehook" title="sys.unraisablehook"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.unraisablehook()</span></code></a> is now used to handle unhandled exceptions.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="thread.interrupt_main">
+<span class="sig-prename descclassname"><span class="pre">_thread.</span></span><span class="sig-name descname"><span class="pre">interrupt_main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">signal.SIGINT</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#thread.interrupt_main" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Simulate the effect of a signal arriving in the main thread.
+A thread can use this function to interrupt the main thread, though
+there is no guarantee that the interruption will happen immediately.</p>
+<p class="untranslated">If given, <em>signum</em> is the number of the signal to simulate.
+If <em>signum</em> is not given, <a class="reference internal" href="signal.html#signal.SIGINT" title="signal.SIGINT"><code class="xref py py-const docutils literal notranslate"><span class="pre">signal.SIGINT</span></code></a> is simulated.</p>
+<p class="untranslated">If the given signal isn't handled by Python (it was set to
+<a class="reference internal" href="signal.html#signal.SIG_DFL" title="signal.SIG_DFL"><code class="xref py py-const docutils literal notranslate"><span class="pre">signal.SIG_DFL</span></code></a> or <a class="reference internal" href="signal.html#signal.SIG_IGN" title="signal.SIG_IGN"><code class="xref py py-const docutils literal notranslate"><span class="pre">signal.SIG_IGN</span></code></a>), this function does
+nothing.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.10 で変更: </span>The <em>signum</em> argument is added to customize the signal number.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">This does not emit the corresponding signal but schedules a call to
+the associated handler (if it exists).
+If you want to truly emit the signal, use <a class="reference internal" href="signal.html#signal.raise_signal" title="signal.raise_signal"><code class="xref py py-func docutils literal notranslate"><span class="pre">signal.raise_signal()</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="thread.exit">
+<span class="sig-prename descclassname"><span class="pre">_thread.</span></span><span class="sig-name descname"><span class="pre">exit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#thread.exit" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="exceptions.html#SystemExit" title="SystemExit"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SystemExit</span></code></a> を送出します。それが捕えられないときは、静かにスレッドを終了させます。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="thread.allocate_lock">
+<span class="sig-prename descclassname"><span class="pre">_thread.</span></span><span class="sig-name descname"><span class="pre">allocate_lock</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#thread.allocate_lock" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">新しいロックオブジェクトを返します。ロックのメソッドはこの後に記述されます。ロックは初期状態としてアンロック状態です。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="thread.get_ident">
+<span class="sig-prename descclassname"><span class="pre">_thread.</span></span><span class="sig-name descname"><span class="pre">get_ident</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#thread.get_ident" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">現在のスレッドの 'スレッドID' を返します。非ゼロの整数です。この値は直接の意味を持っていません; 例えばスレッド特有のデータの辞書に索引をつけるためのような、マジッククッキーとして意図されています。スレッドが終了し、他のスレッドが作られたとき、スレッド ID は再利用されるかもしれません。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="thread.get_native_id">
+<span class="sig-prename descclassname"><span class="pre">_thread.</span></span><span class="sig-name descname"><span class="pre">get_native_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#thread.get_native_id" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return the native integral Thread ID of the current thread assigned by the kernel.
+This is a non-negative integer.
+Its value may be used to uniquely identify this particular thread system-wide
+(until the thread terminates, after which the value may be recycled by the OS).</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: Windows, FreeBSD, Linux, macOS, OpenBSD, NetBSD, AIX, DragonFlyBSD, GNU/kFreeBSD.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.8.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span>Added support for GNU/kFreeBSD.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="thread.stack_size">
+<span class="sig-prename descclassname"><span class="pre">_thread.</span></span><span class="sig-name descname"><span class="pre">stack_size</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#thread.stack_size" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">新しいスレッドを作るときのスレッドスタックサイズを返します。オプションの <em>size</em> 引数にはこれ以降に作成するスレッドのスタックサイズを指定し、0 (プラットフォームのデフォルト値または設定されたデフォルト値) か、 32,768 (32 KiB) 以上の正の整数でなければなりません。<em>size</em> が指定されない場合 0 が使われます。スレッドのスタックサイズの変更がサポートされていない場合、 <a class="reference internal" href="exceptions.html#RuntimeError" title="RuntimeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> を送出します。不正なスタックサイズが指定された場合、 <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> を送出して、スタックサイズは変更されません。32 KiB は現在のインタープリタ自身のために十分であると保証された最小のスタックサイズです。いくつかのプラットフォームではスタックサイズに対して制限があることに注意してください。例えば最小のスタックサイズが 32 KiB より大きかったり、システムのメモリページサイズ の整数倍の必要があるなどです。この制限についてはプラットフォームのドキュメントを参照してください (一般的なページサイズは 4 KiB なので、プラットフォームに関する情報がない場合は 4096 の整数倍のスタックサイズを選ぶといいかもしれません)。</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: Windows, pthreads.</p>
+<p class="untranslated">Unix platforms with POSIX threads support.</p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="thread.TIMEOUT_MAX">
+<span class="sig-prename descclassname"><span class="pre">_thread.</span></span><span class="sig-name descname"><span class="pre">TIMEOUT_MAX</span></span><a class="headerlink" href="#thread.TIMEOUT_MAX" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The maximum value allowed for the <em>timeout</em> parameter of
+<a class="reference internal" href="threading.html#threading.Lock.acquire" title="threading.Lock.acquire"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Lock.acquire</span></code></a>. Specifying a timeout greater
+than this value will raise an <a class="reference internal" href="exceptions.html#OverflowError" title="OverflowError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OverflowError</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+</dd></dl>
+
+<!-- Keep the old URL fragments working (see gh-89554) -->
+<span id='thread.lock.acquire'></span>
+<span id='thread.lock.release'></span>
+<span id='thread.lock.locked'></span><dl class="py class">
+<dt class="sig sig-object py" id="thread.LockType">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">_thread.</span></span><span class="sig-name descname"><span class="pre">LockType</span></span><a class="headerlink" href="#thread.LockType" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">これはロックオブジェクトのタイプです。</p>
+<p class="translated">ロックオブジェクトは次のようなメソッドを持っています:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="thread.LockType.acquire">
+<span class="sig-name descname"><span class="pre">acquire</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">blocking</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#thread.LockType.acquire" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">オプションの引数なしで使用すると、このメソッドは他のスレッドがロックしているかどうかにかかわらずロックを獲得します。ただし、他のスレッドがすでにロックしている場合には解除されるまで待ってからロックを獲得します (同時にロックを獲得できるスレッドはひとつだけであり、これこそがロックの存在理由です)。</p>
+<p class="untranslated">If the <em>blocking</em> argument is present, the action depends on its
+value: if it is false, the lock is only acquired if it can be acquired
+immediately without waiting, while if it is true, the lock is acquired
+unconditionally as above.</p>
+<p class="untranslated">If the floating-point <em>timeout</em> argument is present and positive, it
+specifies the maximum wait time in seconds before returning.  A negative
+<em>timeout</em> argument specifies an unbounded wait.  You cannot specify
+a <em>timeout</em> if <em>blocking</em> is false.</p>
+<p class="translated">なお、ロックを獲得できた場合は <code class="docutils literal notranslate"><span class="pre">True</span></code>、できなかった場合は <code class="docutils literal notranslate"><span class="pre">False</span></code> を返します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span>新しい <em>timeout</em> 引数。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span>POSIX ではロックの取得がシグナルに割り込まれるようになりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.14 で変更: </span>Lock acquires can now be interrupted by signals on Windows.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="thread.LockType.release">
+<span class="sig-name descname"><span class="pre">release</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#thread.LockType.release" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ロックを解放します。そのロックは既に獲得されたものでなければなりませんが、しかし同じスレッドによって獲得されたものである必要はありません。</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="thread.LockType.locked">
+<span class="sig-name descname"><span class="pre">locked</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#thread.LockType.locked" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ロックの状態を返します: 同じスレッドによって獲得されたものなら <code class="docutils literal notranslate"><span class="pre">True</span></code> 、違うのなら <code class="docutils literal notranslate"><span class="pre">False</span></code> を返します。</p>
+</dd></dl>
+
+<p class="translated">これらのメソッドに加えて、ロックオブジェクトは <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> 文を通じて以下の例のように使うこともできます。</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">_thread</span>
+
+<span class="n">a_lock</span> <span class="o">=</span> <span class="n">_thread</span><span class="o">.</span><span class="n">allocate_lock</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="n">a_lock</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;a_lock is locked while this executes&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p class="translated"><strong>警告:</strong></p>
+<ul class="simple" id="index-2">
+<li><p class="untranslated">Interrupts always go to the main thread (the <a class="reference internal" href="exceptions.html#KeyboardInterrupt" title="KeyboardInterrupt"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyboardInterrupt</span></code></a>
+exception will be received by that thread.)</p></li>
+<li><p class="translated"><a class="reference internal" href="sys.html#sys.exit" title="sys.exit"><code class="xref py py-func docutils literal notranslate"><span class="pre">sys.exit()</span></code></a> を呼び出す、あるいは <a class="reference internal" href="exceptions.html#SystemExit" title="SystemExit"><code class="xref py py-exc docutils literal notranslate"><span class="pre">SystemExit</span></code></a> 例外を送出することは、 <a class="reference internal" href="#thread.exit" title="_thread.exit"><code class="xref py py-func docutils literal notranslate"><span class="pre">_thread.exit()</span></code></a> を呼び出すことと同じです。</p></li>
+<li><p class="translated">メインスレッドが終了したとき、他のスレッドが生き残るかどうかは、システムに依存します。多くのシステムでは、 <a class="reference internal" href="../reference/compound_stmts.html#try"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">try</span></code></a> ... <a class="reference internal" href="../reference/compound_stmts.html#finally"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">finally</span></code></a> 節や、オブジェクトデストラクタを実行せずに終了されます。</p></li>
+</ul>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="contextvars.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">contextvars</span></code> --- コンテキスト変数</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="ipc.html"
+                          title="次の章へ">ネットワーク通信とプロセス間通信</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/_thread.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/_thread.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/_thread.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="ipc.html" title="ネットワーク通信とプロセス間通信"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="contextvars.html" title="contextvars --- コンテキスト変数"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="concurrency.html" >並行実行</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">_thread</span></code> --- 低水準なスレッド API</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

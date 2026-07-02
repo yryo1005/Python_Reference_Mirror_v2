@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="12. 仮想環境とパッケージ" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/tutorial/venv.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="はじめに: Python アプリケーションはよく標準ライブラリ以外のパッケージやモジュールを利用します。またアプリケーションがあるバグ修正を必要としていたり、過去のバージョンのインターフェイスに依存しているために、ライブラリの特定のバージョンを必要とすることもあります。 そのため、1つのインストールされたPythonが全てのアプリケーションの要求に対応することは不可能です。もしアプリケーショ..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_tutorial_venv_f1c8edc3.png" />
+<meta property="og:image:alt" content="はじめに: Python アプリケーションはよく標準ライブラリ以外のパッケージやモジュールを利用します。またアプリケーションがあるバグ修正を必要としていたり、過去のバージョンのインターフェイスに依存しているために、ライブラリの特定のバージョンを必要とすることもあります。 そのため、1つのインストールされたPythonが全てのアプリケーションの要求に対応することは不可能です。もしアプリケーショ..." />
+<meta name="description" content="はじめに: Python アプリケーションはよく標準ライブラリ以外のパッケージやモジュールを利用します。またアプリケーションがあるバグ修正を必要としていたり、過去のバージョンのインターフェイスに依存しているために、ライブラリの特定のバージョンを必要とすることもあります。 そのため、1つのインストールされたPythonが全てのアプリケーションの要求に対応することは不可能です。もしアプリケーショ..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>12. 仮想環境とパッケージ &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="13. さあ何を？" href="whatnow.html" />
+    <link rel="prev" title="11. Brief tour of the standard library --- part II" href="stdlib2.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/tutorial/venv.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">12. 仮想環境とパッケージ</a><ul>
+<li><a class="reference internal" href="#introduction">12.1. はじめに</a></li>
+<li><a class="reference internal" href="#creating-virtual-environments">12.2. 仮想環境の作成</a></li>
+<li><a class="reference internal" href="#managing-packages-with-pip">12.3. pip を使ったパッケージ管理</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="stdlib2.html"
+                          title="前の章へ"><span class="section-number">11. </span>Brief tour of the standard library --- part II</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="whatnow.html"
+                          title="次の章へ"><span class="section-number">13. </span>さあ何を？</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "tutorial/venv.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/tutorial/venv.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/tutorial/venv.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="whatnow.html" title="13. さあ何を？"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="stdlib2.html" title="11. Brief tour of the standard library --- part II"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Python チュートリアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">12. </span>仮想環境とパッケージ</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="virtual-environments-and-packages">
+<span id="tut-venv"></span><h1 class="translated"><span class="section-number">12. </span>仮想環境とパッケージ<a class="headerlink" href="#virtual-environments-and-packages" title="Link to this heading">¶</a></h1>
+<section id="introduction">
+<h2 class="translated"><span class="section-number">12.1. </span>はじめに<a class="headerlink" href="#introduction" title="Link to this heading">¶</a></h2>
+<p class="translated">Python アプリケーションはよく標準ライブラリ以外のパッケージやモジュールを利用します。またアプリケーションがあるバグ修正を必要としていたり、過去のバージョンのインターフェイスに依存しているために、ライブラリの特定のバージョンを必要とすることもあります。</p>
+<p class="translated">そのため、1つのインストールされたPythonが全てのアプリケーションの要求に対応することは不可能です。もしアプリケーションAがあるモジュールのバージョン 1.0 を要求していて、別のアプリケーションBが同じモジュールのバージョン 2.0 を要求している場合、2つの要求は衝突していて、1.0 と 2.0 のどちらかのバージョンをインストールしても片方のアプリケーションが動きません。</p>
+<p class="translated">この問題の解決策は <a class="reference internal" href="../glossary.html#term-virtual-environment"><span class="xref std std-term">仮想環境</span></a> を作ることです。仮想環境とは、特定のバージョンの Python と幾つかの追加パッケージを含んだ Python インストールを構成するディレクトリです。</p>
+<p class="translated">別のアプリケーションはそれぞれ別の仮想環境を使うことができます。先の例にあった要求の衝突を解決する場合、アプリケーションAが固有の仮想環境を持ってそこにライブラリのバージョン 1.0 をインストールし、アプリケーションBが持つ別の仮想環境にライブラリのバージョン 2.0 をインストールすることができます。そしてアプリケーションBがライブラリのバージョンを 3.0 に更新することを要求する場合も、アプリケーションAに影響しません。</p>
+</section>
+<section id="creating-virtual-environments">
+<h2 class="translated"><span class="section-number">12.2. </span>仮想環境の作成<a class="headerlink" href="#creating-virtual-environments" title="Link to this heading">¶</a></h2>
+<p class="translated">仮想環境の作成・管理に使われるモジュールは、 <a class="reference internal" href="../library/venv.html#module-venv" title="venv: Creation of virtual environments."><code class="xref py py-mod docutils literal notranslate"><span class="pre">venv</span></code></a> と呼ばれます。 <code class="xref py py-mod docutils literal notranslate"><span class="pre">venv</span></code> は、コマンドが実行された Python のバージョン (<a class="reference internal" href="../using/cmdline.html#cmdoption-version"><code class="xref std std-option docutils literal notranslate"><span class="pre">--version</span></code></a> オプションで表示される) をインストールします。例えば、 <code class="docutils literal notranslate"><span class="pre">python3.12</span></code> でコマンドを実行すると、バージョン 3.12 がインストールされます。</p>
+<p class="translated">仮想環境を作るには、仮想環境を置くディレクトリを決めて、 そのディレクトリのパスを指定して、 <a class="reference internal" href="../library/venv.html#module-venv" title="venv: Creation of virtual environments."><code class="xref py py-mod docutils literal notranslate"><span class="pre">venv</span></code></a> をスクリプトとして実行します:</p>
+<div class="translated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">venv</span> <span class="n">tutorial</span><span class="o">-</span><span class="n">env</span>
+</pre></div>
+</div>
+<p class="translated">これは <code class="docutils literal notranslate"><span class="pre">tutorial-env</span></code> ディレクトリがなければ作成して、その中に Python インタプリタ、その他関連するファイルのコピーを含むサブディレクトリを作ります。</p>
+<p class="translated">仮想環境の一般的なディレクトリの場所は <code class="docutils literal notranslate"><span class="pre">.venv</span></code> です。この名前は、通常はシェルで隠されているため、ディレクトリが存在する理由を説明する名前を付けても、邪魔にはなりません。また、一部のツールでサポートされている <code class="docutils literal notranslate"><span class="pre">.env</span></code> 環境変数定義ファイルによるクラッシュも防止します。</p>
+<p class="translated">仮想環境を作ったら、それを有効化する必要があります。</p>
+<p class="translated">Windows の場合:</p>
+<div class="translated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">tutorial</span><span class="o">-</span><span class="n">env</span>\<span class="n">Scripts</span>\<span class="n">activate</span>
+</pre></div>
+</div>
+<p class="translated">Unix や Mac OS の場合:</p>
+<div class="translated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">source</span> <span class="n">tutorial</span><span class="o">-</span><span class="n">env</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">activate</span>
+</pre></div>
+</div>
+<p class="translated">(このスクリプトは bash shell で書かれています。 <strong class="program">csh</strong> や <strong class="program">fish</strong> を利用している場合、代わりに利用できる <code class="docutils literal notranslate"><span class="pre">activate.csh</span></code> と <code class="docutils literal notranslate"><span class="pre">activate.fish</span></code> スクリプトがあります。)</p>
+<p class="translated">仮想環境を有効化すると、シェルのプロンプトに利用中の仮想環境が表示されるようになり、<code class="docutils literal notranslate"><span class="pre">python</span></code> を実行するとその仮想環境の Python を実行するようになります:</p>
+<div class="translated highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">source</span><span class="w"> </span>~/envs/tutorial-env/bin/activate
+<span class="gp gp-VirtualEnv">(tutorial-env)</span> <span class="gp">$ </span>python
+<span class="go">Python 3.5.1 (default, May  6 2016, 10:59:36)</span>
+<span class="go">  ...</span>
+<span class="go">&gt;&gt;&gt; import sys</span>
+<span class="go">&gt;&gt;&gt; sys.path</span>
+<span class="go">[&#39;&#39;, &#39;/usr/local/lib/python35.zip&#39;, ...,</span>
+<span class="go">&#39;~/envs/tutorial-env/lib/python3.5/site-packages&#39;]</span>
+<span class="go">&gt;&gt;&gt;</span>
+</pre></div>
+</div>
+<p class="untranslated">Note that the activated virtual environment does not alter the <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code> variable in any way.
+This may lead to unexpected results if the path includes references to code which is incompatible with
+the Python version the virtual environment is using. The best practice is to <code class="docutils literal notranslate"><span class="pre">unset</span> <span class="pre">PYTHONPATH</span></code>
+in bash or the equivalent for the shell you are using.</p>
+<p class="translated">仮想環境を無効化するには、ターミナルに:</p>
+<div class="translated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">deactivate</span>
+</pre></div>
+</div>
+<p class="translated">と入力します。</p>
+</section>
+<section id="managing-packages-with-pip">
+<h2 class="translated"><span class="section-number">12.3. </span>pip を使ったパッケージ管理<a class="headerlink" href="#managing-packages-with-pip" title="Link to this heading">¶</a></h2>
+<p class="translated">　<strong class="program">pip</strong> と呼ばれるプログラムでパッケージをインストール、アップグレード、削除することができます。デフォルトでは <code class="docutils literal notranslate"><span class="pre">pip</span></code> は <a class="reference external" href="https://pypi.org">Python Package Index</a> からパッケージをインストールします。ブラウザを使って Python Package Index を閲覧することができます。</p>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">pip</span></code> は &quot;install&quot; 、 &quot;uninstall&quot; 、 &quot;freeze&quot; など、いくつかのサブコマンドを持っています。 (<code class="docutils literal notranslate"><span class="pre">pip</span></code> の完全なドキュメントは <a class="reference internal" href="../installing/index.html#installing-index"><span class="std std-ref">Python モジュールのインストール</span></a> ガイドを参照してください。)</p>
+<p class="translated">パッケージ名を指定してそのパッケージの最新版をインストールすることができます:</p>
+<div class="translated highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(tutorial-env)</span> <span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>novas
+<span class="go">Collecting novas</span>
+<span class="go">  Downloading novas-3.1.1.3.tar.gz (136kB)</span>
+<span class="go">Installing collected packages: novas</span>
+<span class="go">  Running setup.py install for novas</span>
+<span class="go">Successfully installed novas-3.1.1.3</span>
+</pre></div>
+</div>
+<p class="translated">パッケージ名のあとに <code class="docutils literal notranslate"><span class="pre">==</span></code> とバージョン番号を付けることで、特定のバージョンのパッケージをインストールすることもできます:</p>
+<div class="translated highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(tutorial-env)</span> <span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">requests</span><span class="o">==</span><span class="m">2</span>.6.0
+<span class="go">Collecting requests==2.6.0</span>
+<span class="go">  Using cached requests-2.6.0-py2.py3-none-any.whl</span>
+<span class="go">Installing collected packages: requests</span>
+<span class="go">Successfully installed requests-2.6.0</span>
+</pre></div>
+</div>
+<p class="translated">同じコマンドを再び実行した場合、<code class="docutils literal notranslate"><span class="pre">pip</span></code> は要求されたバージョンがインストール済みだと表示して何もしません。別のバージョン番号を指定すればそのバージョンをインストールしますし、<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">--upgrade</span></code> を実行すればそのパッケージを最新版に更新します:</p>
+<div class="translated highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(tutorial-env)</span> <span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>requests
+<span class="go">Collecting requests</span>
+<span class="go">Installing collected packages: requests</span>
+<span class="go">  Found existing installation: requests 2.6.0</span>
+<span class="go">    Uninstalling requests-2.6.0:</span>
+<span class="go">      Successfully uninstalled requests-2.6.0</span>
+<span class="go">Successfully installed requests-2.7.0</span>
+</pre></div>
+</div>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">uninstall</span></code> コマンドに削除するパッケージ名を1つ以上指定します。</p>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">show</span></code> は指定されたパッケージの情報を表示します:</p>
+<div class="translated highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(tutorial-env)</span> <span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>show<span class="w"> </span>requests
+<span class="go">---</span>
+<span class="go">Metadata-Version: 2.0</span>
+<span class="go">Name: requests</span>
+<span class="go">Version: 2.7.0</span>
+<span class="go">Summary: Python HTTP for Humans.</span>
+<span class="go">Home-page: http://python-requests.org</span>
+<span class="go">Author: Kenneth Reitz</span>
+<span class="go">Author-email: me@kennethreitz.com</span>
+<span class="go">License: Apache 2.0</span>
+<span class="go">Location: /Users/akuchling/envs/tutorial-env/lib/python3.4/site-packages</span>
+<span class="go">Requires:</span>
+</pre></div>
+</div>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">list</span></code> は仮想環境にインストールされた全てのパッケージを表示します:</p>
+<div class="translated highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(tutorial-env)</span> <span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>list
+<span class="go">novas (3.1.1.3)</span>
+<span class="go">numpy (1.9.2)</span>
+<span class="go">pip (7.0.3)</span>
+<span class="go">requests (2.7.0)</span>
+<span class="go">setuptools (16.0)</span>
+</pre></div>
+</div>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">freeze</span></code> はインストールされたパッケージ一覧を、<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span></code> が解釈するフォーマットで生成します。一般的な慣習として、このリストを <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> というファイルに保存します:</p>
+<div class="translated highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(tutorial-env)</span> <span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>freeze<span class="w"> </span>&gt;<span class="w"> </span>requirements.txt
+<span class="gp gp-VirtualEnv">(tutorial-env)</span> <span class="gp">$ </span>cat<span class="w"> </span>requirements.txt
+<span class="go">novas==3.1.1.3</span>
+<span class="go">numpy==1.9.2</span>
+<span class="go">requests==2.7.0</span>
+</pre></div>
+</div>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> をバージョン管理システムにコミットして、アプリケーションの一部として配布することができます。ユーザーは必要なパッケージを <code class="docutils literal notranslate"><span class="pre">install</span> <span class="pre">-r</span></code> でインストールできます:</p>
+<div class="translated highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(tutorial-env)</span> <span class="gp">$ </span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<span class="go">Collecting novas==3.1.1.3 (from -r requirements.txt (line 1))</span>
+<span class="go">  ...</span>
+<span class="go">Collecting numpy==1.9.2 (from -r requirements.txt (line 2))</span>
+<span class="go">  ...</span>
+<span class="go">Collecting requests==2.7.0 (from -r requirements.txt (line 3))</span>
+<span class="go">  ...</span>
+<span class="go">Installing collected packages: novas, numpy, requests</span>
+<span class="go">  Running setup.py install for novas</span>
+<span class="go">Successfully installed novas-3.1.1.3 numpy-1.9.2 requests-2.7.0</span>
+</pre></div>
+</div>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">pip</span></code> にはたくさんのオプションがあります。 <code class="docutils literal notranslate"><span class="pre">pip</span></code> の完全なドキュメントは <a class="reference internal" href="../installing/index.html#installing-index"><span class="std std-ref">Python モジュールのインストール</span></a> を参照してください。パッケージを作成してそれを Python Package Index で公開したい場合、 <a class="reference external" href="https://packaging.python.org/en/latest/tutorials/packaging-projects/">Python packaging user guide</a> を参照してください。</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">12. 仮想環境とパッケージ</a><ul>
+<li><a class="reference internal" href="#introduction">12.1. はじめに</a></li>
+<li><a class="reference internal" href="#creating-virtual-environments">12.2. 仮想環境の作成</a></li>
+<li><a class="reference internal" href="#managing-packages-with-pip">12.3. pip を使ったパッケージ管理</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="stdlib2.html"
+                          title="前の章へ"><span class="section-number">11. </span>Brief tour of the standard library --- part II</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="whatnow.html"
+                          title="次の章へ"><span class="section-number">13. </span>さあ何を？</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "tutorial/venv.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/tutorial/venv.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/tutorial/venv.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="whatnow.html" title="13. さあ何を？"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="stdlib2.html" title="11. Brief tour of the standard library --- part II"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python チュートリアル</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><span class="section-number">12. </span>仮想環境とパッケージ</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

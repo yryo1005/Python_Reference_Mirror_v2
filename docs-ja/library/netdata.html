@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="インターネット上のデータの操作" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/netdata.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="この章ではインターネット上で一般的に利用されているデータ形式の操作をサポートするモジュール群について記述します。 email--- 電子メールと MIME 処理のためのパッケージ- email.message: Representing an email message, email.parser: Parsing email messages- FeedParser API, Parser..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_netdata_6b390131.png" />
+<meta property="og:image:alt" content="この章ではインターネット上で一般的に利用されているデータ形式の操作をサポートするモジュール群について記述します。 email--- 電子メールと MIME 処理のためのパッケージ- email.message: Representing an email message, email.parser: Parsing email messages- FeedParser API, Parser..." />
+<meta name="description" content="この章ではインターネット上で一般的に利用されているデータ形式の操作をサポートするモジュール群について記述します。 email--- 電子メールと MIME 処理のためのパッケージ- email.message: Representing an email message, email.parser: Parsing email messages- FeedParser API, Parser..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>インターネット上のデータの操作 &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="email --- 電子メールと MIME 処理のためのパッケージ" href="email.html" />
+    <link rel="prev" title="mmap --- メモリマップファイルのサポート" href="mmap.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/netdata.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="mmap.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mmap</span></code> --- メモリマップファイルのサポート</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="email.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code> --- 電子メールと MIME 処理のためのパッケージ</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/netdata.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/netdata.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/netdata.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="email.html" title="email --- 電子メールと MIME 処理のためのパッケージ"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="mmap.html" title="mmap --- メモリマップファイルのサポート"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Python 標準ライブラリ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">インターネット上のデータの操作</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="internet-data-handling">
+<span id="netdata"></span><h1 class="translated">インターネット上のデータの操作<a class="headerlink" href="#internet-data-handling" title="Link to this heading">¶</a></h1>
+<p class="translated">この章ではインターネット上で一般的に利用されているデータ形式の操作をサポートするモジュール群について記述します。</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="email.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code> --- 電子メールと MIME 処理のためのパッケージ</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="email.message.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.message</span></code>: Representing an email message</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.parser.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.parser</span></code>: Parsing email messages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="email.parser.html#feedparser-api">FeedParser API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="email.parser.html#parser-api">Parser API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="email.parser.html#additional-notes">追記事項</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="email.generator.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.generator</span></code>: Generating MIME documents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.policy.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.policy</span></code>: Policy Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.errors.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.errors</span></code>: Exception and Defect classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.headerregistry.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.headerregistry</span></code>: Custom Header Objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.contentmanager.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.contentmanager</span></code>: Managing MIME Content</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="email.contentmanager.html#content-manager-instances">Content Manager Instances</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="email.examples.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code>: 使用例</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.compat32-message.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.message.Message</span></code>: <code class="xref py py-data docutils literal notranslate"><span class="pre">compat32</span></code> API を使用した電子メールメッセージの表現</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.mime.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.mime</span></code>: Creating email and MIME objects from scratch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.header.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.header</span></code>: 国際化されたヘッダー</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.charset.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.charset</span></code>: 文字集合の表現</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.encoders.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.encoders</span></code>: エンコーダー</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.utils.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.utils</span></code>: Miscellaneous utilities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="email.iterators.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.iterators</span></code>: イテレータ</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="json.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">json</span></code> --- JSON エンコーダーとデコーダー</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="json.html#basic-usage">基本的な使い方</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html#encoders-and-decoders">エンコーダとデコーダ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html#exceptions">例外</a></li>
+<li class="toctree-l2"><a class="reference internal" href="json.html#standard-compliance-and-interoperability">標準への準拠と互換性</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="json.html#character-encodings">文字エンコーディング</a></li>
+<li class="toctree-l3"><a class="reference internal" href="json.html#infinite-and-nan-number-values">無限および NaN の数値</a></li>
+<li class="toctree-l3"><a class="reference internal" href="json.html#repeated-names-within-an-object">オブジェクト中に重複した名前の扱い</a></li>
+<li class="toctree-l3"><a class="reference internal" href="json.html#top-level-non-object-non-array-values">トップレベルの非オブジェクト、非配列の値の扱い</a></li>
+<li class="toctree-l3"><a class="reference internal" href="json.html#implementation-limitations">実装の制限</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="json.html#module-json.tool">コマンドライン・インターフェース</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="json.html#command-line-options">コマンドラインオプション</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mailbox.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mailbox</span></code> --- 様々な形式のメールボックスを操作する</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mailbox.html#mailbox-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">Mailbox</span></code> オブジェクト</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#maildir-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">Maildir</span></code> オブジェクト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#mbox-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">mbox</span></code> オブジェクト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#mh-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">MH</span></code> オブジェクト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#babyl-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">Babyl</span></code> オブジェクト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#mmdf-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">MMDF</span></code> オブジェクト</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mailbox.html#message-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">Message</span></code> オブジェクト</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#maildirmessage-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">MaildirMessage</span></code> オブジェクト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#mboxmessage-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">mboxMessage</span></code> オブジェクト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#mhmessage-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">MHMessage</span></code> オブジェクト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#babylmessage-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">BabylMessage</span></code> オブジェクト</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mailbox.html#mmdfmessage-objects"><code class="xref py py-class docutils literal notranslate"><span class="pre">MMDFMessage</span></code> オブジェクト</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="mailbox.html#exceptions">例外</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mailbox.html#examples">使用例</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="mimetypes.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mimetypes</span></code> --- ファイル名を MIME タイプへマップする</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mimetypes.html#mimetypes-objects">MimeTypes objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mimetypes.html#command-line-usage">コマンドラインでの使用</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mimetypes.html#command-line-example">コマンドラインの例</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="base64.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">base64</span></code> --- Base16, Base32, Base64, Base85 データのエンコード</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="base64.html#rfc-4648-encodings">RFC 4648 エンコーディング</a></li>
+<li class="toctree-l2"><a class="reference internal" href="base64.html#base85-encodings">Base85 エンコーディング</a></li>
+<li class="toctree-l2"><a class="reference internal" href="base64.html#legacy-interface">レガシーインターフェース</a></li>
+<li class="toctree-l2"><a class="reference internal" href="base64.html#security-considerations">セキュリティで考慮すべき点</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="binascii.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">binascii</span></code> --- バイナリ と ASCII 間の変換</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quopri.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">quopri</span></code> --- MIME quoted-printable データのエンコードとデコード</a></li>
+</ul>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="mmap.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mmap</span></code> --- メモリマップファイルのサポート</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="email.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code> --- 電子メールと MIME 処理のためのパッケージ</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/netdata.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/netdata.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/netdata.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="email.html" title="email --- 電子メールと MIME 処理のためのパッケージ"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="mmap.html" title="mmap --- メモリマップファイルのサポート"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">インターネット上のデータの操作</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="os.path --- 一般的なパス名操作" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/os.path.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/genericpath.py, Lib/posixpath.py(POSIX) 、 Lib/ntpath.py(Windows) 。 このモジュールはパス名を扱う際に便利な関数を実装しています。ファイルの読み書きをする際は open() を、ファイルシステムにアクセスするには os モジュールをご参照ください。パスの引数は文字列、バイト列、あるいは os.PathLi..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_os.path_aeabde4f.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/genericpath.py, Lib/posixpath.py(POSIX) 、 Lib/ntpath.py(Windows) 。 このモジュールはパス名を扱う際に便利な関数を実装しています。ファイルの読み書きをする際は open() を、ファイルシステムにアクセスするには os モジュールをご参照ください。パスの引数は文字列、バイト列、あるいは os.PathLi..." />
+<meta name="description" content="ソースコード: Lib/genericpath.py, Lib/posixpath.py(POSIX) 、 Lib/ntpath.py(Windows) 。 このモジュールはパス名を扱う際に便利な関数を実装しています。ファイルの読み書きをする際は open() を、ファイルシステムにアクセスするには os モジュールをご参照ください。パスの引数は文字列、バイト列、あるいは os.PathLi..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>os.path --- 一般的なパス名操作 &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="stat --- stat() の結果を解釈する" href="stat.html" />
+    <link rel="prev" title="pathlib --- オブジェクト指向のファイルシステムパス" href="pathlib.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/os.path.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="pathlib.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pathlib</span></code> --- オブジェクト指向のファイルシステムパス</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="stat.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">stat</span></code> --- <code class="xref py py-func docutils literal notranslate"><span class="pre">stat()</span></code> の結果を解釈する</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/os.path.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/os.path.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/os.path.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="stat.html" title="stat --- stat() の結果を解釈する"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="pathlib.html" title="pathlib --- オブジェクト指向のファイルシステムパス"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="filesys.html" accesskey="U">ファイルとディレクトリへのアクセス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">os.path</span></code> --- 一般的なパス名操作</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-os.path">
+<span id="os-path-common-pathname-manipulations"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">os.path</span></code> --- 一般的なパス名操作<a class="headerlink" href="#module-os.path" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/genericpath.py">Lib/genericpath.py</a>, <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/posixpath.py">Lib/posixpath.py</a> (POSIX) 、 <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/ntpath.py">Lib/ntpath.py</a> (Windows) 。</p>
+<hr class="docutils" id="index-0" />
+<p class="translated">このモジュールはパス名を扱う際に便利な関数を実装しています。ファイルの読み書きをする際は <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a> を、ファイルシステムにアクセスするには <a class="reference internal" href="os.html#module-os" title="os: Miscellaneous operating system interfaces."><code class="xref py py-mod docutils literal notranslate"><span class="pre">os</span></code></a> モジュールをご参照ください。パスの引数は文字列、バイト列、あるいは <a class="reference internal" href="os.html#os.PathLike" title="os.PathLike"><code class="xref py py-class docutils literal notranslate"><span class="pre">os.PathLike</span></code></a> プロトコルを実装するあらゆるオブジェクトとして渡すことができます。</p>
+<p class="translated">Unix シェルとは異なり、Python はあらゆるパス展開を <em>自動的には</em> 行いません。アプリケーションがシェルのようなパス展開を必要とした場合は、 <a class="reference internal" href="#os.path.expanduser" title="os.path.expanduser"><code class="xref py py-func docutils literal notranslate"><span class="pre">expanduser()</span></code></a> や <a class="reference internal" href="#os.path.expandvars" title="os.path.expandvars"><code class="xref py py-func docutils literal notranslate"><span class="pre">expandvars()</span></code></a> といった関数を明示的に呼び出すことで行えます。(<a class="reference internal" href="glob.html#module-glob" title="glob: Unix shell style pathname pattern expansion."><code class="xref py py-mod docutils literal notranslate"><span class="pre">glob</span></code></a> モジュールも参照してください)</p>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p class="translated"><a class="reference internal" href="pathlib.html#module-pathlib" title="pathlib: Object-oriented filesystem paths"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pathlib</span></code></a> モジュールは高水準のパスオブジェクトを提供します。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated">以下のすべての関数は、そのパラメータにバイト列のみ、あるいは文字列のみ受け付けます。パスまたはファイル名を返す場合、返り値は同じ型のオブジェクトになります。</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">Since different operating systems have different path name conventions, there
+are several versions of this module in the standard library.  The
+<code class="xref py py-mod docutils literal notranslate"><span class="pre">os.path</span></code> module is always the path module suitable for the operating
+system Python is running on, and therefore usable for local paths.  However,
+you can also import and use the individual modules if you want to manipulate
+a path that is <em>always</em> in one of the different formats.  They all have the
+same interface:</p>
+<ul class="simple">
+<li><p class="translated">UNIX 形式のパスを扱う <code class="xref py py-mod docutils literal notranslate"><span class="pre">posixpath</span></code></p></li>
+<li><p class="translated">Windows のパスを扱う <code class="xref py py-mod docutils literal notranslate"><span class="pre">ntpath</span></code></p></li>
+</ul>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.8 で変更: </span><a class="reference internal" href="#os.path.exists" title="os.path.exists"><code class="xref py py-func docutils literal notranslate"><span class="pre">exists()</span></code></a>、 <a class="reference internal" href="#os.path.lexists" title="os.path.lexists"><code class="xref py py-func docutils literal notranslate"><span class="pre">lexists()</span></code></a>、 <a class="reference internal" href="#os.path.isdir" title="os.path.isdir"><code class="xref py py-func docutils literal notranslate"><span class="pre">isdir()</span></code></a>、 <a class="reference internal" href="#os.path.isfile" title="os.path.isfile"><code class="xref py py-func docutils literal notranslate"><span class="pre">isfile()</span></code></a>、 <a class="reference internal" href="#os.path.islink" title="os.path.islink"><code class="xref py py-func docutils literal notranslate"><span class="pre">islink()</span></code></a>、および <a class="reference internal" href="#os.path.ismount" title="os.path.ismount"><code class="xref py py-func docutils literal notranslate"><span class="pre">ismount()</span></code></a> は、OS レベルで表現できない文字列を含む可能性がある例外を送出する代わりに <code class="docutils literal notranslate"><span class="pre">False</span></code> を返すようになりました。</p>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.abspath">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">abspath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.abspath" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return a normalized absolutized version of the pathname <em>path</em>. On most
+platforms, this is equivalent to calling <code class="docutils literal notranslate"><span class="pre">normpath(join(os.getcwd(),</span> <span class="pre">path))</span></code>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p class="untranslated"><a class="reference internal" href="#os.path.join" title="os.path.join"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.path.join()</span></code></a> and <a class="reference internal" href="#os.path.normpath" title="os.path.normpath"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.path.normpath()</span></code></a>.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.basename">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">basename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.basename" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">パス名 <em>path</em> の末尾のファイル名部分を返します。これは関数 <a class="reference internal" href="#os.path.split" title="os.path.split"><code class="xref py py-func docutils literal notranslate"><span class="pre">split()</span></code></a> に <em>path</em> を渡した時に返されるペアの 2 番めの要素です。この関数が返すのは Unix の <strong class="program">basename</strong> とは異なります; Unix の <strong class="program">basename</strong> は <code class="docutils literal notranslate"><span class="pre">'/foo/bar/'</span></code> に対して <code class="docutils literal notranslate"><span class="pre">'bar'</span></code> を返しますが、関数 <a class="reference internal" href="#os.path.basename" title="os.path.basename"><code class="xref py py-func docutils literal notranslate"><span class="pre">basename()</span></code></a> は空文字列 (<code class="docutils literal notranslate"><span class="pre">''</span></code>) を返します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.commonpath">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">commonpath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">paths</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.commonpath" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return the longest common sub-path of each pathname in the iterable
+<em>paths</em>.  Raise <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> if <em>paths</em> contain both absolute
+and relative pathnames, if <em>paths</em> are on different drives, or
+if <em>paths</em> is empty.  Unlike <a class="reference internal" href="#os.path.commonprefix" title="os.path.commonprefix"><code class="xref py py-func docutils literal notranslate"><span class="pre">commonprefix()</span></code></a>, this returns a
+valid path.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.5.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like objects</span></a> のシーケンスを受け入れるようになりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span>Any iterable can now be passed, rather than just sequences.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.commonprefix">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">commonprefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.commonprefix" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return the longest string prefix (taken character-by-character) that is a
+prefix of all strings in <em>list</em>.  If <em>list</em> is empty, return the empty string
+(<code class="docutils literal notranslate"><span class="pre">''</span></code>).</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p class="untranslated">This function may return invalid paths because it works a
+character at a time.
+If you need a <strong>common path prefix</strong>, then the algorithm
+implemented in this function is not secure. Use
+<a class="reference internal" href="#os.path.commonpath" title="os.path.commonpath"><code class="xref py py-func docutils literal notranslate"><span class="pre">commonpath()</span></code></a> for finding a common path prefix.</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">commonprefix</span><span class="p">([</span><span class="s1">&#39;/usr/lib&#39;</span><span class="p">,</span> <span class="s1">&#39;/usr/local/lib&#39;</span><span class="p">])</span>
+<span class="go">&#39;/usr/l&#39;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">commonpath</span><span class="p">([</span><span class="s1">&#39;/usr/lib&#39;</span><span class="p">,</span> <span class="s1">&#39;/usr/local/lib&#39;</span><span class="p">])</span>
+<span class="go">&#39;/usr&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.dirname">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">dirname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.dirname" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">パス名 <em>path</em> のディレクトリ名を返します。これは関数 <a class="reference internal" href="#os.path.split" title="os.path.split"><code class="xref py py-func docutils literal notranslate"><span class="pre">split()</span></code></a> に <em>path</em> を渡した時に返されるペアの 1 番めの要素です。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.exists">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.exists" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>path</em> が実在するパスかオープンしているファイル記述子を参照している場合 <code class="docutils literal notranslate"><span class="pre">True</span></code> を返します。壊れたシンボリックリンクについては <code class="docutils literal notranslate"><span class="pre">False</span></code> を返します。一部のプラットフォームでは、たとえ <em>path</em> が物理的に存在していたとしても、要求されたファイルに対する <a class="reference internal" href="os.html#os.stat" title="os.stat"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.stat()</span></code></a> の実行権がなければこの関数が <code class="docutils literal notranslate"><span class="pre">False</span></code> を返すことがあります。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span><em>path</em> は整数でも可能になりました: それがオープンしているファイル記述子なら <code class="docutils literal notranslate"><span class="pre">True</span></code> が返り、それ以外なら <code class="docutils literal notranslate"><span class="pre">False</span></code> が返ります。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.lexists">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">lexists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.lexists" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>path</em> refers to an existing path, including
+broken symbolic links.   Equivalent to <a class="reference internal" href="#os.path.exists" title="os.path.exists"><code class="xref py py-func docutils literal notranslate"><span class="pre">exists()</span></code></a> on platforms lacking
+<a class="reference internal" href="os.html#os.lstat" title="os.lstat"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.lstat()</span></code></a>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function" id="index-1">
+<dt class="sig sig-object py" id="os.path.expanduser">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">expanduser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.expanduser" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">Unix および Windows では、与えられた引数の先頭のパス要素 <code class="docutils literal notranslate"><span class="pre">~</span></code> 、または <code class="docutils literal notranslate"><span class="pre">~user</span></code> を、 <em>user</em> のホームディレクトリのパスに置き換えて返します。</p>
+<p class="translated" id="index-2">Unix では、先頭の <code class="docutils literal notranslate"><span class="pre">~</span></code> は、環境変数 <span class="target" id="index-12"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">HOME</span></code> が設定されているならその値に置き換えられます。設定されていない場合は、現在のユーザのホームディレクトリをビルトインモジュール <a class="reference internal" href="pwd.html#module-pwd" title="pwd: The password database (getpwnam() and friends)."><code class="xref py py-mod docutils literal notranslate"><span class="pre">pwd</span></code></a> を使ってパスワードディレクトリから探して置き換えます。先頭の <code class="docutils literal notranslate"><span class="pre">~user</span></code> については、直接パスワードディレクトリから探します。</p>
+<p class="untranslated">On Windows, <span class="target" id="index-4"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">USERPROFILE</span></code> will be used if set, otherwise a combination
+of <span class="target" id="index-5"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">HOMEPATH</span></code> and <span class="target" id="index-6"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">HOMEDRIVE</span></code> will be used.  An initial
+<code class="docutils literal notranslate"><span class="pre">~user</span></code> is handled by checking that the last directory component of the current
+user's home directory matches <span class="target" id="index-7"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">USERNAME</span></code>, and replacing it if so.</p>
+<p class="translated">置き換えに失敗したり、引数のパスがチルダで始まっていなかった場合は、パスをそのまま返します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.8 で変更: </span>Windowsで  <span class="target" id="index-13"></span><code class="xref std std-envvar docutils literal notranslate"><span class="pre">HOME</span></code> は参照しなくなりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function" id="index-9">
+<dt class="sig sig-object py" id="os.path.expandvars">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">expandvars</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.expandvars" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">引数のパスの環境変数を展開して返します。引数の中の <code class="docutils literal notranslate"><span class="pre">$name</span></code> または <code class="docutils literal notranslate"><span class="pre">${name}</span></code> のような形式の文字列は環境変数、 <em>name</em> の値に置き換えられます。不正な変数名や存在しない変数名の場合には変換されず、そのまま返します。</p>
+<p class="translated">Windows では、 <code class="docutils literal notranslate"><span class="pre">$name</span></code> や <code class="docutils literal notranslate"><span class="pre">${name}</span></code> の形式に加えて、 <code class="docutils literal notranslate"><span class="pre">%name%</span></code> の形式もサポートされています。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.getatime">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">getatime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.getatime" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return the time of last access of <em>path</em>.  The return value is a floating-point number giving
+the number of seconds since the epoch (see the  <a class="reference internal" href="time.html#module-time" title="time: Time access and conversions."><code class="xref py py-mod docutils literal notranslate"><span class="pre">time</span></code></a> module).  Raise
+<a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> if the file does not exist or is inaccessible.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.getmtime">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">getmtime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.getmtime" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return the time of last modification of <em>path</em>.  The return value is a floating-point number
+giving the number of seconds since the epoch (see the  <a class="reference internal" href="time.html#module-time" title="time: Time access and conversions."><code class="xref py py-mod docutils literal notranslate"><span class="pre">time</span></code></a> module).
+Raise <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> if the file does not exist or is inaccessible.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.getctime">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">getctime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.getctime" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">システムの ctime、Unix系など一部のシステムでは最後にメタデータが変更された時刻、Windows などその他のシステムでは <em>path</em> の作成時刻を返します。返り値はエポック (<a class="reference internal" href="time.html#module-time" title="time: Time access and conversions."><code class="xref py py-mod docutils literal notranslate"><span class="pre">time</span></code></a> モジュールを参照) からの経過時間を示す秒数になります。ファイルが存在しない、あるいはアクセスできなかった場合は <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> を送出します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.getsize">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">getsize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.getsize" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>path</em> のサイズをバイト数で返します。ファイルが存在しない、あるいはアクセスできなかった場合は <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> を送出します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.isabs">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">isabs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.isabs" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>path</em> is an absolute pathname.  On Unix, that means it
+begins with a slash, on Windows that it begins with two (back)slashes, or a
+drive letter, colon, and (back)slash together.</p>
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<p class="untranslated"><a class="reference internal" href="#os.path.abspath" title="os.path.abspath"><code class="xref py py-func docutils literal notranslate"><span class="pre">abspath()</span></code></a></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span>On Windows, returns <code class="docutils literal notranslate"><span class="pre">False</span></code> if the given path starts with exactly one
+(back)slash.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.isfile">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">isfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.isfile" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>path</em> が <a class="reference internal" href="#os.path.exists" title="os.path.exists"><code class="xref py py-func docutils literal notranslate"><span class="pre">存在する</span></code></a> 一般ファイルなら <code class="docutils literal notranslate"><span class="pre">True</span></code> を返します。
+この関数はシンボリックリンクの先を辿るので、同じパスに対して <a class="reference internal" href="#os.path.islink" title="os.path.islink"><code class="xref py py-func docutils literal notranslate"><span class="pre">islink()</span></code></a> と <a class="reference internal" href="#os.path.isfile" title="os.path.isfile"><code class="xref py py-func docutils literal notranslate"><span class="pre">isfile()</span></code></a> の両方が真を返すことがあります。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.isdir">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">isdir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.isdir" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>path</em> が <a class="reference internal" href="#os.path.exists" title="os.path.exists"><code class="xref py py-func docutils literal notranslate"><span class="pre">存在する</span></code></a> ディレクトリなら <code class="docutils literal notranslate"><span class="pre">True</span></code> を返します。
+この関数はシンボリックリンクの先を辿るので、同じパスに対して <a class="reference internal" href="#os.path.islink" title="os.path.islink"><code class="xref py py-func docutils literal notranslate"><span class="pre">islink()</span></code></a> と <a class="reference internal" href="#os.path.isdir" title="os.path.isdir"><code class="xref py py-func docutils literal notranslate"><span class="pre">isdir()</span></code></a> の両方が真を返すことがあります。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.isjunction">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">isjunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.isjunction" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>path</em> refers to an <a class="reference internal" href="#os.path.lexists" title="os.path.lexists"><code class="xref py py-func docutils literal notranslate"><span class="pre">existing</span></code></a> directory
+entry that is a junction.  Always return <code class="docutils literal notranslate"><span class="pre">False</span></code> if junctions are not
+supported on the current platform.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.12.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.islink">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">islink</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.islink" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>path</em> が <a class="reference internal" href="#os.path.exists" title="os.path.exists"><code class="xref py py-func docutils literal notranslate"><span class="pre">存在する</span></code></a> ディレクトリを指すシンボリックリンクなら <code class="docutils literal notranslate"><span class="pre">True</span></code> を返します。
+Python ランタイムがシンボリックリンクをサポートしていないプラットフォームでは、常に <code class="docutils literal notranslate"><span class="pre">False</span></code> を返します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.ismount">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">ismount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.ismount" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if pathname <em>path</em> is a <em class="dfn">mount point</em>: a point in a
+file system where a different file system has been mounted.  On POSIX, the
+function checks whether <em>path</em>'s parent, <code class="file docutils literal notranslate"><em><span class="pre">path</span></em><span class="pre">/..</span></code>, is on a different
+device than <em>path</em>, or whether <code class="file docutils literal notranslate"><em><span class="pre">path</span></em><span class="pre">/..</span></code> and <em>path</em> point to the same
+i-node on the same device --- this should detect mount points for all Unix
+and POSIX variants.  It is not able to reliably detect bind mounts on the
+same filesystem. On Linux systems, it will always return <code class="docutils literal notranslate"><span class="pre">True</span></code> for btrfs
+subvolumes, even if they aren't mount points. On Windows, a drive letter root
+and a share UNC are always mount points, and for any other path
+<code class="docutils literal notranslate"><span class="pre">GetVolumePathName</span></code> is called to see if it is different from the input path.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.4 で変更: </span>Added support for detecting non-root mount points on Windows.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.isdevdrive">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">isdevdrive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.isdevdrive" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if pathname <em>path</em> is located on a Windows Dev Drive.
+A Dev Drive is optimized for developer scenarios, and offers faster
+performance for reading and writing files. It is recommended for use for
+source code, temporary build directories, package caches, and other
+IO-intensive operations.</p>
+<p class="untranslated">May raise an error for an invalid path, for example, one without a
+recognizable drive, but returns <code class="docutils literal notranslate"><span class="pre">False</span></code> on platforms that do not support
+Dev Drives. See <a class="reference external" href="https://learn.microsoft.com/windows/dev-drive/">the Windows documentation</a>
+for information on enabling and creating Dev Drives.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.12.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span>The function is now available on all platforms, and will always return <code class="docutils literal notranslate"><span class="pre">False</span></code> on those that have no support for Dev Drives</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.isreserved">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">isreserved</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.isreserved" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if <em>path</em> is a reserved pathname on the current system.</p>
+<p class="untranslated">On Windows, reserved filenames include those that end with a space or dot;
+those that contain colons (i.e. file streams such as &quot;name:stream&quot;),
+wildcard characters (i.e. <code class="docutils literal notranslate"><span class="pre">'*?&quot;&lt;&gt;'</span></code>), pipe, or ASCII control characters;
+as well as DOS device names such as &quot;NUL&quot;, &quot;CON&quot;, &quot;CONIN$&quot;, &quot;CONOUT$&quot;,
+&quot;AUX&quot;, &quot;PRN&quot;, &quot;COM1&quot;, and &quot;LPT1&quot;.</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">This function approximates rules for reserved paths on most Windows
+systems. These rules change over time in various Windows releases.
+This function may be updated in future Python releases as changes to
+the rules become broadly available.</p>
+</div>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: Windows.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.13.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.join">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">join</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">paths</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.join" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Join one or more path segments intelligently.  The return value is the
+concatenation of <em>path</em> and all members of <em>*paths</em>, with exactly one
+directory separator following each non-empty part, except the last. That is,
+the result will only end in a separator if the last part is either empty or
+ends in a separator.</p>
+<p class="untranslated">If a segment is an absolute path (which on Windows requires both a drive and
+a root), then all previous segments are ignored and joining continues from the
+absolute path segment. On Linux, for example:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;/home/foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+<span class="go">&#39;/home/foo/bar&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;/home/foo&#39;</span><span class="p">,</span> <span class="s1">&#39;/home/bar&#39;</span><span class="p">)</span>
+<span class="go">&#39;/home/bar&#39;</span>
+</pre></div>
+</div>
+<p class="untranslated">On Windows, the drive is not reset when a rooted path segment (e.g.,
+<code class="docutils literal notranslate"><span class="pre">r'\foo'</span></code>) is encountered. If a segment is on a different drive or is an
+absolute path, all previous segments are ignored and the drive is reset. For
+example:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;c:</span><span class="se">\\</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+<span class="go">&#39;c:\\foo&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s1">&#39;c:</span><span class="se">\\</span><span class="s1">foo&#39;</span><span class="p">,</span> <span class="s1">&#39;d:</span><span class="se">\\</span><span class="s1">bar&#39;</span><span class="p">)</span>
+<span class="go">&#39;d:\\bar&#39;</span>
+</pre></div>
+</div>
+<p class="untranslated">Note that since there is a current directory for each drive,
+<code class="docutils literal notranslate"><span class="pre">os.path.join(&quot;c:&quot;,</span> <span class="pre">&quot;foo&quot;)</span></code> represents a path relative to the current
+directory on drive <code class="file docutils literal notranslate"><span class="pre">C:</span></code> (<code class="file docutils literal notranslate"><span class="pre">c:foo</span></code>), not <code class="file docutils literal notranslate"><span class="pre">c:\foo</span></code>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><em>path</em> と <em>paths</em> が <a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け付けるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.normcase">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">normcase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.normcase" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">パス名の大文字・小文字を正規化します。
+Windowsでは、パス名にある文字を全て小文字に、スラッシュをバックスラッシュに変換します。
+他のオペレーティングシステムでは、パスを変更せずに返します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.normpath">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">normpath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.normpath" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">パスを正規化します。余分な区切り文字や上位レベル参照を除去し、<code class="docutils literal notranslate"><span class="pre">A//B</span></code>、<code class="docutils literal notranslate"><span class="pre">A/B/</span></code>、<code class="docutils literal notranslate"><span class="pre">A/./B</span></code> や <code class="docutils literal notranslate"><span class="pre">A/foo/../B</span></code> などはすべて <code class="docutils literal notranslate"><span class="pre">A/B</span></code> になります。この文字列操作は、シンボリックリンクを含むパスの意味を変えてしまう場合があります。Windows では、スラッシュをバックスラッシュに変換します。大文字小文字の正規化には <a class="reference internal" href="#os.path.normcase" title="os.path.normcase"><code class="xref py py-func docutils literal notranslate"><span class="pre">normcase()</span></code></a> を使用してください。</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">On POSIX systems, in accordance with <a class="reference external" href="https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html#tag_04_13">IEEE Std 1003.1 2013 Edition; 4.13
+Pathname Resolution</a>,
+if a pathname begins with exactly two slashes, the first component
+following the leading characters may be interpreted in an implementation-defined
+manner, although more than two leading characters shall be treated as a
+single character.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.realpath">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">realpath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.realpath" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return the canonical path of the specified filename, eliminating any symbolic
+links encountered in the path (if they are supported by the operating
+system). On Windows, this function will also resolve MS-DOS (also called 8.3)
+style names such as <code class="docutils literal notranslate"><span class="pre">C:\\PROGRA~1</span></code> to <code class="docutils literal notranslate"><span class="pre">C:\\Program</span> <span class="pre">Files</span></code>.</p>
+<p class="untranslated">By default, the path is evaluated up to the first component that does not
+exist, is a symlink loop, or whose evaluation raises <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a>.
+All such components are appended unchanged to the existing part of the path.</p>
+<p class="untranslated">Some errors that are handled this way include &quot;access denied&quot;, &quot;not a
+directory&quot;, or &quot;bad argument to internal function&quot;. Thus, the
+resulting path may be missing or inaccessible, may still contain
+links or loops, and may traverse non-directories.</p>
+<p class="untranslated">This behavior can be modified by keyword arguments:</p>
+<p class="untranslated">If <em>strict</em> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, the first error encountered when evaluating the path is
+re-raised.
+In particular, <a class="reference internal" href="exceptions.html#FileNotFoundError" title="FileNotFoundError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a> is raised if <em>path</em> does not exist,
+or another <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> if it is otherwise inaccessible.</p>
+<p class="untranslated">If <em>strict</em> is <a class="reference internal" href="#os.path.ALLOW_MISSING" title="os.path.ALLOW_MISSING"><code class="xref py py-data docutils literal notranslate"><span class="pre">os.path.ALLOW_MISSING</span></code></a>, errors other than
+<a class="reference internal" href="exceptions.html#FileNotFoundError" title="FileNotFoundError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></a> are re-raised (as with <code class="docutils literal notranslate"><span class="pre">strict=True</span></code>).
+Thus, the returned path will not contain any symbolic links, but the named
+file and some of its parent directories may be missing.</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="untranslated">This function emulates the operating system's procedure for making a path
+canonical, which differs slightly between Windows and UNIX with respect
+to how links and subsequent path components interact.</p>
+<p class="untranslated">Operating system APIs make paths canonical as needed, so it's not
+normally necessary to call this function.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.8 で変更: </span>Windows においてシンボリックリンクとジャンクションが解決されるようになりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.10 で変更: </span><em>strict</em> 引数が追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.14 で変更: </span>The <a class="reference internal" href="#os.path.ALLOW_MISSING" title="os.path.ALLOW_MISSING"><code class="xref py py-data docutils literal notranslate"><span class="pre">ALLOW_MISSING</span></code></a> value for the <em>strict</em> parameter
+was added.</p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="os.path.ALLOW_MISSING">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">ALLOW_MISSING</span></span><a class="headerlink" href="#os.path.ALLOW_MISSING" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Special value used for the <em>strict</em> argument in <a class="reference internal" href="#os.path.realpath" title="os.path.realpath"><code class="xref py py-func docutils literal notranslate"><span class="pre">realpath()</span></code></a>.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.14.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.relpath">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">relpath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">os.curdir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.relpath" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">カレントディレクトリあるいはオプションの <em>start</em> ディレクトリからの <em>path</em> への相対パスを返します。これはパス計算で行っており、ファイルシステムにアクセスして <em>path</em> や <em>start</em> の存在や性質を確認することはありません。Windowsでは、 <em>path</em> と <em>start</em> が異なるドライブの場合、 <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> を送出します。</p>
+<p class="untranslated"><em>start</em> defaults to <a class="reference internal" href="os.html#os.curdir" title="os.curdir"><code class="xref py py-data docutils literal notranslate"><span class="pre">os.curdir</span></code></a>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.samefile">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">samefile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path2</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.samefile" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">引数の両パス名が同じファイルまたはディレクトリを参照している場合、 <code class="docutils literal notranslate"><span class="pre">True</span></code> を返します。これは、デバイス番号と i-node 番号で決定されます。どちらかのパス名への <a class="reference internal" href="os.html#os.stat" title="os.stat"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.stat()</span></code></a> 呼び出しが失敗した場合、例外が送出されます。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span>Windows サポートを追加しました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.4 で変更: </span>Windows が他のプラットフォームと同じ実装を使用するようになりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.sameopenfile">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">sameopenfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fp1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fp2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.sameopenfile" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイル記述子 <em>fp1</em> と <em>fp2</em> が同じファイルを参照していたら <code class="docutils literal notranslate"><span class="pre">True</span></code> を返します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span>Windows サポートを追加しました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.samestat">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">samestat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stat1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stat2</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.samestat" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">stat タプル <em>stat1</em> と <em>stat2</em> が同じファイルを参照していれば <code class="docutils literal notranslate"><span class="pre">True</span></code> を返します。これらのタプルは <a class="reference internal" href="os.html#os.fstat" title="os.fstat"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.fstat()</span></code></a> 、 <a class="reference internal" href="os.html#os.lstat" title="os.lstat"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.lstat()</span></code></a> あるいは <a class="reference internal" href="os.html#os.stat" title="os.stat"><code class="xref py py-func docutils literal notranslate"><span class="pre">os.stat()</span></code></a> の返り値で構いません。この関数は <a class="reference internal" href="#os.path.samefile" title="os.path.samefile"><code class="xref py py-func docutils literal notranslate"><span class="pre">samefile()</span></code></a> と <a class="reference internal" href="#os.path.sameopenfile" title="os.path.sameopenfile"><code class="xref py py-func docutils literal notranslate"><span class="pre">sameopenfile()</span></code></a> を使用した比較に基いて実装しています。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.4 で変更: </span>Windows サポートを追加しました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.split">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.split" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Split the pathname <em>path</em> into a pair, <code class="docutils literal notranslate"><span class="pre">(head,</span> <span class="pre">tail)</span></code> where <em>tail</em> is the
+last pathname component and <em>head</em> is everything leading up to that.  The
+<em>tail</em> part will never contain a slash; if <em>path</em> ends in a slash, <em>tail</em>
+will be empty.  If there is no slash in <em>path</em>, <em>head</em> will be empty.  If
+<em>path</em> is empty, both <em>head</em> and <em>tail</em> are empty.  Trailing slashes are
+stripped from <em>head</em> unless it is the root (one or more slashes only).  In
+all cases, <code class="docutils literal notranslate"><span class="pre">join(head,</span> <span class="pre">tail)</span></code> returns a path to the same location as <em>path</em>
+(but the strings may differ).  Also see the functions <a class="reference internal" href="#os.path.join" title="os.path.join"><code class="xref py py-func docutils literal notranslate"><span class="pre">join()</span></code></a>,
+<a class="reference internal" href="#os.path.dirname" title="os.path.dirname"><code class="xref py py-func docutils literal notranslate"><span class="pre">dirname()</span></code></a> and <a class="reference internal" href="#os.path.basename" title="os.path.basename"><code class="xref py py-func docutils literal notranslate"><span class="pre">basename()</span></code></a>.</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.splitdrive">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">splitdrive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.splitdrive" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">パス名 <em>path</em> を <code class="docutils literal notranslate"><span class="pre">(drive,</span> <span class="pre">tail)</span></code> のペアに分割します。<em>drive</em> はマウントポイントか空文字列になります。ドライブ指定をサポートしていないシステムでは、<em>drive</em> は常に空文字になります。どの場合でも、<code class="docutils literal notranslate"><span class="pre">drive</span> <span class="pre">+</span> <span class="pre">tail</span></code> は <em>path</em> と等しくなります。</p>
+<p class="translated">Windows では、パス名はドライブ名/UNC 共有ポイントと相対パスに分割されます。</p>
+<p class="translated">パスがドライブレターを含む場合、ドライブレターにはコロンまでが含まれます:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">splitdrive</span><span class="p">(</span><span class="s2">&quot;c:/dir&quot;</span><span class="p">)</span>
+<span class="go">(&quot;c:&quot;, &quot;/dir&quot;)</span>
+</pre></div>
+</div>
+<p class="untranslated">If the path contains a UNC path, drive will contain the host name
+and share:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">splitdrive</span><span class="p">(</span><span class="s2">&quot;//host/computer/dir&quot;</span><span class="p">)</span>
+<span class="go">(&quot;//host/computer&quot;, &quot;/dir&quot;)</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.splitroot">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">splitroot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.splitroot" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Split the pathname <em>path</em> into a 3-item tuple <code class="docutils literal notranslate"><span class="pre">(drive,</span> <span class="pre">root,</span> <span class="pre">tail)</span></code> where
+<em>drive</em> is a device name or mount point, <em>root</em> is a string of separators
+after the drive, and <em>tail</em> is everything after the root. Any of these
+items may be the empty string. In all cases, <code class="docutils literal notranslate"><span class="pre">drive</span> <span class="pre">+</span> <span class="pre">root</span> <span class="pre">+</span> <span class="pre">tail</span></code> will
+be the same as <em>path</em>.</p>
+<p class="untranslated">On POSIX systems, <em>drive</em> is always empty. The <em>root</em> may be empty (if <em>path</em> is
+relative), a single forward slash (if <em>path</em> is absolute), or two forward slashes
+(implementation-defined per <a class="reference external" href="https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap04.html#tag_04_13">IEEE Std 1003.1-2017; 4.13 Pathname Resolution</a>.)
+For example:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">splitroot</span><span class="p">(</span><span class="s1">&#39;/home/sam&#39;</span><span class="p">)</span>
+<span class="go">(&#39;&#39;, &#39;/&#39;, &#39;home/sam&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">splitroot</span><span class="p">(</span><span class="s1">&#39;//home/sam&#39;</span><span class="p">)</span>
+<span class="go">(&#39;&#39;, &#39;//&#39;, &#39;home/sam&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">splitroot</span><span class="p">(</span><span class="s1">&#39;///home/sam&#39;</span><span class="p">)</span>
+<span class="go">(&#39;&#39;, &#39;/&#39;, &#39;//home/sam&#39;)</span>
+</pre></div>
+</div>
+<p class="untranslated">On Windows, <em>drive</em> may be empty, a drive-letter name, a UNC share, or a device
+name. The <em>root</em> may be empty, a forward slash, or a backward slash. For
+example:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">splitroot</span><span class="p">(</span><span class="s1">&#39;C:/Users/Sam&#39;</span><span class="p">)</span>
+<span class="go">(&#39;C:&#39;, &#39;/&#39;, &#39;Users/Sam&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">splitroot</span><span class="p">(</span><span class="s1">&#39;//Server/Share/Users/Sam&#39;</span><span class="p">)</span>
+<span class="go">(&#39;//Server/Share&#39;, &#39;/&#39;, &#39;Users/Sam&#39;)</span>
+</pre></div>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.12.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="os.path.splitext">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">splitext</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="positional-only-separator o"><abbr title="Positional-only parameter separator (PEP 570)"><span class="pre">/</span></abbr></span></em><span class="sig-paren">)</span><a class="headerlink" href="#os.path.splitext" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Split the pathname <em>path</em> into a pair <code class="docutils literal notranslate"><span class="pre">(root,</span> <span class="pre">ext)</span></code>  such that <code class="docutils literal notranslate"><span class="pre">root</span> <span class="pre">+</span> <span class="pre">ext</span> <span class="pre">==</span>
+<span class="pre">path</span></code>, and the extension, <em>ext</em>, is empty or begins with a period and contains at
+most one period.</p>
+<p class="untranslated">If the path contains no extension, <em>ext</em> will be <code class="docutils literal notranslate"><span class="pre">''</span></code>:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">splitext</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+<span class="go">(&#39;bar&#39;, &#39;&#39;)</span>
+</pre></div>
+</div>
+<p class="untranslated">If the path contains an extension, then <em>ext</em> will be set to this extension,
+including the leading period. Note that previous periods will be ignored:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">splitext</span><span class="p">(</span><span class="s1">&#39;foo.bar.exe&#39;</span><span class="p">)</span>
+<span class="go">(&#39;foo.bar&#39;, &#39;.exe&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">splitext</span><span class="p">(</span><span class="s1">&#39;/foo/bar.exe&#39;</span><span class="p">)</span>
+<span class="go">(&#39;/foo/bar&#39;, &#39;.exe&#39;)</span>
+</pre></div>
+</div>
+<p class="untranslated">Leading periods of the last component of the path are considered to
+be part of the root:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">splitext</span><span class="p">(</span><span class="s1">&#39;.cshrc&#39;</span><span class="p">)</span>
+<span class="go">(&#39;.cshrc&#39;, &#39;&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">splitext</span><span class="p">(</span><span class="s1">&#39;/foo/....jpg&#39;</span><span class="p">)</span>
+<span class="go">(&#39;/foo/....jpg&#39;, &#39;&#39;)</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span><a class="reference internal" href="../glossary.html#term-path-like-object"><span class="xref std std-term">path-like object</span></a> を受け入れるようになりました。</p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="os.path.supports_unicode_filenames">
+<span class="sig-prename descclassname"><span class="pre">os.path.</span></span><span class="sig-name descname"><span class="pre">supports_unicode_filenames</span></span><a class="headerlink" href="#os.path.supports_unicode_filenames" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ファイル名に任意の Unicode 文字列を (システムの制限内で) 使用できる場合は <code class="docutils literal notranslate"><span class="pre">True</span></code> になります。</p>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="pathlib.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pathlib</span></code> --- オブジェクト指向のファイルシステムパス</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="stat.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">stat</span></code> --- <code class="xref py py-func docutils literal notranslate"><span class="pre">stat()</span></code> の結果を解釈する</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/os.path.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/os.path.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/os.path.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="stat.html" title="stat --- stat() の結果を解釈する"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="pathlib.html" title="pathlib --- オブジェクト指向のファイルシステムパス"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="filesys.html" >ファイルとディレクトリへのアクセス</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">os.path</span></code> --- 一般的なパス名操作</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

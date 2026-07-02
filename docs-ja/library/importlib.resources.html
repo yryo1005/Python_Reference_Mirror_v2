@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="importlib.resources -- パッケージリソースの読み取り、オープン、アクセス" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/importlib.resources.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/importlib/resources/__init__.py This module leverages Python&#x27;s import system to provide access to resources within packages.&quot;Resources&quot; are file-like resources associated..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_importlib.resources_3d2ed623.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/importlib/resources/__init__.py This module leverages Python&#x27;s import system to provide access to resources within packages.&quot;Resources&quot; are file-like resources associated..." />
+<meta name="description" content="ソースコード: Lib/importlib/resources/__init__.py This module leverages Python&#x27;s import system to provide access to resources within packages.&quot;Resources&quot; are file-like resources associated..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>importlib.resources -- パッケージリソースの読み取り、オープン、アクセス &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="importlib.resources.abc -- リソースの抽象基底クラス" href="importlib.resources.abc.html" />
+    <link rel="prev" title="importlib --- import の実装" href="importlib.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/importlib.resources.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">importlib.resources</span></code> -- パッケージリソースの読み取り、オープン、アクセス</a><ul>
+<li><a class="reference internal" href="#functional-api">関数 API</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="importlib.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">importlib</span></code> --- <code class="xref std std-keyword docutils literal notranslate"><span class="pre">import</span></code> の実装</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="importlib.resources.abc.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">importlib.resources.abc</span></code> -- リソースの抽象基底クラス</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/importlib.resources.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/importlib.resources.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/importlib.resources.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="importlib.resources.abc.html" title="importlib.resources.abc -- リソースの抽象基底クラス"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="importlib.html" title="importlib --- import の実装"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="modules.html" accesskey="U">モジュールのインポート</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">importlib.resources</span></code> -- パッケージリソースの読み取り、オープン、アクセス</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-importlib.resources">
+<span id="importlib-resources-package-resource-reading-opening-and-access"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">importlib.resources</span></code> -- パッケージリソースの読み取り、オープン、アクセス<a class="headerlink" href="#module-importlib.resources" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/importlib/resources/__init__.py">Lib/importlib/resources/__init__.py</a></p>
+<hr class="docutils" />
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.7.</span></p>
+</div>
+<p class="untranslated">This module leverages Python's import system to provide access to <em>resources</em>
+within <em>packages</em>.</p>
+<p class="untranslated">&quot;Resources&quot; are file-like resources associated with a module or package in
+Python. The resources may be contained directly in a package, within a
+subdirectory contained in that package, or adjacent to modules outside a
+package. Resources may be text or binary. As a result, a package's Python
+module sources (.py), compilation artifacts (pycache), and installation
+artifacts (like <a class="reference internal" href="os.path.html#os.path.isreserved" title="os.path.isreserved"><code class="xref py py-func docutils literal notranslate"><span class="pre">reserved</span> <span class="pre">filenames</span></code></a>
+in directories) are technically de-facto resources of that package.
+In practice, however, resources are primarily those non-Python artifacts
+exposed specifically by the package author.</p>
+<p class="untranslated">Resources can be opened or read in either binary or text mode.</p>
+<p class="translated">リソースは大体ディレクトリの中のファイルに似ていますが、これは単なる例え話であることを頭に入れておくことが重要です。例えば、パッケージとそのリソースは <a class="reference internal" href="zipimport.html#module-zipimport" title="zipimport: Support for importing Python modules from ZIP archives."><code class="xref py py-mod docutils literal notranslate"><span class="pre">zipimport</span></code></a> を使って zip ファイルからインポートすることができます。</p>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p class="untranslated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">importlib.resources</span></code> follows the same security model as the built-in
+<a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a> function. Passing untrusted inputs to the functions
+in this module is unsafe.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated">このモジュールのスタンドアローンバックポートでは、 <a class="reference external" href="https://importlib-resources.readthedocs.io/en/latest/using.html">importlib.resources の使用</a> と <a class="reference external" href="https://importlib-resources.readthedocs.io/en/latest/migration.html">pkg_resources から importlib.resources への移行</a> についての詳細情報を提供しています。</p>
+</div>
+<p class="translated"><a class="reference internal" href="importlib.html#importlib.abc.Loader" title="importlib.abc.Loader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Loaders</span></code></a> でリソースの読み込みをサポートしたい場合は、 <a class="reference internal" href="importlib.resources.abc.html#importlib.resources.abc.ResourceReader" title="importlib.resources.abc.ResourceReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">importlib.resources.abc.ResourceReader</span></code></a> で指定された <code class="docutils literal notranslate"><span class="pre">get_resource_reader(fullname)</span></code> メソッドを実装しなければいけません。</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="importlib.resources.Anchor">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">importlib.resources.</span></span><span class="sig-name descname"><span class="pre">Anchor</span></span><a class="headerlink" href="#importlib.resources.Anchor" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Represents an anchor for resources, either a <a class="reference internal" href="types.html#types.ModuleType" title="types.ModuleType"><code class="xref py py-class docutils literal notranslate"><span class="pre">module</span> <span class="pre">object</span></code></a> or a module name as a string. Defined as
+<code class="docutils literal notranslate"><span class="pre">Union[str,</span> <span class="pre">ModuleType]</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="importlib.resources.files">
+<span class="sig-prename descclassname"><span class="pre">importlib.resources.</span></span><span class="sig-name descname"><span class="pre">files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anchor</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#importlib.resources.Anchor" title="importlib.resources.Anchor"><span class="pre">Anchor</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="constants.html#None" title="None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#importlib.resources.files" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Returns a <a class="reference internal" href="importlib.resources.abc.html#importlib.resources.abc.Traversable" title="importlib.resources.abc.Traversable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Traversable</span></code></a> object
+representing the resource container (think directory) and its resources
+(think files). A Traversable may contain other containers (think
+subdirectories).</p>
+<p class="untranslated"><em>anchor</em> is an optional <a class="reference internal" href="#importlib.resources.Anchor" title="importlib.resources.Anchor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Anchor</span></code></a>. If the anchor is a
+package, resources are resolved from that package. If a module,
+resources are resolved adjacent to that module (in the same package
+or the package root). If the anchor is omitted, the caller's module
+is used.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.9.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.12 で変更: </span><em>package</em> parameter was renamed to <em>anchor</em>. <em>anchor</em> can now
+be a non-package module and if omitted will default to the caller's
+module. <em>package</em> is still accepted for compatibility but will raise
+a <a class="reference internal" href="exceptions.html#DeprecationWarning" title="DeprecationWarning"><code class="xref py py-exc docutils literal notranslate"><span class="pre">DeprecationWarning</span></code></a>. Consider passing the anchor positionally or
+using <code class="docutils literal notranslate"><span class="pre">importlib_resources</span> <span class="pre">&gt;=</span> <span class="pre">5.10</span></code> for a compatible interface
+on older Pythons.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="importlib.resources.as_file">
+<span class="sig-prename descclassname"><span class="pre">importlib.resources.</span></span><span class="sig-name descname"><span class="pre">as_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">traversable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#importlib.resources.as_file" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Given a <a class="reference internal" href="importlib.resources.abc.html#importlib.resources.abc.Traversable" title="importlib.resources.abc.Traversable"><code class="xref py py-class docutils literal notranslate"><span class="pre">Traversable</span></code></a> object representing
+a file or directory, typically from <a class="reference internal" href="#importlib.resources.files" title="importlib.resources.files"><code class="xref py py-func docutils literal notranslate"><span class="pre">importlib.resources.files()</span></code></a>,
+return a context manager for use in a <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> statement.
+The context manager provides a <a class="reference internal" href="pathlib.html#pathlib.Path" title="pathlib.Path"><code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code></a> object.</p>
+<p class="untranslated">Exiting the context manager cleans up any temporary file or directory
+created when the resource was extracted from e.g. a zip file.</p>
+<p class="untranslated">Use <code class="docutils literal notranslate"><span class="pre">as_file</span></code> when the Traversable methods
+(<code class="docutils literal notranslate"><span class="pre">read_text</span></code>, etc) are insufficient and an actual file or directory on
+the file system is required.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.9.</span></p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.12 で変更: </span>Added support for <em>traversable</em> representing a directory.</p>
+</div>
+</dd></dl>
+
+<section id="functional-api">
+<span id="importlib-resources-functional"></span><h2 class="translated">関数 API<a class="headerlink" href="#functional-api" title="Link to this heading">¶</a></h2>
+<p class="untranslated">A set of simplified, backwards-compatible helpers is available.
+These allow common operations in a single function call.</p>
+<p class="untranslated">For all the following functions:</p>
+<ul>
+<li><p class="untranslated"><em>anchor</em> is an <a class="reference internal" href="#importlib.resources.Anchor" title="importlib.resources.Anchor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Anchor</span></code></a>,
+as in <a class="reference internal" href="#importlib.resources.files" title="importlib.resources.files"><code class="xref py py-func docutils literal notranslate"><span class="pre">files()</span></code></a>.
+Unlike in <code class="docutils literal notranslate"><span class="pre">files</span></code>, it may not be omitted.</p></li>
+<li><p class="untranslated"><em>path_names</em> are components of a resource's path name, relative to
+the anchor.
+For example, to get the text of resource named <code class="docutils literal notranslate"><span class="pre">info.txt</span></code>, use:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">my_module</span><span class="p">,</span> <span class="s2">&quot;info.txt&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="untranslated">Like <a class="reference internal" href="importlib.resources.abc.html#importlib.resources.abc.Traversable" title="importlib.resources.abc.Traversable"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Traversable.joinpath</span></code></a>,
+The individual components should use forward slashes (<code class="docutils literal notranslate"><span class="pre">/</span></code>)
+as path separators.
+For example, the following are equivalent:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">read_binary</span><span class="p">(</span><span class="n">my_module</span><span class="p">,</span> <span class="s2">&quot;pics/painting.png&quot;</span><span class="p">)</span>
+<span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">read_binary</span><span class="p">(</span><span class="n">my_module</span><span class="p">,</span> <span class="s2">&quot;pics&quot;</span><span class="p">,</span> <span class="s2">&quot;painting.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="untranslated">For backward compatibility reasons, functions that read text require
+an explicit <em>encoding</em> argument if multiple <em>path_names</em> are given.
+For example, to get the text of <code class="docutils literal notranslate"><span class="pre">info/chapter1.txt</span></code>, use:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">my_module</span><span class="p">,</span> <span class="s2">&quot;info&quot;</span><span class="p">,</span> <span class="s2">&quot;chapter1.txt&quot;</span><span class="p">,</span>
+                              <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<dl class="py function">
+<dt class="sig sig-object py" id="importlib.resources.open_binary">
+<span class="sig-prename descclassname"><span class="pre">importlib.resources.</span></span><span class="sig-name descname"><span class="pre">open_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anchor</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">path_names</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#importlib.resources.open_binary" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Open the named resource for binary reading.</p>
+<p class="untranslated">See <a class="reference internal" href="#importlib-resources-functional"><span class="std std-ref">the introduction</span></a> for
+details on <em>anchor</em> and <em>path_names</em>.</p>
+<p class="untranslated">This function returns a <a class="reference internal" href="typing.html#typing.BinaryIO" title="typing.BinaryIO"><code class="xref py py-class docutils literal notranslate"><span class="pre">BinaryIO</span></code></a> object,
+that is, a binary stream open for reading.</p>
+<p class="untranslated">This function is roughly equivalent to:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">files</span><span class="p">(</span><span class="n">anchor</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="o">*</span><span class="n">path_names</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span>Multiple <em>path_names</em> are accepted.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="importlib.resources.open_text">
+<span class="sig-prename descclassname"><span class="pre">importlib.resources.</span></span><span class="sig-name descname"><span class="pre">open_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anchor</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">path_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'strict'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#importlib.resources.open_text" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Open the named resource for text reading.
+By default, the contents are read as strict UTF-8.</p>
+<p class="untranslated">See <a class="reference internal" href="#importlib-resources-functional"><span class="std std-ref">the introduction</span></a> for
+details on <em>anchor</em> and <em>path_names</em>.
+<em>encoding</em> and <em>errors</em> have the same meaning as in built-in <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a>.</p>
+<p class="untranslated">For backward compatibility reasons, the <em>encoding</em> argument must be given
+explicitly if there are multiple <em>path_names</em>.
+This limitation is scheduled to be removed in Python 3.15.</p>
+<p class="untranslated">This function returns a <a class="reference internal" href="typing.html#typing.TextIO" title="typing.TextIO"><code class="xref py py-class docutils literal notranslate"><span class="pre">TextIO</span></code></a> object,
+that is, a text stream open for reading.</p>
+<p class="untranslated">This function is roughly equivalent to:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">files</span><span class="p">(</span><span class="n">anchor</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="o">*</span><span class="n">path_names</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span>Multiple <em>path_names</em> are accepted.
+<em>encoding</em> and <em>errors</em> must be given as keyword arguments.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="importlib.resources.read_binary">
+<span class="sig-prename descclassname"><span class="pre">importlib.resources.</span></span><span class="sig-name descname"><span class="pre">read_binary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anchor</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">path_names</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#importlib.resources.read_binary" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Read and return the contents of the named resource as <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>.</p>
+<p class="untranslated">See <a class="reference internal" href="#importlib-resources-functional"><span class="std std-ref">the introduction</span></a> for
+details on <em>anchor</em> and <em>path_names</em>.</p>
+<p class="untranslated">This function is roughly equivalent to:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">files</span><span class="p">(</span><span class="n">anchor</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="o">*</span><span class="n">path_names</span><span class="p">)</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span>Multiple <em>path_names</em> are accepted.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="importlib.resources.read_text">
+<span class="sig-prename descclassname"><span class="pre">importlib.resources.</span></span><span class="sig-name descname"><span class="pre">read_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anchor</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">path_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'strict'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#importlib.resources.read_text" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Read and return the contents of the named resource as <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>.
+By default, the contents are read as strict UTF-8.</p>
+<p class="untranslated">See <a class="reference internal" href="#importlib-resources-functional"><span class="std std-ref">the introduction</span></a> for
+details on <em>anchor</em> and <em>path_names</em>.
+<em>encoding</em> and <em>errors</em> have the same meaning as in built-in <a class="reference internal" href="functions.html#open" title="open"><code class="xref py py-func docutils literal notranslate"><span class="pre">open()</span></code></a>.</p>
+<p class="untranslated">For backward compatibility reasons, the <em>encoding</em> argument must be given
+explicitly if there are multiple <em>path_names</em>.
+This limitation is scheduled to be removed in Python 3.15.</p>
+<p class="untranslated">This function is roughly equivalent to:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">files</span><span class="p">(</span><span class="n">anchor</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="o">*</span><span class="n">path_names</span><span class="p">)</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span>Multiple <em>path_names</em> are accepted.
+<em>encoding</em> and <em>errors</em> must be given as keyword arguments.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="importlib.resources.path">
+<span class="sig-prename descclassname"><span class="pre">importlib.resources.</span></span><span class="sig-name descname"><span class="pre">path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anchor</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">path_names</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#importlib.resources.path" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Provides the path to the <em>resource</em> as an actual file system path.  This
+function returns a context manager for use in a <a class="reference internal" href="../reference/compound_stmts.html#with"><code class="xref std std-keyword docutils literal notranslate"><span class="pre">with</span></code></a> statement.
+The context manager provides a <a class="reference internal" href="pathlib.html#pathlib.Path" title="pathlib.Path"><code class="xref py py-class docutils literal notranslate"><span class="pre">pathlib.Path</span></code></a> object.</p>
+<p class="untranslated">Exiting the context manager cleans up any temporary files created, e.g.
+when the resource needs to be extracted from a zip file.</p>
+<p class="untranslated">For example, the <a class="reference internal" href="pathlib.html#pathlib.Path.stat" title="pathlib.Path.stat"><code class="xref py py-meth docutils literal notranslate"><span class="pre">stat()</span></code></a> method requires
+an actual file system path; it can be used like this:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">path</span><span class="p">(</span><span class="n">anchor</span><span class="p">,</span> <span class="s2">&quot;resource.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fspath</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">fspath</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="untranslated">See <a class="reference internal" href="#importlib-resources-functional"><span class="std std-ref">the introduction</span></a> for
+details on <em>anchor</em> and <em>path_names</em>.</p>
+<p class="untranslated">This function is roughly equivalent to:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">as_file</span><span class="p">(</span><span class="n">files</span><span class="p">(</span><span class="n">anchor</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="o">*</span><span class="n">path_names</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span>Multiple <em>path_names</em> are accepted.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="importlib.resources.is_resource">
+<span class="sig-prename descclassname"><span class="pre">importlib.resources.</span></span><span class="sig-name descname"><span class="pre">is_resource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anchor</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">path_names</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#importlib.resources.is_resource" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return <code class="docutils literal notranslate"><span class="pre">True</span></code> if the named resource exists, otherwise <code class="docutils literal notranslate"><span class="pre">False</span></code>.
+This function does not consider directories to be resources.</p>
+<p class="untranslated">See <a class="reference internal" href="#importlib-resources-functional"><span class="std std-ref">the introduction</span></a> for
+details on <em>anchor</em> and <em>path_names</em>.</p>
+<p class="untranslated">This function is roughly equivalent to:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">files</span><span class="p">(</span><span class="n">anchor</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="o">*</span><span class="n">path_names</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.13 で変更: </span>Multiple <em>path_names</em> are accepted.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="importlib.resources.contents">
+<span class="sig-prename descclassname"><span class="pre">importlib.resources.</span></span><span class="sig-name descname"><span class="pre">contents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">anchor</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">path_names</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#importlib.resources.contents" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return an iterable over the named items within the package or path.
+The iterable returns names of resources (e.g. files) and non-resources
+(e.g. directories) as <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>.
+The iterable does not recurse into subdirectories.</p>
+<p class="untranslated">See <a class="reference internal" href="#importlib-resources-functional"><span class="std std-ref">the introduction</span></a> for
+details on <em>anchor</em> and <em>path_names</em>.</p>
+<p class="untranslated">This function is roughly equivalent to:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">resource</span> <span class="ow">in</span> <span class="n">files</span><span class="p">(</span><span class="n">anchor</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="o">*</span><span class="n">path_names</span><span class="p">)</span><span class="o">.</span><span class="n">iterdir</span><span class="p">():</span>
+    <span class="k">yield</span> <span class="n">resource</span><span class="o">.</span><span class="n">name</span>
+</pre></div>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">バージョン 3.11 で非推奨: </span>Prefer <code class="docutils literal notranslate"><span class="pre">iterdir()</span></code> as above, which offers more control over the
+results and richer functionality.</p>
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">importlib.resources</span></code> -- パッケージリソースの読み取り、オープン、アクセス</a><ul>
+<li><a class="reference internal" href="#functional-api">関数 API</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="importlib.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">importlib</span></code> --- <code class="xref std std-keyword docutils literal notranslate"><span class="pre">import</span></code> の実装</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="importlib.resources.abc.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">importlib.resources.abc</span></code> -- リソースの抽象基底クラス</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/importlib.resources.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/importlib.resources.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/importlib.resources.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="importlib.resources.abc.html" title="importlib.resources.abc -- リソースの抽象基底クラス"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="importlib.html" title="importlib --- import の実装"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="modules.html" >モジュールのインポート</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">importlib.resources</span></code> -- パッケージリソースの読み取り、オープン、アクセス</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

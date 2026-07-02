@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="email.headerregistry: Custom Header Objects" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/email.headerregistry.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/email/headerregistry.py ヘッダーは str のカスタマイズされたサブクラスで表現されます。 与えられたヘッダーを表現するために使用される特定のクラスは、ヘッダーが作成されるときに有効な policy の header_factory で決定されます。 このセクションでは、email ライブラリが RFC 5322 に準拠したメールメッセージを扱..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_email.headerregistry_77d12515.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/email/headerregistry.py ヘッダーは str のカスタマイズされたサブクラスで表現されます。 与えられたヘッダーを表現するために使用される特定のクラスは、ヘッダーが作成されるときに有効な policy の header_factory で決定されます。 このセクションでは、email ライブラリが RFC 5322 に準拠したメールメッセージを扱..." />
+<meta name="description" content="ソースコード: Lib/email/headerregistry.py ヘッダーは str のカスタマイズされたサブクラスで表現されます。 与えられたヘッダーを表現するために使用される特定のクラスは、ヘッダーが作成されるときに有効な policy の header_factory で決定されます。 このセクションでは、email ライブラリが RFC 5322 に準拠したメールメッセージを扱..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>email.headerregistry: Custom Header Objects &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="email.contentmanager: Managing MIME Content" href="email.contentmanager.html" />
+    <link rel="prev" title="email.errors: Exception and Defect classes" href="email.errors.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/email.headerregistry.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="email.errors.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.errors</span></code>: Exception and Defect classes</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="email.contentmanager.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.contentmanager</span></code>: Managing MIME Content</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/email.headerregistry.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/email.headerregistry.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/email.headerregistry.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="email.contentmanager.html" title="email.contentmanager: Managing MIME Content"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="email.errors.html" title="email.errors: Exception and Defect classes"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" >インターネット上のデータの操作</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="email.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code> --- 電子メールと MIME 処理のためのパッケージ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.headerregistry</span></code>: Custom Header Objects</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-email.headerregistry">
+<span id="email-headerregistry-custom-header-objects"></span><h1 class="untranslated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.headerregistry</span></code>: Custom Header Objects<a class="headerlink" href="#module-email.headerregistry" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/email/headerregistry.py">Lib/email/headerregistry.py</a></p>
+<hr class="docutils" />
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.6: </span><a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p>
+</div>
+<p class="translated">ヘッダーは <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> のカスタマイズされたサブクラスで表現されます。 与えられたヘッダーを表現するために使用される特定のクラスは、ヘッダーが作成されるときに有効な <a class="reference internal" href="email.policy.html#module-email.policy" title="email.policy: Controlling the parsing and generating of messages"><code class="xref py py-mod docutils literal notranslate"><span class="pre">policy</span></code></a> の <a class="reference internal" href="email.policy.html#email.policy.EmailPolicy.header_factory" title="email.policy.EmailPolicy.header_factory"><code class="xref py py-attr docutils literal notranslate"><span class="pre">header_factory</span></code></a> で決定されます。 このセクションでは、email ライブラリが <span class="target" id="index-24"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc5322.html"><strong>RFC 5322</strong></a> に準拠したメールメッセージを扱うために実装している、特定の <code class="docutils literal notranslate"><span class="pre">header_factory</span></code> について説明します。このヘッダーは、様々なヘッダータイプに対してカスタマイズされたヘッダーオブジェクトを提供するだけでなく、アプリケーションが独自のカスタムヘッダータイプを追加できるような拡張メカニズムも備えています。</p>
+<p class="translated"><a class="reference internal" href="email.policy.html#email.policy.EmailPolicy" title="email.policy.EmailPolicy"><code class="xref py py-data docutils literal notranslate"><span class="pre">EmailPolicy</span></code></a> から派生したポリシーオブジェクトのいずれかを使用する場合、すべてのヘッダーは <a class="reference internal" href="#email.headerregistry.HeaderRegistry" title="email.headerregistry.HeaderRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">HeaderRegistry</span></code></a> によって生成され、最終的な基底クラスとして <a class="reference internal" href="#email.headerregistry.BaseHeader" title="email.headerregistry.BaseHeader"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseHeader</span></code></a> を有します。 各ヘッダクラスには、ヘッダの種類によって決まる追加のベースクラスがあります。 例えば、多くのヘッダーは <a class="reference internal" href="#email.headerregistry.UnstructuredHeader" title="email.headerregistry.UnstructuredHeader"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnstructuredHeader</span></code></a> というクラスをもうひとつの基底クラスとして持っています。 ヘッダーに特化した第二のクラスは、ヘッダーの名前によって決定され、 <code class="xref py py-class docutils literal notranslate"><span class="pre">HeaderRegistry</span></code> に格納されたルックアップテーブルを使用します。 これらすべては、典型的なアプリケーションプログラムに対しては透過的に管理されますが、より複雑なアプリケーションで使用するためにデフォルトの動作を変更するためのインタフェースが提供されています。</p>
+<p class="translated">以下のセクションでは、まずヘッダーの基本クラスとその属性を説明し、次に <a class="reference internal" href="#email.headerregistry.HeaderRegistry" title="email.headerregistry.HeaderRegistry"><code class="xref py py-class docutils literal notranslate"><span class="pre">HeaderRegistry</span></code></a> の動作を変更するための API、そして最後に構造化ヘッダーからパースされたデータを表現するためのサポートクラスについて説明します。</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="email.headerregistry.BaseHeader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.headerregistry.</span></span><span class="sig-name descname"><span class="pre">BaseHeader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#email.headerregistry.BaseHeader" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>name</em> と <em>value</em> は <a class="reference internal" href="email.policy.html#email.policy.EmailPolicy.header_factory" title="email.policy.EmailPolicy.header_factory"><code class="xref py py-attr docutils literal notranslate"><span class="pre">header_factory</span></code></a> 呼び出しから <code class="docutils literal notranslate"><span class="pre">BaseHeader</span></code> に渡されます。 どのヘッダーオブジェクトの文字列値も、完全にユニコードにデコードされた <em>value</em> です。</p>
+<p class="translated">基底クラスは以下の読み出し専用属性を定義しています:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.BaseHeader.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#email.headerregistry.BaseHeader.name" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ヘッダーの名前(フィールドの':'の前の部分)。これは <a class="reference internal" href="email.policy.html#email.policy.EmailPolicy.header_factory" title="email.policy.EmailPolicy.header_factory"><code class="xref py py-attr docutils literal notranslate"><span class="pre">header_factory</span></code></a> の <em>name</em> の呼び出しで渡された値と全く同じです; つまり、大文字・小文字が保持されます。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.BaseHeader.defects">
+<span class="sig-name descname"><span class="pre">defects</span></span><a class="headerlink" href="#email.headerregistry.BaseHeader.defects" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">パース中に見つかったRFCのコンプライアンス問題を報告する <a class="reference internal" href="email.errors.html#email.errors.HeaderDefect" title="email.errors.HeaderDefect"><code class="xref py py-exc docutils literal notranslate"><span class="pre">HeaderDefect</span></code></a> インスタンスのタプルです。 email パッケージはコンプライアンスに関する問題を完全に検出するように努めています。 報告されるかもしれない欠陥の種類の議論については、 <a class="reference internal" href="email.errors.html#module-email.errors" title="email.errors: The exception classes used by the email package."><code class="xref py py-mod docutils literal notranslate"><span class="pre">errors</span></code></a> モジュールを参照してください。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.BaseHeader.max_count">
+<span class="sig-name descname"><span class="pre">max_count</span></span><a class="headerlink" href="#email.headerregistry.BaseHeader.max_count" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このタイプのヘッダーで、同じ <code class="docutils literal notranslate"><span class="pre">name</span></code> を持つことができる最大数。 値として <code class="docutils literal notranslate"><span class="pre">None</span></code> を指定すると、無制限になります。 この属性の <code class="docutils literal notranslate"><span class="pre">BaseHeader</span></code> の値は <code class="docutils literal notranslate"><span class="pre">None</span></code> です; 特殊な header クラスでは、必要に応じてこの値をオーバーライドすることが期待されます。</p>
+</dd></dl>
+
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">BaseHeader</span></code> は以下のメソッドも提供します。このメソッドはemail ライブラリのコードから呼び出され、一般にアプリケーションプログラムからは呼び出されません：</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="email.headerregistry.BaseHeader.fold">
+<span class="sig-name descname"><span class="pre">fold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">policy</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#email.headerregistry.BaseHeader.fold" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ヘッダを <em>policy</em> に従って正しく折りたたむために必要な <a class="reference internal" href="email.policy.html#email.policy.Policy.linesep" title="email.policy.Policy.linesep"><code class="xref py py-attr docutils literal notranslate"><span class="pre">linesep</span></code></a> 文字を含む文字列を返します。 ヘッダには任意のバイナリデータを含めることができないため、 <a class="reference internal" href="email.policy.html#email.policy.Policy.cte_type" title="email.policy.Policy.cte_type"><code class="xref py py-attr docutils literal notranslate"><span class="pre">cte_type</span></code></a> が <code class="docutils literal notranslate"><span class="pre">8bit</span></code> の場合は <code class="docutils literal notranslate"><span class="pre">7bit</span></code> と同じように扱われます。 もし <a class="reference internal" href="email.policy.html#email.policy.EmailPolicy.utf8" title="email.policy.EmailPolicy.utf8"><code class="xref py py-attr docutils literal notranslate"><span class="pre">utf8</span></code></a> が <code class="docutils literal notranslate"><span class="pre">False</span></code> であれば、非ASCIIデータは <span class="target" id="index-25"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc2047.html"><strong>RFC 2047</strong></a> でエンコードされます。</p>
+</dd></dl>
+
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">BaseHeader</span></code> 自身はヘッダーオブジェクトを生成するために使用することはできません。このクラスは、それぞれの特殊化ヘッダーがヘッダーオブジェクトを生成するために協力するプロトコルを定義しています。 具体的には、 <code class="docutils literal notranslate"><span class="pre">BaseHeader</span></code> は <code class="docutils literal notranslate"><span class="pre">parse</span></code> という名前の <a class="reference internal" href="functions.html#classmethod" title="classmethod"><code class="xref py py-func docutils literal notranslate"><span class="pre">classmethod()</span></code></a> を特殊化されたクラスが提供することを要求しています。このメソッドは以下のように呼び出されます:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">parse</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">kwds</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="untranslated"><code class="docutils literal notranslate"><span class="pre">kwds</span></code> is a dictionary containing one pre-initialized key, <code class="docutils literal notranslate"><span class="pre">defects</span></code>.
+<code class="docutils literal notranslate"><span class="pre">defects</span></code> is an empty list.  The parse method should append any detected
+defects to this list.  On return, the <code class="docutils literal notranslate"><span class="pre">kwds</span></code> dictionary <em>must</em> contain
+values for at least the keys <code class="docutils literal notranslate"><span class="pre">decoded</span></code>, <code class="docutils literal notranslate"><span class="pre">defects</span></code> and <code class="docutils literal notranslate"><span class="pre">parse_tree</span></code>.
+<code class="docutils literal notranslate"><span class="pre">decoded</span></code> should be the string value for the header (that is, the header
+value fully decoded to unicode). <code class="docutils literal notranslate"><span class="pre">parse_tree</span></code> is set to the parse tree obtained
+from parsing the header. The parse method should assume that <em>string</em> may
+contain content-transfer-encoded parts, but should correctly handle all valid
+unicode characters as well so that it can parse un-encoded header values.</p>
+<p class="translated">その後、 <code class="docutils literal notranslate"><span class="pre">BaseHeader</span></code> の <code class="docutils literal notranslate"><span class="pre">__new__</span></code> がヘッダのインスタンスを生成し、 <code class="docutils literal notranslate"><span class="pre">init</span></code> メソッドを呼び出します。 特殊クラスは、 <code class="docutils literal notranslate"><span class="pre">BaseHeader</span></code> が提供しない属性を設定したい場合にのみ <code class="docutils literal notranslate"><span class="pre">init</span></code> メソッドを提供する必要があります。 このような``init`` メソッドは以下のようなものです：</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">/</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_myattr</span> <span class="o">=</span> <span class="n">kw</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;myattr&#39;</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="translated">つまり、特殊クラスが <code class="docutils literal notranslate"><span class="pre">kwds</span></code> の辞書に追加したものはすべて削除して処理し、 <code class="docutils literal notranslate"><span class="pre">kw``の残りの内容</span> <span class="pre">(と</span> <span class="pre">``args</span></code>) は``BaseHeader`` の``init`` メソッドに渡す必要があるのです。</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="email.headerregistry.UnstructuredHeader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.headerregistry.</span></span><span class="sig-name descname"><span class="pre">UnstructuredHeader</span></span><a class="headerlink" href="#email.headerregistry.UnstructuredHeader" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">&quot;unstructured&quot; ヘッダは <span class="target" id="index-26"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc5322.html"><strong>RFC 5322</strong></a> におけるデフォルトのヘッダのタイプです。指定された構文を持たないすべてのヘッダは、unstructuredとして扱われます。 構造化されていないヘッダの典型的な例は <em class="mailheader">Subject</em> ヘッダです。</p>
+<p class="translated"><span class="target" id="index-27"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc5322.html"><strong>RFC 5322</strong></a> では、非構造化ヘッダは ASCII 文字セットの任意のテキストの集まりです。しかし、 <span class="target" id="index-28"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc2047.html"><strong>RFC 2047</strong></a> にはヘッダ値の中で非 ASCII テキストを ASCII 文字としてエンコードするための <span class="target" id="index-29"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc5322.html"><strong>RFC 5322</strong></a> と互換性のあるメカニズムが備わっています。 エンコードされた単語を含む <em>value</em> がコンストラクタに渡されると、 <code class="docutils literal notranslate"><span class="pre">UnstructuredHeader</span></code> パーサは非構造化テキストに対する <span class="target" id="index-30"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc2047.html"><strong>RFC 2047</strong></a> 規則に従って、エンコードされた単語を unicode に変換します。 パーサは特定の非適合なエンコードされた単語のデコードを試みるためにヒューリスティックを使用します。 このような場合、欠陥が登録されます。また、エンコードされた単語やエンコードされていないテキスト内の無効な文字などの問題に対しても欠陥が登録されます。</p>
+<p class="translated">このヘッダ型には追加の属性はありません。</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="email.headerregistry.DateHeader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.headerregistry.</span></span><span class="sig-name descname"><span class="pre">DateHeader</span></span><a class="headerlink" href="#email.headerregistry.DateHeader" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><span class="target" id="index-7"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc5322.html"><strong>RFC 5322</strong></a> specifies a very specific format for dates within email headers.
+The <code class="docutils literal notranslate"><span class="pre">DateHeader</span></code> parser recognizes that date format, as well as
+recognizing a number of variant forms that are sometimes found &quot;in the
+wild&quot;.</p>
+<p class="translated">このヘッダ型は以下の属性も提供しています:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.DateHeader.datetime">
+<span class="sig-name descname"><span class="pre">datetime</span></span><a class="headerlink" href="#email.headerregistry.DateHeader.datetime" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">If the header value can be recognized as a valid date of one form or
+another, this attribute will contain a <a class="reference internal" href="datetime.html#datetime.datetime" title="datetime.datetime"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code></a>
+instance representing that date.  If the timezone of the input date is
+specified as <code class="docutils literal notranslate"><span class="pre">-0000</span></code> (indicating it is in UTC but contains no
+information about the source timezone), then <a class="reference internal" href="#email.headerregistry.DateHeader.datetime" title="email.headerregistry.DateHeader.datetime"><code class="xref py py-attr docutils literal notranslate"><span class="pre">datetime</span></code></a> will be a
+naive <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code>.  If a specific timezone offset is
+found (including <code class="docutils literal notranslate"><span class="pre">+0000</span></code>), then <code class="xref py py-attr docutils literal notranslate"><span class="pre">datetime</span></code> will contain an aware
+<code class="docutils literal notranslate"><span class="pre">datetime</span></code> that uses <a class="reference internal" href="datetime.html#datetime.timezone" title="datetime.timezone"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.timezone</span></code></a> to record the timezone
+offset.</p>
+</dd></dl>
+
+<p class="translated">ヘッダーの <code class="docutils literal notranslate"><span class="pre">decoded</span></code> 値は、 <code class="docutils literal notranslate"><span class="pre">datetime</span></code> を <span class="target" id="index-31"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc5322.html"><strong>RFC 5322</strong></a> のルールに従ってフォーマットすることで決定されます。</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">email</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">format_datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">datetime</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">DateHeader</span></code> を作成する際に、 <em>value</em> は <a class="reference internal" href="datetime.html#datetime.datetime" title="datetime.datetime"><code class="xref py py-class docutils literal notranslate"><span class="pre">datetime</span></code></a> インスタンスである可能性があります。 これは、例えば、次のようなコードは有効であり、期待通りの動作をすることを意味します:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">msg</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2011</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">21</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="translated">これは単純な <code class="docutils literal notranslate"><span class="pre">datetime</span></code> であるため、UTC タイムスタンプとして解釈され、結果として <code class="docutils literal notranslate"><span class="pre">-0000</span></code> というタイムゾーンを持つ値になります。 もっと便利なのは <a class="reference internal" href="email.utils.html#module-email.utils" title="email.utils: Miscellaneous email package utilities."><code class="xref py py-mod docutils literal notranslate"><span class="pre">utils</span></code></a> モジュールの <a class="reference internal" href="email.utils.html#email.utils.localtime" title="email.utils.localtime"><code class="xref py py-func docutils literal notranslate"><span class="pre">localtime()</span></code></a> 関数を使用することです:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">msg</span><span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">localtime</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="translated">この例では、現在のタイムゾーンオフセットを使用して、日付ヘッダーを現在の時刻と日付に設定します。</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="email.headerregistry.AddressHeader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.headerregistry.</span></span><span class="sig-name descname"><span class="pre">AddressHeader</span></span><a class="headerlink" href="#email.headerregistry.AddressHeader" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">アドレスヘッダは最も複雑な構造のヘッダタイプの1つです。 <code class="docutils literal notranslate"><span class="pre">AddressHeader</span></code> クラスは、あらゆるアドレスヘッダに対する汎用的なインターフェースを提供します。</p>
+<p class="translated">このヘッダ型は以下の属性も提供しています:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.AddressHeader.groups">
+<span class="sig-name descname"><span class="pre">groups</span></span><a class="headerlink" href="#email.headerregistry.AddressHeader.groups" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ヘッダー値に含まれるアドレスとグループをエンコードした <a class="reference internal" href="#email.headerregistry.Group" title="email.headerregistry.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">Group</span></code></a> オブジェクトのタプルです。 グループに属さないアドレスは、このリストでは <a class="reference internal" href="#email.headerregistry.Group.display_name" title="email.headerregistry.Group.display_name"><code class="xref py py-attr docutils literal notranslate"><span class="pre">display_name</span></code></a> が <code class="docutils literal notranslate"><span class="pre">None</span></code> であるシングルアドレスの <code class="docutils literal notranslate"><span class="pre">Groups</span></code> として表現されます。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.AddressHeader.addresses">
+<span class="sig-name descname"><span class="pre">addresses</span></span><a class="headerlink" href="#email.headerregistry.AddressHeader.addresses" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">ヘッダー値に含まれる全ての個別アドレスをエンコードした <a class="reference internal" href="#email.headerregistry.Address" title="email.headerregistry.Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">Address</span></code></a> オブジェクトのタプルです。 ヘッダ値にグループが含まれている場合、そのグループに含まれる個々のアドレスは、ヘッダ値でグループが出現した時点でリストに含まれます (つまり、アドレスのリストは一次元のリストに「フラット化」されます)。</p>
+</dd></dl>
+
+<p class="untranslated">The <code class="docutils literal notranslate"><span class="pre">decoded</span></code> value of the header will have all encoded words decoded to
+unicode.  <a class="reference internal" href="codecs.html#module-encodings.idna" title="encodings.idna: Internationalized Domain Names implementation"><code class="xref py py-class docutils literal notranslate"><span class="pre">idna</span></code></a> encoded domain names are also decoded to
+unicode.  The <code class="docutils literal notranslate"><span class="pre">decoded</span></code> value is set by <a class="reference internal" href="stdtypes.html#meth-str-join"><span class="std std-ref">joining</span></a> the
+<a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> value of the elements of the <code class="docutils literal notranslate"><span class="pre">groups</span></code> attribute with <code class="docutils literal notranslate"><span class="pre">',</span>
+<span class="pre">'</span></code>.</p>
+<p class="untranslated">A list of <a class="reference internal" href="#email.headerregistry.Address" title="email.headerregistry.Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">Address</span></code></a> and <a class="reference internal" href="#email.headerregistry.Group" title="email.headerregistry.Group"><code class="xref py py-class docutils literal notranslate"><span class="pre">Group</span></code></a> objects in any combination
+may be used to set the value of an address header.  <code class="docutils literal notranslate"><span class="pre">Group</span></code> objects whose
+<code class="docutils literal notranslate"><span class="pre">display_name</span></code> is <code class="docutils literal notranslate"><span class="pre">None</span></code> will be interpreted as single addresses, which
+allows an address list to be copied with groups intact by using the list
+obtained from the <code class="docutils literal notranslate"><span class="pre">groups</span></code> attribute of the source header.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="email.headerregistry.SingleAddressHeader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.headerregistry.</span></span><span class="sig-name descname"><span class="pre">SingleAddressHeader</span></span><a class="headerlink" href="#email.headerregistry.SingleAddressHeader" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">追加の属性を 1 つ持つ、<a class="reference internal" href="#email.headerregistry.AddressHeader" title="email.headerregistry.AddressHeader"><code class="xref py py-class docutils literal notranslate"><span class="pre">AddressHeader</span></code></a> の派生クラスです:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.SingleAddressHeader.address">
+<span class="sig-name descname"><span class="pre">address</span></span><a class="headerlink" href="#email.headerregistry.SingleAddressHeader.address" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The single address encoded by the header value.  If the header value
+actually contains more than one address (which would be a violation of
+the RFC under the default <a class="reference internal" href="email.policy.html#module-email.policy" title="email.policy: Controlling the parsing and generating of messages"><code class="xref py py-mod docutils literal notranslate"><span class="pre">policy</span></code></a>), accessing this attribute
+will result in a <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p class="untranslated">Many of the above classes also have a <code class="docutils literal notranslate"><span class="pre">Unique</span></code> variant (for example,
+<code class="docutils literal notranslate"><span class="pre">UniqueUnstructuredHeader</span></code>).  The only difference is that in the <code class="docutils literal notranslate"><span class="pre">Unique</span></code>
+variant, <a class="reference internal" href="#email.headerregistry.BaseHeader.max_count" title="email.headerregistry.BaseHeader.max_count"><code class="xref py py-attr docutils literal notranslate"><span class="pre">max_count</span></code></a> is set to 1.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="email.headerregistry.MIMEVersionHeader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.headerregistry.</span></span><span class="sig-name descname"><span class="pre">MIMEVersionHeader</span></span><a class="headerlink" href="#email.headerregistry.MIMEVersionHeader" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">There is really only one valid value for the <em class="mailheader">MIME-Version</em>
+header, and that is <code class="docutils literal notranslate"><span class="pre">1.0</span></code>.  For future proofing, this header class
+supports other valid version numbers.  If a version number has a valid value
+per <span class="target" id="index-9"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc2045.html"><strong>RFC 2045</strong></a>, then the header object will have non-<code class="docutils literal notranslate"><span class="pre">None</span></code> values for
+the following attributes:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.MIMEVersionHeader.version">
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#email.headerregistry.MIMEVersionHeader.version" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">バージョン番号 (文字列)、空白やコメントは除かれます。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.MIMEVersionHeader.major">
+<span class="sig-name descname"><span class="pre">major</span></span><a class="headerlink" href="#email.headerregistry.MIMEVersionHeader.major" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">メジャーバージョン番号 (整数)</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.MIMEVersionHeader.minor">
+<span class="sig-name descname"><span class="pre">minor</span></span><a class="headerlink" href="#email.headerregistry.MIMEVersionHeader.minor" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">マイナーバージョン番号 (整数)</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="email.headerregistry.ParameterizedMIMEHeader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.headerregistry.</span></span><span class="sig-name descname"><span class="pre">ParameterizedMIMEHeader</span></span><a class="headerlink" href="#email.headerregistry.ParameterizedMIMEHeader" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">MIME headers all start with the prefix 'Content-'.  Each specific header has
+a certain value, described under the class for that header.  Some can
+also take a list of supplemental parameters, which have a common format.
+This class serves as a base for all the MIME headers that take parameters.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.ParameterizedMIMEHeader.params">
+<span class="sig-name descname"><span class="pre">params</span></span><a class="headerlink" href="#email.headerregistry.ParameterizedMIMEHeader.params" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">A dictionary mapping parameter names to parameter values.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="email.headerregistry.ContentTypeHeader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.headerregistry.</span></span><span class="sig-name descname"><span class="pre">ContentTypeHeader</span></span><a class="headerlink" href="#email.headerregistry.ContentTypeHeader" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em class="mailheader">Content-Type</em> ヘッダを扱う <a class="reference internal" href="#email.headerregistry.ParameterizedMIMEHeader" title="email.headerregistry.ParameterizedMIMEHeader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterizedMIMEHeader</span></code></a> クラスです。</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.ContentTypeHeader.content_type">
+<span class="sig-name descname"><span class="pre">content_type</span></span><a class="headerlink" href="#email.headerregistry.ContentTypeHeader.content_type" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The content type string, in the form <code class="docutils literal notranslate"><span class="pre">maintype/subtype</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.ContentTypeHeader.maintype">
+<span class="sig-name descname"><span class="pre">maintype</span></span><a class="headerlink" href="#email.headerregistry.ContentTypeHeader.maintype" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.ContentTypeHeader.subtype">
+<span class="sig-name descname"><span class="pre">subtype</span></span><a class="headerlink" href="#email.headerregistry.ContentTypeHeader.subtype" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="email.headerregistry.ContentDispositionHeader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.headerregistry.</span></span><span class="sig-name descname"><span class="pre">ContentDispositionHeader</span></span><a class="headerlink" href="#email.headerregistry.ContentDispositionHeader" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em class="mailheader">Content-Disposition</em> ヘッダを扱う <a class="reference internal" href="#email.headerregistry.ParameterizedMIMEHeader" title="email.headerregistry.ParameterizedMIMEHeader"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParameterizedMIMEHeader</span></code></a> クラスです。</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.ContentDispositionHeader.content_disposition">
+<span class="sig-name descname"><span class="pre">content_disposition</span></span><a class="headerlink" href="#email.headerregistry.ContentDispositionHeader.content_disposition" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated"><code class="docutils literal notranslate"><span class="pre">inline</span></code> and <code class="docutils literal notranslate"><span class="pre">attachment</span></code> are the only valid values in common use.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="email.headerregistry.ContentTransferEncodingHeader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.headerregistry.</span></span><span class="sig-name descname"><span class="pre">ContentTransferEncodingHeader</span></span><a class="headerlink" href="#email.headerregistry.ContentTransferEncodingHeader" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em class="mailheader">Content-Transfer-Encoding</em> ヘッダを扱います。</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.ContentTransferEncodingHeader.cte">
+<span class="sig-name descname"><span class="pre">cte</span></span><a class="headerlink" href="#email.headerregistry.ContentTransferEncodingHeader.cte" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">有効な値は <code class="docutils literal notranslate"><span class="pre">7bit</span></code>、<code class="docutils literal notranslate"><span class="pre">8bit</span></code>、<code class="docutils literal notranslate"><span class="pre">base64</span></code>、<code class="docutils literal notranslate"><span class="pre">quoted-printable</span></code> です。詳細については <span class="target" id="index-32"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc2045.html"><strong>RFC 2045</strong></a> を参照してください。</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="email.headerregistry.HeaderRegistry">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.headerregistry.</span></span><span class="sig-name descname"><span class="pre">HeaderRegistry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">BaseHeader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">UnstructuredHeader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_default_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#email.headerregistry.HeaderRegistry" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">This is the factory used by <a class="reference internal" href="email.policy.html#email.policy.EmailPolicy" title="email.policy.EmailPolicy"><code class="xref py py-class docutils literal notranslate"><span class="pre">EmailPolicy</span></code></a> by default.
+<code class="docutils literal notranslate"><span class="pre">HeaderRegistry</span></code> builds the class used to create a header instance
+dynamically, using <em>base_class</em> and a specialized class retrieved from a
+registry that it holds.  When a given header name does not appear in the
+registry, the class specified by <em>default_class</em> is used as the specialized
+class.  When <em>use_default_map</em> is <code class="docutils literal notranslate"><span class="pre">True</span></code> (the default), the standard
+mapping of header names to classes is copied in to the registry during
+initialization.  <em>base_class</em> is always the last class in the generated
+class's <a class="reference internal" href="../reference/datamodel.html#type.__bases__" title="type.__bases__"><code class="xref py py-class docutils literal notranslate"><span class="pre">__bases__</span></code></a> list.</p>
+<p class="translated">デフォルトのマッピング:</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd translated">subject<span class="colon">:</span></dt>
+<dd class="field-odd translated"><p class="translated">UniqueUnstructuredHeader</p>
+</dd>
+<dt class="field-even translated">date<span class="colon">:</span></dt>
+<dd class="field-even translated"><p class="translated">UniqueDateHeader</p>
+</dd>
+<dt class="field-odd translated">resent-date<span class="colon">:</span></dt>
+<dd class="field-odd translated"><p class="translated">DateHeader</p>
+</dd>
+<dt class="field-even translated">orig-date<span class="colon">:</span></dt>
+<dd class="field-even translated"><p class="translated">UniqueDateHeader</p>
+</dd>
+<dt class="field-odd translated">sender<span class="colon">:</span></dt>
+<dd class="field-odd translated"><p class="translated">UniqueSingleAddressHeader</p>
+</dd>
+<dt class="field-even untranslated">resent-sender<span class="colon">:</span></dt>
+<dd class="field-even untranslated"><p class="translated">SingleAddressHeader</p>
+</dd>
+<dt class="field-odd translated">to<span class="colon">:</span></dt>
+<dd class="field-odd translated"><p class="translated">UniqueAddressHeader</p>
+</dd>
+<dt class="field-even translated">resent-to<span class="colon">:</span></dt>
+<dd class="field-even translated"><p class="translated">AddressHeader</p>
+</dd>
+<dt class="field-odd translated">cc<span class="colon">:</span></dt>
+<dd class="field-odd translated"><p class="translated">UniqueAddressHeader</p>
+</dd>
+<dt class="field-even translated">resent-cc<span class="colon">:</span></dt>
+<dd class="field-even translated"><p class="translated">AddressHeader</p>
+</dd>
+<dt class="field-odd untranslated">bcc<span class="colon">:</span></dt>
+<dd class="field-odd untranslated"><p class="translated">UniqueAddressHeader</p>
+</dd>
+<dt class="field-even untranslated">resent-bcc<span class="colon">:</span></dt>
+<dd class="field-even untranslated"><p class="translated">AddressHeader</p>
+</dd>
+<dt class="field-odd translated">from<span class="colon">:</span></dt>
+<dd class="field-odd translated"><p class="translated">UniqueAddressHeader</p>
+</dd>
+<dt class="field-even translated">resent-from<span class="colon">:</span></dt>
+<dd class="field-even translated"><p class="translated">AddressHeader</p>
+</dd>
+<dt class="field-odd translated">reply-to<span class="colon">:</span></dt>
+<dd class="field-odd translated"><p class="translated">UniqueAddressHeader</p>
+</dd>
+<dt class="field-even untranslated">mime-version<span class="colon">:</span></dt>
+<dd class="field-even untranslated"><p class="untranslated">MIMEVersionHeader</p>
+</dd>
+<dt class="field-odd untranslated">content-type<span class="colon">:</span></dt>
+<dd class="field-odd untranslated"><p class="untranslated">ContentTypeHeader</p>
+</dd>
+<dt class="field-even untranslated">content-disposition<span class="colon">:</span></dt>
+<dd class="field-even untranslated"><p class="untranslated">ContentDispositionHeader</p>
+</dd>
+<dt class="field-odd untranslated">content-transfer-encoding<span class="colon">:</span></dt>
+<dd class="field-odd untranslated"><p class="untranslated">ContentTransferEncodingHeader</p>
+</dd>
+<dt class="field-even untranslated">message-id<span class="colon">:</span></dt>
+<dd class="field-even untranslated"><p class="untranslated">MessageIDHeader</p>
+</dd>
+</dl>
+</div></blockquote>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">HeaderRegistry</span></code> には以下のメソッドがあります:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="email.headerregistry.HeaderRegistry.map_to_type">
+<span class="sig-name descname"><span class="pre">map_to_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#email.headerregistry.HeaderRegistry.map_to_type" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated"><em>name</em> is the name of the header to be mapped.  It will be converted to
+lower case in the registry.  <em>cls</em> is the specialized class to be used,
+along with <em>base_class</em>, to create the class used to instantiate headers
+that match <em>name</em>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="email.headerregistry.HeaderRegistry.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#email.headerregistry.HeaderRegistry.__getitem__" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Construct and return a class to handle creating a <em>name</em> header.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="email.headerregistry.HeaderRegistry.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#email.headerregistry.HeaderRegistry.__call__" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Retrieves the specialized header associated with <em>name</em> from the
+registry (using <em>default_class</em> if <em>name</em> does not appear in the
+registry) and composes it with <em>base_class</em> to produce a class,
+calls the constructed class's constructor, passing it the same
+argument list, and finally returns the class instance created thereby.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p class="untranslated">The following classes are the classes used to represent data parsed from
+structured headers and can, in general, be used by an application program to
+construct structured values to assign to specific headers.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="email.headerregistry.Address">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.headerregistry.</span></span><span class="sig-name descname"><span class="pre">Address</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">display_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addr_spec</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#email.headerregistry.Address" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このクラスは電子メールのアドレスを表すのに使われます。アドレスの一般的な形式は:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">display_name</span><span class="p">]</span> <span class="o">&lt;</span><span class="n">username</span><span class="nd">@domain</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p class="translated">もしくは:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">username</span><span class="nd">@domain</span>
+</pre></div>
+</div>
+<p class="untranslated">where each part must conform to specific syntax rules spelled out in
+<span class="target" id="index-11"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc5322.html"><strong>RFC 5322</strong></a>.</p>
+<p class="untranslated">As a convenience <em>addr_spec</em> can be specified instead of <em>username</em> and
+<em>domain</em>, in which case <em>username</em> and <em>domain</em> will be parsed from the
+<em>addr_spec</em>.  An <em>addr_spec</em> must be a properly RFC quoted string; if it is
+not <code class="docutils literal notranslate"><span class="pre">Address</span></code> will raise an error.  Unicode characters are allowed and
+will be property encoded when serialized.  However, per the RFCs, unicode is
+<em>not</em> allowed in the username portion of the address.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.Address.display_name">
+<span class="sig-name descname"><span class="pre">display_name</span></span><a class="headerlink" href="#email.headerregistry.Address.display_name" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The display name portion of the address, if any, with all quoting
+removed.  If the address does not have a display name, this attribute
+will be an empty string.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.Address.username">
+<span class="sig-name descname"><span class="pre">username</span></span><a class="headerlink" href="#email.headerregistry.Address.username" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">アドレスの <code class="docutils literal notranslate"><span class="pre">username</span></code> 部分、クォートは取り除かれます。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.Address.domain">
+<span class="sig-name descname"><span class="pre">domain</span></span><a class="headerlink" href="#email.headerregistry.Address.domain" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">アドレスの <code class="docutils literal notranslate"><span class="pre">domain</span></code> 部分。</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.Address.addr_spec">
+<span class="sig-name descname"><span class="pre">addr_spec</span></span><a class="headerlink" href="#email.headerregistry.Address.addr_spec" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The <code class="docutils literal notranslate"><span class="pre">username&#64;domain</span></code> portion of the address, correctly quoted
+for use as a bare address (the second form shown above).  This
+attribute is not mutable.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="email.headerregistry.Address.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#email.headerregistry.Address.__str__" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The <code class="docutils literal notranslate"><span class="pre">str</span></code> value of the object is the address quoted according to
+<span class="target" id="index-12"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc5322.html"><strong>RFC 5322</strong></a> rules, but with no Content Transfer Encoding of any non-ASCII
+characters.</p>
+</dd></dl>
+
+<p class="untranslated">To support SMTP (<span class="target" id="index-13"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc5321.html"><strong>RFC 5321</strong></a>), <code class="docutils literal notranslate"><span class="pre">Address</span></code> handles one special case: if
+<code class="docutils literal notranslate"><span class="pre">username</span></code> and <code class="docutils literal notranslate"><span class="pre">domain</span></code> are both the empty string (or <code class="docutils literal notranslate"><span class="pre">None</span></code>), then
+the string value of the <code class="docutils literal notranslate"><span class="pre">Address</span></code> is <code class="docutils literal notranslate"><span class="pre">&lt;&gt;</span></code>.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="email.headerregistry.Group">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">email.headerregistry.</span></span><span class="sig-name descname"><span class="pre">Group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">display_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addresses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#email.headerregistry.Group" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このクラスはアドレスグループを表すのに使われます。アドレスグループの一般的な形式は:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="n">display_name</span><span class="p">:</span> <span class="p">[</span><span class="n">address</span><span class="o">-</span><span class="nb">list</span><span class="p">];</span>
+</pre></div>
+</div>
+<p class="untranslated">As a convenience for processing lists of addresses that consist of a mixture
+of groups and single addresses, a <code class="docutils literal notranslate"><span class="pre">Group</span></code> may also be used to represent
+single addresses that are not part of a group by setting <em>display_name</em> to
+<code class="docutils literal notranslate"><span class="pre">None</span></code> and providing a list of the single address as <em>addresses</em>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.Group.display_name">
+<span class="sig-name descname"><span class="pre">display_name</span></span><a class="headerlink" href="#email.headerregistry.Group.display_name" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The <code class="docutils literal notranslate"><span class="pre">display_name</span></code> of the group.  If it is <code class="docutils literal notranslate"><span class="pre">None</span></code> and there is
+exactly one <code class="docutils literal notranslate"><span class="pre">Address</span></code> in <code class="docutils literal notranslate"><span class="pre">addresses</span></code>, then the <code class="docutils literal notranslate"><span class="pre">Group</span></code> represents a
+single address that is not in a group.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="email.headerregistry.Group.addresses">
+<span class="sig-name descname"><span class="pre">addresses</span></span><a class="headerlink" href="#email.headerregistry.Group.addresses" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">A possibly empty tuple of <a class="reference internal" href="#email.headerregistry.Address" title="email.headerregistry.Address"><code class="xref py py-class docutils literal notranslate"><span class="pre">Address</span></code></a> objects representing the
+addresses in the group.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="email.headerregistry.Group.__str__">
+<span class="sig-name descname"><span class="pre">__str__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#email.headerregistry.Group.__str__" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The <code class="docutils literal notranslate"><span class="pre">str</span></code> value of a <code class="docutils literal notranslate"><span class="pre">Group</span></code> is formatted according to <span class="target" id="index-14"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc5322.html"><strong>RFC 5322</strong></a>,
+but with no Content Transfer Encoding of any non-ASCII characters.  If
+<code class="docutils literal notranslate"><span class="pre">display_name</span></code> is none and there is a single <code class="docutils literal notranslate"><span class="pre">Address</span></code> in the
+<code class="docutils literal notranslate"><span class="pre">addresses</span></code> list, the <code class="docutils literal notranslate"><span class="pre">str</span></code> value will be the same as the <code class="docutils literal notranslate"><span class="pre">str</span></code> of
+that single <code class="docutils literal notranslate"><span class="pre">Address</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<p class="translated rubric">脚注</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id2" role="doc-footnote">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p class="untranslated">Originally added in 3.3 as a <a class="reference internal" href="../glossary.html#term-provisional-package"><span class="xref std std-term">provisional module</span></a></p>
+</aside>
+</aside>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="email.errors.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.errors</span></code>: Exception and Defect classes</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="email.contentmanager.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.contentmanager</span></code>: Managing MIME Content</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/email.headerregistry.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/email.headerregistry.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/email.headerregistry.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="email.contentmanager.html" title="email.contentmanager: Managing MIME Content"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="email.errors.html" title="email.errors: Exception and Defect classes"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="netdata.html" >インターネット上のデータの操作</a> &#187;</li>
+          <li class="nav-item nav-item-3"><a href="email.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">email</span></code> --- 電子メールと MIME 処理のためのパッケージ</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">email.headerregistry</span></code>: Custom Header Objects</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

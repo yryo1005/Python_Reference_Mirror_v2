@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="urllib.parse --- URL を構成要素に解析する" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/urllib.parse.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="ソースコード: Lib/urllib/parse.py このモジュールでは URL (Uniform Resource Locator) 文字列をその構成要素 (アドレススキーム、ネットワーク上の位置、パスその他) に分解したり、構成要素を URL に組みなおしたり、 &quot;相対 URL (relative URL)&quot; を指定した &quot;基底 URL (base URL..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_urllib.parse_56dfac02.png" />
+<meta property="og:image:alt" content="ソースコード: Lib/urllib/parse.py このモジュールでは URL (Uniform Resource Locator) 文字列をその構成要素 (アドレススキーム、ネットワーク上の位置、パスその他) に分解したり、構成要素を URL に組みなおしたり、 &quot;相対 URL (relative URL)&quot; を指定した &quot;基底 URL (base URL..." />
+<meta name="description" content="ソースコード: Lib/urllib/parse.py このモジュールでは URL (Uniform Resource Locator) 文字列をその構成要素 (アドレススキーム、ネットワーク上の位置、パスその他) に分解したり、構成要素を URL に組みなおしたり、 &quot;相対 URL (relative URL)&quot; を指定した &quot;基底 URL (base URL..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>urllib.parse --- URL を構成要素に解析する &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="urllib.error --- urllib.request によって送出される例外クラス" href="urllib.error.html" />
+    <link rel="prev" title="urllib.request --- URL を開くための大規模なライブラリ" href="urllib.request.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/urllib.parse.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">urllib.parse</span></code> --- URL を構成要素に解析する</a><ul>
+<li><a class="reference internal" href="#url-parsing">URL の解析</a></li>
+<li><a class="reference internal" href="#url-parsing-security">URL parsing security</a></li>
+<li><a class="reference internal" href="#parsing-ascii-encoded-bytes">ASCII エンコードバイト列の解析</a></li>
+<li><a class="reference internal" href="#structured-parse-results">構造化された解析結果</a></li>
+<li><a class="reference internal" href="#url-quoting">URL のクオート</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="urllib.request.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">urllib.request</span></code> --- URL を開くための大規模なライブラリ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="urllib.error.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">urllib.error</span></code> --- urllib.request によって送出される例外クラス</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/urllib.parse.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/urllib.parse.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/urllib.parse.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="urllib.error.html" title="urllib.error --- urllib.request によって送出される例外クラス"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="urllib.request.html" title="urllib.request --- URL を開くための大規模なライブラリ"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="internet.html" accesskey="U">インターネットプロトコルとサポート</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">urllib.parse</span></code> --- URL を構成要素に解析する</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-urllib.parse">
+<span id="urllib-parse-parse-urls-into-components"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">urllib.parse</span></code> --- URL を構成要素に解析する<a class="headerlink" href="#module-urllib.parse" title="Link to this heading">¶</a></h1>
+<p class="translated"><strong>ソースコード:</strong> <a class="extlink-source reference external" href="https://github.com/python/cpython/tree/3.14/Lib/urllib/parse.py">Lib/urllib/parse.py</a></p>
+<hr class="docutils" id="index-0" />
+<p class="translated">このモジュールでは URL (Uniform Resource Locator) 文字列をその構成要素 (アドレススキーム、ネットワーク上の位置、パスその他) に分解したり、構成要素を URL に組みなおしたり、 &quot;相対 URL (relative URL)&quot; を指定した &quot;基底 URL (base URL)&quot; に基づいて絶対 URL に変換するための標準的なインターフェースを定義しています。</p>
+<p class="translated">このモジュールは Relative Uniform Resource Locators (相対 URL) に関するインターネット RFC に適合するよう設計されており、次の URL スキームをサポートしています: <code class="docutils literal notranslate"><span class="pre">file</span></code>, <code class="docutils literal notranslate"><span class="pre">ftp</span></code>, <code class="docutils literal notranslate"><span class="pre">gopher</span></code>, <code class="docutils literal notranslate"><span class="pre">hdl</span></code>, <code class="docutils literal notranslate"><span class="pre">http</span></code>, <code class="docutils literal notranslate"><span class="pre">https</span></code>, <code class="docutils literal notranslate"><span class="pre">imap</span></code>, <code class="docutils literal notranslate"><span class="pre">itms-services</span></code>, <code class="docutils literal notranslate"><span class="pre">mailto</span></code>, <code class="docutils literal notranslate"><span class="pre">mms</span></code>, <code class="docutils literal notranslate"><span class="pre">news</span></code>, <code class="docutils literal notranslate"><span class="pre">nntp</span></code>, <code class="docutils literal notranslate"><span class="pre">prospero</span></code>, <code class="docutils literal notranslate"><span class="pre">rsync</span></code>, <code class="docutils literal notranslate"><span class="pre">rtsp</span></code>, <code class="docutils literal notranslate"><span class="pre">rtsps</span></code>, <code class="docutils literal notranslate"><span class="pre">rtspu</span></code>, <code class="docutils literal notranslate"><span class="pre">sftp</span></code>, <code class="docutils literal notranslate"><span class="pre">shttp</span></code>, <code class="docutils literal notranslate"><span class="pre">sip</span></code>, <code class="docutils literal notranslate"><span class="pre">sips</span></code>, <code class="docutils literal notranslate"><span class="pre">snews</span></code>, <code class="docutils literal notranslate"><span class="pre">svn</span></code>, <code class="docutils literal notranslate"><span class="pre">svn+ssh</span></code>, <code class="docutils literal notranslate"><span class="pre">telnet</span></code>, <code class="docutils literal notranslate"><span class="pre">wais</span></code>, <code class="docutils literal notranslate"><span class="pre">ws</span></code>, <code class="docutils literal notranslate"><span class="pre">wss</span></code></p>
+<div class="impl-detail compound">
+<p class="untranslated"><strong>CPython 実装の詳細:</strong> The inclusion of the <code class="docutils literal notranslate"><span class="pre">itms-services</span></code> URL scheme can prevent an app from
+passing Apple's App Store review process for the macOS and iOS App Stores.
+Handling for the <code class="docutils literal notranslate"><span class="pre">itms-services</span></code> scheme is always removed on iOS; on
+macOS, it <em>may</em> be removed if CPython has been built with the
+<a class="reference internal" href="../using/configure.html#cmdoption-with-app-store-compliance"><code class="xref std std-option docutils literal notranslate"><span class="pre">--with-app-store-compliance</span></code></a> option.</p>
+</div>
+<p class="untranslated">The <code class="xref py py-mod docutils literal notranslate"><span class="pre">urllib.parse</span></code> module defines functions that fall into two broad
+categories: URL parsing and URL quoting. These are covered in detail in
+the following sections.</p>
+<p class="untranslated">This module's functions use the deprecated term <code class="docutils literal notranslate"><span class="pre">netloc</span></code> (or <code class="docutils literal notranslate"><span class="pre">net_loc</span></code>),
+which was introduced in <span class="target" id="index-1"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc1808.html"><strong>RFC 1808</strong></a>. However, this term has been obsoleted by
+<span class="target" id="index-2"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc3986.html"><strong>RFC 3986</strong></a>, which introduced the term <code class="docutils literal notranslate"><span class="pre">authority</span></code> as its replacement.
+The use of <code class="docutils literal notranslate"><span class="pre">netloc</span></code> is continued for backward compatibility.</p>
+<section id="url-parsing">
+<h2 class="translated">URL の解析<a class="headerlink" href="#url-parsing" title="Link to this heading">¶</a></h2>
+<p class="translated">URL 解析関数は、URL 文字列を各構成要素に分割するか、あるいは URL の構成要素を組み合わせて URL 文字列を生成します。</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="urllib.parse.urlsplit">
+<span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">urlsplit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">urlstring</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheme</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_fragments</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.urlsplit" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Parse a URL into five components, returning a 5-item <a class="reference internal" href="../glossary.html#term-named-tuple"><span class="xref std std-term">named tuple</span></a>
+<a class="reference internal" href="#urllib.parse.SplitResult" title="urllib.parse.SplitResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">SplitResult</span></code></a> or <a class="reference internal" href="#urllib.parse.SplitResultBytes" title="urllib.parse.SplitResultBytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">SplitResultBytes</span></code></a>.
+This corresponds to the general structure of a URL:
+<code class="docutils literal notranslate"><span class="pre">scheme://netloc/path?query#fragment</span></code>.
+Each tuple item is a string, possibly empty. The components are not broken up
+into smaller parts (for example, the network location is a single string), and %
+escapes are not expanded. The delimiters as shown above are not part of the
+result, except for a leading slash in the <em>path</em> component, which is retained if
+present.  For example:</p>
+<div class="untranslated highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlsplit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">urlsplit</span><span class="p">(</span><span class="s2">&quot;scheme://netloc/path?query#fragment&quot;</span><span class="p">)</span>
+<span class="go">SplitResult(scheme=&#39;scheme&#39;, netloc=&#39;netloc&#39;, path=&#39;/path&#39;,</span>
+<span class="go">            query=&#39;query&#39;, fragment=&#39;fragment&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o</span> <span class="o">=</span> <span class="n">urlsplit</span><span class="p">(</span><span class="s2">&quot;http://docs.python.org:80/3/library/urllib.parse.html?&quot;</span>
+<span class="gp">... </span>             <span class="s2">&quot;highlight=params#url-parsing&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o</span>
+<span class="go">SplitResult(scheme=&#39;http&#39;, netloc=&#39;docs.python.org:80&#39;,</span>
+<span class="go">            path=&#39;/3/library/urllib.parse.html&#39;,</span>
+<span class="go">            query=&#39;highlight=params&#39;, fragment=&#39;url-parsing&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o</span><span class="o">.</span><span class="n">scheme</span>
+<span class="go">&#39;http&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o</span><span class="o">.</span><span class="n">netloc</span>
+<span class="go">&#39;docs.python.org:80&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o</span><span class="o">.</span><span class="n">hostname</span>
+<span class="go">&#39;docs.python.org&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o</span><span class="o">.</span><span class="n">port</span>
+<span class="go">80</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">o</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span><span class="n">fragment</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">geturl</span><span class="p">()</span>
+<span class="go">&#39;http://docs.python.org:80/3/library/urllib.parse.html?highlight=params&#39;</span>
+</pre></div>
+</div>
+<p class="untranslated">Following the syntax specifications in <span class="target" id="index-3"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc1808.html"><strong>RFC 1808</strong></a>, <code class="xref py py-func docutils literal notranslate"><span class="pre">urlsplit()</span></code> recognizes
+a netloc only if it is properly introduced by '//'.  Otherwise the
+input is presumed to be a relative URL and thus to start with
+a path component.</p>
+<div class="untranslated highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlsplit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">urlsplit</span><span class="p">(</span><span class="s1">&#39;//www.cwi.nl:80/</span><span class="si">%7E</span><span class="s1">guido/Python.html&#39;</span><span class="p">)</span>
+<span class="go">SplitResult(scheme=&#39;&#39;, netloc=&#39;www.cwi.nl:80&#39;, path=&#39;/%7Eguido/Python.html&#39;,</span>
+<span class="go">            query=&#39;&#39;, fragment=&#39;&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">urlsplit</span><span class="p">(</span><span class="s1">&#39;www.cwi.nl/</span><span class="si">%7E</span><span class="s1">guido/Python.html&#39;</span><span class="p">)</span>
+<span class="go">SplitResult(scheme=&#39;&#39;, netloc=&#39;&#39;, path=&#39;www.cwi.nl/%7Eguido/Python.html&#39;,</span>
+<span class="go">            query=&#39;&#39;, fragment=&#39;&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">urlsplit</span><span class="p">(</span><span class="s1">&#39;help/Python.html&#39;</span><span class="p">)</span>
+<span class="go">SplitResult(scheme=&#39;&#39;, netloc=&#39;&#39;, path=&#39;help/Python.html&#39;,</span>
+<span class="go">            query=&#39;&#39;, fragment=&#39;&#39;)</span>
+</pre></div>
+</div>
+<p class="untranslated">The <em>scheme</em> argument gives the default addressing scheme, to be
+used only if the URL does not specify one.  It should be the same type
+(text or bytes) as <em>urlstring</em>, except that the default value <code class="docutils literal notranslate"><span class="pre">''</span></code> is
+always allowed, and is automatically converted to <code class="docutils literal notranslate"><span class="pre">b''</span></code> if appropriate.</p>
+<p class="untranslated">If the <em>allow_fragments</em> argument is false, fragment identifiers are not
+recognized.  Instead, they are parsed as part of the path, parameters
+or query component, and <code class="xref py py-attr docutils literal notranslate"><span class="pre">fragment</span></code> is set to the empty string in
+the return value.</p>
+<p class="translated">戻り値は <a class="reference internal" href="../glossary.html#term-named-tuple"><span class="xref std std-term">名前付きタプル</span></a> です。これは、インデックス指定もしくは以下のような名前属性で要素にアクセスできることを意味します:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p class="translated">属性</p></th>
+<th class="head"><p class="translated">インデックス</p></th>
+<th class="head"><p class="translated">値</p></th>
+<th class="head"><p class="translated">指定されなかった場合の値</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p class="translated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">scheme</span></code></p></td>
+<td><p class="translated">0</p></td>
+<td><p class="translated">URL スキーム</p></td>
+<td><p class="untranslated"><em>scheme</em> parameter</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">netloc</span></code></p></td>
+<td><p class="translated">1</p></td>
+<td><p class="translated">ネットワーク上の位置</p></td>
+<td><p class="translated">空文字列</p></td>
+</tr>
+<tr class="row-even"><td><p class="translated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">path</span></code></p></td>
+<td><p class="translated">2</p></td>
+<td><p class="translated">階層的パス</p></td>
+<td><p class="translated">空文字列</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">query</span></code></p></td>
+<td><p class="translated">3</p></td>
+<td><p class="translated">クエリ要素</p></td>
+<td><p class="translated">空文字列</p></td>
+</tr>
+<tr class="row-even"><td><p class="translated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fragment</span></code></p></td>
+<td><p class="translated">4</p></td>
+<td><p class="translated">フラグメント識別子</p></td>
+<td><p class="translated">空文字列</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">username</span></code></p></td>
+<td></td>
+<td><p class="translated">ユーザ名</p></td>
+<td><p class="untranslated"><a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p class="translated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">password</span></code></p></td>
+<td></td>
+<td><p class="translated">パスワード</p></td>
+<td><p class="untranslated"><a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">hostname</span></code></p></td>
+<td></td>
+<td><p class="translated">ホスト名 (小文字)</p></td>
+<td><p class="untranslated"><a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p class="translated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">port</span></code></p></td>
+<td></td>
+<td><p class="translated">ポート番号を表わす整数 (もしあれば)</p></td>
+<td><p class="untranslated"><a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+<p class="translated">URL中で不正なポートが指定されている場合、 <code class="xref py py-attr docutils literal notranslate"><span class="pre">port</span></code> 属性を読みだすと、<a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> を送出します。結果オブジェクトのより詳しい情報は <a class="reference internal" href="#urlparse-result-object"><span class="std std-ref">構造化された解析結果</span></a> 節を参照してください。</p>
+<p class="translated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">netloc</span></code> 属性にマッチしなかった角括弧があると <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> を送出します。</p>
+<p class="untranslated">Characters in the <code class="xref py py-attr docutils literal notranslate"><span class="pre">netloc</span></code> attribute that decompose under NFKC
+normalization (as used by the IDNA encoding) into any of <code class="docutils literal notranslate"><span class="pre">/</span></code>, <code class="docutils literal notranslate"><span class="pre">?</span></code>,
+<code class="docutils literal notranslate"><span class="pre">#</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;</span></code>, or <code class="docutils literal notranslate"><span class="pre">:</span></code> will raise a <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a>. If the URL is
+decomposed before parsing, no error will be raised.</p>
+<p class="untranslated">Following some of the <a class="reference external" href="https://url.spec.whatwg.org/#concept-basic-url-parser">WHATWG spec</a> that updates <span class="target" id="index-4"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc3986.html"><strong>RFC 3986</strong></a>, leading C0
+control and space characters are stripped from the URL. <code class="docutils literal notranslate"><span class="pre">\n</span></code>,
+<code class="docutils literal notranslate"><span class="pre">\r</span></code> and tab <code class="docutils literal notranslate"><span class="pre">\t</span></code> characters are removed from the URL at any position.</p>
+<p class="untranslated">As is the case with all named tuples, the subclass has a few additional methods
+and attributes that are particularly useful. One such method is <code class="xref py py-meth docutils literal notranslate"><span class="pre">_replace()</span></code>.
+The <code class="xref py py-meth docutils literal notranslate"><span class="pre">_replace()</span></code> method will return a new <a class="reference internal" href="#urllib.parse.SplitResult" title="urllib.parse.SplitResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">SplitResult</span></code></a> object
+replacing specified fields with new values.</p>
+<div class="untranslated highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlsplit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="n">urlsplit</span><span class="p">(</span><span class="s1">&#39;//www.cwi.nl:80/</span><span class="si">%7E</span><span class="s1">guido/Python.html&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span>
+<span class="go">SplitResult(scheme=&#39;&#39;, netloc=&#39;www.cwi.nl:80&#39;, path=&#39;/%7Eguido/Python.html&#39;,</span>
+<span class="go">            query=&#39;&#39;, fragment=&#39;&#39;)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="o">.</span><span class="n">_replace</span><span class="p">(</span><span class="n">scheme</span><span class="o">=</span><span class="s1">&#39;http&#39;</span><span class="p">)</span>
+<span class="go">SplitResult(scheme=&#39;http&#39;, netloc=&#39;www.cwi.nl:80&#39;, path=&#39;/%7Eguido/Python.html&#39;,</span>
+<span class="go">            query=&#39;&#39;, fragment=&#39;&#39;)</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p class="untranslated"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlsplit()</span></code> does not perform validation.  See <a class="reference internal" href="#url-parsing-security"><span class="std std-ref">URL parsing
+security</span></a> for details.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span>IPv6 URL の解析も行えるようになりました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span>The fragment is now parsed for all URL schemes (unless <em>allow_fragments</em> is
+false), in accordance with <span class="target" id="index-5"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc3986.html"><strong>RFC 3986</strong></a>.  Previously, an allowlist of
+schemes that support fragments existed.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.6 で変更: </span>Out-of-range port numbers now raise <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a>, instead of
+returning <a class="reference internal" href="constants.html#None" title="None"><code class="xref py py-const docutils literal notranslate"><span class="pre">None</span></code></a>.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.8 で変更: </span>Characters that affect netloc parsing under NFKC normalization will
+now raise <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a>.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.10 で変更: </span>ASCII newline and tab characters are stripped from the URL.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.12 で変更: </span>Leading WHATWG C0 control and space characters are stripped from the URL.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urllib.parse.parse_qs">
+<span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">parse_qs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_blank_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_parsing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'replace'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&amp;'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.parse_qs" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">文字列引数として渡されたクエリ文字列  (<em class="mimetype">application/x-www-form-urlencoded</em> 型のデータ) を解析します。解析されたデータを辞書として返します。辞書のキーは一意なクエリ変数名で、値は各変数名に対する値からなるリストです。</p>
+<p class="translated">任意の引数 <em>keep_blank_values</em> は、パーセントエンコードされたクエリの中の値が入っていないクエリの値を空白文字列と見なすかどうかを示すフラグです。値が真であれば、値の入っていないフィールドは空文字列のままになります。標準では偽で、値の入っていないフィールドを無視し、そのフィールドはクエリに含まれていないものとして扱います。</p>
+<p class="translated">任意の引数 <em>strict_parsing</em> はパース時のエラーをどう扱うかを決めるフラグです。値が偽なら (デフォルトの設定です)、エラーは暗黙のうちに無視します。値が真なら <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> 例外を送出します。</p>
+<p class="translated">任意のパラメータ <em>encoding</em> および <em>errors</em> はパーセントエンコードされたシーケンスを Unicode 文字にデコードする方法を指定します。これは <a class="reference internal" href="stdtypes.html#bytes.decode" title="bytes.decode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">bytes.decode()</span></code></a> メソッドに渡されます。</p>
+<p class="untranslated">The optional argument <em>max_num_fields</em> is the maximum number of fields to
+read. If set, then throws a <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> if there are more than
+<em>max_num_fields</em> fields read.</p>
+<p class="untranslated">The optional argument <em>separator</em> is the symbol to use for separating the
+query arguments. It defaults to <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>.</p>
+<p class="translated">このような辞書をクエリ文字列に変換するには <a class="reference internal" href="#urllib.parse.urlencode" title="urllib.parse.urlencode"><code class="xref py py-func docutils literal notranslate"><span class="pre">urllib.parse.urlencode()</span></code></a> 関数を (<code class="docutils literal notranslate"><span class="pre">doseq</span></code> パラメータに <code class="docutils literal notranslate"><span class="pre">True</span></code> を指定して) 使用します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span><em>encoding</em> および <em>errors</em> パラメータが追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.8 で変更: </span><em>max_num_fields</em> パラメータが追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.10 で変更: </span>Added <em>separator</em> parameter with the default value of <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>. Python
+versions earlier than Python 3.10 allowed using both <code class="docutils literal notranslate"><span class="pre">;</span></code> and <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> as
+query parameter separator. This has been changed to allow only a single
+separator key, with <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> as the default separator.</p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">バージョン 3.14 で非推奨: </span>Accepting objects with false values (like <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">[]</span></code>) except empty
+strings and byte-like objects and <code class="docutils literal notranslate"><span class="pre">None</span></code> is now deprecated.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urllib.parse.parse_qsl">
+<span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">parse_qsl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">qs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_blank_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict_parsing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'replace'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_num_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'&amp;'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.parse_qsl" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">文字列引数として渡されたクエリ文字列 (<em class="mimetype">application/x-www-form-urlencoded</em> 型のデータ) を解析します。解析されたデータは名前と値のペアからなるリストです。</p>
+<p class="translated">任意の引数 <em>keep_blank_values</em> は、パーセントエンコードされたクエリの中の値が入っていないクエリの値を空白文字列と見なすかどうかを示すフラグです。値が真であれば、値の入っていないフィールドは空文字列のままになります。標準では偽で、値の入っていないフィールドを無視し、そのフィールドはクエリに含まれていないものとして扱います。</p>
+<p class="translated">任意の引数 <em>strict_parsing</em> はパース時のエラーをどう扱うかを決めるフラグです。値が偽なら (デフォルトの設定です)、エラーは暗黙のうちに無視します。値が真なら <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> 例外を送出します。</p>
+<p class="translated">任意のパラメータ <em>encoding</em> および <em>errors</em> はパーセントエンコードされたシーケンスを Unicode 文字にデコードする方法を指定します。これは <a class="reference internal" href="stdtypes.html#bytes.decode" title="bytes.decode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">bytes.decode()</span></code></a> メソッドに渡されます。</p>
+<p class="untranslated">The optional argument <em>max_num_fields</em> is the maximum number of fields to
+read. If set, then throws a <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> if there are more than
+<em>max_num_fields</em> fields read.</p>
+<p class="untranslated">The optional argument <em>separator</em> is the symbol to use for separating the
+query arguments. It defaults to <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>.</p>
+<p class="translated">ペアのリストからクエリ文字列を生成する場合には <a class="reference internal" href="#urllib.parse.urlencode" title="urllib.parse.urlencode"><code class="xref py py-func docutils literal notranslate"><span class="pre">urllib.parse.urlencode()</span></code></a> 関数を使用します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span><em>encoding</em> および <em>errors</em> パラメータが追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.8 で変更: </span><em>max_num_fields</em> パラメータが追加されました。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.10 で変更: </span>Added <em>separator</em> parameter with the default value of <code class="docutils literal notranslate"><span class="pre">&amp;</span></code>. Python
+versions earlier than Python 3.10 allowed using both <code class="docutils literal notranslate"><span class="pre">;</span></code> and <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> as
+query parameter separator. This has been changed to allow only a single
+separator key, with <code class="docutils literal notranslate"><span class="pre">&amp;</span></code> as the default separator.</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urllib.parse.urlunsplit">
+<span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">urlunsplit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.urlunsplit" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Construct a URL from a tuple as returned by <code class="docutils literal notranslate"><span class="pre">urlsplit()</span></code>. The <em>parts</em>
+argument can be any five-item iterable. This may result in a slightly
+different, but equivalent URL, if the URL that was parsed originally had
+unnecessary delimiters (for example, a <code class="docutils literal notranslate"><span class="pre">?</span></code> with an empty query; the RFC
+states that these are equivalent).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urllib.parse.urlparse">
+<span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">urlparse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">urlstring</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheme</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_fragments</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.urlparse" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">This is similar to <a class="reference internal" href="#urllib.parse.urlsplit" title="urllib.parse.urlsplit"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlsplit()</span></code></a>, but additionally splits the <em>path</em>
+component on <em>path</em> and <em>params</em>.
+This function returns a 6-item <a class="reference internal" href="../glossary.html#term-named-tuple"><span class="xref std std-term">named tuple</span></a> <a class="reference internal" href="#urllib.parse.ParseResult" title="urllib.parse.ParseResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParseResult</span></code></a>
+or <a class="reference internal" href="#urllib.parse.ParseResultBytes" title="urllib.parse.ParseResultBytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParseResultBytes</span></code></a>.
+Its items are the same as for the <code class="xref py py-func docutils literal notranslate"><span class="pre">urlsplit()</span></code> result, except that
+<em>params</em> is inserted at index 3, between <em>path</em> and <em>query</em>.</p>
+<p class="untranslated">This function is based on obsoleted <span class="target" id="index-6"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc1738.html"><strong>RFC 1738</strong></a> and <span class="target" id="index-7"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc1808.html"><strong>RFC 1808</strong></a>, which
+listed <em>params</em> as the main URL component.
+The more recent URL syntax allows parameters to be applied to each segment
+of the <em>path</em> portion of the URL (see <span class="target" id="index-8"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc3986.html"><strong>RFC 3986</strong></a>).
+<a class="reference internal" href="#urllib.parse.urlsplit" title="urllib.parse.urlsplit"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlsplit()</span></code></a> should generally be used instead of <code class="xref py py-func docutils literal notranslate"><span class="pre">urlparse()</span></code>.
+A separate function is needed to separate the path segments and parameters.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urllib.parse.urlunparse">
+<span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">urlunparse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parts</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.urlunparse" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Combine the elements of a tuple as returned by <a class="reference internal" href="#urllib.parse.urlparse" title="urllib.parse.urlparse"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlparse()</span></code></a> into a
+complete URL as a string. The <em>parts</em> argument can be any six-item
+iterable. This may result in a slightly different, but equivalent URL, if the
+URL that was parsed originally had unnecessary delimiters (for example, a ?
+with an empty query; the RFC states that these are equivalent).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urllib.parse.urljoin">
+<span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">urljoin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_fragments</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.urljoin" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">&quot;基底 URL&quot;(<em>base</em>)と別のURL(<em>url</em>)を組み合わせて、完全な URL (&quot;絶対 URL&quot;) を構成します。くだけて言えば、この関数は相対 URL にない要素を提供するために基底 URL の要素、特にアドレススキーム、ネットワーク上の位置、およびパス (の一部) を使います。例えば:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urljoin</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">urljoin</span><span class="p">(</span><span class="s1">&#39;http://www.cwi.nl/</span><span class="si">%7E</span><span class="s1">guido/Python.html&#39;</span><span class="p">,</span> <span class="s1">&#39;FAQ.html&#39;</span><span class="p">)</span>
+<span class="go">&#39;http://www.cwi.nl/%7Eguido/FAQ.html&#39;</span>
+</pre></div>
+</div>
+<p class="untranslated">The <em>allow_fragments</em> argument has the same meaning and default as for
+<a class="reference internal" href="#urllib.parse.urlsplit" title="urllib.parse.urlsplit"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlsplit()</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">注釈</p>
+<p class="translated"><em>url</em> が (<code class="docutils literal notranslate"><span class="pre">//</span></code> か <code class="docutils literal notranslate"><span class="pre">scheme://</span></code> で始まる) 絶対URLであれば、その <em>url</em> のホスト名と / もしくは scheme は結果に反映されます。例えば:</p>
+<div class="translated highlight-pycon notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">urljoin</span><span class="p">(</span><span class="s1">&#39;http://www.cwi.nl/</span><span class="si">%7E</span><span class="s1">guido/Python.html&#39;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s1">&#39;//www.python.org/</span><span class="si">%7E</span><span class="s1">guido&#39;</span><span class="p">)</span>
+<span class="go">&#39;http://www.python.org/%7Eguido&#39;</span>
+</pre></div>
+</div>
+<p class="translated">もしこの動作が望みのものでない場合は、 <em>url</em> を <a class="reference internal" href="#urllib.parse.urlsplit" title="urllib.parse.urlsplit"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlsplit()</span></code></a> と <a class="reference internal" href="#urllib.parse.urlunsplit" title="urllib.parse.urlunsplit"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlunsplit()</span></code></a> で先に処理して、 <em>scheme</em> と <em>netloc</em> を削除してください。</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p class="untranslated">Because an absolute URL may be passed as the <code class="docutils literal notranslate"><span class="pre">url</span></code> parameter, it is
+generally <strong>not secure</strong> to use <code class="docutils literal notranslate"><span class="pre">urljoin</span></code> with an attacker-controlled
+<code class="docutils literal notranslate"><span class="pre">url</span></code>. For example in,
+<code class="docutils literal notranslate"><span class="pre">urljoin(&quot;https://website.com/users/&quot;,</span> <span class="pre">username)</span></code>, if <code class="docutils literal notranslate"><span class="pre">username</span></code> can
+contain an absolute URL, the result of <code class="docutils literal notranslate"><span class="pre">urljoin</span></code> will be the absolute
+URL.</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span><span class="target" id="index-20"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc3986.html"><strong>RFC 3986</strong></a> で定義された意味論とマッチするように挙動がアップデートされました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urllib.parse.urldefrag">
+<span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">urldefrag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.urldefrag" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">If <em>url</em> contains a fragment identifier, return a modified version of <em>url</em>
+with no fragment identifier, and the fragment identifier as a separate
+string.  If there is no fragment identifier in <em>url</em>, return <em>url</em> unmodified
+and an empty string.</p>
+<p class="translated">戻り値は <a class="reference internal" href="../glossary.html#term-named-tuple"><span class="xref std std-term">名前付きタプル</span></a> で、インデックスによってもしくは名前属性として要素にアクセスできます:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p class="translated">属性</p></th>
+<th class="head"><p class="translated">インデックス</p></th>
+<th class="head"><p class="translated">値</p></th>
+<th class="head"><p class="translated">指定されなかった場合の値</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p class="translated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">url</span></code></p></td>
+<td><p class="translated">0</p></td>
+<td><p class="translated">フラグメントのない URL</p></td>
+<td><p class="translated">空文字列</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fragment</span></code></p></td>
+<td><p class="translated">1</p></td>
+<td><p class="translated">フラグメント識別子</p></td>
+<td><p class="translated">空文字列</p></td>
+</tr>
+</tbody>
+</table>
+<p class="translated">結果オブジェクトのより詳しい情報は <a class="reference internal" href="#urlparse-result-object"><span class="std std-ref">構造化された解析結果</span></a> 節を参照してください。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span>結果はシンプルな 2 要素のタプルから構造化オブジェクトに変更されました。</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urllib.parse.unwrap">
+<span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">unwrap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.unwrap" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Extract the url from a wrapped URL (that is, a string formatted as
+<code class="docutils literal notranslate"><span class="pre">&lt;URL:scheme://host/path&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;scheme://host/path&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">URL:scheme://host/path</span></code>
+or <code class="docutils literal notranslate"><span class="pre">scheme://host/path</span></code>). If <em>url</em> is not a wrapped URL, it is returned
+without changes.</p>
+</dd></dl>
+
+</section>
+<section id="url-parsing-security">
+<span id="id1"></span><h2 class="untranslated">URL parsing security<a class="headerlink" href="#url-parsing-security" title="Link to this heading">¶</a></h2>
+<p class="untranslated">The <a class="reference internal" href="#urllib.parse.urlsplit" title="urllib.parse.urlsplit"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlsplit()</span></code></a> and <a class="reference internal" href="#urllib.parse.urlparse" title="urllib.parse.urlparse"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlparse()</span></code></a> APIs do not perform <strong>validation</strong> of
+inputs.  They may not raise errors on inputs that other applications consider
+invalid.  They may also succeed on some inputs that might not be considered
+URLs elsewhere.  Their purpose is for practical functionality rather than
+purity.</p>
+<p class="untranslated">Instead of raising an exception on unusual input, they may instead return some
+component parts as empty strings. Or components may contain more than perhaps
+they should.</p>
+<p class="untranslated">We recommend that users of these APIs where the values may be used anywhere
+with security implications code defensively. Do some verification within your
+code before trusting a returned component part.  Does that <code class="docutils literal notranslate"><span class="pre">scheme</span></code> make
+sense?  Is that a sensible <code class="docutils literal notranslate"><span class="pre">path</span></code>?  Is there anything strange about that
+<code class="docutils literal notranslate"><span class="pre">hostname</span></code>?  etc.</p>
+<p class="untranslated">What constitutes a URL is not universally well defined.  Different applications
+have different needs and desired constraints.  For instance the living <a class="reference external" href="https://url.spec.whatwg.org/#concept-basic-url-parser">WHATWG
+spec</a> describes what user facing web clients such as a web browser require.
+While <span class="target" id="index-10"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc3986.html"><strong>RFC 3986</strong></a> is more general.  These functions incorporate some aspects of
+both, but cannot be claimed compliant with either.  The APIs and existing user
+code with expectations on specific behaviors predate both standards leading us
+to be very cautious about making API behavior changes.</p>
+</section>
+<section id="parsing-ascii-encoded-bytes">
+<span id="id2"></span><h2 class="translated">ASCII エンコードバイト列の解析<a class="headerlink" href="#parsing-ascii-encoded-bytes" title="Link to this heading">¶</a></h2>
+<p class="translated">URL を解析する関数は元々文字列のみ操作するよう設計されていました。実際のところ、それは URL が正しくクオートされエンコードされた ASCII バイト列を操作できた方が有用でした。結果的にこのモジュールの URL 解析関数はすべて <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> および <a class="reference internal" href="stdtypes.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytearray</span></code></a> オブジェクトに加えて <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> オブジェクトでも処理するようになりました。</p>
+<p class="translated"><a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> データが渡された場合、戻り値は <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> データのみを含んだものになります。<a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> あるいは <a class="reference internal" href="stdtypes.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytearray</span></code></a> が渡された場合、戻り値は <code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code> データのみを含んだものになります。</p>
+<p class="translated">単一の関数を呼び出す時に <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> または <a class="reference internal" href="stdtypes.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytearray</span></code></a> が混在した <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> を渡した場合、<a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> が、非 ASCII バイト値が渡された場合 <a class="reference internal" href="exceptions.html#UnicodeDecodeError" title="UnicodeDecodeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">UnicodeDecodeError</span></code></a> が送出されます。</p>
+<p class="translated"><a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> と <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> 間で容易に変換を行えるよう、すべての URL 解析関数は <code class="xref py py-meth docutils literal notranslate"><span class="pre">encode()</span></code> メソッド (結果に <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> データが含まれる時用) か <code class="xref py py-meth docutils literal notranslate"><span class="pre">decode()</span></code> メソッド (結果に <code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code> データが含まれる時用) のどちらかを提供しています。これらメソッドの動作は対応する <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> と <code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code> メソッドが持つものと同じです (ただしデフォルトのエンコーディングは <code class="docutils literal notranslate"><span class="pre">'utf-8'</span></code> ではなく <code class="docutils literal notranslate"><span class="pre">'ascii'</span></code> になります)。それぞれは <code class="xref py py-meth docutils literal notranslate"><span class="pre">encode()</span></code> メソッドを持つ <code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code> データか <code class="xref py py-meth docutils literal notranslate"><span class="pre">decode()</span></code> メソッドを持つ <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code> データのどちらかに対応した型を生成します。</p>
+<p class="translated">非 ASCII データを含むなど、不適切にクオートされた URL を操作する可能性のあるアプリケーションでは、URL 解析メソッドを呼び出す前に独自にバイト列から文字列にデコードする必要があります。</p>
+<p class="translated">この項で説明された挙動は URL 解析関数にのみ該当します。URL クオート関数でバイトシーケンスを生成もしくは消化する際には、別にURL クオート関数の項で詳説されている通りのルールに従います。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span>URL 解析関数は ASCII エンコードバイトシーケンスも受け付けるようになりました</p>
+</div>
+</section>
+<section id="structured-parse-results">
+<span id="urlparse-result-object"></span><h2 class="translated">構造化された解析結果<a class="headerlink" href="#structured-parse-results" title="Link to this heading">¶</a></h2>
+<p class="untranslated">The result objects from the <a class="reference internal" href="#urllib.parse.urlsplit" title="urllib.parse.urlsplit"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlsplit()</span></code></a>, <a class="reference internal" href="#urllib.parse.urlparse" title="urllib.parse.urlparse"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlparse()</span></code></a>  and
+<a class="reference internal" href="#urllib.parse.urldefrag" title="urllib.parse.urldefrag"><code class="xref py py-func docutils literal notranslate"><span class="pre">urldefrag()</span></code></a> functions are subclasses of the <a class="reference internal" href="stdtypes.html#tuple" title="tuple"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a> type.
+These subclasses add the attributes listed in the documentation for
+those functions, the encoding and decoding support described in the
+previous section, as well as an additional method:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="urllib.parse.urllib.parse.SplitResult.geturl">
+<span class="sig-prename descclassname"><span class="pre">urllib.parse.SplitResult.</span></span><span class="sig-name descname"><span class="pre">geturl</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.urllib.parse.SplitResult.geturl" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Return the re-combined version of the original URL as a string. This may
+differ from the original URL in that the scheme may be normalized to lower
+case and empty components may be dropped. Specifically, empty parameters,
+queries, and fragment identifiers will be removed.</p>
+<p class="translated"><a class="reference internal" href="#urllib.parse.urldefrag" title="urllib.parse.urldefrag"><code class="xref py py-func docutils literal notranslate"><span class="pre">urldefrag()</span></code></a> の戻り値では、空のフラグメント識別子のみ削除されます。<a class="reference internal" href="#urllib.parse.urlsplit" title="urllib.parse.urlsplit"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlsplit()</span></code></a> および <a class="reference internal" href="#urllib.parse.urlparse" title="urllib.parse.urlparse"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlparse()</span></code></a> の戻り値では、このメソッドが返す URL には説明されているすべての変更が加えられます。</p>
+<p class="translated">加えた解析関数を逆に行えばこのメソッドの戻り値は元の URL になります:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlsplit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;HTTP://www.Python.org/doc/#&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r1</span> <span class="o">=</span> <span class="n">urlsplit</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r1</span><span class="o">.</span><span class="n">geturl</span><span class="p">()</span>
+<span class="go">&#39;http://www.Python.org/doc/&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r2</span> <span class="o">=</span> <span class="n">urlsplit</span><span class="p">(</span><span class="n">r1</span><span class="o">.</span><span class="n">geturl</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r2</span><span class="o">.</span><span class="n">geturl</span><span class="p">()</span>
+<span class="go">&#39;http://www.Python.org/doc/&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p class="translated">以下のクラスは <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> オブジェクトを操作した場合、構造化された解析結果の実装を提供します:</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="urllib.parse.DefragResult">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">DefragResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragment</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.DefragResult" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#urllib.parse.urldefrag" title="urllib.parse.urldefrag"><code class="xref py py-func docutils literal notranslate"><span class="pre">urldefrag()</span></code></a> の具象クラスの結果には <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> データが含まれます。<code class="xref py py-meth docutils literal notranslate"><span class="pre">encode()</span></code> メソッドは <a class="reference internal" href="#urllib.parse.DefragResultBytes" title="urllib.parse.DefragResultBytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">DefragResultBytes</span></code></a> インスタンスを返します。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="urllib.parse.ParseResult">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">ParseResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">netloc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragment</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.ParseResult" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#urllib.parse.urlparse" title="urllib.parse.urlparse"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlparse()</span></code></a> の具象クラスの結果には <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> データが含まれます。<code class="xref py py-meth docutils literal notranslate"><span class="pre">encode()</span></code> メソッドは <a class="reference internal" href="#urllib.parse.ParseResultBytes" title="urllib.parse.ParseResultBytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParseResultBytes</span></code></a> インスタンスを返します。</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="urllib.parse.SplitResult">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">SplitResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">netloc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragment</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.SplitResult" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#urllib.parse.urlsplit" title="urllib.parse.urlsplit"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlsplit()</span></code></a> の具象クラスの結果には <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> データが含まれます。<code class="xref py py-meth docutils literal notranslate"><span class="pre">encode()</span></code> メソッドは <a class="reference internal" href="#urllib.parse.SplitResultBytes" title="urllib.parse.SplitResultBytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">SplitResultBytes</span></code></a> インスタンスを返します。</p>
+</dd></dl>
+
+<p class="translated">以下のクラスは <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> または <a class="reference internal" href="stdtypes.html#bytearray" title="bytearray"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytearray</span></code></a> オブジェクトを操作した時に解析結果の実装を提供します:</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="urllib.parse.DefragResultBytes">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">DefragResultBytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragment</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.DefragResultBytes" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#urllib.parse.urldefrag" title="urllib.parse.urldefrag"><code class="xref py py-func docutils literal notranslate"><span class="pre">urldefrag()</span></code></a> の具象クラスの結果には <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> データが含まれます。<code class="xref py py-meth docutils literal notranslate"><span class="pre">decode()</span></code> メソッドは <a class="reference internal" href="#urllib.parse.DefragResult" title="urllib.parse.DefragResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">DefragResult</span></code></a> インスタンスを返します。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="urllib.parse.ParseResultBytes">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">ParseResultBytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">netloc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragment</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.ParseResultBytes" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#urllib.parse.urlparse" title="urllib.parse.urlparse"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlparse()</span></code></a> の具象クラスの結果には <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> が含まれます。<code class="xref py py-meth docutils literal notranslate"><span class="pre">decode()</span></code> メソッドは <a class="reference internal" href="#urllib.parse.ParseResult" title="urllib.parse.ParseResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParseResult</span></code></a> インスタンスを返します。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="urllib.parse.SplitResultBytes">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">SplitResultBytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">netloc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fragment</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.SplitResultBytes" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#urllib.parse.urlsplit" title="urllib.parse.urlsplit"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlsplit()</span></code></a> の具象クラスの結果には <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> データが含まれます。<code class="xref py py-meth docutils literal notranslate"><span class="pre">decode()</span></code> メソッドは <a class="reference internal" href="#urllib.parse.SplitResult" title="urllib.parse.SplitResult"><code class="xref py py-class docutils literal notranslate"><span class="pre">SplitResult</span></code></a> インスタンスを返します。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+</dd></dl>
+
+</section>
+<section id="url-quoting">
+<h2 class="translated">URL のクオート<a class="headerlink" href="#url-quoting" title="Link to this heading">¶</a></h2>
+<p class="translated">URL クオート関数は、プログラムデータを取り URL 構成要素として使用できるよう特殊文字をクオートしたり非 ASCII 文字を適切にエンコードすることに焦点を当てています。これらは上述の URL 解析関数でカバーされていない URL 構成要素からオリジナルデータの再作成もサポートしています。</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="urllib.parse.quote">
+<span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">quote</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">safe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.quote" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>string</em> 内の特殊文字を <code class="samp docutils literal notranslate"><span class="pre">%</span><em><span class="pre">xx</span></em></code> を使用してエスケープします。文字、数字、および <code class="docutils literal notranslate"><span class="pre">'_.-~'</span></code> はクオートされません。デフォルトでは、この関数は URL のパス部分のクオートのために用意されています。任意のパラメータ <em>safe</em> を指定すると、指定した ASCII 文字もクオートされません。デフォルトは <code class="docutils literal notranslate"><span class="pre">'/'</span></code> です。</p>
+<p class="translated"><em>string</em> に使用できるのは <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> か <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> オブジェクトです。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.7 で変更: </span>Moved from <span class="target" id="index-11"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc2396.html"><strong>RFC 2396</strong></a> to <span class="target" id="index-12"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc3986.html"><strong>RFC 3986</strong></a> for quoting URL strings. &quot;~&quot; is now
+included in the set of unreserved characters.</p>
+</div>
+<p class="translated">任意のパラメータ <em>encoding</em> と <em>errors</em> は <a class="reference internal" href="stdtypes.html#str.encode" title="str.encode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">str.encode()</span></code></a> で受け付けられる非 ASCII 文字への対処法を指定します。<em>encoding</em> のデフォルトは <code class="docutils literal notranslate"><span class="pre">'utf-8'</span></code>、<em>errors</em> のデフォルトは <code class="docutils literal notranslate"><span class="pre">'strict'</span></code> で、非サポート文字があると <a class="reference internal" href="exceptions.html#UnicodeEncodeError" title="UnicodeEncodeError"><code class="xref py py-class docutils literal notranslate"><span class="pre">UnicodeEncodeError</span></code></a> を送出します。<em>string</em> が <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> の場合 <em>encoding</em> と <em>errors</em> を指定してはいけません。指定すると <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-class docutils literal notranslate"><span class="pre">TypeError</span></code></a> が送出されます。</p>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">quote(string,</span> <span class="pre">safe,</span> <span class="pre">encoding,</span> <span class="pre">errors)</span></code> は <code class="docutils literal notranslate"><span class="pre">quote_from_bytes(string.encode(encoding,</span> <span class="pre">errors),</span> <span class="pre">safe)</span></code> と等価であることに留意してください。</p>
+<p class="translated">例: <code class="docutils literal notranslate"><span class="pre">quote('/El</span> <span class="pre">Niño/')</span></code> は <code class="docutils literal notranslate"><span class="pre">'/El%20Ni%C3%B1o/'</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urllib.parse.quote_plus">
+<span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">quote_plus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">safe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.quote_plus" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Like <a class="reference internal" href="#urllib.parse.quote" title="urllib.parse.quote"><code class="xref py py-func docutils literal notranslate"><span class="pre">quote()</span></code></a>, but also replace spaces with plus signs, as required for
+quoting HTML form values when building up a query string to go into a URL.
+Plus signs in the original string are escaped unless they are included in
+<em>safe</em>.  It also does not have <em>safe</em> default to <code class="docutils literal notranslate"><span class="pre">'/'</span></code>.</p>
+<p class="translated">例: <code class="docutils literal notranslate"><span class="pre">quote_plus('/El</span> <span class="pre">Niño/')</span></code> は <code class="docutils literal notranslate"><span class="pre">'%2FEl+Ni%C3%B1o%2F'</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urllib.parse.quote_from_bytes">
+<span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">quote_from_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bytes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">safe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.quote_from_bytes" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#urllib.parse.quote" title="urllib.parse.quote"><code class="xref py py-func docutils literal notranslate"><span class="pre">quote()</span></code></a> と似ていますが、<a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> ではなく <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> オブジェクトを取り、文字列からバイト列へのエンコードを行いません。</p>
+<p class="translated">例: <code class="docutils literal notranslate"><span class="pre">quote_from_bytes(b'a&amp;\xef')</span></code> は <code class="docutils literal notranslate"><span class="pre">'a%26%EF'</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urllib.parse.unquote">
+<span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">unquote</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'replace'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.unquote" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">エスケープされた <code class="samp docutils literal notranslate"><span class="pre">%</span><em><span class="pre">xx</span></em></code> をそれに対応した単一文字に置き換えます。オプション引数の <em>encoding</em> と <em>errors</em> は <a class="reference internal" href="stdtypes.html#bytes.decode" title="bytes.decode"><code class="xref py py-meth docutils literal notranslate"><span class="pre">bytes.decode()</span></code></a> メソッドで受け付けられるパーセントエンコードされたシーケンスから Unicode 文字へのデコード法を指定します。</p>
+<p class="translated"><em>string</em> に使用できるのは <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> か <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> オブジェクトです。</p>
+<p class="translated"><em>encoding</em> のデフォルトは <code class="docutils literal notranslate"><span class="pre">'utf-8'</span></code>、<em>errors</em> のデフォルトは <code class="docutils literal notranslate"><span class="pre">'replace'</span></code> で、不正なシーケンスはプレースホルダー文字に置き換えられます。</p>
+<p class="translated">例: <code class="docutils literal notranslate"><span class="pre">unquote('/El%20Ni%C3%B1o/')</span></code> は <code class="docutils literal notranslate"><span class="pre">'/El</span> <span class="pre">Niño/'</span></code> を返します。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.9 で変更: </span><em>string</em> parameter supports bytes and str objects (previously only str).</p>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urllib.parse.unquote_plus">
+<span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">unquote_plus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'utf-8'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'replace'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.unquote_plus" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#urllib.parse.unquote" title="urllib.parse.unquote"><code class="xref py py-func docutils literal notranslate"><span class="pre">unquote()</span></code></a> と似ていますが、HTML フォームの値のアンクオートのために「+」を空白に置き換えます。</p>
+<p class="translated"><em>string</em> は <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> でなければなりません。</p>
+<p class="translated">例: <code class="docutils literal notranslate"><span class="pre">unquote_plus('/El+Ni%C3%B1o/')</span></code> は <code class="docutils literal notranslate"><span class="pre">'/El</span> <span class="pre">Niño/'</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urllib.parse.unquote_to_bytes">
+<span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">unquote_to_bytes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">string</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.unquote_to_bytes" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">スケープされた <code class="samp docutils literal notranslate"><span class="pre">%</span><em><span class="pre">xx</span></em></code> をそれに対応した 1 オクテットに置き換え、<a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> オブジェクトを返します。</p>
+<p class="translated"><em>string</em> に使用できるのは <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> か <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> オブジェクトです。</p>
+<p class="translated"><a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> だった場合、<em>string</em> 内のエスケープされていない非 ASCII 文字は UTF-8 バイト列にエンコードされます。</p>
+<p class="translated">例: <code class="docutils literal notranslate"><span class="pre">unquote_to_bytes('a%26%EF')</span></code> は <code class="docutils literal notranslate"><span class="pre">b'a&amp;\xef'</span></code> を返します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="urllib.parse.urlencode">
+<span class="sig-prename descclassname"><span class="pre">urllib.parse.</span></span><span class="sig-name descname"><span class="pre">urlencode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">doseq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">safe</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">encoding</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">errors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quote_via</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">quote_plus</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#urllib.parse.urlencode" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">マッピング型オブジェクトまたは 2 個の要素からなるタプルのシーケンス (<a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> か <a class="reference internal" href="stdtypes.html#bytes" title="bytes"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a> オブジェクトが含まれているかもしれません) を、パーセントエンコードされた ASCII 文字列に変換します。戻り値の文字列が <a class="reference internal" href="urllib.request.html#urllib.request.urlopen" title="urllib.request.urlopen"><code class="xref py py-func docutils literal notranslate"><span class="pre">urlopen()</span></code></a> 関数での POST 操作の <em>data</em> で使用される場合はバイト列にエンコードしなければなりません。そうでない場合は <a class="reference internal" href="exceptions.html#TypeError" title="TypeError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">TypeError</span></code></a> が送出されます。</p>
+<p class="translated">戻り値は <code class="docutils literal notranslate"><span class="pre">'&amp;'</span></code> 文字で区切られた <code class="docutils literal notranslate"><span class="pre">key=value</span></code> のペアからなる一組の文字列になります。 <em>key</em> と <em>value</em> は <em>quote_via</em> を使用してクオートされます。デフォルトで、値をクォートするために <a class="reference internal" href="#urllib.parse.quote_plus" title="urllib.parse.quote_plus"><code class="xref py py-func docutils literal notranslate"><span class="pre">quote_plus()</span></code></a> が使用されます。つまり、スペースは <code class="docutils literal notranslate"><span class="pre">'+'</span></code> 文字に、 '/' 文字は <code class="docutils literal notranslate"><span class="pre">%2F</span></code> にクォートされます。これは GET リクエストの標準に準拠します (<code class="docutils literal notranslate"><span class="pre">application/x-www-form-urlencoded</span></code>)。 <em>quote_via</em> として渡すことができる別の関数は <a class="reference internal" href="#urllib.parse.quote" title="urllib.parse.quote"><code class="xref py py-func docutils literal notranslate"><span class="pre">quote()</span></code></a> です。それはスペースを <code class="docutils literal notranslate"><span class="pre">%20</span></code> にエンコードし、 '/' をエンコードしません。何がクォートされるかを最大限コントロールしたければ、 <code class="docutils literal notranslate"><span class="pre">quote</span></code> を使って <em>safe</em> に値を指定してください。</p>
+<p class="translated">引数 <em>query</em> が 2 要素のタプルのシーケンスの場合、各タプルの第一要素はキーに、第二要素は値になります。
+値となる要素はシーケンスを取ることもでき、この場合、オプションのパラメーター <em>doseq</em> が <code class="docutils literal notranslate"><span class="pre">True</span></code> と評価されるのであれば、キーに対し値シーケンスの各要素を個別に結び付けた <code class="docutils literal notranslate"><span class="pre">key=value</span></code> のペアを、 <code class="docutils literal notranslate"><span class="pre">'&amp;'</span></code> 文字でつないだものを生成します。
+エンコードされた文字列内のパラメーターの順序はシーケンス内のパラメータータプルの順序と一致します。</p>
+<p class="translated"><em>safe</em>, <em>encoding</em>, および <em>errors</em> パラメータは <em>quote_via</em> にそのまま渡されます (クエリ要素が <a class="reference internal" href="stdtypes.html#str" title="str"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a> の場合は、 <em>encoding</em> と <em>errors</em> パラメータだけが渡されます)。</p>
+<p class="translated">このエンコード処理の逆を行うには、このモジュールで提供されている <a class="reference internal" href="#urllib.parse.parse_qs" title="urllib.parse.parse_qs"><code class="xref py py-func docutils literal notranslate"><span class="pre">parse_qs()</span></code></a> と <a class="reference internal" href="#urllib.parse.parse_qsl" title="urllib.parse.parse_qsl"><code class="xref py py-func docutils literal notranslate"><span class="pre">parse_qsl()</span></code></a> を使用して、クエリ文字列を Python データ構造に変換できます。</p>
+<p class="translated">POST リクエストのデータ、あるいは URL クエリ文字列を生成するために、 <a class="reference internal" href="#urllib.parse.urlencode" title="urllib.parse.urlencode"><code class="xref py py-func docutils literal notranslate"><span class="pre">urllib.parse.urlencode()</span></code></a> メソッドをどのように使えばよいかを見るには、<a class="reference internal" href="urllib.request.html#urllib-examples"><span class="std std-ref">urllib の使用例</span></a> を参照してください。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.2 で変更: </span><em>query</em> はバイト列と文字列オブジェクトをサポートします。</p>
+</div>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.5 で変更: </span><em>quote_via</em> パラメータが追加されました。</p>
+</div>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">バージョン 3.14 で非推奨: </span>Accepting objects with false values (like <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">[]</span></code>) except empty
+strings and byte-like objects and <code class="docutils literal notranslate"><span class="pre">None</span></code> is now deprecated.</p>
+</div>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">参考</p>
+<dl class="simple">
+<dt class="untranslated"><a class="reference external" href="https://url.spec.whatwg.org/">WHATWG</a> -  URL Living standard</dt><dd><p class="untranslated">Working Group for the URL Standard that defines URLs, domains, IP addresses, the
+application/x-www-form-urlencoded format, and their API.</p>
+</dd>
+<dt class="translated"><span class="target" id="index-13"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc3986.html"><strong>RFC 3986</strong></a> - Uniform Resource Identifiers</dt><dd><p class="translated">これが現在の標準規格 (STD66) です。urllib.parse モジュールに対するすべての変更はこの規格に準拠していなければなりませんが、若干の逸脱はありえます。これは主には後方互換性のため、また主要なブラウザで一般的に見られる、URL を解析する上でのいくつかの事実上の要件を満たすためです。</p>
+</dd>
+<dt class="translated"><span class="target" id="index-14"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc2732.html"><strong>RFC 2732</strong></a> - Format for Literal IPv6 Addresses in URL's.</dt><dd><p class="translated">この規格は IPv6 の URL を解析するときの要求事項を記述しています。</p>
+</dd>
+<dt class="translated"><span class="target" id="index-15"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc2396.html"><strong>RFC 2396</strong></a> - Uniform Resource Identifiers (URI): Generic Syntax</dt><dd><p class="translated">この RFC では Uniform Resource Name (URN) と Uniform Resource Locator (URL) の両方に対する一般的な文法的要求事項を記述しています。</p>
+</dd>
+<dt class="translated"><span class="target" id="index-16"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc2368.html"><strong>RFC 2368</strong></a> - The mailto URL scheme.</dt><dd><p class="translated">mailto URL スキームに対する文法的要求事項です。</p>
+</dd>
+<dt class="translated"><span class="target" id="index-17"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc1808.html"><strong>RFC 1808</strong></a> - Relative Uniform Resource Locators</dt><dd><p class="translated">この RFC には絶対 URL と相対 URL を結合するための規則がボーダケースの取扱い方を決定する &quot;異常な例&quot; つきで収められています。</p>
+</dd>
+<dt class="translated"><span class="target" id="index-18"></span><a class="rfc reference external" href="https://datatracker.ietf.org/doc/html/rfc1738.html"><strong>RFC 1738</strong></a> - Uniform Resource Locators (URL)</dt><dd><p class="translated">この RFC では絶対 URL の形式的な文法と意味付けを仕様化しています。</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">urllib.parse</span></code> --- URL を構成要素に解析する</a><ul>
+<li><a class="reference internal" href="#url-parsing">URL の解析</a></li>
+<li><a class="reference internal" href="#url-parsing-security">URL parsing security</a></li>
+<li><a class="reference internal" href="#parsing-ascii-encoded-bytes">ASCII エンコードバイト列の解析</a></li>
+<li><a class="reference internal" href="#structured-parse-results">構造化された解析結果</a></li>
+<li><a class="reference internal" href="#url-quoting">URL のクオート</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="urllib.request.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">urllib.request</span></code> --- URL を開くための大規模なライブラリ</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="urllib.error.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">urllib.error</span></code> --- urllib.request によって送出される例外クラス</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/urllib.parse.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/urllib.parse.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/urllib.parse.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="urllib.error.html" title="urllib.error --- urllib.request によって送出される例外クラス"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="urllib.request.html" title="urllib.request --- URL を開くための大規模なライブラリ"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="internet.html" >インターネットプロトコルとサポート</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">urllib.parse</span></code> --- URL を構成要素に解析する</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>

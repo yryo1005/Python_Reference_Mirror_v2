@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+
+<html lang="ja" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="resource --- リソース使用情報" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://docs.python.org/3/library/resource.html" />
+<meta property="og:site_name" content="Python documentation" />
+<meta property="og:description" content="このモジュールでは、プログラムによって使用されているシステムリソースを計測したり制御するための基本的なメカニズムを提供します。 Availability: Unix, not WASI. 特定のシステムリソースを指定したり、現在のプロセスやその子プロセスのリソース使用情報を要求するためにシンボル定数が使われます。 システムコールが失敗した場合 OSError を送出します。 リソースの制限:..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="https://docs.python.org/3.14/ja/_images/social_previews/summary_library_resource_95156b64.png" />
+<meta property="og:image:alt" content="このモジュールでは、プログラムによって使用されているシステムリソースを計測したり制御するための基本的なメカニズムを提供します。 Availability: Unix, not WASI. 特定のシステムリソースを指定したり、現在のプロセスやその子プロセスのリソース使用情報を要求するためにシンボル定数が使われます。 システムコールが失敗した場合 OSError を送出します。 リソースの制限:..." />
+<meta name="description" content="このモジュールでは、プログラムによって使用されているシステムリソースを計測したり制御するための基本的なメカニズムを提供します。 Availability: Unix, not WASI. 特定のシステムリソースを指定したり、現在のプロセスやその子プロセスのリソース使用情報を要求するためにシンボル定数が使われます。 システムコールが失敗した場合 OSError を送出します。 リソースの制限:..." />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#3776ab">
+
+    <title>resource --- リソース使用情報 &#8212; Python 3.14.6 ドキュメント</title><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css?v=234b1a7c" />
+    <link rel="stylesheet" type="text/css" href="../_static/pydoctheme.css?v=4365c8fe" />
+    <link id="pygments_dark_css" media="(prefers-color-scheme: dark)" rel="stylesheet" type="text/css" href="../_static/pygments_dark.css?v=5349f25f" />
+    
+    <script src="../_static/documentation_options.js?v=121f1ef3"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/translations.js?v=4755f45a"></script>
+    
+    <script src="../_static/sidebar.js"></script>
+    
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Python 3.14.6 ドキュメント 内を検索"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="このドキュメントについて" href="../about.html" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="next" title="syslog --- Unix syslog ライブラリルーチン群" href="syslog.html" />
+    <link rel="prev" title="fcntl --- fcntl および ioctl システムコール" href="fcntl.html" />
+    
+      
+      <script defer file-types="bz2,epub,zip" data-domain="docs.python.org" src="https://analytics.python.org/js/script.file-downloads.outbound-links.js"></script>
+      
+      <link rel="canonical" href="https://docs.python.org/3/library/resource.html">
+      
+    
+
+    
+    <style>
+      @media only screen {
+        table.full-width-table {
+            width: 100%;
+        }
+      }
+    </style>
+<link rel="stylesheet" href="../_static/pydoctheme_dark.css" media="(prefers-color-scheme: dark)" id="pydoctheme_dark_css">
+    <link rel="shortcut icon" type="image/png" href="../_static/py.svg">
+            <script type="text/javascript" src="../_static/copybutton.js"></script>
+            <script type="text/javascript" src="../_static/menu.js"></script>
+            <script type="text/javascript" src="../_static/search-focus.js"></script>
+            <script type="text/javascript" src="../_static/themetoggle.js"></script> 
+            <script type="text/javascript" src="../_static/rtd_switcher.js"></script>
+            <meta name="readthedocs-addons-api-version" content="1">
+
+  </head>
+<body>
+<div class="mobile-nav">
+    <input type="checkbox" id="menuToggler" class="toggler__input" aria-controls="navigation"
+           aria-pressed="false" aria-expanded="false" role="button" aria-label="メニュー">
+    <nav class="nav-content" role="navigation">
+        <label for="menuToggler" class="toggler__label">
+            <span></span>
+        </label>
+        <span class="nav-items-wrapper">
+            <a href="https://www.python.org/" class="nav-logo">
+                <img src="../_static/py.svg" alt="Python logo">
+            </a>
+            <span class="version_switcher_placeholder"></span>
+            <form role="search" class="search" action="../search.html" method="get">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" class="search-icon">
+                    <path fill-rule="nonzero" fill="currentColor" d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 001.48-5.34c-.47-2.78-2.79-5-5.59-5.34a6.505 6.505 0 00-7.27 7.27c.34 2.8 2.56 5.12 5.34 5.59a6.5 6.5 0 005.34-1.48l.27.28v.79l4.25 4.25c.41.41 1.08.41 1.49 0 .41-.41.41-1.08 0-1.49L15.5 14zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                </svg>
+                <input placeholder="検索" aria-label="検索" type="search" name="q">
+                <input type="submit" value="検索">
+            </form>
+        </span>
+    </nav>
+    <div class="menu-wrapper">
+        <nav class="menu" role="navigation" aria-label="main navigation">
+            <div class="language_switcher_placeholder"></div>
+            
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label>
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">resource</span></code> --- リソース使用情報</a><ul>
+<li><a class="reference internal" href="#resource-limits">リソースの制限</a></li>
+<li><a class="reference internal" href="#resource-usage">リソースの使用状態</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="fcntl.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fcntl</span></code> --- <code class="docutils literal notranslate"><span class="pre">fcntl</span></code> および <code class="docutils literal notranslate"><span class="pre">ioctl</span></code> システムコール</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="syslog.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">syslog</span></code> --- Unix syslog ライブラリルーチン群</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/resource.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/resource.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/resource.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </nav>
+    </div>
+</div>
+
+  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="syslog.html" title="syslog --- Unix syslog ライブラリルーチン群"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="fcntl.html" title="fcntl --- fcntl および ioctl システムコール"
+             accesskey="P">前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="unix.html" accesskey="U">Unix-specific services</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">resource</span></code> --- リソース使用情報</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="module-resource">
+<span id="resource-resource-usage-information"></span><h1 class="translated"><code class="xref py py-mod docutils literal notranslate"><span class="pre">resource</span></code> --- リソース使用情報<a class="headerlink" href="#module-resource" title="Link to this heading">¶</a></h1>
+<hr class="docutils" />
+<p class="translated">このモジュールでは、プログラムによって使用されているシステムリソースを計測したり制御するための基本的なメカニズムを提供します。</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: Unix, not WASI.</p>
+</div>
+<p class="translated">特定のシステムリソースを指定したり、現在のプロセスやその子プロセスのリソース使用情報を要求するためにシンボル定数が使われます。</p>
+<p class="translated">システムコールが失敗した場合 <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> を送出します。</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="resource.error">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">error</span></span><a class="headerlink" href="#resource.error" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> の非推奨のエイリアスです。</p>
+<div class="versionchanged">
+<p><span class="versionmodified changed">バージョン 3.3 で変更: </span><span class="target" id="index-2"></span><a class="pep reference external" href="https://peps.python.org/pep-3151/"><strong>PEP 3151</strong></a> に基づき、このクラスは <a class="reference internal" href="exceptions.html#OSError" title="OSError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">OSError</span></code></a> のエイリアスになりました。</p>
+</div>
+</dd></dl>
+
+<section id="resource-limits">
+<h2 class="translated">リソースの制限<a class="headerlink" href="#resource-limits" title="Link to this heading">¶</a></h2>
+<p class="translated">リソースの使用は下に述べる <a class="reference internal" href="#resource.setrlimit" title="resource.setrlimit"><code class="xref py py-func docutils literal notranslate"><span class="pre">setrlimit()</span></code></a> 関数を使って制限することができます。各リソースは二つ組の制限値: ソフトリミット (soft limit) 、およびハードリミット (hard limit) 、で制御されます。ソフトリミットは現在の制限値で、時間とともにプロセスによって下げたり上げたりできます。ソフトリミットはハードリミットを超えることはできません。ハードリミットはソフトリミットよりも高い任意の値まで下げることができますが、上げることはできません。 (スーパユーザの有効な UID を持つプロセスのみがハードリミットを上げることができます。)</p>
+<p class="translated">制限をかけるべく指定できるリソースはシステムに依存します。指定できるリソースは <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/getrlimit(2)">getrlimit(2)</a></em> マニュアルページで解説されています。以下に列挙するリソースは背後のオペレーティングシステムがサポートする場合にサポートされています; オペレーティングシステム側で値を調べたり制御したりできないリソースは、そのプラットフォーム向けのこのモジュール内では定義されていません。</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIM_INFINITY">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIM_INFINITY</span></span><a class="headerlink" href="#resource.RLIM_INFINITY" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">無制限のリソースの上限を示すための定数です。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="resource.getrlimit">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">getrlimit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#resource.getrlimit" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><em>resource</em> の現在のソフトおよびハードリミットを表すタプル <code class="docutils literal notranslate"><span class="pre">(soft,</span> <span class="pre">hard)</span></code> を返します。無効なリソースが指定された場合には <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> が、背後のシステムコールが予期せず失敗した場合には <a class="reference internal" href="#resource.error" title="resource.error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">error</span></code></a> が送出されます。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="resource.setrlimit">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">setrlimit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#resource.setrlimit" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">Sets new limits of consumption of <em>resource</em>. The <em>limits</em> argument must be a
+tuple <code class="docutils literal notranslate"><span class="pre">(soft,</span> <span class="pre">hard)</span></code> of two integers describing the new limits. A value of
+<a class="reference internal" href="#resource.RLIM_INFINITY" title="resource.RLIM_INFINITY"><code class="xref py py-const docutils literal notranslate"><span class="pre">RLIM_INFINITY</span></code></a> can be used to request a limit that is
+unlimited.</p>
+<p class="untranslated">Raises <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> if an invalid resource is specified, if the new soft
+limit exceeds the hard limit, or if a process tries to raise its hard limit.
+Specifying a limit of <a class="reference internal" href="#resource.RLIM_INFINITY" title="resource.RLIM_INFINITY"><code class="xref py py-const docutils literal notranslate"><span class="pre">RLIM_INFINITY</span></code></a> when the hard or
+system limit for that resource is not unlimited will result in a
+<code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code>.  A process with the effective UID of super-user can
+request any valid limit value, including unlimited, but <code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code>
+will still be raised if the requested limit exceeds the system imposed
+limit.</p>
+<p class="translated"><code class="docutils literal notranslate"><span class="pre">setrlimit</span></code> は背後のシステムコールが予期せず失敗した場合に、 <a class="reference internal" href="#resource.error" title="resource.error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">error</span></code></a> を送出する場合があります。</p>
+<p class="untranslated">VxWorks only supports setting <a class="reference internal" href="#resource.RLIMIT_NOFILE" title="resource.RLIMIT_NOFILE"><code class="xref py py-const docutils literal notranslate"><span class="pre">RLIMIT_NOFILE</span></code></a>.</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">src</span></code>, <code class="docutils literal notranslate"><span class="pre">dst`,</span> <span class="pre">``limits</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">resource.setrlimit</span></code> を送出します。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="resource.prlimit">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">prlimit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">limits</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#resource.prlimit" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">1つの関数の中で <a class="reference internal" href="#resource.setrlimit" title="resource.setrlimit"><code class="xref py py-func docutils literal notranslate"><span class="pre">setrlimit()</span></code></a> と <a class="reference internal" href="#resource.getrlimit" title="resource.getrlimit"><code class="xref py py-func docutils literal notranslate"><span class="pre">getrlimit()</span></code></a> を組み合わせ、任意のプロセスのリソースの制限値を取得したり設定したりします。
+<em>pid</em> が 0 の場合は、現在のプロセスに適用されます。
+<em>resource</em> および <em>limits</em> は、 <em>limits</em> がオプションであることを除けば、 <code class="xref py py-func docutils literal notranslate"><span class="pre">setrlimit()</span></code> と同じ意味です。</p>
+<p class="translated"><em>limits</em> が与えられないときは、関数はプロセス <em>pid</em> の <em>resource</em> の制限値を返します。
+<em>limits</em> が与えられたときは、プロセスの <em>resource</em> の制限値が設定され、設定が変更される前のリソースの制限値が返されます。</p>
+<p class="translated"><em>pid</em> が見付からないときは <a class="reference internal" href="exceptions.html#ProcessLookupError" title="ProcessLookupError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ProcessLookupError</span></code></a> を、ユーザがプロセスの <code class="docutils literal notranslate"><span class="pre">CAP_SYS_RESOURCE</span></code> を持ってないときは <a class="reference internal" href="exceptions.html#PermissionError" title="PermissionError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">PermissionError</span></code></a> を送出します。</p>
+<p class="audit-hook translated">引数 <code class="docutils literal notranslate"><span class="pre">pid</span></code>, <code class="docutils literal notranslate"><span class="pre">dst`,</span> <span class="pre">``limits</span></code> を指定して <a class="reference internal" href="sys.html#auditing"><span class="std std-ref">監査イベント</span></a> <code class="docutils literal notranslate"><span class="pre">resource.prlimit</span></code> を送出します。</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: Linux &gt;= 2.6.36 with glibc &gt;= 2.13.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<p class="translated">以下のシンボルは、後に述べる関数 <a class="reference internal" href="#resource.setrlimit" title="resource.setrlimit"><code class="xref py py-func docutils literal notranslate"><span class="pre">setrlimit()</span></code></a> および <a class="reference internal" href="#resource.getrlimit" title="resource.getrlimit"><code class="xref py py-func docutils literal notranslate"><span class="pre">getrlimit()</span></code></a> を使って消費量を制御することができるリソースを定義しています。これらのシンボルの値は、C プログラムで使われているシンボルと全く同じです。</p>
+<p class="translated"><em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/getrlimit(2)">getrlimit(2)</a></em> の Unix マニュアルページには、指定可能なリソースが列挙されています。全てのシステムで同じシンボルが使われているわけではなく、また同じリソースを表すために同じ値が使われているとも限らないので注意してください。このモジュールはプラットフォーム間の相違を隠蔽しようとはしていません --- あるプラットフォームで定義されていないシンボルは、そのプラットフォーム向けの本モジュールでは利用することができません。</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_CORE">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_CORE</span></span><a class="headerlink" href="#resource.RLIMIT_CORE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">現在のプロセスが生成できるコアファイルの最大 (バイト) サイズです。プロセスの全体イメージを入れるためにこの値より大きなサイズのコアファイルが要求された結果、部分的なコアファイルが生成される可能性があります。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_CPU">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_CPU</span></span><a class="headerlink" href="#resource.RLIMIT_CPU" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The maximum amount of processor time (in seconds) that a process can use. If
+this limit is exceeded, a <a class="reference internal" href="signal.html#signal.SIGXCPU" title="signal.SIGXCPU"><code class="xref py py-const docutils literal notranslate"><span class="pre">SIGXCPU</span></code></a> signal is sent to the process. (See
+the <a class="reference internal" href="signal.html#module-signal" title="signal: Set handlers for asynchronous events."><code class="xref py py-mod docutils literal notranslate"><span class="pre">signal</span></code></a> module documentation for information about how to catch this
+signal and do something useful, e.g. flush open files to disk.)</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_FSIZE">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_FSIZE</span></span><a class="headerlink" href="#resource.RLIMIT_FSIZE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">プロセスが作成するファイルの最大サイズです。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_DATA">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_DATA</span></span><a class="headerlink" href="#resource.RLIMIT_DATA" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">プロセスのヒープの最大 (バイト) サイズです。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_STACK">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_STACK</span></span><a class="headerlink" href="#resource.RLIMIT_STACK" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">現在のプロセスのコールスタックの最大サイズ (バイト単位) です。
+これはマルチスレッドプロセスのメインスレッドのスタックのみに影響します。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_RSS">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_RSS</span></span><a class="headerlink" href="#resource.RLIMIT_RSS" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">プロセスが取りうる最大 RAM 常駐ページサイズ (resident set size) です。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_NPROC">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_NPROC</span></span><a class="headerlink" href="#resource.RLIMIT_NPROC" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">現在のプロセスが生成できるプロセスの上限です。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_NOFILE">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_NOFILE</span></span><a class="headerlink" href="#resource.RLIMIT_NOFILE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">現在のプロセスが開けるファイル記述子の上限です。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_OFILE">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_OFILE</span></span><a class="headerlink" href="#resource.RLIMIT_OFILE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#resource.RLIMIT_NOFILE" title="resource.RLIMIT_NOFILE"><code class="xref py py-const docutils literal notranslate"><span class="pre">RLIMIT_NOFILE</span></code></a> の BSD での名称です。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_MEMLOCK">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_MEMLOCK</span></span><a class="headerlink" href="#resource.RLIMIT_MEMLOCK" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">メモリ中でロックできる最大アドレス空間です。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_VMEM">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_VMEM</span></span><a class="headerlink" href="#resource.RLIMIT_VMEM" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The largest area of mapped memory which the process may occupy.
+Usually an alias of <a class="reference internal" href="#resource.RLIMIT_AS" title="resource.RLIMIT_AS"><code class="xref py py-const docutils literal notranslate"><span class="pre">RLIMIT_AS</span></code></a>.</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: Solaris, FreeBSD, NetBSD.</p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_AS">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_AS</span></span><a class="headerlink" href="#resource.RLIMIT_AS" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">アドレス空間でプロセスが占有できる最大領域 (バイト単位) です。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_MSGQUEUE">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_MSGQUEUE</span></span><a class="headerlink" href="#resource.RLIMIT_MSGQUEUE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">POSIX メッセージキューに割り当てることの出来るバイト数です。</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: Linux &gt;= 2.6.8.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_NICE">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_NICE</span></span><a class="headerlink" href="#resource.RLIMIT_NICE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">プロセスの nice の上限です (20 - rlim_cur)。</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: Linux &gt;= 2.6.12.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_RTPRIO">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_RTPRIO</span></span><a class="headerlink" href="#resource.RLIMIT_RTPRIO" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">リアルタイム優先順位の上限です。</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: Linux &gt;= 2.6.12.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_RTTIME">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_RTTIME</span></span><a class="headerlink" href="#resource.RLIMIT_RTTIME" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">リアルタイムスケジューリングにおいて、プロセスがブロッキングシステムコールを行わずに使用できるCPU時間の制限値（マイクロ秒単位）。</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: Linux &gt;= 2.6.25.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_SIGPENDING">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_SIGPENDING</span></span><a class="headerlink" href="#resource.RLIMIT_SIGPENDING" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">プロセスがキュー出来るシグナルの数です。</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: Linux &gt;= 2.6.8.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_SBSIZE">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_SBSIZE</span></span><a class="headerlink" href="#resource.RLIMIT_SBSIZE" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このユーザが使用するソケットバッファの最大サイズ(バイト単位)。これは、このユーザが常に保持できるネットワークメモリの量、つまり mbuf の量を制限します。</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: FreeBSD, NetBSD.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_SWAP">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_SWAP</span></span><a class="headerlink" href="#resource.RLIMIT_SWAP" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このユーザ ID のすべてのプロセスで予約または使用できるスワップスペースの最大サイズ (バイト単位)。この制限は vm.overcommit sysctl のビット 1 が設定されている場合のみ適用されます。この sysctl の完全な説明については <a class="reference external" href="https://man.freebsd.org/cgi/man.cgi?query=tuning&amp;sektion=7">tuning(7)</a> を参照してください。</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: FreeBSD &gt;= 8.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_NPTS">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_NPTS</span></span><a class="headerlink" href="#resource.RLIMIT_NPTS" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">このユーザ ID が作成する擬似端末の数の上限です。</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: FreeBSD &gt;= 8.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.4.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RLIMIT_KQUEUES">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RLIMIT_KQUEUES</span></span><a class="headerlink" href="#resource.RLIMIT_KQUEUES" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">The maximum number of kqueues this user id is allowed to create.</p>
+<div class="availability docutils container">
+<p class="untranslated"><a class="reference internal" href="intro.html#availability"><span class="std std-ref">Availability</span></a>: FreeBSD &gt;= 11.</p>
+</div>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.10.</span></p>
+</div>
+</dd></dl>
+
+</section>
+<section id="resource-usage">
+<h2 class="translated">リソースの使用状態<a class="headerlink" href="#resource-usage" title="Link to this heading">¶</a></h2>
+<p class="translated">以下の関数はリソース使用情報を取得するために使われます:</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="resource.getrusage">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">getrusage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">who</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#resource.getrusage" title="Link to this definition">¶</a></dt>
+<dd><p class="untranslated">This function returns an object that describes the resources consumed by either
+the current process or its children, as specified by the <em>who</em> parameter.  The
+<em>who</em> parameter should be specified using one of the <code class="xref py py-const docutils literal notranslate"><span class="pre">RUSAGE_*</span></code>
+constants described below.</p>
+<p class="translated">簡単な例:</p>
+<div class="untranslated highlight-python3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">resource</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="c1"># a non CPU-bound task</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">getrusage</span><span class="p">(</span><span class="n">RUSAGE_SELF</span><span class="p">))</span>
+
+<span class="c1"># a CPU-bound task</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span> <span class="o">**</span> <span class="mi">8</span><span class="p">):</span>
+   <span class="n">_</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">getrusage</span><span class="p">(</span><span class="n">RUSAGE_SELF</span><span class="p">))</span>
+</pre></div>
+</div>
+<p class="untranslated">The fields of the return value each describe how a particular system resource
+has been used, e.g. amount of time spent running in user mode or number of times
+the process was swapped out of main memory. Some values are dependent on the
+clock tick interval, e.g. the amount of memory the process is using.</p>
+<p class="translated">以前のバージョンとの互換性のため、返される値は 16 要素からなるタプルとしてアクセスすることもできます。</p>
+<p class="untranslated">The fields <code class="xref py py-attr docutils literal notranslate"><span class="pre">ru_utime</span></code> and <code class="xref py py-attr docutils literal notranslate"><span class="pre">ru_stime</span></code> of the return value are
+floating-point values representing the amount of time spent executing in user
+mode and the amount of time spent executing in system mode, respectively. The
+remaining values are integers. Consult the <em class="manpage"><a class="manpage reference external" href="https://manpages.debian.org/getrusage(2)">getrusage(2)</a></em> man page for
+detailed information about these values. A brief summary is presented here:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p class="translated">インデックス</p></th>
+<th class="head"><p class="translated">フィールド</p></th>
+<th class="head"><p class="translated">リソース</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">0</span></code></p></td>
+<td><p class="untranslated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ru_utime</span></code></p></td>
+<td><p class="untranslated">time in user mode (float seconds)</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">1</span></code></p></td>
+<td><p class="untranslated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ru_stime</span></code></p></td>
+<td><p class="untranslated">time in system mode (float seconds)</p></td>
+</tr>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">2</span></code></p></td>
+<td><p class="untranslated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ru_maxrss</span></code></p></td>
+<td><p class="translated">最大常駐ページサイズ</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">3</span></code></p></td>
+<td><p class="untranslated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ru_ixrss</span></code></p></td>
+<td><p class="translated">共有メモリサイズ</p></td>
+</tr>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">4</span></code></p></td>
+<td><p class="untranslated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ru_idrss</span></code></p></td>
+<td><p class="translated">非共有メモリサイズ</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p class="untranslated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ru_isrss</span></code></p></td>
+<td><p class="translated">非共有スタックサイズ</p></td>
+</tr>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">6</span></code></p></td>
+<td><p class="untranslated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ru_minflt</span></code></p></td>
+<td><p class="translated">I/O を必要としないページフォールト数</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">7</span></code></p></td>
+<td><p class="untranslated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ru_majflt</span></code></p></td>
+<td><p class="translated">I/O を必要とするページフォールト数</p></td>
+</tr>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">8</span></code></p></td>
+<td><p class="untranslated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ru_nswap</span></code></p></td>
+<td><p class="translated">スワップアウト回数</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">9</span></code></p></td>
+<td><p class="untranslated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ru_inblock</span></code></p></td>
+<td><p class="translated">ブロック入力操作数</p></td>
+</tr>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">10</span></code></p></td>
+<td><p class="untranslated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ru_oublock</span></code></p></td>
+<td><p class="translated">ブロック出力操作数</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">11</span></code></p></td>
+<td><p class="untranslated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ru_msgsnd</span></code></p></td>
+<td><p class="translated">送信メッセージ数</p></td>
+</tr>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">12</span></code></p></td>
+<td><p class="untranslated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ru_msgrcv</span></code></p></td>
+<td><p class="translated">受信メッセージ数</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">13</span></code></p></td>
+<td><p class="untranslated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ru_nsignals</span></code></p></td>
+<td><p class="translated">受信シグナル数</p></td>
+</tr>
+<tr class="row-even"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">14</span></code></p></td>
+<td><p class="untranslated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ru_nvcsw</span></code></p></td>
+<td><p class="translated">自発的な実行コンテキスト切り替え数</p></td>
+</tr>
+<tr class="row-odd"><td><p class="translated"><code class="docutils literal notranslate"><span class="pre">15</span></code></p></td>
+<td><p class="untranslated"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ru_nivcsw</span></code></p></td>
+<td><p class="translated">非自発的な実行コンテキスト切り替え数</p></td>
+</tr>
+</tbody>
+</table>
+<p class="translated">この関数は無効な <em>who</em> 引数を指定した場合には <a class="reference internal" href="exceptions.html#ValueError" title="ValueError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> を送出します。また、異常が発生した場合には <a class="reference internal" href="#resource.error" title="resource.error"><code class="xref py py-exc docutils literal notranslate"><span class="pre">error</span></code></a> 例外が送出される可能性があります。</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="resource.getpagesize">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">getpagesize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#resource.getpagesize" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">システムページ内のバイト数を返します。(ハードウェアページサイズと同じとは限りません。)</p>
+</dd></dl>
+
+<p class="untranslated">The following <code class="xref py py-const docutils literal notranslate"><span class="pre">RUSAGE_*</span></code> symbols are passed to the <a class="reference internal" href="#resource.getrusage" title="resource.getrusage"><code class="xref py py-func docutils literal notranslate"><span class="pre">getrusage()</span></code></a>
+function to specify which processes information should be provided for.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RUSAGE_SELF">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RUSAGE_SELF</span></span><a class="headerlink" href="#resource.RUSAGE_SELF" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#resource.getrusage" title="resource.getrusage"><code class="xref py py-func docutils literal notranslate"><span class="pre">getrusage()</span></code></a> に渡すと呼び出し中のプロセスが消費しているリソースを要求します。そのプロセスの全スレッドが使用するリソースの合計です。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RUSAGE_CHILDREN">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RUSAGE_CHILDREN</span></span><a class="headerlink" href="#resource.RUSAGE_CHILDREN" title="Link to this definition">¶</a></dt>
+<dd><p class="translated">呼び出し元のプロセスの子プロセスが消費するリソースを要求するために、 <a class="reference internal" href="#resource.getrusage" title="resource.getrusage"><code class="xref py py-func docutils literal notranslate"><span class="pre">getrusage()</span></code></a> に渡して終了させ、待機させることができます。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RUSAGE_BOTH">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RUSAGE_BOTH</span></span><a class="headerlink" href="#resource.RUSAGE_BOTH" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#resource.getrusage" title="resource.getrusage"><code class="xref py py-func docutils literal notranslate"><span class="pre">getrusage()</span></code></a> に渡すと現在のプロセスおよび子プロセスの両方が消費しているリソースを要求します。全てのシステムで利用可能なわけではありません。</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="resource.RUSAGE_THREAD">
+<span class="sig-prename descclassname"><span class="pre">resource.</span></span><span class="sig-name descname"><span class="pre">RUSAGE_THREAD</span></span><a class="headerlink" href="#resource.RUSAGE_THREAD" title="Link to this definition">¶</a></dt>
+<dd><p class="translated"><a class="reference internal" href="#resource.getrusage" title="resource.getrusage"><code class="xref py py-func docutils literal notranslate"><span class="pre">getrusage()</span></code></a> に渡すと現在のスレッドが消費しているリソースを要求します。全てのシステムで利用可能なわけではありません。</p>
+<div class="versionadded">
+<p><span class="versionmodified added">Added in version 3.2.</span></p>
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../contents.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">resource</span></code> --- リソース使用情報</a><ul>
+<li><a class="reference internal" href="#resource-limits">リソースの制限</a></li>
+<li><a class="reference internal" href="#resource-usage">リソースの使用状態</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="fcntl.html"
+                          title="前の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">fcntl</span></code> --- <code class="docutils literal notranslate"><span class="pre">fcntl</span></code> および <code class="docutils literal notranslate"><span class="pre">ioctl</span></code> システムコール</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="syslog.html"
+                          title="次の章へ"><code class="xref py py-mod docutils literal notranslate"><span class="pre">syslog</span></code> --- Unix syslog ライブラリルーチン群</a></p>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const title = document.querySelector('meta[property="og:title"]').content;
+        const elements = document.querySelectorAll('.improvepage');
+        const pageurl = window.location.href.split('?')[0];
+        elements.forEach(element => {
+            const url = new URL(element.href.split('?')[0].replace("-nojs", ""));
+            url.searchParams.set('pagetitle', title);
+            url.searchParams.set('pageurl', pageurl);
+            url.searchParams.set('pagesource', "library/resource.rst");
+            element.href = url.toString();
+        });
+    });
+  </script>
+  <div role="note" aria-label="source link">
+    <h3>This page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../bugs.html">Report a bug</a></li>
+      <li><a class="improvepage" href="../improve-page-nojs.html">Improve this page</a></li>
+      <li>
+        <a href="https://github.com/python/cpython/blob/main/Doc/library/resource.rst?plain=1"
+            rel="nofollow">Show source
+        </a>
+      </li>
+      
+      <li>
+        <a href="https://github.com/python/python-docs-ja/blob/3.14/library/resource.po?plain=1"
+           rel="nofollow">Show translation source</a>
+      </li>
+      
+    </ul>
+  </div>
+        </div>
+<div id="sidebarbutton" title="サイドバーをたたむ">
+<span>«</span>
+</div>
+
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="Related">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="syslog.html" title="syslog --- Unix syslog ライブラリルーチン群"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="fcntl.html" title="fcntl --- fcntl および ioctl システムコール"
+             >前へ</a> |</li>
+
+          <li><img src="../_static/py.svg" alt="Python logo" style="vertical-align: middle; margin-top: -1px"></li>
+          <li><a href="https://www.python.org/">Python</a> &#187;</li>
+          <li class="switchers">
+            <div class="language_switcher_placeholder"></div>
+            <div class="version_switcher_placeholder"></div>
+          </li>
+          <li>
+              
+          </li>
+    <li id="cpython-language-and-version">
+      <a href="../index.html">3.14.6 Documentation</a> &#187;
+    </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Python 標準ライブラリ</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="unix.html" >Unix-specific services</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">resource</span></code> --- リソース使用情報</a></li>
+                <li class="right">
+                    
+
+    <div class="inline-search" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="検索" aria-label="検索" type="search" name="q" id="search-box">
+          <input type="submit" value="検索">
+        </form>
+    </div>
+                     |
+                </li>
+            <li class="right">
+<label class="theme-selector-label">
+    テーマ
+    <select class="theme-selector" oninput="activateTheme(this.value)">
+        <option value="auto" selected>自動</option>
+        <option value="light">ライト</option>
+        <option value="dark">ダーク</option>
+    </select>
+</label> |</li>
+            
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2001 Python Software Foundation.
+    <br>
+    このページはPython Software Foundation License Version 2でライセンスされています。
+    <br>
+    ドキュメント内のサンプル、レシピ等のコードは、Zero Clause BSDライセンスの下で追加的にライセンスされています。
+    <br>
+    
+      詳しくは<a href="/license.html">歴史とライセンス</a>を参照してください。<br>
+    
+    
+    <br>
+
+    Pythonソフトウェア財団は非営利法人です。
+<a href="https://www.python.org/psf/donations/">寄付をするには</a>
+<br>
+    <br>
+      最終更新日: 6月 30, 2026 (09:08 UTC)
+    
+      <a href="/bugs.html">バグを報告する</a>
+    
+    <br>
+
+    <a href="https://www.sphinx-doc.org/">Sphinx</a>8.2.3を使って構築されています。
+    </div>
+
+  </body>
+</html>
